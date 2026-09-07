@@ -731,7 +731,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
                 Bigger ideas deserve <em>Claude</em>.
               </h1>
               <p className={styles.hVee}>
-                <span className={styles.hVeeTag}>VEE</span>
+                <span className={styles.hVeeTag}>IMPERIUM</span>
                 a whole app, live numbers, a mind of its own - more than six simple shapes. In
                 Claude Code, with the Imperium MCP, you build the real thing: pro grade,
                 on-brand, still yours.
@@ -859,7 +859,7 @@ export default function TileBuilder({ userId, initialIdea = '' }: { userId: stri
             {searching && matches.length === 0 && (
               <div className={styles.noMatch}>
                 <p className={styles.noMatchVee}>
-                  <span className={styles.hVeeTag}>VEE</span>
+                  <span className={styles.hVeeTag}>IMPERIUM</span>
                   {missVerdict && missVerdict.verdict !== 'buildable'
                     ? `"${query.trim()}" - ${missVerdict.why ?? 'that one is bigger than the library'}.`
                     : `nothing that small in the library yet - but Claude builds exactly that, pro grade, straight onto this dashboard.`}

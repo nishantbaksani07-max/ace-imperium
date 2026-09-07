@@ -17,7 +17,7 @@ export const alt = 'Imperium Arts District — a gallery of ready-made tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Imperium gem mark — the flat-faceted "V" gem, solid fills on near-black.
+// Imperium gem mark — the flat-faceted "I" gem, solid fills on near-black.
 // Same geometry as app/icon.tsx so the brand mark stays consistent.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
