@@ -22,7 +22,7 @@ function normalizeUrl(raw: string): string {
 async function probe(url: string): Promise<{ ok: boolean; status: number; ms: number; title?: string }> {
   const startedAt = Date.now()
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'VitalityBot/1.0 (+https://vitality.app)' },
+    headers: { 'User-Agent': 'ImperiumBot/1.0 (+https://vitality.app)' },
     redirect: 'follow',
     cache: 'no-store',
   })

@@ -17,7 +17,7 @@ export const alt = 'Imperium Makers — the people building tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Imperium gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
+// Imperium gem mark — flat-faceted "I" gem, same geometry as app/icon.tsx.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
   <path d="M392 372 L632 372 L724 470 L512 744 L300 470 Z" fill="#1f4d3d"/>

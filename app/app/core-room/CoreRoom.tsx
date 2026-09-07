@@ -96,7 +96,7 @@ export default function CoreRoom({ graphs }: { graphs: CoreGraph[] }) {
           </svg>
           DASHBOARD
         </Link>
-        <div className={s.eyebrow}>VITALITY · THE CORE ROOM</div>
+        <div className={s.eyebrow}>IMPERIUM · THE CORE ROOM</div>
         <h1 className={s.title}>
           Every line your life has <em>drawn</em>.
         </h1>

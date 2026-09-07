@@ -40,12 +40,12 @@ export default function VeeNotice() {
           <span />
           <span />
         </span>
-        <span className={styles.laptopUrl}>vitality.app/today</span>
+        <span className={styles.laptopUrl}>imperium.app/today</span>
       </div>
 
       <div className={styles.laptopScreen}>
         <div className={styles.vnEyebrow}>
-          <span className={styles.vnEyebrowDot} /> Imperium · Imperium — this afternoon
+          <span className={styles.vnEyebrowDot} /> Imperium — this afternoon
         </div>
         <h3 className={styles.vnTitle}>Howdy, Alex.</h3>
         <p className={styles.vnIntro}>

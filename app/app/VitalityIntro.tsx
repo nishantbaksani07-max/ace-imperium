@@ -5,8 +5,8 @@ import styles from './vitalityIntro.module.css'
 
 /**
  * "The Swipe" app-open splash, ported from the approved
- * public/vitality-intro-a.html. A fixed full-screen black overlay: the V mark
- * streaks in from the right trailing mint motion lines, the VITALITY letters
+ * public/vitality-intro-a.html. A fixed full-screen black overlay: the I mark
+ * streaks in from the right trailing mint motion lines, the IMPERIUM letters
  * settle right to left in its wake, then the whole splash fades out to reveal
  * the dashboard.
  *
@@ -181,7 +181,7 @@ function IntroInner({ onReveal }: IntroProps) {
 
   if (phase === 'idle' || phase === 'done') return null
 
-  const letters = 'VITALITY'.split('')
+  const letters = 'IMPERIUM'.split('')
   return (
     <>
     {/* suppressHydrationWarning: the parse-time script below may have stamped
