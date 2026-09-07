@@ -5,6 +5,7 @@ import { ImageResponse } from 'next/og'
  * background (iOS ignores transparency and adds its own rounding). Same
  * Imperium gem mark as app/icon.tsx, sized for the smaller canvas.
  */
+export const runtime = 'nodejs'
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 

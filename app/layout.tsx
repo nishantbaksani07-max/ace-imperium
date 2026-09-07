@@ -35,6 +35,7 @@ const jetBrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL) : new URL('https://imperium.app'),
   title: 'Imperium',
   description: 'A personal dashboard built around your goals.',
   applicationName: 'Imperium',

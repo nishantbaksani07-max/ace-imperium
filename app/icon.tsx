@@ -6,6 +6,7 @@ import { ImageResponse } from 'next/og'
  * and the manifest references it. The mark is the Imperium gem: a mint faceted
  * hexagon with the V, on the brand-dark background.
  */
+export const runtime = 'nodejs'
 export const size = { width: 512, height: 512 }
 export const contentType = 'image/png'
 

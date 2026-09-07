@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { PUBLIC_FEATURED_TILES } from '@/lib/tiles/featured'
 
+export const runtime = 'nodejs'
 /**
  * Open Graph card for a single Arts District tile (/district/[id]).
  *
@@ -14,7 +15,6 @@ import { PUBLIC_FEATURED_TILES } from '@/lib/tiles/featured'
  * base64 SVG data-URI, no remote asset or font is fetched, and type uses a safe
  * system sans stack (our next/font vars are not available in this context).
  */
-export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
