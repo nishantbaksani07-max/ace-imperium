@@ -1,0 +1,308 @@
+/* THE ROOM (TRAIN 5) - the metric registry made tangible.
+   Calm engineering aesthetic: black, thin lines, mono spec text, mint only
+   where a number is alive. Generated from the registry, never hand-synced. */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  color: var(--fg);
+}
+
+.kicker {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.title {
+  margin: 8px 0 10px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* The law, stated where Alex reads it. */
+.law {
+  margin: 0 0 6px;
+  max-width: 620px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted-strong);
+}
+.law code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.76rem;
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.07);
+  border: 1px solid rgba(110, 231, 183, 0.18);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+.meta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 34px;
+}
+
+.section { margin-bottom: 34px; }
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  margin-bottom: 4px;
+}
+.sectionName {
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.sectionCount {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+/* One metric = one row. Wide spec tables scroll inside themselves. */
+.rows { display: flex; flex-direction: column; }
+
+/* Each metric block is a wrapper div holding [.row, .words], so the separator
+   lives on the WRAPPER: one line between consecutive metrics, none inside a
+   metric and none after the last (a border on .row would draw between a
+   metric's own label line and its chips instead). */
+.rows > div { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.rows > div:last-child { border-bottom: none; }
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.35fr) 88px 30px minmax(120px, 0.9fr) 76px 58px;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 2px;
+}
+
+.label { font-size: 0.84rem; font-weight: 550; line-height: 1.3; }
+.family {
+  display: inline-block;
+  margin-left: 7px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  border-radius: 999px;
+  padding: 1px 6px;
+  vertical-align: 2px;
+}
+
+.unit, .source, .count {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--muted-strong);
+}
+.source { color: var(--muted); }
+.count { text-align: right; color: var(--muted-strong); }
+.count b { color: var(--mint); font-weight: 600; }
+.countDim { color: var(--muted); }
+/* The table the shared head count belongs to, named right under the number. */
+.countTable {
+  display: block;
+  font-size: 0.5rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.dir { display: flex; align-items: center; justify-content: center; }
+.dir svg { display: block; }
+
+.open {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+  text-decoration: none;
+  text-align: right;
+  transition: opacity 0.15s ease;
+}
+.open:hover { opacity: 0.75; }
+
+/* The words strip under a row's main line. */
+.words {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: -4px;
+  padding: 0 2px 11px;
+}
+.word {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+/* Honest gap line for categories with no native metric. */
+.gap {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+  padding: 12px 2px;
+}
+.gap a { color: var(--mint); text-decoration: none; }
+.gap a:hover { opacity: 0.75; }
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr 30px 58px;
+  }
+  .unit, .source, .count { display: none; }
+}
+
+/* ── THE SYSTEMS ────────────────────────────────────────────────────────────
+   The room's second wing: not what number we can draw, but whether the machine
+   that draws it is running. Same calm engineering language as above; the only
+   color is a status dot (mint alive, amber caution - never red). */
+
+.systems {
+  margin-top: 60px;
+  padding-top: 34px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.systemsTitle {
+  margin: 8px 0 10px;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.systemsIntro {
+  margin: 0 0 28px;
+  max-width: 620px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted-strong);
+}
+
+.systemsGap {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+  padding: 12px 2px;
+}
+
+.sysGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.sysCard {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  background: var(--card);
+  padding: 16px 16px 14px;
+}
+
+.sysHead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+
+/* Status dot: filled vs hollow carries alive vs dead, color carries severity. */
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.dot_ok { background: var(--mint); box-shadow: 0 0 8px rgba(110, 231, 183, 0.5); }
+.dot_degraded { background: var(--amber); }
+.dot_unknown { background: transparent; border: 1.5px solid var(--amber); }
+.dot_down { background: transparent; border: 1.5px solid var(--amber); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08); }
+
+.sysName {
+  font-size: 1rem;
+  color: var(--fg);
+  flex: 1;
+}
+
+.sysStatus {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.word_ok { color: var(--mint); }
+.word_degraded, .word_unknown, .word_down { color: var(--amber); }
+
+.sysDetail {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.sysChecks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sysCheck {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.sysCheckMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.sysCheckMark svg { display: block; }
+
+.sysCheckLabel {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--muted-strong);
+}
+.sysCheckNote {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  color: var(--amber);
+  margin-top: 3px;
+}
+
+@media (max-width: 640px) {
+  .sysGrid { grid-template-columns: 1fr; }
+}

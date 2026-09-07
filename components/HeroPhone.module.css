@@ -1,0 +1,187 @@
+/*
+ * HeroPhone — stylized phone composite for the landing hero.
+ * Sized with viewport-aware constraints so it never dominates the page.
+ * The visible 'screen' content fills the top ~80%; the lower portion is
+ * intentionally subtle so the mist layer over the landing canvas can
+ * obscure it (the 'emerging from horizon' effect).
+ */
+
+.phone {
+  position: relative;
+  width: clamp(220px, 22vw, 280px);
+  max-height: 60vh;
+  aspect-ratio: 9 / 17;
+  border-radius: 28px;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+  box-shadow:
+    0 0 100px rgba(110, 231, 183, 0.22),
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+/* Top bezel hint — a thin pill at the very top, like a status pill */
+.bezel {
+  width: 60px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto 4px;
+  flex-shrink: 0;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 4px;
+  flex-shrink: 0;
+}
+
+.greeting {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.greetingStrong {
+  font-size: 0.75rem;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+}
+
+.tile {
+  background: var(--card-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tileLabel {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.tileBody {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Fitness ring */
+
+.ring {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--mint) 0deg,
+    var(--mint) 240deg,
+    rgba(255, 255, 255, 0.08) 240deg,
+    rgba(255, 255, 255, 0.08) 360deg
+  );
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.ringInner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  display: grid;
+  place-items: center;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--mint);
+}
+
+.tileMain {
+  font-size: 0.75rem;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.tileSub {
+  font-size: 0.625rem;
+  color: var(--muted-strong);
+}
+
+.weightValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+.spark {
+  flex: 1;
+  height: 18px;
+}
+
+.dotRow {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dotFilled {
+  background: var(--mint);
+}
+
+.glass {
+  width: 9px;
+  height: 13px;
+  border-radius: 2px 2px 4px 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.glassFilled {
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.3) 0%, var(--mint) 100%);
+}
+
+/* Spacer to push the last bit of content up + leave a clean bottom region
+   that the mist layer can naturally obscure. */
+.bottomCushion {
+  flex: 1;
+  min-height: 8px;
+}
+
+@media (max-width: 519px) {
+  .phone {
+    width: clamp(180px, 50vw, 220px);
+    padding: 12px 10px;
+    gap: 6px;
+  }
+
+  .tile {
+    padding: 8px 10px;
+  }
+}

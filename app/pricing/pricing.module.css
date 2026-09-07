@@ -1,0 +1,2159 @@
+/*
+ * Pricing page — single-tier, $15/mo, "Focus" layout (price is the hero).
+ * Tokens mirror the landing's gem hero scope so the page reads as a
+ * direct continuation of the funnel (same dark + mint, same Hanken +
+ * Instrument Serif + JetBrains Mono stack).
+ */
+
+.page {
+  /* Local tokens — same values as landing.module.css's .hero scope */
+  --bg: #04060a;
+  --bg-2: #07100e;
+  --ink: #e9efe9;
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --rule: rgba(233, 239, 233, 0.14);
+  --rule-strong: rgba(233, 239, 233, 0.22);
+  --mint: #6ee7b7;
+  --mint-soft: #a7f3d0;
+  --mint-deep: #1f4d3d;
+  --mint-glow: rgba(110, 231, 183, 0.4);
+
+  --sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --serif: var(--font-serif), ui-serif, Georgia, serif;
+  --mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+
+  position: relative;
+  isolation: isolate;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ───────── Section: Offer (zone 1) ──────────────────────────────── */
+
+.offer {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  padding: clamp(108px, 13vh, 168px) clamp(24px, 5vw, 72px) clamp(64px, 8vh, 112px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      60% 50% at 50% 42%,
+      rgba(110, 231, 183, 0.22) 0%,
+      rgba(110, 231, 183, 0.08) 30%,
+      rgba(110, 231, 183, 0) 65%
+    ),
+    radial-gradient(
+      28% 22% at 50% 44%,
+      rgba(255, 226, 181, 0.10) 0%,
+      rgba(255, 226, 181, 0) 70%
+    ),
+    radial-gradient(
+      120% 80% at 50% 100%,
+      rgba(14, 38, 30, 0.85) 0%,
+      rgba(4, 6, 10, 1) 70%
+    );
+}
+
+/* ───────── Top chrome ──────────────────────────────────────────── */
+
+.chrome {
+  position: absolute;
+  top: clamp(20px, 3vh, 36px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 0 clamp(24px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: auto;
+}
+
+.wordmark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.wordmark::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  margin-left: 8px;
+  vertical-align: middle;
+  box-shadow: 0 0 10px var(--mint-glow);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 36px);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.nav a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nav a:hover {
+  color: var(--mint);
+}
+
+.navMeta {
+  color: var(--mint) !important;
+}
+
+/* ───────── Hero gem — centred icosahedron, the single accent ───── */
+
+.offerGem {
+  position: relative;
+  z-index: 1;
+  width: clamp(216px, 28vw, 304px);
+  height: clamp(216px, 28vw, 304px);
+  margin-bottom: clamp(-34px, -2.4vh, -14px);
+  pointer-events: none;
+  filter: drop-shadow(0 0 36px rgba(110, 231, 183, 0.32))
+    drop-shadow(0 0 100px rgba(110, 231, 183, 0.16));
+  animation: orb-float 13s ease-in-out infinite alternate;
+  opacity: 0.92;
+}
+
+.offerGem :global(canvas) {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, 1) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, 1) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@keyframes orb-float {
+  0% { translate: 0 -8px; }
+  100% { translate: 0 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offerGem { animation: none; }
+}
+
+/* ───────── Offer header — eyebrow + headline + sub ─────────────── */
+
+.offerHeader {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  margin: 0 0 clamp(32px, 4.5vh, 52px);
+  max-width: 900px;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(22px, 3vh, 32px);
+}
+
+.eyebrowRule {
+  display: inline-block;
+  width: 36px;
+  height: 1px;
+  background: var(--mint);
+  opacity: 0.7;
+}
+
+.headline {
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--ink);
+  font-size: clamp(54px, 8vw, 104px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.headline em {
+  font-style: italic;
+  color: var(--mint);
+  font-weight: 400;
+}
+
+.sub {
+  font-family: var(--sans);
+  color: var(--ink-dim);
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.55;
+  margin: clamp(22px, 3vh, 32px) auto 0;
+  max-width: 480px;
+}
+
+/* ───────── Pricing card — the visual anchor ────────────────────── */
+
+.priceCard {
+  position: relative;
+  z-index: 5;
+  width: min(440px, 92vw);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  padding: clamp(24px, 3.5vh, 36px) clamp(24px, 3.5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 2.5vh, 28px);
+  box-shadow:
+    0 24px 80px -32px rgba(110, 231, 183, 0.25),
+    0 12px 40px -20px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 480ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 480ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.priceCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--rule-strong);
+  box-shadow:
+    0 32px 100px -32px rgba(110, 231, 183, 0.35),
+    0 16px 50px -20px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.priceTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-bottom: clamp(16px, 2vh, 24px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.priceTopLabel {
+  color: var(--mint);
+}
+
+.priceTopMark {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--mint);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.priceFigure {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  color: var(--ink);
+}
+
+.priceCurrency {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1;
+  color: var(--mint);
+  margin-top: clamp(12px, 1.5vh, 20px);
+}
+
+.priceAmount {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(110px, 13vw, 168px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.priceUnit {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-bottom: clamp(12px, 1.5vh, 20px);
+  font-family: var(--serif);
+}
+
+.priceUnitTop {
+  font-style: italic;
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: var(--ink-dim);
+  line-height: 1;
+}
+
+.priceUnitBottom {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  line-height: 1;
+}
+
+.priceBullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-dim);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.priceBullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.priceCheck {
+  color: var(--mint);
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: rgba(110, 231, 183, 0.12);
+}
+
+.priceCheckSvg {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+
+.priceCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--bg);
+  background: var(--mint);
+  padding: 16px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.priceCta:hover {
+  background: var(--mint-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 20px 50px -16px var(--mint-glow);
+}
+
+.priceCtaArrow {
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.priceCta:hover .priceCtaArrow {
+  transform: translateX(3px);
+}
+
+.priceFinePrint {
+  margin: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ───────── Section: Included (zone 2) ──────────────────────────── */
+
+.included {
+  position: relative;
+  padding: clamp(80px, 12vh, 160px) clamp(24px, 5vw, 72px);
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    #06090c 100%
+  );
+}
+
+.sectionHead {
+  max-width: 720px;
+  margin: 0 auto clamp(40px, 6vh, 72px);
+  text-align: center;
+}
+
+.sectionHead .eyebrow {
+  margin-bottom: clamp(20px, 2.5vh, 28px);
+}
+
+.sectionHeadline {
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--ink);
+  font-size: clamp(40px, 6vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.sectionHeadline em {
+  font-style: italic;
+  color: var(--mint);
+}
+
+.sectionSub {
+  font-family: var(--sans);
+  color: var(--ink-dim);
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.55;
+  margin: clamp(20px, 3vh, 28px) auto 0;
+  max-width: 560px;
+}
+
+/* The trimmed, scannable "what's included" list — four lines, not a
+   nine-card grid. Number · serif-italic title · plain-spoken body. */
+.inclList {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.inclItem {
+  border-bottom: 1px solid var(--rule);
+}
+
+.inclItem:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.inclSummary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(18px, 2.4vh, 24px) 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.inclSummary::-webkit-details-marker {
+  display: none;
+}
+
+.inclNum {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--mint);
+}
+
+.inclTitle {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(19px, 1.9vw, 26px);
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  line-height: 1.12;
+}
+
+/* +/- toggle that turns into a minus when the item opens */
+.inclChevron,
+.faqChevron {
+  flex: none;
+  position: relative;
+  width: 13px;
+  height: 13px;
+}
+
+.inclChevron::before,
+.inclChevron::after,
+.faqChevron::before,
+.faqChevron::after {
+  content: '';
+  position: absolute;
+  background: var(--ink-faint);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inclChevron::before,
+.faqChevron::before {
+  top: 6px;
+  left: 0;
+  width: 13px;
+  height: 1.5px;
+}
+
+.inclChevron::after,
+.faqChevron::after {
+  top: 0;
+  left: 6px;
+  width: 1.5px;
+  height: 13px;
+}
+
+.inclItem[open] .inclChevron::after,
+.faqItem[open] .faqChevron::after {
+  transform: scaleY(0);
+}
+
+.inclBody {
+  margin: 0;
+  padding: 0 0 clamp(18px, 2.4vh, 24px);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+/* Founder's-pricing lock-in — the FOMO lever kept as one quiet band. */
+.lockIn {
+  max-width: 720px;
+  margin: clamp(40px, 6vh, 72px) auto 0;
+  padding: clamp(20px, 2.5vh, 28px) clamp(22px, 3vw, 32px);
+  background: linear-gradient(
+    135deg,
+    rgba(110, 231, 183, 0.06) 0%,
+    rgba(110, 231, 183, 0.02) 100%
+  );
+  border: 1px solid rgba(110, 231, 183, 0.18);
+  border-radius: 14px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink);
+  text-align: center;
+}
+
+.lockInLabel {
+  color: var(--mint);
+  font-weight: 500;
+}
+
+/* ───────── Section: Your Claude, with a memory (zone 1.5) ───────── */
+/* Minimal + visual: one line, a phone playing a scripted Claude exchange
+   (ConnectorDemo) where Vitality's connectors surface the hidden thing,
+   then small chips of what it quietly catches. */
+.claude {
+  /* Iris is the Claude / AI accent (from the Vee card system) — distinct
+     from Vitality's mint. Mint = your data going in; iris = Claude.
+     Amber = a heads-up (used inside the Vee notice). */
+  --iris: #a78bfa;
+  --iris-hi: #c4b5fd;
+  --iris-ink: #1c1240;
+  --iris-glow: rgba(167, 139, 250, 0.42);
+  --amber: #f59e0b;
+  --amber-bd: rgba(245, 158, 11, 0.36);
+
+  position: relative;
+  padding: clamp(80px, 12vh, 150px) clamp(24px, 5vw, 72px);
+  background: linear-gradient(to bottom, #06090c 0%, var(--bg) 100%);
+  border-top: 1px solid var(--rule);
+}
+
+/* ── IT'S A CONNECTOR — mock of Claude's connectors panel ───────── */
+.connPanel {
+  max-width: 460px;
+  margin: clamp(24px, 4vh, 40px) auto clamp(28px, 4vh, 44px);
+  border: 1px solid var(--rule-strong);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0a0d12;
+  box-shadow: 0 30px 70px -36px rgba(0, 0, 0, 0.9),
+    0 0 60px -34px var(--iris-glow);
+}
+
+.connPanelHead {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.connPanelTitle {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.connPanelSub {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+.connRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-top: 1px solid var(--rule);
+}
+
+.connRow:first-of-type {
+  border-top: none;
+}
+
+.connRowLive {
+  background: linear-gradient(
+    90deg,
+    rgba(110, 231, 183, 0.06),
+    rgba(110, 231, 183, 0)
+  );
+}
+
+.connLogo {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--mint);
+  color: #04221a;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  box-shadow: 0 0 14px -2px var(--mint-glow);
+}
+
+.connLogoDim {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: 13px;
+}
+
+.connMeta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.connName {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.connDesc {
+  font-family: var(--sans);
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+.connBadge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mint);
+}
+
+.connBadgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+  animation: connectorPulse 2.4s ease-in-out infinite;
+}
+
+.connConnect {
+  flex: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 5px 13px;
+}
+
+/* ── WHAT GOES IN — clickable module cards ──────────────────────── */
+.sources {
+  max-width: 760px;
+  margin: 0 auto clamp(40px, 6vh, 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2.5vh, 24px);
+}
+
+/* The Vitality AI avatar (gem) watching a live, auto-cycling app screen. */
+.aiShowcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 54px);
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto clamp(28px, 4vh, 44px);
+}
+
+.aiGem {
+  position: relative;
+  flex: none;
+  width: clamp(168px, 22vw, 232px);
+  height: clamp(168px, 22vw, 232px);
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(110, 231, 183, 0.3))
+    drop-shadow(0 0 90px rgba(110, 231, 183, 0.14));
+  animation: orb-float 13s ease-in-out infinite alternate;
+}
+
+.aiGem canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+}
+
+.aiScreenWrap {
+  flex: 0 0 auto;
+  width: min(320px, 78vw);
+}
+
+.aiScreen {
+  animation: aiScreenIn 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes aiScreenIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.aiScreenLabel {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.aiScreenDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+  animation: connectorPulse 2s ease-in-out infinite;
+}
+
+@media (max-width: 700px) {
+  .aiShowcase {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .aiGem {
+    width: clamp(150px, 42vw, 196px);
+    height: clamp(150px, 42vw, 196px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aiGem,
+  .aiScreen,
+  .aiScreenDot {
+    animation: none;
+  }
+}
+
+.sourcesLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.sourceGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.sourceCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+  padding: 14px 15px;
+  border: 1px solid var(--rule);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.015);
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sourceCard:hover {
+  border-color: rgba(110, 231, 183, 0.4);
+  background: rgba(110, 231, 183, 0.04);
+  transform: translateY(-2px);
+}
+
+.sourceName {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sourceBlurb {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.45;
+}
+
+.sourceView {
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+  opacity: 0;
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sourceCard:hover .sourceView {
+  opacity: 1;
+}
+
+/* ── Module preview modal ───────────────────────────────────────── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 4, 8, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: backdropIn 220ms ease both;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalPanel {
+  position: relative;
+  width: min(360px, 92vw);
+  border: 1px solid var(--rule-strong);
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 28px);
+  background: linear-gradient(180deg, #0c0f14 0%, #07090d 100%);
+  box-shadow: 0 50px 110px -40px rgba(0, 0, 0, 0.95);
+  animation: panelIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink-dim);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.modalClose:hover {
+  color: var(--ink);
+  border-color: var(--border-strong, rgba(255, 255, 255, 0.16));
+}
+
+/* Real screenshot variant — fills the screen frame. */
+.appShot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+/* Mini app screen inside the modal */
+.appScreen {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 40% at 0% 0%, rgba(110, 231, 183, 0.06), transparent 60%),
+    #060809;
+}
+
+.appScreenHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 16px 12px;
+}
+
+.appScreenTitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.appScreenTag {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.appScreenRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.appRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 16px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 13.5px;
+}
+
+.appRowLabel {
+  color: var(--ink-dim);
+}
+
+.appRowVal {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.tone_mint { color: var(--mint); }
+.tone_amber { color: var(--amber); }
+.tone_iris { color: var(--iris-hi); }
+
+.appScreenNote {
+  padding: 11px 16px 14px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.modalMeta {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.modalName {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modalBlurb {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+
+.modalManage {
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modalBackdrop,
+  .modalPanel,
+  .connBadgeDot {
+    animation: none;
+  }
+}
+
+/* ── THE CONNECTOR — doorway + how to connect ───────────────────── */
+.connect {
+  max-width: 560px;
+  margin: clamp(34px, 5vh, 56px) auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 3vh, 30px);
+}
+
+/* "Open in Claude" doorway — premium iris portal (Vee treatment C). */
+.doorway {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: min(420px, 92vw);
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-align: left;
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.15),
+    rgba(167, 139, 250, 0.05)
+  );
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 0 44px -26px var(--iris-glow);
+  transition: border-color 260ms var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow 260ms var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)),
+    transform 260ms var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.doorway:hover {
+  border-color: rgba(167, 139, 250, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 40px -22px var(--iris-glow);
+  transform: translateY(-1px);
+}
+
+.doorwayMark {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--iris);
+  color: var(--iris-ink);
+}
+
+.doorwayMark svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.doorwayLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.doorwayTitle {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.doorwaySub {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  margin-top: 1px;
+}
+
+.doorwayArrow {
+  flex: none;
+  color: var(--iris-hi);
+  font-size: 18px;
+  transition: transform 260ms var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.doorway:hover .doorwayArrow {
+  transform: translateX(4px);
+}
+
+/* Three-step connect strip — makes "it's a Claude connector" concrete. */
+.connectSteps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+}
+
+.connectSteps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  color: var(--ink-dim);
+}
+
+.stepNum {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--iris-hi);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  background: rgba(167, 139, 250, 0.06);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.connectFoot {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* ── THE TWO SURFACES — laptop (your app) beside the phone (Claude) ──
+   Side by side with a gap — they never overlap. Stack on narrow screens. */
+.deviceScene {
+  position: relative;
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 3vw, 44px);
+}
+
+.devicePhone {
+  flex: 0 0 auto;
+  width: 244px;
+}
+
+.devicePhone .demoStage {
+  margin: 0;
+}
+
+.devicePhone .phone {
+  width: 244px;
+  height: 500px;
+  border-radius: 40px;
+  padding: 8px;
+}
+
+.devicePhone .phoneScreen,
+.devicePhone .screenGlare {
+  border-radius: 33px;
+}
+
+/* Browser-window frame holding the live Vee notice (the app on desktop). */
+.laptop {
+  flex: 1 1 auto;
+  max-width: 600px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: #090c11;
+  box-shadow:
+    0 60px 110px -40px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 80px -30px rgba(167, 139, 250, 0.14);
+}
+
+.laptopBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--rule);
+}
+
+.laptopDots {
+  display: inline-flex;
+  gap: 7px;
+}
+
+.laptopDots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.laptopUrl {
+  margin: 0 auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 4px 16px;
+}
+
+.laptopScreen {
+  padding: clamp(20px, 3vw, 32px) clamp(20px, 3vw, 34px) clamp(22px, 3vw, 30px);
+  /* Leave room on the lower-right for the overlapping phone. */
+  padding-right: clamp(20px, 3vw, 34px);
+  background:
+    radial-gradient(80% 30% at 0% 0%, rgba(167, 139, 250, 0.07), transparent 60%),
+    #06080c;
+}
+
+/* Vee notice — mirrors public/vee-card-library.html */
+.vnEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--iris-hi);
+}
+
+.vnEyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+}
+
+.vnTitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 10px 0 12px;
+}
+
+.vnIntro {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--ink-dim);
+  max-width: 52ch;
+  margin: 0 0 clamp(18px, 2.5vw, 26px);
+}
+
+.vnIntro b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.vnIris {
+  color: var(--iris-hi);
+}
+
+.vnAmber {
+  color: var(--amber);
+}
+
+.vnMint {
+  color: var(--mint);
+  border-bottom: 1px solid rgba(110, 231, 183, 0.5);
+}
+
+/* live goals card */
+.vnCard {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.015);
+  margin-bottom: 16px;
+}
+
+.vnCardHead {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+
+.vnCardHead b {
+  color: var(--iris-hi);
+  font-weight: 500;
+}
+
+.vnGoal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.vnGoal:first-of-type {
+  border-top: none;
+}
+
+.vnGoalName {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.vnGoalSub {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.vnSpark {
+  width: 72px;
+  height: 20px;
+  flex: none;
+  display: block;
+}
+
+.vnDelta {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 56px;
+}
+
+.vnDelta span {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.vnUp {
+  color: var(--mint);
+}
+
+.vnDown {
+  color: var(--amber);
+}
+
+.vnChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.vnChip {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  padding: 6px 9px;
+}
+
+/* "what Vitality noticed" — the iris insight card */
+.vnNotice {
+  border: 1px solid rgba(167, 139, 250, 0.28);
+  border-radius: 16px;
+  padding: 15px 18px 18px;
+  background:
+    radial-gradient(130% 95% at 0% 0%, rgba(167, 139, 250, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(167, 139, 250, 0.04), rgba(255, 255, 255, 0.004));
+  box-shadow: 0 0 55px -36px var(--iris-glow);
+}
+
+.vnNoticeTop {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.vnVmark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 1px solid rgba(167, 139, 250, 0.42);
+  background: rgba(167, 139, 250, 0.12);
+  color: var(--iris-hi);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.vnNoticeTag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--iris-hi);
+}
+
+.vnNoticeSrc {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.vnNoticeBody {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.vnActs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.vnActIris,
+.vnActAmber {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 11px;
+  padding: 9px 14px;
+}
+
+.vnActIris {
+  color: var(--iris-hi);
+  border: 1px solid rgba(167, 139, 250, 0.38);
+  background: rgba(167, 139, 250, 0.05);
+}
+
+.vnActAmber {
+  color: var(--amber);
+  border: 1px solid var(--amber-bd);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+/* Stack the two devices on narrow viewports. */
+@media (max-width: 860px) {
+  .deviceScene {
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .laptop {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .devicePhone {
+    width: auto;
+    margin: 0;
+  }
+
+  .devicePhone .phone {
+    width: clamp(280px, 80vw, 320px);
+    height: clamp(560px, 76vh, 600px);
+  }
+}
+
+/* ── The connector demo — a Claude-app phone playing a scripted exchange ──
+   Frame language matched to the landing's HeroPhones (titanium chassis,
+   dynamic island, glass glare). Component: app/pricing/ConnectorDemo. */
+
+.demoStage {
+  display: flex;
+  justify-content: center;
+  margin: clamp(40px, 6vh, 64px) auto 0;
+  perspective: 1400px;
+}
+
+/* Entrance — phone rises + settles when scrolled into view. */
+.phoneReveal {
+  opacity: 0;
+  transform: translateY(52px) scale(0.94);
+  transition:
+    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.revealed .phoneReveal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Continuous gentle float (own element so it never fights the entrance). */
+.phoneFloat {
+  animation: demoFloat 7s ease-in-out infinite alternate;
+}
+
+@keyframes demoFloat {
+  0% { transform: translateY(-6px); }
+  100% { transform: translateY(9px); }
+}
+
+/* Titanium chassis — mirrors HeroPhones .phone. */
+.phone {
+  position: relative;
+  width: clamp(300px, 86vw, 356px);
+  height: clamp(580px, 78vh, 684px);
+  border-radius: 48px;
+  padding: 9px;
+  background: linear-gradient(
+    115deg,
+    #1e2024 0%,
+    #131519 20%,
+    #0a0c10 55%,
+    #050709 100%
+  );
+  box-shadow:
+    0 70px 120px -34px rgba(0, 0, 0, 0.95),
+    0 34px 60px -24px rgba(0, 0, 0, 0.6),
+    0 8px 14px -6px rgba(0, 0, 0, 0.7),
+    0 0 0 0.5px rgba(255, 255, 255, 0.05),
+    0 0 80px -14px rgba(110, 231, 183, 0.16),
+    inset 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 0 30px rgba(110, 231, 183, 0.03);
+  overflow: hidden;
+}
+
+.screenGlare {
+  position: absolute;
+  inset: 9px;
+  z-index: 4;
+  border-radius: 40px;
+  pointer-events: none;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 22%,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.025) 62%,
+    rgba(255, 255, 255, 0) 78%
+  );
+}
+
+.phoneScreen {
+  position: relative;
+  height: 100%;
+  border-radius: 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(130% 50% at 50% 0%, rgba(110, 231, 183, 0.06), transparent 58%),
+    linear-gradient(180deg, #050709 0%, #03050a 100%);
+}
+
+.island {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  height: 26px;
+  border-radius: 999px;
+  background: #000;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+  z-index: 6;
+}
+
+/* Status bar */
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 26px 8px;
+  color: rgba(233, 239, 233, 0.9);
+  flex-shrink: 0;
+}
+
+.statusTime {
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.statusIcons {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.92;
+}
+
+.statusIcons svg { display: block; }
+
+/* Claude app header */
+.appHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 18px 12px;
+  flex-shrink: 0;
+}
+
+.appBack {
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink-dim);
+}
+
+.appName {
+  font-family: var(--sans);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.appCaret {
+  color: var(--ink-faint);
+  font-size: 12px;
+  margin-left: 1px;
+}
+
+.appGem {
+  margin-left: auto;
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: rgba(110, 231, 183, 0.14);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--mint);
+}
+
+.connectorBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 0 18px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.connectorPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--mint);
+  white-space: nowrap;
+}
+
+.connectorDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+  animation: connectorPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes connectorPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.connectorScope {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Chat — bottom-anchored, newest message pushes the stack up */
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 18px 16px 10px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* User message — grey rounded bubble, right (Claude app style) */
+.userMsg {
+  align-self: flex-end;
+  max-width: 78%;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px 20px 6px 20px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.45;
+  animation: msgIn 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Claude reply — burst avatar + plain text, no bubble (Claude app style) */
+.aiMsg {
+  align-self: flex-start;
+  display: flex;
+  gap: 11px;
+  max-width: 97%;
+}
+
+.aiAvatar {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Iris — the Claude mark (set on .claude, cascades into the phone). */
+  color: var(--iris-hi, #c4b5fd);
+}
+
+.aiAvatar svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  filter: drop-shadow(0 0 5px rgba(167, 139, 250, 0.4));
+}
+
+.aiBody {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.56;
+}
+
+.aiLine {
+  margin: 0;
+  animation: msgIn 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aiLine em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--mint);
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing dots */
+.typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 0;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  opacity: 0.4;
+  animation: typingDot 1.2s ease-in-out infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.18s; }
+.typing span:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* Decorative composer */
+.composer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 14px 16px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.composerInput {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+
+.composerSend {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--mint);
+  color: #04060a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phoneReveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .phoneFloat,
+  .userMsg,
+  .aiLine,
+  .typing span,
+  .connectorDot {
+    animation: none;
+  }
+}
+
+/* ───────── Section: Closer (zone 3) ────────────────────────────── */
+
+.closer {
+  position: relative;
+  padding: clamp(72px, 10vh, 130px) clamp(24px, 5vw, 72px);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 4vh, 48px);
+}
+
+.closerCard {
+  width: min(420px, 92vw);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 2.5vh, 28px);
+  padding: clamp(32px, 4vh, 48px) clamp(24px, 3.5vw, 36px);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 80px -32px rgba(110, 231, 183, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.closerCardFigure {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+}
+
+.closerHeadline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.closerCard .priceCta {
+  width: 100%;
+}
+
+/* ───────── FAQ ─────────────────────────────────────────────────── */
+
+.faq {
+  width: 100%;
+  max-width: 720px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.faqHeading {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  text-align: center;
+  margin: 0;
+}
+
+.faqItem {
+  border-top: 1px solid var(--rule);
+}
+
+.faqItem:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.faqQ {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(20px, 2.6vh, 28px) 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.8vw, 22px);
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+
+.faqQ::-webkit-details-marker {
+  display: none;
+}
+
+.faqA {
+  margin: 0;
+  padding: 0 0 clamp(20px, 2.6vh, 28px);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  max-width: 64ch;
+}
+
+/* ───────── Indie footer line ───────────────────────────────────── */
+
+.indieFooter {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+  margin-top: clamp(40px, 5vh, 64px);
+  padding-top: clamp(32px, 4vh, 48px);
+  border-top: 1px solid var(--rule);
+  width: 100%;
+  max-width: 720px;
+}
+
+/* ───────── Responsive — tablet ──────────────────────────────────── */
+
+@media (max-width: 980px) {
+  .headline {
+    font-size: clamp(48px, 11vw, 84px);
+  }
+}
+
+/* ───────── Responsive — phone ──────────────────────────────────── */
+
+@media (max-width: 560px) {
+  .offer {
+    padding: 100px 20px 56px;
+  }
+
+  .offerGem {
+    width: clamp(190px, 54vw, 230px);
+    height: clamp(190px, 54vw, 230px);
+    opacity: 0.7;
+    margin-bottom: -18px;
+  }
+
+  .nav a:not(.navMeta) {
+    display: none;
+  }
+
+  .priceAmount {
+    font-size: clamp(96px, 24vw, 140px);
+  }
+}

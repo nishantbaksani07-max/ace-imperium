@@ -1,0 +1,266 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Water</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;accent-color:#6EE7B7;margin:0;-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(110,231,183,.3)}
+  .wrap{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(8px,3vw,28px);
+    padding:clamp(12px,4vw,40px);
+    min-height:100%;
+    width:100%;
+    text-align:center;
+    overflow:auto;
+  }
+  .head{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto}
+  .label{
+    font-size:clamp(10px,2.6vw,13px);
+    letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.5);font-weight:600;
+  }
+  .sub{
+    font-size:clamp(11px,3vw,14px);
+    color:rgba(255,255,255,.42);font-weight:500;
+    transition:color .5s cubic-bezier(.16,1,.3,1);
+  }
+  .sub.done{color:#6EE7B7}
+
+  .ringwrap{
+    position:relative;
+    width:clamp(110px,42vw,260px);
+    height:clamp(110px,42vw,260px);
+    flex:0 1 auto;
+  }
+  svg.ring{width:100%;height:100%;display:block;transform:rotate(-90deg)}
+  .track{stroke:rgba(255,255,255,.08);fill:none}
+  .prog{
+    stroke:url(#mintgrad);fill:none;stroke-linecap:round;
+    transition:stroke-dashoffset .7s cubic-bezier(.16,1,.3,1),filter .6s cubic-bezier(.16,1,.3,1);
+  }
+  .ringwrap.done .prog{filter:drop-shadow(0 0 10px rgba(110,231,183,.65))}
+
+  /* filling wave inside the ring */
+  .core{
+    position:absolute;inset:clamp(9px,3.2vw,20px);
+    border-radius:50%;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.025);
+  }
+  .fill{
+    position:absolute;left:-25%;right:-25%;bottom:0;
+    height:140%;
+    transition:transform .85s cubic-bezier(.16,1,.3,1);
+    transform:translateY(100%);
+  }
+  .fill .water{
+    position:absolute;left:0;right:0;bottom:0;top:18px;
+    background:linear-gradient(180deg,rgba(110,231,183,.34),rgba(110,231,183,.16));
+  }
+  .fill svg{position:absolute;left:0;bottom:calc(100% - 19px);width:200%;height:24px}
+  .wave-a{animation:drift 7s linear infinite}
+  .wave-b{animation:drift 11s linear infinite reverse;opacity:.55}
+  @keyframes drift{to{transform:translateX(-50%)}}
+  .ringwrap.done .water{background:linear-gradient(180deg,rgba(110,231,183,.5),rgba(110,231,183,.26))}
+
+  .count{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;line-height:1;
+  }
+  .num{
+    font-size:clamp(34px,14vw,92px);font-weight:700;
+    letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .num.pop{transform:scale(1.12)}
+  .of{
+    font-size:clamp(10px,2.8vw,15px);
+    color:rgba(255,255,255,.5);font-weight:600;margin-top:5px;
+  }
+
+  .controls{display:flex;align-items:center;gap:clamp(12px,4vw,24px);flex:0 0 auto}
+  button.btn{
+    -webkit-appearance:none;appearance:none;cursor:pointer;
+    width:clamp(46px,14vw,72px);height:clamp(46px,14vw,72px);
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .3s cubic-bezier(.16,1,.3,1),background .3s cubic-bezier(.16,1,.3,1),border-color .3s cubic-bezier(.16,1,.3,1),opacity .3s ease;
+    -webkit-tap-highlight-color:transparent;
+    flex:0 0 auto;
+  }
+  button.btn svg{width:42%;height:42%}
+  button.btn:hover{background:rgba(255,255,255,.1)}
+  button.btn:active{transform:scale(.9)}
+  button.plus{
+    background:rgba(110,231,183,.14);
+    border-color:rgba(110,231,183,.4);
+    color:#6EE7B7;
+    width:clamp(54px,17vw,88px);height:clamp(54px,17vw,88px);
+  }
+  button.plus:hover{background:rgba(110,231,183,.22)}
+  button.plus svg{width:38%;height:38%}
+  button.btn:disabled{opacity:.3;cursor:default}
+  button.btn:disabled:active{transform:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="label">Water today</div>
+    <div class="sub" id="sub">Stay topped up</div>
+  </div>
+
+  <div class="ringwrap" id="ringwrap">
+    <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <linearGradient id="mintgrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#6EE7B7"/>
+          <stop offset="1" stop-color="#3FD6A4"/>
+        </linearGradient>
+      </defs>
+      <circle class="track" cx="50" cy="50" r="44" stroke-width="6"/>
+      <circle class="prog" id="prog" cx="50" cy="50" r="44" stroke-width="6"
+        stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+    </svg>
+    <div class="core">
+      <div class="fill" id="fill">
+        <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+          <path class="wave-a" d="M0 12 Q25 4 50 12 T100 12 T150 12 T200 12 V24 H0 Z" fill="rgba(110,231,183,.3)"/>
+        </svg>
+        <svg viewBox="0 0 200 24" preserveAspectRatio="none">
+          <path class="wave-b" d="M0 12 Q25 20 50 12 T100 12 T150 12 T200 12 V24 H0 Z" fill="rgba(110,231,183,.22)"/>
+        </svg>
+        <div class="water"></div>
+      </div>
+      <div class="count">
+        <div class="num" id="num">0</div>
+        <div class="of" id="of">of 8 glasses</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn minus" id="minus" aria-label="Remove a glass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <button class="btn plus" id="plus" aria-label="Add a glass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+
+(function(){
+  var CIRC=276.46; // 2*pi*44
+
+  function todayKey(){
+    var d=new Date();
+    var m=String(d.getMonth()+1).padStart(2,'0');
+    var day=String(d.getDate()).padStart(2,'0');
+    return d.getFullYear()+'-'+m+'-'+day;
+  }
+
+  var state={date:todayKey(),count:0,goal:8};
+
+  function sanitize(d){
+    var goal=8;
+    if(d&&typeof d.goal==='number'&&isFinite(d.goal)&&d.goal>0){goal=Math.round(d.goal);}
+    var s={date:todayKey(),count:0,goal:goal};
+    if(d&&typeof d==='object'){
+      if(d.date===s.date){ // same local day, keep progress
+        var c=(typeof d.count==='number'&&isFinite(d.count))?Math.round(d.count):0;
+        s.count=Math.max(0,c);
+      }
+      // different/missing date -> fresh day, count stays 0
+    }
+    return s;
+  }
+
+  var num=document.getElementById('num');
+  var ofEl=document.getElementById('of');
+  var sub=document.getElementById('sub');
+  var prog=document.getElementById('prog');
+  var fill=document.getElementById('fill');
+  var ringwrap=document.getElementById('ringwrap');
+  var minus=document.getElementById('minus');
+  var plus=document.getElementById('plus');
+
+  var DONE_MSGS=['Goal reached. Nicely done','Fully topped up','Hydrated and happy'];
+
+  function render(animatePop){
+    var goal=state.goal;
+    var count=state.count;
+    var ratio=goal>0?Math.min(1,count/goal):0;
+    var done=count>=goal&&goal>0;
+
+    num.textContent=count;
+    ofEl.textContent='of '+goal+' glasses';
+    prog.style.strokeDashoffset=(CIRC*(1-ratio)).toFixed(2);
+    // wave fills upward as ratio grows; full fill nudged slightly past for a brimming feel
+    var lift=done?-6:0;
+    fill.style.transform='translateY('+((1-ratio)*100+lift)+'%)';
+
+    if(done){
+      ringwrap.classList.add('done');
+      sub.classList.add('done');
+      sub.textContent=DONE_MSGS[Math.min(count-goal,DONE_MSGS.length-1)]||DONE_MSGS[0];
+    }else{
+      ringwrap.classList.remove('done');
+      sub.classList.remove('done');
+      var left=goal-count;
+      sub.textContent=count===0?'Stay topped up':(left+' to go');
+    }
+
+    minus.disabled=count<=0;
+
+    if(animatePop){
+      num.classList.remove('pop');
+      void num.offsetWidth;
+      num.classList.add('pop');
+      setTimeout(function(){num.classList.remove('pop');},520);
+    }
+  }
+
+  function persist(){
+    Vitality.save({date:state.date,count:state.count,goal:state.goal});
+  }
+
+  plus.addEventListener('click',function(){
+    state.count+=1;
+    render(true);
+    persist();
+  });
+  minus.addEventListener('click',function(){
+    if(state.count<=0)return;
+    state.count-=1;
+    render(true);
+    persist();
+  });
+
+  // initial paint with defaults so it never looks blank, then hydrate
+  render(false);
+
+  Vitality.load().then(function(d){
+    var loaded=sanitize(d);
+    var rolled=(d&&d.date&&d.date!==todayKey()); // crossed into a new day
+    state=loaded;
+    render(false);
+    // if we reset for a new day, or there was no saved data, write the fresh state back so it persists
+    if(rolled||!d){persist();}
+  }).catch(function(){
+    state=sanitize(null);
+    render(false);
+  });
+})();
+</script>
+</body></html>

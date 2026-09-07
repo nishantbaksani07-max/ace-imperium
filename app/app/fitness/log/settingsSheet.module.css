@@ -1,0 +1,308 @@
+/*
+ * SettingsSheet — centered modal for the logger's settings (units toggle +
+ * link to setup wizard). Used by both SessionMenu and SplitLog so the gear
+ * icon in either place opens the same dialog.
+ *
+ * Pattern mirrors ExerciseSettings / FormReferenceSheet: full-page backdrop
+ * with blur, centered sheet, Esc + backdrop-click + close-button close.
+ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: 100;
+  animation: backdropIn 200ms var(--ease-premium);
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: sheetIn 280ms var(--ease-premium);
+}
+
+@keyframes sheetIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .sheet { animation: none; }
+}
+
+/* ── Close button (top-right) ── */
+
+.closeBtn {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted-strong);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.closeBtn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.closeBtn:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+
+.closeBtn:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+/* ── Head (eyebrow + title) ── */
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-right: 44px; /* leave room for the close button */
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+  font-weight: 600;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* ── Units section ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sectionHint {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.sectionHint em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.unitToggle {
+  display: flex;
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  padding: 4px;
+  gap: 4px;
+}
+
+.unitOption {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--muted-strong);
+  padding: 10px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.unitOption:hover:not(.unitOptionActive) {
+  color: var(--fg);
+}
+
+.unitOptionActive {
+  background: var(--mint);
+  color: #000;
+}
+
+.unitOption:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+/* ── Action row (link to /app/fitness/setup) ── */
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.actionRow:hover {
+  border-color: var(--border-strong);
+  background: var(--card-elevated);
+}
+
+.actionRow:hover .actionRowArrow {
+  color: var(--mint);
+  transform: translateX(3px);
+}
+
+.actionRow:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+.actionRowLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.actionRowTitle {
+  font-size: var(--text-base);
+  color: var(--fg);
+}
+
+.actionRowTitle em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.actionRowDesc {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.actionRowArrow {
+  color: var(--muted);
+  font-size: var(--text-lg);
+  transition: color var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+/* Status pill that replaces the arrow on rows that have a binary
+   completed/not-started state (currently: "Tailor my split"). */
+.actionRowStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.actionRowStatusDone {
+  background: var(--mint);
+  color: var(--bg);
+}
+
+.actionRowStatusEmpty {
+  background: transparent;
+  color: var(--muted-strong);
+  border: 1px solid var(--border-strong);
+}
+
+/* ── Back arrow on the checklist sub-screen header ─────────────── */
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-bottom: var(--space-2);
+  background: transparent;
+  border: 0;
+  padding: 4px 8px 4px 0;
+  color: var(--muted-strong);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: color var(--duration) var(--ease);
+}
+
+.backBtn:hover {
+  color: var(--ink);
+}
+
+.backBtn svg {
+  flex: 0 0 auto;
+}
+
+/* ── Checklist sub-screen body ─────────────────────────────────── */
+
+.checklistWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.checklistIntro {
+  color: var(--muted-strong);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}

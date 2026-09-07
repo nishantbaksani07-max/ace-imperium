@@ -1,0 +1,291 @@
+/*
+ * NewQuizGreeting — "I added a new quiz, want to take it?" modal.
+ *
+ * Same editorial canon as /welcome (HeroCrystal gem in character
+ * mode, mint glow, serif italic title) so the user reads it as the
+ * same character speaking, not a new system alert.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(4, 6, 10, 0.62);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  overflow-y: auto;
+  animation: greetingOverlay 280ms var(--ease-premium);
+}
+
+@keyframes greetingOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(110, 231, 183, 0.10), transparent 55%),
+    var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 24px;
+  box-shadow:
+    0 32px 100px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(110, 231, 183, 0.1),
+    0 0 80px -20px rgba(110, 231, 183, 0.2);
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  animation: greetingDialog 420ms var(--ease-premium);
+}
+
+@keyframes greetingDialog {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .dialog { animation: none; }
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(80% 50% at 50% 0%, rgba(110, 231, 183, 0.12) 0%, rgba(110, 231, 183, 0.04) 40%, rgba(110, 231, 183, 0) 75%);
+  border-radius: inherit;
+}
+
+.closeIcon {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  color: var(--muted-strong);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+.closeIcon:hover { color: var(--fg); background: rgba(0, 0, 0, 0.5); }
+
+/* Gem stage — smaller than /welcome since this is a modal, not a
+   full page. Same character-mode HeroCrystal with the V flicker. */
+.gemStage {
+  position: relative;
+  z-index: 1;
+  width: 180px;
+  height: 180px;
+  filter: drop-shadow(0 0 30px rgba(110, 231, 183, 0.22))
+          drop-shadow(0 0 70px rgba(110, 231, 183, 0.10));
+}
+
+.gemStage > canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gemFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.18) 0%, rgba(110, 231, 183, 0) 70%);
+}
+
+.copyStack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 36ch;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.eyebrowRule {
+  width: 22px;
+  height: 1px;
+  background: var(--mint);
+  opacity: 0.6;
+}
+
+.line {
+  margin: 0;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 3.6vw, 1.85rem);
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.line em { font-style: italic; color: var(--mint); }
+
+.lineSub {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-dim, rgba(233, 239, 233, 0.65));
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+}
+
+/* Pulsing quiz card — the visual "this is the new thing" cue. */
+.quizCard {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: 2px; /* room for the outer glow */
+  border-radius: var(--radius-lg);
+}
+
+.quizCardGlow {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(110, 231, 183, 0.6);
+  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.18), 0 0 28px -6px var(--mint-glow);
+  animation: cardPulse 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cardPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.15), 0 0 20px -8px var(--mint-glow);
+    border-color: rgba(110, 231, 183, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.4), 0 0 44px -2px var(--mint-glow);
+    border-color: rgba(110, 231, 183, 0.85);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quizCardGlow { animation: none; }
+}
+
+.quizCardInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: var(--space-4) var(--space-5);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: calc(var(--radius-lg) - 2px);
+  text-align: left;
+}
+
+.quizCardEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.78);
+}
+
+.quizCardEyebrowRule {
+  width: 16px;
+  height: 1px;
+  background: var(--mint);
+  opacity: 0.55;
+}
+
+.quizCardTitle {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.quizCardTitle em { font-style: italic; }
+
+.quizCardMeta {
+  font-size: var(--text-xs);
+  color: var(--ink-faint, rgba(233, 239, 233, 0.45));
+  letter-spacing: 0.02em;
+}
+
+.actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  width: 100%;
+  justify-content: space-between;
+}
+
+.maybeBtn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+.maybeBtn:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.takeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  background: var(--mint);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 22px -8px var(--mint-glow);
+  transition: background var(--duration) var(--ease), transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.takeBtn:hover {
+  background: var(--mint-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 0 32px -4px var(--mint-glow);
+}

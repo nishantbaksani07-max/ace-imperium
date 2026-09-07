@@ -1,0 +1,75 @@
+/* GoalsPeek — the "Your goals" presence in the Vee tab (BUILD42/47). Self-contained
+   iris tokens so it works anywhere without the goals-page wrapper. Cozy when empty
+   (an invitation, not a dotted box), goals that pop once you have them. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;600&display=swap');
+
+.peek{
+  --iris:#a78bfa; --iris-hi:#c4b5fd; --iris-glow:rgba(167,139,250,.42); --iris-deep:#241b46;
+  --muted:rgba(255,255,255,.5); --muted-strong:rgba(255,255,255,.72); --border:rgba(255,255,255,.1);
+  --card:rgba(255,255,255,.02); --card-elevated:rgba(255,255,255,.04);
+  --serif:'Instrument Serif',Georgia,serif; --mono:'JetBrains Mono','SF Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  display:flex; flex-direction:column; gap:11px;
+}
+.head{display:flex;align-items:center;gap:10px}
+.vmark{display:inline-flex;align-items:center;justify-content:center;color:var(--iris)}
+.lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-strong)}
+.rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(167,139,250,.3),transparent)}
+.open{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--iris);text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.open svg{transition:transform .2s var(--ease)}
+.open:hover svg{transform:translateX(2px)}
+
+/* ── empty state — a cozy invitation ── */
+.invite{position:relative;overflow:hidden;border:1px solid rgba(167,139,250,.28);border-radius:18px;
+  padding:1.3rem 1.4rem;text-decoration:none;color:inherit;
+  background:radial-gradient(120% 120% at 0% 0%, rgba(167,139,250,.1), transparent 60%), var(--card-elevated);
+  box-shadow:0 0 70px -36px var(--iris-glow);display:flex;align-items:center;gap:1.05rem;
+  animation:peekRise .6s var(--ease) both;transition:border-color .2s var(--ease),transform .14s var(--ease)}
+.invite:hover{border-color:rgba(167,139,250,.45)}
+.invite:active{transform:scale(.99)}
+.invite::before{content:"";position:absolute;inset:-40% -10% auto auto;width:60%;height:160%;border-radius:50%;
+  background:radial-gradient(circle, rgba(167,139,250,.16), transparent 70%);filter:blur(8px);
+  animation:peekBreathe 5.5s var(--ease) infinite;pointer-events:none}
+.inviteGlyph{flex:0 0 auto;width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+  color:var(--iris);border:1px solid rgba(167,139,250,.34);background:rgba(167,139,250,.07);position:relative;z-index:1;
+  animation:peekFloat 4.5s var(--ease) infinite}
+.inviteBody{flex:1;min-width:0;position:relative;z-index:1;display:flex;flex-direction:column;gap:.65rem;align-items:flex-start}
+.invitePrompt{font-family:var(--serif);font-style:italic;font-size:1.32rem;line-height:1.2;color:#fff}
+/* refined, professional — smaller than a hero button */
+.inviteAdd{display:inline-flex;align-items:center;gap:7px;min-height:36px;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+  padding:8px 14px;border-radius:999px;color:#000;background:var(--iris);
+  box-shadow:0 0 20px -8px var(--iris-glow);transition:background .2s var(--ease)}
+.invite:hover .inviteAdd{background:var(--iris-hi)}
+
+/* ── populated — goals that pop ── */
+.rows{display:flex;flex-direction:column;gap:9px}
+.goal{position:relative;overflow:hidden;border:1px solid rgba(167,139,250,.24);border-radius:16px;
+  padding:1rem 1.1rem;text-decoration:none;color:inherit;
+  background:radial-gradient(130% 120% at 0% 0%, rgba(167,139,250,.08), transparent 58%), var(--card);
+  box-shadow:0 0 0 1px rgba(167,139,250,.05), 0 0 50px -30px var(--iris-glow);
+  display:flex;align-items:center;gap:1rem;animation:peekRise .55s var(--ease) both;
+  transition:border-color .2s var(--ease),transform .14s var(--ease)}
+.goal:hover{border-color:rgba(167,139,250,.5);transform:translateY(-1px)}
+.goal:active{transform:scale(.99)}
+.goal:nth-child(2){animation-delay:.07s}
+.goal:nth-child(3){animation-delay:.13s}
+.goalIcon{flex:0 0 auto;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  color:var(--iris);border:1px solid rgba(167,139,250,.34);background:rgba(167,139,250,.08)}
+/* keeps the left indent constant while a goal is still awaiting its category */
+.goalIconPlaceholder{flex:0 0 auto;width:42px;height:42px}
+.goalBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.goalCat{font-family:var(--mono);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--iris)}
+.goalTitle{font-family:var(--serif);font-style:italic;font-size:1.22rem;line-height:1.15;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.goalMeta{font-family:var(--mono);font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pips{flex:0 0 auto;display:inline-flex;align-items:flex-end;gap:3px;height:18px}
+.pip{width:4px;border-radius:2px;background:rgba(255,255,255,.1)}
+.pipOn{background:var(--iris);box-shadow:0 0 7px var(--iris-glow)}
+
+@keyframes peekRise{0%{opacity:0;transform:translateY(12px) scale(.99)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes peekBreathe{0%,100%{opacity:.5;transform:scale(.95)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes peekFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){
+  .invite,.goal{animation:none}
+  .invite::before,.inviteGlyph{animation:none}
+}

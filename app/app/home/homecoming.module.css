@@ -1,0 +1,384 @@
+/* "Vitality, I'm home" - the ritual stage.
+   Full screen, never scrolls, on the signature world. The shell owns this
+   file: gem travel, scrim, settle flash, act frame, skip, questions, close.
+   Acts bring their own .module.css and render inside .actStage. */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  height: 100dvh;
+  overflow: hidden;
+  background: #04060a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: stageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes stageIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Deepen the world so the reads carry. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(60% 50% at 50% 38%, rgba(4, 6, 10, 0) 0%, rgba(4, 6, 10, 0.55) 78%),
+    linear-gradient(180deg, rgba(4, 6, 10, 0.25), rgba(4, 6, 10, 0.6));
+  pointer-events: none;
+}
+
+/* The bright settle: the pull resolving lights the stage for a breath and the
+   first act rides in on the light. A stage overlay, NOT a filter on the gem
+   (the gem is about to move; filters on movers jank phones). */
+.settleFlash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(46% 38% at 50% 34%, rgba(110, 231, 183, 0.3), rgba(110, 231, 183, 0) 72%);
+  animation: settleFlash 0.7s ease-out forwards;
+}
+@keyframes settleFlash {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── The gem ────────────────────────────────────────────────────────────── */
+
+/* DashboardHeaderGem owns the crystal at a fixed 200px stage; the wrapper
+   moves it with ONE transform-only transition (no width/height animation,
+   so the canvas never re-rasters mid-flight, and no filter on the mover). */
+.gemWrap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-left: -100px;
+  z-index: 3;
+  pointer-events: none;
+  transform-origin: top center;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.gemCenter {
+  transform: translateY(calc(50dvh - 236px));
+}
+.gemDock {
+  transform: translateY(calc(env(safe-area-inset-top) + 12px)) scale(0.6);
+}
+
+/* ── Chrome ─────────────────────────────────────────────────────────────── */
+
+.exit {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 18px);
+  right: 22px;
+  z-index: 6;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.exit:hover { color: #6ee7b7; border-color: rgba(110, 231, 183, 0.4); }
+.exit svg { width: 15px; height: 15px; }
+
+/* ── Phase body (arrive / quiet / questions / close) ────────────────────── */
+
+.body {
+  position: relative;
+  z-index: 4;
+  width: min(720px, calc(100% - 48px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: opacity 0.32s ease, transform 0.32s ease;
+}
+.bodyLeaving { opacity: 0; transform: translateY(10px); }
+
+/* Vee's one-line bubble. */
+.vee {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 46ch;
+  animation: riseIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.veeTag {
+  flex: none;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #6ee7b7;
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: 999px;
+  padding: 3px 9px;
+  transform: translateY(-2px);
+}
+/* COLOR LAW: a crashed act is a caution, so the apology tag reads amber. */
+.veeTagAmber {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ARRIVE */
+.arrive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 34px;
+  margin-top: 130px;
+}
+.beatRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  color: rgba(110, 231, 183, 0.75);
+}
+.beatDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6ee7b7;
+  box-shadow: 0 0 12px #6ee7b7;
+  animation: beatPulse 1.4s ease-in-out infinite;
+}
+@keyframes beatPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+.beatText { animation: riseIn 0.4s ease both; }
+
+/* ── Act frame: the region the shell hands to each act ──────────────────── */
+
+/* Bounded between the docked gem and the bottom safe area so an act can
+   size itself to the viewport and never cause page scroll. */
+.actFrame {
+  position: absolute;
+  z-index: 4;
+  top: calc(env(safe-area-inset-top) + 152px);
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(760px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.32s ease;
+}
+.actFrame.bodyLeaving { opacity: 0; transform: translateX(-50%) translateY(10px); }
+
+.actStage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* The quiet mono skip under every act. Spark pattern: lights on hover only. */
+.skip {
+  flex: none;
+  align-self: center;
+  margin-top: 8px;
+  padding: 12px 20px;
+  min-height: 40px;
+  background: none;
+  border: none;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.32);
+  cursor: pointer;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.skip:hover { color: rgba(110, 231, 183, 0.85); text-shadow: 0 0 16px rgba(110, 231, 183, 0.4); }
+
+/* A crashed act: one amber apology, one way forward. */
+.actFail {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: center;
+}
+
+/* QUIET slate */
+.quiet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin-top: 120px;
+}
+
+/* QUESTIONS: progressive, never a wall. Q2 rises in only after Q1. */
+.questions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin-top: 118px;
+}
+.question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: riseIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.questionLine {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 44ch;
+}
+.togglePair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.toggle {
+  padding: 10px 20px;
+  min-height: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(167, 243, 208, 0.16);
+  border-radius: 999px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.68);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.toggle:hover { color: #fff; border-color: rgba(110, 231, 183, 0.45); }
+.toggleOn {
+  background: rgba(110, 231, 183, 0.14);
+  border-color: rgba(110, 231, 183, 0.55);
+  color: #6ee7b7;
+}
+
+/* Text-not-box advance (Spark pattern: lights on hover, no idle glow). */
+.next {
+  margin-top: 6px;
+  background: none;
+  border: none;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 12px 18px;
+  min-height: 40px;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.next:hover { color: #6ee7b7; text-shadow: 0 0 18px rgba(110, 231, 183, 0.5); }
+
+/* CLOSE */
+.closeAct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-top: 110px;
+}
+.eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: rgba(110, 231, 183, 0.8);
+  animation: riseIn 0.5s ease both;
+}
+.hero {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(38px, 6vw, 62px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  color: #f2f6f4;
+  animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+.hero em { font-style: italic; color: #6ee7b7; }
+.heroSub {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  animation: riseIn 0.7s ease 0.16s both;
+}
+.enter {
+  margin-top: 16px;
+  padding: 14px 34px;
+  background: #6ee7b7;
+  color: #042a1c;
+  border: none;
+  border-radius: 999px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  animation: riseIn 0.7s ease 0.24s both;
+  transition: background 0.2s, transform 0.2s;
+}
+.enter:hover { background: #5dd6a6; transform: translateY(-1px); }
+
+/* ── Phone ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .gemCenter { transform: translateY(calc(50dvh - 224px)) scale(0.85); }
+  .gemDock { transform: translateY(calc(env(safe-area-inset-top) + 10px)) scale(0.55); }
+  .actFrame { top: calc(env(safe-area-inset-top) + 134px); width: calc(100vw - 28px); }
+  .arrive, .quiet, .questions, .closeAct { margin-top: 92px; }
+  .vee { font-size: 15.5px; }
+  .questionLine { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage, .vee, .question, .beatText, .eyebrow, .hero, .heroSub, .enter, .settleFlash { animation: none; }
+  .gemWrap { transition: none; }
+  .body, .actFrame { transition: none; }
+}
+
+/* ── Close-recap stream lines (fuel + water, presence-gated) ───────────── */
+
+.recap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: riseIn 0.7s ease 0.2s both;
+}
+.recapLine {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recap { animation: none; }
+}

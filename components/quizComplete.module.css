@@ -1,0 +1,213 @@
+/* Shared celebration screen — see QuizComplete.tsx for usage.
+   Renders inside any chrome (dialog overlay, page shell, wizard surface). */
+
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--bg, #000);
+  animation: qcShellFade 0.45s ease-out both;
+}
+
+@keyframes qcShellFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Atmosphere + mountains + particles now come from <WelcomeBackdrop />.
+   Same recipe as /welcome and the shielded quiz surface — so the
+   celebration reads as a continuous extension of those environments
+   instead of a one-off flat-black screen. */
+
+/* ── Content card ────────────────────────────────────────────── */
+
+.content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  animation: qcRise 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes qcRise {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── V crystal + pulsing check overlay ──────────────────────────
+   Matches the gem in /onboarding so the "you did it" moment uses
+   the same hero character. Check overlay pulses on top of the
+   crystal's center face; the same drop-shadow halo as the
+   onboarding gem keeps the look consistent. */
+
+.gemStage {
+  position: relative;
+  width: clamp(180px, 24vmin, 220px);
+  height: clamp(180px, 24vmin, 220px);
+  margin-bottom: 24px;
+  filter: drop-shadow(0 0 50px rgba(110, 231, 183, 0.22))
+          drop-shadow(0 0 110px rgba(110, 231, 183, 0.08));
+  animation: qcGemPop 0.75s cubic-bezier(0.22, 1.6, 0.36, 1) both,
+             qcGemHalo 3.9s ease-in-out 0.75s infinite;
+}
+
+.gemStage > canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.gemFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.18) 0%, rgba(110, 231, 183, 0) 70%);
+}
+
+@keyframes qcGemPop {
+  0%   { transform: scale(0.55); opacity: 0; }
+  60%  { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes qcGemHalo {
+  0%, 100% {
+    filter: drop-shadow(0 0 40px rgba(110, 231, 183, 0.16))
+            drop-shadow(0 0 100px rgba(110, 231, 183, 0.06));
+  }
+  50% {
+    filter: drop-shadow(0 0 70px rgba(110, 231, 183, 0.30))
+            drop-shadow(0 0 140px rgba(110, 231, 183, 0.12));
+  }
+}
+
+/* No DOM overlay anymore — the per-quiz mark + the check both live on
+   HeroCrystal's face-cycling plane, so they sit on the gem (refracting
+   with the glass) instead of floating flat on top. See HeroCrystal's
+   glyph prop. */
+
+/* ── Typography ──────────────────────────────────────────────── */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 14px;
+}
+
+.eyebrowRule {
+  width: 22px;
+  height: 1px;
+  background: rgba(110, 231, 183, 0.6);
+}
+
+.headline {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(28px, 5vw, 40px);
+  line-height: 1.12;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.96);
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.headline em {
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(110, 231, 183, 0.92) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sub {
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+  max-width: 380px;
+  margin: 0 0 30px;
+}
+
+/* ── CTA ─────────────────────────────────────────────────────── */
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(8, 12, 11, 0.96);
+  background: var(--mint, #6EE7B7);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.55),
+    0 12px 30px -10px rgba(110, 231, 183, 0.55);
+}
+
+.cta:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--mint-hover, #5dd6a6);
+}
+
+.cta:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cta:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+/* Secondary CTA — quiet text-link under the primary pill. Shown on
+   shielded (first-time) celebrations so the user can either go see
+   what they built (primary) OR return to the welcome checklist to
+   keep working through onboarding (this). Italic serif to match the
+   editorial voice of the rest of the screen; no chrome, no border. */
+.secondaryCta {
+  margin-top: 14px;
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.secondaryCta:hover:not(:disabled) {
+  color: var(--mint, #6EE7B7);
+}
+
+.secondaryCta:disabled {
+  opacity: 0.4;
+  cursor: progress;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gemStage,
+  .content {
+    animation: none !important;
+  }
+}

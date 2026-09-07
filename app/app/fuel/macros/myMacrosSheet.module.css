@@ -1,0 +1,142 @@
+/*
+ * My Macros sheet — centered, animated add-to-today surface for Fuel.
+ * Vitality DNA: near-black, mint accents, Instrument Serif headline, mono
+ * eyebrows. Springy entrance, staggered rows, an expanding micro drawer.
+ */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(2, 4, 7, 0.66);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: mmFade 0.28s var(--ease) forwards;
+}
+@keyframes mmFade { from { opacity: 0 } to { opacity: 1 } }
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 26px 24px 22px;
+  border-radius: 28px;
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16));
+  background: linear-gradient(180deg, rgba(13, 20, 16, 0.97), rgba(6, 10, 8, 0.99));
+  box-shadow: 0 40px 120px -40px #000;
+  animation: mmRise 0.42s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+  scrollbar-width: none;
+}
+.sheet::-webkit-scrollbar { display: none }
+@keyframes mmRise {
+  from { opacity: 0; transform: translateY(26px) scale(0.97) }
+  to { opacity: 1; transform: none }
+}
+.glow {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 130px;
+  background: radial-gradient(80% 100% at 50% 0, rgba(110, 231, 183, 0.09), transparent 70%);
+  pointer-events: none;
+}
+
+.top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; position: relative }
+.eyebrow { font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--mint); opacity: 0.85 }
+.title { font-family: var(--font-serif, Georgia, serif); font-weight: 400; font-size: 33px; line-height: 1; margin: 7px 0 3px }
+.title em { font-style: italic }
+.sub { color: var(--muted-strong, rgba(255, 255, 255, 0.6)); font-size: 13.5px }
+.x { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16)); background: rgba(255, 255, 255, 0.03); color: var(--muted-strong); font-size: 18px; cursor: pointer; display: grid; place-items: center; transition: all 0.2s var(--ease) }
+.x:hover { color: var(--fg); border-color: var(--mint) }
+
+/* fast capture row — flat spark actions, divider-separated, light up on hover */
+.methods { display: flex; margin: 18px 0 16px; border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08)); border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08)) }
+.method { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 6px; border: none; background: none; color: var(--muted-strong); cursor: pointer; font-family: inherit; transition: color 0.2s var(--ease) }
+.method + .method::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 22px; background: var(--border, rgba(255, 255, 255, 0.08)) }
+.method:hover, .method.methodOn { color: var(--mint) }
+.method svg { width: 19px; height: 19px; transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) }
+.method:hover svg { transform: translateY(-2px) }
+.method span { font-size: 11px; font-weight: 600 }
+
+/* search */
+.search { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; padding: 13px 15px; border: 1px solid var(--border, rgba(255, 255, 255, 0.08)); border-radius: 14px; background: rgba(255, 255, 255, 0.025); transition: border-color 0.2s var(--ease) }
+.search:focus-within { border-color: rgba(110, 231, 183, 0.4) }
+.search svg { width: 16px; height: 16px; color: var(--mint); flex: 0 0 auto }
+.search input { flex: 1; background: none; border: none; outline: none; color: var(--fg); font-family: inherit; font-size: 15px }
+.search input::placeholder { color: var(--muted) }
+
+/* tabs */
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; margin: 20px 0 16px; scrollbar-width: none }
+.tabs::-webkit-scrollbar { display: none }
+.tab { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border, rgba(255, 255, 255, 0.08)); background: transparent; color: var(--muted-strong); font-family: inherit; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.2s var(--ease) }
+.tab:hover { color: var(--fg); border-color: var(--border-strong) }
+.tabOn { background: rgba(110, 231, 183, 0.12); border-color: var(--mint); color: var(--mint-hi, #a7f3d0) }
+.soon { font-size: 9px; opacity: 0.6; margin-left: 5px; letter-spacing: 0.1em; text-transform: uppercase }
+
+.body { min-height: 160px }
+.pane { animation: mmPane 0.32s var(--ease) }
+@keyframes mmPane { from { opacity: 0; transform: translateY(7px) } to { opacity: 1; transform: none } }
+
+/* rows — soft, airy, hairline-bordered; the glyph sits clean (no boxy tile) */
+.list { display: flex; flex-direction: column; gap: 6px }
+.row { display: flex; align-items: center; gap: 14px; width: 100%; padding: 15px 16px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; background: transparent; cursor: pointer; text-align: left; font-family: inherit; color: var(--fg); animation: mmRow 0.4s var(--ease-premium) both; transition: transform 0.18s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease) }
+@keyframes mmRow { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+.row:hover { border-color: rgba(110, 231, 183, 0.3); background: rgba(110, 231, 183, 0.03); transform: translateY(-1px) }
+.row:active { transform: translateY(0) }
+.rico { flex: 0 0 auto; color: var(--mint); opacity: 0.85; display: grid; place-items: center }
+.rico svg { width: 19px; height: 19px }
+.rmid { flex: 1; min-width: 0; display: flex; flex-direction: column }
+.rname { font-weight: 600; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.rmeta { font-size: 12px; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.rmacros { display: flex; gap: 10px; font-size: 11.5px; margin-top: 6px; opacity: 0.92 }
+.rmacros b { font-weight: 600; color: var(--fg) }
+.mP { color: #ef8f7a } .mC { color: #5ec8e0 } .mF { color: var(--amber) }
+.rkcal { flex: 0 0 auto; text-align: right }
+.rkcal b { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 21px; color: var(--mint-hi, #a7f3d0) }
+.rkcal span { display: block; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 1px }
+.plus { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 9px; border: 1px solid rgba(110, 231, 183, 0.4); background: rgba(110, 231, 183, 0.08); color: var(--mint); display: grid; place-items: center }
+.plus svg { width: 16px; height: 16px }
+.rstar { flex: 0 0 auto; color: var(--mint); display: grid; place-items: center }
+.rstar svg { width: 16px; height: 16px }
+
+/* "Create a custom food" — a clear, inviting way to use the tab, not guess */
+.createRow { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 16px; margin-bottom: 8px; border: 1px dashed rgba(110, 231, 183, 0.35); border-radius: 14px; background: transparent; color: var(--mint); font-family: inherit; font-weight: 600; font-size: 13.5px; cursor: pointer; transition: background 0.2s var(--ease), border-color 0.2s var(--ease) }
+.createRow:hover { background: rgba(110, 231, 183, 0.05); border-color: var(--mint) }
+.createIc { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 7px; background: rgba(110, 231, 183, 0.1) }
+.createIc svg { width: 14px; height: 14px }
+
+.empty { text-align: center; padding: 44px 14px; color: var(--muted) }
+.empty svg { width: 30px; height: 30px; opacity: 0.45; margin-bottom: 11px; color: var(--muted) }
+.empty p { margin: 0; font-size: 14px; line-height: 1.45 }
+
+/* custom form */
+.field { margin-bottom: 13px }
+.lbl { font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px }
+.inp { width: 100%; padding: 12px 13px; border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16)); border-radius: 12px; background: rgba(255, 255, 255, 0.03); color: var(--fg); font-family: inherit; font-size: 15px; outline: none; transition: border-color 0.2s var(--ease) }
+.inp:focus { border-color: var(--mint) }
+.inp::placeholder { color: var(--muted) }
+.per { font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 6px 0 10px }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 11px }
+
+.more { margin-top: 4px; border-top: 1px dashed var(--border, rgba(255, 255, 255, 0.08)); padding-top: 14px }
+.moreBtn { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: none; color: var(--mint); font-family: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 2px }
+.moreBtn svg { width: 14px; height: 14px; transition: transform 0.25s var(--ease) }
+.moreOpen svg { transform: rotate(180deg) }
+.microWrap { max-height: 0; overflow: hidden; transition: max-height 0.38s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) }
+.microOpen { max-height: 460px }
+.microGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; padding-top: 14px }
+.microHint { font-size: 11.5px; color: var(--muted); font-style: italic; margin-top: 11px }
+
+.cta { width: 100%; margin-top: 18px; padding: 15px; border: none; border-radius: 15px; background: var(--mint); color: var(--mint-ink, #06281d); font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s var(--ease), transform 0.15s var(--ease) }
+.cta:hover { background: var(--mint-hover, #a7f3d0) }
+.cta:active { transform: scale(0.99) }
+.cta svg { width: 17px; height: 17px }
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim, .sheet, .pane, .row { animation: none }
+}

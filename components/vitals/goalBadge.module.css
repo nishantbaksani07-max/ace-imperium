@@ -1,0 +1,66 @@
+/* GoalBadge — the always-on header pill showing the active goal */
+
+.badge {
+  /* Azure re-theme: Vitals accent is azure, not the app mint. */
+  --accent: #5e9bff;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(94, 155, 255, 0.10);
+  border: 1px solid rgba(94, 155, 255, 0.25);
+  border-radius: var(--radius-pill);
+  padding: 7px 13px;
+  color: var(--fg);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--duration) ease, border-color var(--duration) ease;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.badge:hover {
+  background: rgba(94, 155, 255, 0.15);
+  border-color: rgba(94, 155, 255, 0.4);
+}
+
+/* Pulsing dot */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+  position: relative;
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  animation: badgePulse 2.2s ease-out infinite;
+}
+
+@keyframes badgePulse {
+  0%   { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.label {
+  color: var(--muted);
+}
+
+.value {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.settling {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 11px;
+  font-weight: 400;
+}

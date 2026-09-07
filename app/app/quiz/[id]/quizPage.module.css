@@ -1,0 +1,14 @@
+/*
+ * Shielded quiz surface — used when a quiz is launched from the
+ * /welcome onboarding checklist. Same recipe as /welcome's .page so
+ * the two surfaces feel like one continuous space. Quiz dialog (own
+ * z-index 110) sits on top of the WelcomeBackdrop layers (z-index 0–2).
+ */
+.shieldedPage {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg);
+  isolation: isolate;
+  overflow-x: hidden;
+}

@@ -1,0 +1,399 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { lintTile } from './lintTile.js';
+import { richnessOf } from './richness.js';
+import { validateReport } from './reportContract.js';
+
+// A NEW worked example: the DAILY-SPEND tile. It fills a gap the shipped examples
+// leave open. Recipe is intake, sleep is duration, deep-work is count, sleep-quality
+// is rating, but the only money-shaped shipped example is a passive markets reader,
+// not a logged spend a user actually enters. This is the MONEY archetype with a
+// goalDirection of DOWN done Fuel-grade: a serif today-total hero with a currency
+// symbol, a status pill that reads honestly (idle before any spend, good under the
+// daily cap, caution over it, never red because overspending is not a destructive
+// action), a real 7-day bar chart section as a this-week ledger, a soft-confirm undo
+// so a mistap is never stuck, honest persistence through the host bridge, and exactly
+// one money stream reported.
+//
+// It is hand-authored to be the QUALITY REFERENCE, so it must clear every gate it
+// preaches: lint at 0 errors AND 0 warnings, the richness gate as Fuel-grade rich,
+// and a valid report() stream. If a future edit drifts it below any of those, one
+// of the three tests below fails loudly.
+
+const HTML = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daily spend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fg:#fff;--mint:#6EE7B7;--mint-hover:#5dd6a6;--mint-deep:#1f4d3d;--mint-glow:rgba(110,231,183,.4);--mint-ink:#042a1c;
+  --amber:#F59E0B;--muted:rgba(255,255,255,.5);--muted-strong:rgba(255,255,255,.7);
+  --border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.16);--card:rgba(255,255,255,.03);
+  --radius-lg:12px;--radius-card:18px;--radius-xl:20px;--radius-pill:999px;
+  --ease:cubic-bezier(.2,.8,.2,1);--ease-premium:cubic-bezier(.16,1,.3,1);--spring:cubic-bezier(.34,1.56,.64,1);
+  --dfast:120ms;--dur:180ms;--dlift:480ms;
+  --font-inter:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-serif:'Instrument Serif','Times New Roman',Georgia,serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+html{overscroll-behavior-y:none}
+body{font-family:var(--font-inter);color:var(--fg);background:transparent;font-size:1rem;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;accent-color:var(--mint);
+  -webkit-user-select:none;user-select:none}
+input,select{caret-color:var(--mint)}
+.selectable,.selectable *,input{-webkit-user-select:text;user-select:text}
+::selection{background:rgba(110,231,183,.25)}
+::-moz-selection{background:rgba(110,231,183,.25)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit;color:inherit}
+
+.shell{position:relative;min-height:100%;padding:clamp(16px,5vw,40px);z-index:0}
+.shell::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 40% at 50% -5%,rgba(110,231,183,.10),transparent 70%),
+             radial-gradient(50% 30% at 100% 100%,rgba(31,77,61,.18),transparent 70%)}
+.body{position:relative;z-index:2;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(16px,3vw,24px)}
+
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.eyebrow{display:flex;align-items:center;gap:.75rem;min-width:0}
+.eyebrow .num{font-family:var(--font-serif);font-style:italic;font-size:1.125rem;color:var(--mint);line-height:1}
+.eyebrow .label{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.22em;color:var(--muted-strong)}
+.gear{flex:none;width:38px;height:38px;border-radius:11px;border:1px solid var(--border);background:var(--card);
+  color:var(--muted-strong);display:grid;place-items:center;
+  transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.gear:hover{color:var(--mint);border-color:var(--mint-glow)}
+.gear:active{transform:scale(.94)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.hero{position:relative;overflow:hidden;border:1px solid rgba(110,231,183,.18);border-radius:var(--radius-xl);
+  background:radial-gradient(120% 80% at 0% 0%,rgba(110,231,183,.07),transparent 60%),var(--card);
+  box-shadow:0 0 0 1px rgba(110,231,183,.06),0 0 56px -26px var(--mint-glow),inset 0 1px 0 rgba(255,255,255,.04);
+  padding:clamp(18px,5vw,26px);display:flex;flex-direction:column;gap:1rem}
+.hero .title{font-family:var(--font-serif);font-style:italic;font-weight:400;font-size:clamp(2rem,7vw,2.75rem);line-height:1;letter-spacing:-.02em}
+.heroRow{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;flex-wrap:wrap}
+.bignum{font-family:var(--font-serif);font-weight:400;font-size:clamp(3.5rem,13vw,5.2rem);line-height:.82;letter-spacing:-.02em;font-variant-numeric:tabular-nums;transition:transform var(--dfast) var(--spring)}
+.bignum.pop{transform:scale(1.06)}
+.bignum .cur{font-family:var(--font-serif);font-size:.55em;color:var(--muted-strong);margin-right:.06em}
+.unit{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius-pill);
+  font-family:var(--font-mono);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.16em;border:1px solid var(--border)}
+.pill .dot{width:6px;height:6px;border-radius:50%}
+.pill.good{color:var(--mint);border-color:rgba(110,231,183,.4);background:rgba(110,231,183,.05)}
+.pill.good .dot{background:var(--mint)}
+.pill.caution{color:var(--amber);border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.06)}
+.pill.caution .dot{background:var(--amber)}
+.pill.idle{color:var(--muted);border-color:var(--border);background:transparent}
+.pill.idle .dot{background:var(--muted)}
+
+.entry{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:stretch}
+.amount{position:relative;display:flex;align-items:center}
+.amount .sym{position:absolute;left:14px;font-family:var(--font-serif);font-size:1.2rem;color:var(--muted-strong);pointer-events:none}
+.amount input{width:100%;background:var(--card);border:1px solid var(--border-strong);color:var(--fg);
+  padding:16px 14px 16px 34px;border-radius:14px;outline:none;font-family:var(--font-mono);font-size:1.05rem;
+  transition:border-color var(--dur) var(--ease)}
+.amount input:focus{border-color:rgba(110,231,183,.45);background:rgba(110,231,183,.04)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:0 20px;border-radius:14px;
+  font-size:1rem;font-weight:600;line-height:1;background:var(--mint);color:var(--mint-ink);
+  transition:background var(--dur) var(--ease-premium),transform var(--dfast) var(--ease-premium),opacity var(--dur) var(--ease)}
+.btn:hover{background:var(--mint-hover)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.undoRow{display:flex;justify-content:flex-end}
+.undo{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);background:var(--card);color:var(--muted-strong);
+  border-radius:var(--radius-pill);padding:8px 14px;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  transition:border-color var(--dur) var(--ease-premium),color var(--dur) var(--ease),transform var(--dfast) var(--ease-premium),opacity var(--dur) var(--ease)}
+.undo:hover{border-color:var(--mint);color:var(--mint)}
+.undo:active{transform:scale(.96)}
+.undo:disabled{opacity:.3;cursor:not-allowed}
+.undo svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.section{display:flex;flex-direction:column;gap:1rem}
+.secEyebrow{display:flex;align-items:center;gap:.75rem}
+.secEyebrow .num{font-family:var(--font-serif);font-style:italic;font-size:1.125rem;color:var(--mint);line-height:1}
+.secEyebrow .label{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.22em;color:var(--muted-strong)}
+.secEyebrow .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent)}
+.card{border:1px solid var(--border);border-radius:var(--radius-card);
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));padding:1.25rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 48px -28px rgba(0,0,0,.8);
+  transition:border-color var(--dur) var(--ease-premium)}
+.card:hover{border-color:rgba(110,231,183,.28)}
+
+.bars{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;height:96px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.bwrap{width:100%;height:80px;display:flex;align-items:flex-end;justify-content:center}
+.bfill{width:66%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,rgba(110,231,183,.32),rgba(31,77,61,.28));
+  transform-origin:bottom;transform:scaleY(.02);transition:transform var(--dlift) var(--ease-premium)}
+.bfill.now{background:linear-gradient(180deg,var(--mint),var(--mint-deep));box-shadow:0 0 18px -4px var(--mint-glow)}
+.bfill.over{background:linear-gradient(180deg,rgba(245,158,11,.55),rgba(124,45,18,.35))}
+.dlab{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.stat{margin-top:14px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-strong);text-align:center}
+.empty{text-align:center;color:var(--muted);padding:2rem 1rem}
+.empty .lead{font-family:var(--font-serif);font-style:italic;font-size:1.2rem;color:var(--muted-strong);margin-bottom:4px}
+
+.settings{border:1px solid rgba(110,231,183,.26);border-radius:16px;background:rgba(110,231,183,.05);padding:16px;
+  display:flex;flex-direction:column;gap:10px;text-align:left}
+.settings h3{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);font-weight:700}
+.settings p{font-size:.8rem;color:var(--muted-strong);line-height:1.55}
+.settings label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.settings input{width:100%;background:var(--card);border:1px solid var(--border-strong);color:var(--fg);
+  padding:10px 12px;border-radius:var(--radius-lg);outline:none;transition:border-color var(--dur) var(--ease)}
+.settings input:focus{border-color:rgba(110,231,183,.45);background:rgba(110,231,183,.04)}
+.msg{min-height:16px;font-size:.75rem;color:var(--muted)}
+.msg.warn{color:var(--amber)}
+
+@keyframes rise{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.rise{opacity:0;animation:rise var(--dlift) var(--spring) both;animation-delay:calc(var(--i,0)*70ms)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+  .rise{opacity:1;transform:none}.bfill{transform:none}.bignum.pop{transform:none}}
+</style>
+</head>
+<body>
+  <main class="shell">
+    <div class="body">
+
+      <div class="head rise" style="--i:0">
+        <div class="eyebrow"><span class="num">01</span><span class="label">DAILY SPEND</span></div>
+        <button class="gear" id="gear" type="button" aria-label="settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M20 12.5a7.9 7.9 0 0 0 .06-1l1.4-1.1-1.5-2.6-1.7.6a8 8 0 0 0-1.6-1l-.3-1.8h-3l-.3 1.8a8 8 0 0 0-1.6 1l-1.7-.6-1.5 2.6 1.4 1.1a7.9 7.9 0 0 0 0 2l-1.4 1.1 1.5 2.6 1.7-.6a8 8 0 0 0 1.6 1l.3 1.8h3l.3-1.8a8 8 0 0 0 1.6-1l1.7.6 1.5-2.6-1.4-1.1c.04-.33.06-.66.06-1z"/></svg>
+        </button>
+      </div>
+
+      <section class="hero rise" style="--i:1">
+        <h1 class="title">Daily spend</h1>
+        <div class="heroRow">
+          <span class="bignum" id="value"><span class="cur">$</span>0</span>
+          <span class="pill idle" id="status"><span class="dot"></span>nothing yet</span>
+        </div>
+        <span class="unit">spent today</span>
+      </section>
+
+      <div class="settings rise" id="settings" style="--i:2" hidden>
+        <h3>daily cap</h3>
+        <p>The amount you want to stay under each day. Go over and the pill turns a calm amber, never red, because a busy day is a note, not a failure.</p>
+        <label for="goal">stay under</label>
+        <input id="goal" class="selectable" type="number" inputmode="decimal" step="1" min="0" placeholder="40">
+      </div>
+
+      <div class="entry rise" style="--i:2">
+        <div class="amount">
+          <span class="sym">$</span>
+          <input id="amt" class="selectable" type="number" inputmode="decimal" step="0.01" min="0" placeholder="add an amount">
+        </div>
+        <button class="btn" id="primary" type="button" disabled>Add</button>
+      </div>
+      <div class="undoRow rise" style="--i:2">
+        <button class="undo" id="undo" type="button" disabled>
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg>
+          undo last
+        </button>
+      </div>
+
+      <section class="section rise" style="--i:3">
+        <div class="secEyebrow"><span class="num">02</span><span class="label">THIS WEEK</span><span class="rule"></span></div>
+        <div class="card" id="section"></div>
+      </section>
+
+      <div class="msg" id="msg" aria-live="polite"></div>
+
+    </div>
+  </main>
+  <script>
+  var Vitality={_w:{},
+    save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},
+    load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})},
+    report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}
+  };
+  window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+  (function(){
+    var DOW=['Su','Mo','Tu','We','Th','Fr','Sa'];
+    var SYM='$';
+    var GOAL=40, GD='down', loaded=false, lastDay='';
+    var mem={days:{},goal:40};
+
+    function pad(n){return String(n).padStart(2,'0')}
+    function key(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+    function today(){return key(new Date())}
+    function round2(n){return Math.round(n*100)/100}
+    function money(n){var v=round2(n);return SYM+(v%1===0?String(v):v.toFixed(2))}
+    function moneyBare(n){var v=round2(n);return v%1===0?String(v):v.toFixed(2)}
+
+    function writeStore(){Vitality.save(mem);}
+
+    function get(k){return mem.days[k]||0}
+
+    function last7(){
+      var out=[],now=new Date();
+      for(var i=6;i>=0;i--){var d=new Date(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()-i,12));
+        var lk=key(d);out.push({key:lk,dow:d.getUTCDay(),value:mem.days[lk]||0})}
+      return out;
+    }
+
+    function statusPill(v){
+      if(v<=0){pill('idle','nothing yet');return}
+      if(v<=GOAL){pill('good',money(GOAL-v)+' under cap');return}
+      pill('caution',money(v-GOAL)+' over cap');
+    }
+    function pill(state,text){var p=document.getElementById('status');if(!p)return;
+      p.className='pill '+state;p.innerHTML='<span class="dot"></span>'+text}
+
+    function drawBars(){
+      var wk=last7();var logged=wk.filter(function(r){return r.value>0});
+      if(!logged.length){
+        document.getElementById('section').innerHTML='<div class="empty"><div class="lead">nothing yet</div><div>add today\\'s first spend and your week starts here.</div></div>';
+        return;
+      }
+      var max=1;wk.forEach(function(r){if(r.value>max)max=r.value});
+      var cells=wk.map(function(r,idx){
+        var ratio=r.value>0?Math.max(.08,r.value/max):0;var now=idx===6&&r.value>0;
+        var over=r.value>GOAL;
+        var cls='bfill'+(now?' now':'')+(over&&!now?' over':'');
+        return '<div class="col"><div class="bwrap"><div class="'+cls+'" style="transform:scaleY('+ratio.toFixed(3)+')"></div></div><span class="dlab">'+DOW[r.dow]+'</span></div>';
+      }).join('');
+      var sum=0;wk.forEach(function(r){sum+=r.value});
+      var avg=round2(sum/logged.length);
+      var stat='this week '+money(sum)+' over '+logged.length+' of 7 days, avg '+money(avg)+' a day';
+      document.getElementById('section').innerHTML='<div class="bars">'+cells+'</div><div class="stat">'+stat+'</div>';
+    }
+
+    function popNum(){
+      var el=document.getElementById('value');el.classList.add('pop');
+      setTimeout(function(){el.classList.remove('pop')},160);
+    }
+
+    function render(){
+      var v=get(today());
+      document.getElementById('value').innerHTML='<span class="cur">'+SYM+'</span>'+moneyBare(v);
+      statusPill(v);
+      document.getElementById('undo').disabled=(lastDay!==today())||get(today())<=0;
+      drawBars();
+      report(v);
+    }
+
+    function report(v){
+      if(v>0){Vitality.report({key:'daily spend',label:'Daily spend',value:round2(v),date:today(),kind:'money',goalDirection:'down'});}
+    }
+
+    function add(){
+      if(!loaded)return;
+      var input=document.getElementById('amt');
+      var n=parseFloat(input.value);if(!isFinite(n)||n<=0){return}
+      n=round2(n);
+      mem.last={day:today(),amount:n};lastDay=today();
+      mem.days[today()]=round2(get(today())+n);writeStore();
+      input.value='';document.getElementById('primary').disabled=true;
+      var m=document.getElementById('msg');m.className='msg';m.textContent='added '+money(n)+' to today.';
+      popNum();render();
+    }
+    function undoLast(){
+      if(!mem.last||mem.last.day!==today())return;
+      var back=mem.last.amount||0;
+      mem.days[today()]=Math.max(0,round2(get(today())-back));
+      if(mem.days[today()]===0)delete mem.days[today()];
+      mem.last=null;lastDay='';writeStore();
+      var m=document.getElementById('msg');m.className='msg';m.textContent='removed '+money(back)+', no problem.';
+      render();
+    }
+
+    function load(){
+      Vitality.load().then(function(s){
+        if(s&&typeof s==='object'){
+          mem.days=s.days||{};if(typeof s.goal==='number')mem.goal=s.goal;
+          if(s.last&&typeof s.last==='object'){mem.last=s.last;lastDay=s.last.day||''}
+        }
+        GOAL=mem.goal||40;
+        document.getElementById('goal').value=mem.goal||'';
+        loaded=true;render();
+      });
+    }
+
+    document.getElementById('amt').addEventListener('input',function(){
+      var n=parseFloat(this.value);document.getElementById('primary').disabled=!(isFinite(n)&&n>0);
+    });
+    document.getElementById('primary').addEventListener('click',add);
+    document.getElementById('undo').addEventListener('click',undoLast);
+    document.getElementById('gear').addEventListener('click',function(){var s=document.getElementById('settings');s.hidden=!s.hidden;if(!s.hidden)document.getElementById('goal').focus()});
+    document.getElementById('goal').addEventListener('change',function(){
+      var n=parseFloat(this.value);if(!isFinite(n)||n<0){return}
+      n=round2(n);mem.goal=n;GOAL=n;writeStore();render();
+    });
+
+    load();
+  })();
+  </script>
+</body>
+</html>`;
+
+test('money example: the tile is Vitality-grade (0 errors, 0 warnings)', () => {
+  const result = lintTile(HTML);
+  if (!result.ok || result.warnings > 0) {
+    console.log('\n' + result.findings.map((f) => `  [${f.severity}] ${f.rule}: ${f.message}`).join('\n') + '\n');
+  }
+  assert.equal(result.errors, 0, 'the money worked example must have zero floor errors');
+  assert.equal(result.warnings, 0, 'the money worked example must have zero polish warnings');
+});
+
+test('money example: it clears the richness gate as Fuel-grade rich', () => {
+  const r = richnessOf(HTML);
+  if (!r.ok) console.log('\n  missing richness marks: ' + r.missing.join(', ') + '\n');
+  assert.equal(r.ok, true, 'the money worked example must be Fuel-grade rich');
+  assert.equal(r.score, r.max, 'every richness mark must be present');
+});
+
+test('money example: it reports exactly one valid money stream', () => {
+  // exactly one report() call, and it is a money stream
+  const reports = HTML.match(/Vitality\.report\s*\(/g) || [];
+  assert.equal(reports.length, 1, 'a money tile reports exactly one stream');
+  assert.match(HTML, /kind:\s*'money'/, 'reports a money stream');
+  assert.match(HTML, /goalDirection:\s*'down'/, 'spending less is a down goal');
+  // the exact shape it posts must pass the dashboard-side contract
+  const v = validateReport({ key: 'daily spend', label: 'Daily spend', value: 32.5, date: '2026-07-02', kind: 'money', goalDirection: 'down' });
+  assert.equal(v.ok, true, 'the reported stream must validate against the contract');
+});
+
+// ── FILE C: BEHAVIOR of the reference tile (runs the real HTML through the harness) ──
+// The three tests above are STATIC (lint / richness / a synthetic report literal). A
+// logic bug in the gold-standard example — the thing Claude is told to emulate — would
+// pass them untouched. These mount the reference HTML in a real DOM and exercise it.
+import { mountReady as mountMoney } from './behaviorHarness.js';
+
+test('money example behaves: renders and the today-total moves by the exact amount added', async () => {
+  const now = new Date('2026-07-03T10:00:00');
+  const h = await mountMoney(HTML, { now });
+  assert.equal(h.errors.length, 0, `the money reference threw at mount: ${h.errors.join(' | ')}`);
+  assert.equal(h.valueText(), '$0', 'resting hero is a zero today-total with the currency symbol');
+  assert.ok(h.section().length > 0, 'the this-week section rendered');
+  // enter 20, add -> $20; add 30 -> $50 (same-day accumulation)
+  await h.type('#amt', '20');
+  await h.click('#primary');
+  assert.equal(h.valueText(), '$20', 'the first spend shows as the today-total');
+  await h.type('#amt', '30');
+  await h.click('#primary');
+  assert.equal(h.value(), 50, 'a second same-day spend accumulates to 50');
+  assert.equal(h.errors.length, 0, 'no throw across the interactions');
+  h.close();
+});
+
+// FIXED (finding #4): the reference bridge was reconciled to the templates' async no-arg
+// contract. The tile now carries the real bridge inside the sealed doc (Vitality.save(d)
+// single-arg postMessage, Vitality.load() no-arg Promise resolved by the host's
+// load:result, Vitality.report(stream)), so against the real host it persists and reports
+// exactly like a template-built tile. This test proves it end to end.
+test('money example behaves: reports through the host bridge and survives reopen', async () => {
+  const now = new Date('2026-07-03T10:00:00');
+  const h = await mountMoney(HTML, { now });
+  await h.type('#amt', '20');
+  await h.click('#primary');
+  assert.ok(h.reports.length >= 1, 'the tile reports its spend to Vee via the host');
+  const v = validateReport(h.reports[h.reports.length - 1]);
+  assert.ok(v.ok && v.stream.value === 20, 'the reported value matches the on-screen total');
+  const h2 = await h.rehydrate();
+  assert.equal(h2.value(), 20, 'reopening the tile keeps the total (host persistence)');
+  h.close();
+  h2.close();
+});

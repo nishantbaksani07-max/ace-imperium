@@ -1,0 +1,119 @@
+/* CozyLoader — the "Pop / cozy" loading treatment, generalized.
+   Lifted 1:1 from the macro tracker's PendingMealCard so the look is identical:
+   a playful tag bounces in, the content springs up under it with one phrase
+   color-emphasized, and the WHOLE CARD tints to the item's tone (border, tag,
+   progress bar, pulsing dots, highlighted phrase) cross-fading every interval.
+   Fully reduced-motion safe. See macros.module.css .cardPending for the origin. */
+
+.loader {
+  --tone: var(--mint);
+  --tone-soft: rgba(110, 231, 183, 0.28);
+  --tone-ink: #06281d;
+  display: flex;
+  gap: var(--space-3);
+  border: 1px solid var(--tone-soft);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  transition: border-color 0.5s var(--ease-premium);
+}
+
+/* Tone palette — reuses globals tokens, with two non-food tones added.
+   Each maps to --tone (the accent) + --tone-soft (the border / faint wash). */
+.loader[data-tone='mint'] {
+  --tone: var(--mint);
+  --tone-soft: rgba(110, 231, 183, 0.28);
+  --tone-ink: #06281d;
+}
+.loader[data-tone='blue'] {
+  --tone: #8fb8c9;
+  --tone-soft: rgba(143, 184, 201, 0.34);
+  --tone-ink: #08222b;
+}
+.loader[data-tone='amber'] {
+  --tone: var(--amber);
+  --tone-soft: rgba(245, 158, 11, 0.3);
+  --tone-ink: #2a1903;
+}
+.loader[data-tone='violet'] {
+  --tone: #a78bfa;
+  --tone-soft: rgba(167, 139, 250, 0.32);
+  --tone-ink: #1b1233;
+}
+.loader[data-tone='rose'] {
+  --tone: #f472b6;
+  --tone-soft: rgba(244, 114, 182, 0.3);
+  --tone-ink: #320c20;
+}
+
+/* Optional leading slot (thumbnail / shimmer placeholder) */
+.leading { flex-shrink: 0; }
+.shimmer {
+  width: 56px; height: 56px; border-radius: var(--radius-md); flex-shrink: 0;
+  background: linear-gradient(100deg, rgba(255,255,255,0.04) 30%, rgba(110,231,183,0.14) 50%, rgba(255,255,255,0.04) 70%);
+  background-size: 200% 100%;
+  animation: cozyShimmer 1.3s linear infinite;
+}
+
+.body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.top { display: flex; justify-content: space-between; gap: var(--space-2); align-items: baseline; }
+.title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--mint);
+}
+.cancel {
+  background: none; border: none; color: var(--muted); font-size: var(--text-lg);
+  line-height: 1; cursor: pointer; flex-shrink: 0; padding: 0 var(--space-1);
+}
+.cancel:hover { color: var(--fg); }
+
+.bar { height: 4px; border-radius: var(--radius-pill); background: var(--border-strong); overflow: hidden; }
+.bar span {
+  display: block; height: 100%; width: 40%; border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, transparent, var(--tone), transparent);
+  animation: cozySlide 1.4s var(--ease-premium) infinite;
+}
+
+.fact { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); min-height: 3.6em; }
+.tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tone-ink);
+  background: var(--tone);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  width: fit-content;
+  transition: background 0.5s var(--ease-premium);
+  animation: cozyTagPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.text {
+  margin: 0;
+  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  color: #eafff7;
+  animation: cozyPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hl { color: var(--tone); font-weight: 700; transition: color 0.5s var(--ease-premium); }
+
+.dots { display: flex; gap: 6px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--tone); opacity: 0.4; transition: background 0.5s var(--ease-premium); animation: cozyDot 1.2s ease-in-out infinite; }
+.dots i:nth-child(2) { animation-delay: 0.2s; }
+.dots i:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes cozyTagPop { 0% { opacity: 0; transform: scale(0.6) rotate(-6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes cozyPop { 0% { opacity: 0; transform: scale(0.8) translateY(8px); } 60% { opacity: 1; transform: scale(1.04); } 100% { transform: scale(1) translateY(0); } }
+@keyframes cozyDot { 0%, 100% { opacity: 0.35; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+@keyframes cozyShimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes cozySlide { from { transform: translateX(-120%); } to { transform: translateX(320%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader, .tag, .text, .dots i, .bar span, .shimmer { transition: none; animation: none; }
+  /* Content still shows; the bar holds a calm static fill instead of sliding. */
+  .bar span { width: 100%; opacity: 0.5; }
+}

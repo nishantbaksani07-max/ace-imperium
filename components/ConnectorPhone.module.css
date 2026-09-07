@@ -1,0 +1,168 @@
+/*
+ * ConnectorPhone — phone frame (HeroPhone language) showing Claude + the
+ * Vitality connector pushing proactive nudges that stagger in like real
+ * notifications. Tokens are the global ones from app/globals.css.
+ */
+
+.phone {
+  position: relative;
+  width: clamp(248px, 26vw, 310px);
+  aspect-ratio: 9 / 18;
+  border-radius: 34px;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg) 100%);
+  box-shadow:
+    0 0 110px rgba(110, 231, 183, 0.18),
+    0 40px 80px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  overflow: hidden;
+}
+
+.bezel {
+  width: 64px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 auto 2px;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 6px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.appName {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: 0.01em;
+}
+
+.connected {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--mint);
+  white-space: nowrap;
+}
+
+.connectedDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+  animation: cp-pulse 2s ease-in-out infinite;
+}
+
+/* Notification cards — pushed by Claude using Vitality's data. */
+.notif {
+  background: var(--card-elevated);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 11px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  animation: cp-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.n1 { animation-delay: 0.35s; }
+.n2 { animation-delay: 1.15s; }
+.n3 { animation-delay: 1.95s; }
+
+.notifHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notifIcon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  background: rgba(110, 231, 183, 0.14);
+  color: var(--mint);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.notifTitle {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
+.notifBody {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: var(--muted-strong);
+  line-height: 1.45;
+}
+
+.notifActions {
+  display: flex;
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.actPrimary {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.actGhost {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--muted-strong);
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+
+@keyframes cp-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .connectedDot { animation: none; }
+}

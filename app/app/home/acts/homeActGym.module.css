@@ -1,0 +1,160 @@
+/* ACT 3 - GYM. Renders inside the homecoming stage (shell owns the backdrop,
+   docked gem, exit, crossfades). One non-scrolling column: Vee line, the
+   session button-card, the peak-window line, the quiet skip. */
+
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 26px;
+  margin-top: 110px;
+}
+
+/* Vee's one-line bubble - same voice as the shell. */
+.vee {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 46ch;
+  animation: riseIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.veeTag {
+  flex: none;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: #6ee7b7;
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: 999px;
+  padding: 3px 9px;
+  transform: translateY(-2px);
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── The session button-card ────────────────────────────────────────────── */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(420px, 100%);
+  padding: 30px 26px 26px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  border-radius: 22px;
+  cursor: pointer;
+  animation: riseIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.card:hover {
+  border-color: rgba(110, 231, 183, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+}
+.card:active { transform: translateY(0) scale(0.99); }
+
+.cardEyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.75);
+}
+.cardDay {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(44px, 8vw, 60px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  color: #f2f6f4;
+}
+.cardMeta {
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.cardSeen {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.lockPill {
+  margin-top: 10px;
+  padding: 13px 32px;
+  background: #6ee7b7;
+  color: #042a1c;
+  border-radius: 999px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.card:hover .lockPill { background: #5dd6a6; }
+
+/* ── The peak-window line ───────────────────────────────────────────────── */
+
+.peakLine {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 40ch;
+  animation: riseIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+.peakLine b {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: 19px;
+  color: #6ee7b7;
+  margin: 0 1px;
+}
+
+/* Quiet mono skip (Spark pattern: lights on hover, no idle glow). */
+.skip {
+  background: none;
+  border: none;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 12px 18px;
+  animation: riseIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.skip:hover { color: #6ee7b7; text-shadow: 0 0 18px rgba(110, 231, 183, 0.5); }
+
+/* ── Confirmation beat ──────────────────────────────────────────────────── */
+
+.beatWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+}
+.veeBig { font-size: 19px; }
+
+/* ── Phone ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .act { margin-top: 96px; gap: 22px; }
+  .beatWrap { margin-top: 120px; }
+  .vee { font-size: 15.5px; }
+  .veeBig { font-size: 17px; }
+  .cardDay { font-size: clamp(40px, 11vw, 52px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vee, .card, .peakLine, .skip { animation: none; }
+  .card, .lockPill, .skip { transition: none; }
+}

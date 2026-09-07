@@ -1,0 +1,255 @@
+/* CelebrationScreen — the shared congrats/celebration layout for Vitality.
+   Vertically-centered, premium: WelcomeBackdrop ambiance, gem hero, mono
+   eyebrow with a rule, big serif title, italic serif sub, glowing summary
+   card, pill CTA. Matches the macro plan-result standard
+   (app/app/fuel/macros/macroSetup.module.css). See
+   docs/SKILL-celebration-screens.md. */
+
+.page {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--fg);
+  display: grid;
+  place-items: center;
+  padding: var(--space-8) var(--space-6) var(--space-10);
+  overflow: hidden;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: celebFade 0.35s var(--ease, ease) both;
+}
+
+/* The cozy vocabulary, shared with CozyLoader + the quiz reveal: a springy
+   overshoot pop and a rise-up. Stagger order down the page = the standard. */
+@keyframes celebFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cozyPop {
+  0%   { opacity: 0; transform: scale(0.82); }
+  60%  { opacity: 1; transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+@keyframes cozyUp {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.97); }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Back link — floats top-left, doesn't push the centered stack */
+.back {
+  position: absolute;
+  top: calc(var(--space-5) + env(safe-area-inset-top));
+  left: var(--space-6);
+  z-index: 2;
+  font-size: var(--text-sm);
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color var(--duration) ease;
+}
+.back:hover { color: var(--fg); }
+
+/* Gem hero — cozy pop entrance */
+.gemWrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: calc(-1 * var(--space-4)) auto var(--space-2);
+  animation: cozyPop 0.72s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+}
+.gemInner { position: relative; z-index: 1; width: 100%; height: 100%; }
+
+/* Celebratory bursts — sonar rings + motes popping outward from the gem,
+   looping, so the moment feels happy and alive. Sits behind the gem. */
+.bursts { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+.ring {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 156px; height: 156px;
+  margin: -78px 0 0 -78px;
+  border: 1px solid var(--mint);
+  border-radius: 50%;
+  opacity: 0;
+  animation: celebRing 2.8s ease-out infinite;
+}
+.ring2 { animation-delay: 0.93s; }
+.ring3 { animation-delay: 1.86s; }
+@keyframes celebRing {
+  0%   { transform: scale(0.42); opacity: 0.5; }
+  70%  { opacity: 0.1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.sparkle {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 9px var(--mint);
+  opacity: 0;
+  animation: celebSpark 3.2s ease-out infinite;
+}
+@keyframes celebSpark {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  16%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.3); opacity: 0; }
+}
+
+/* Eyebrow — mono with a leading rule, like the macro result */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+  animation: cozyUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both;
+}
+.rule {
+  display: inline-block;
+  width: 34px;
+  height: 1px;
+  background: var(--mint);
+  opacity: 0.7;
+}
+
+.title {
+  font-family: var(--font-serif, 'Newsreader', Georgia, serif);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 5.5vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  margin: var(--space-3) 0 var(--space-3);
+}
+.title em { font-style: italic; }
+
+.sub {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: rgba(240, 255, 245, 0.78);
+  line-height: 1.55;
+  max-width: 42ch;
+  margin: 0 auto var(--space-6);
+}
+
+/* Summary card — glowing mint panel */
+.card {
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  border-radius: var(--radius-xl, 22px);
+  background: rgba(110, 231, 183, 0.05);
+  box-shadow: 0 0 36px -18px var(--mint-glow, rgba(110, 231, 183, 0.5));
+  padding: var(--space-5) var(--space-6);
+  margin: 0 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  animation: cozyUp 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
+}
+
+.cardKey {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.cardValue {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+  color: var(--fg);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  background: rgba(110, 231, 183, 0.08);
+  color: var(--mint);
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.chipDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mint);
+  flex: none;
+}
+
+/* Buttons — pill primary + small mono ghost */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  animation: cozyUp 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 1.05s both;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: var(--mint);
+  color: #06281d;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-base);
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  transition: background var(--duration) ease, transform var(--duration) ease;
+}
+.primaryBtn:hover { background: var(--mint-hover, #8af0c4); transform: translateY(-1px); }
+.primaryBtn:active { transform: translateY(0); }
+.primaryBtn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+.ghostBtn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--duration) ease;
+}
+.ghostBtn:hover { color: var(--mint); }
+.ghostBtn:disabled { opacity: 0.5; cursor: default; }
+
+/* Slot for extra content below the buttons (e.g. a swap row) */
+.extra {
+  margin-top: var(--space-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell, .gemWrap, .eyebrow, .card, .buttons { animation: none; }
+  .ring, .sparkle { animation: none; opacity: 0; }
+}

@@ -1,0 +1,320 @@
+/* VeeGoalsSection - the fused "your goals" board on the new Vee page, wearing
+   the vee-notice-preview signature (ticker rows + the WHY panel). The row and
+   panel chrome reuse app/app/goals/veeNoticed.module.css (ts.board, ts.grow,
+   ts.gdCard, ts.life) and the create sheet reuses goalsVee.module.css; both of
+   those modules define their tokens on a PAGE root class we do not mount here,
+   so .scope re-declares the same token set (values copied 1:1).
+   Colour LAW: mint = good, amber = caution, never red. */
+
+.scope {
+  --iris: #a78bfa; --iris-hi: #c4b5fd; --iris-glow: rgba(167, 139, 250, 0.42); --iris-deep: #241b46;
+  --amber: #f59e0b; --amber-glow: rgba(245, 158, 11, 0.32);
+  --muted: rgba(255, 255, 255, 0.5); --muted-strong: rgba(255, 255, 255, 0.72);
+  --border: rgba(255, 255, 255, 0.08); --border-strong: rgba(255, 255, 255, 0.16);
+  --card: rgba(255, 255, 255, 0.02); --card-elevated: rgba(255, 255, 255, 0.04);
+  --s2: 0.5rem; --s3: 0.75rem; --s4: 1rem; --s5: 1.25rem; --s6: 1.5rem; --s8: 2rem;
+  --pill: 999px;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1); --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  display: flex; flex-direction: column; gap: 0.9rem;
+  color: #fff; font-family: var(--sans); font-size: 15px;
+}
+.scope :focus-visible { outline: 2px solid var(--iris-hi); outline-offset: 2px; border-radius: 8px; }
+.scope input { font-size: max(16px, 1em); }
+
+/* glass over the atmosphere: the board floats like the Noticed card does */
+.boardGlass {
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(167, 139, 250, 0.04), transparent 60%),
+    rgba(10, 14, 12, 0.42);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 26px 70px -34px rgba(0, 0, 0, 0.8);
+}
+
+/* row identity: name + mono sub (the notice-preview .gn signature) */
+.gn { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+.gTitle { font-size: 0.94rem; font-weight: 600; color: #fff; line-height: 1.2; text-align: left; }
+.gSub { font-family: var(--mono); font-size: 0.53rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.gState { font-family: var(--mono); font-size: 0.46rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+/* a just-created goal's row lands with a quiet mint breath */
+.justSet { animation: rowLand 0.9s var(--ease) both; border-radius: 11px; }
+@keyframes rowLand {
+  0% { background: rgba(110, 231, 183, 0.1); }
+  100% { background: transparent; }
+}
+
+/* the WHY panel (notice-preview gdcard language) */
+.whyLbl { font-family: var(--mono); font-size: 0.53rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.whyRead { font-size: 0.94rem; line-height: 1.5; color: #fff; margin: 0 0 13px; }
+
+/* triangle receipt bullets: mint up / amber down / muted flat, honest-only */
+.facts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 13px; }
+.fac { display: flex; align-items: center; gap: 10px; font-size: 0.84rem; color: var(--muted-strong); }
+.fac svg { width: 12px; height: 12px; flex: none; }
+.facUp svg { color: #a7f3d0; }
+.facDn svg { color: #fbbf3f; }
+.facFlat svg { color: var(--muted); }
+
+/* the lightbulb lever line, its key phrase mint-underlined */
+.lever { display: flex; gap: 11px; align-items: flex-start; font-size: 0.92rem; line-height: 1.5; color: #fff; border-top: 1px solid var(--border); padding-top: 13px; margin-bottom: 2px; }
+.leverBulb { flex: none; width: 19px; height: 19px; color: #a7f3d0; margin-top: 2px; }
+.leverBulb svg { width: 19px; height: 19px; }
+.sauce { color: #a7f3d0; font-weight: 700; border-bottom: 2px solid rgba(110, 231, 183, 0.55); padding-bottom: 1px; text-shadow: 0 0 22px rgba(110, 231, 183, 0.4); }
+
+/* the one-tap lever action (mint outline, fills on hover) */
+.leverBtn {
+  display: inline-flex; align-items: center; gap: 8px; font: 500 0.86rem var(--sans);
+  color: #a7f3d0; background: transparent; border: 1px solid rgba(110, 231, 183, 0.4); border-radius: 12px;
+  padding: 11px 16px; cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: color 0.26s var(--ease), background 0.26s var(--ease), border-color 0.26s var(--ease), transform 0.22s var(--ease), box-shadow 0.3s var(--ease);
+}
+.leverBtn svg { width: 15px; height: 15px; flex: none; transition: transform 0.42s var(--spring); }
+.leverBtn:hover { color: #04221a; background: #6ee7b7; border-color: #6ee7b7; transform: translateY(-2px); box-shadow: 0 12px 28px -15px rgba(110, 231, 183, 0.4); }
+.leverBtn:hover svg { transform: scale(1.16); }
+.leverBtn:active { transform: scale(0.97); }
+
+/* the always-visible graph slot (TRAIN 4): with data the series draws inside;
+   without, the same framed area holds one honest ask. Hairline frame + a quiet
+   baseline axis so the empty state still reads as "a graph lives here". */
+.graphSlot {
+  position: relative; height: 118px; margin: 2px 0 13px;
+  border: 1px solid var(--border); border-radius: 12px;
+  background:
+    linear-gradient(to top, rgba(255, 255, 255, 0.03), transparent 45%),
+    var(--card);
+  overflow: hidden;
+}
+.graphSlot::before {
+  /* the baseline axis hairline, sitting just above the frame's bottom edge */
+  content: ''; position: absolute; left: 10px; right: 10px; bottom: 9px;
+  border-bottom: 1px solid var(--border);
+}
+.graphSlot::after {
+  /* the y-axis hairline */
+  content: ''; position: absolute; left: 10px; top: 9px; bottom: 9px;
+  border-left: 1px solid var(--border);
+}
+/* The plot layer holds the svg + the scrub overlay, sitting inside the frame's
+   axis hairlines. Pointer events land here so a drag reads the whole plot. */
+.graphPlot { position: absolute; inset: 9px 10px; touch-action: none; cursor: crosshair; }
+.graphSvg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+
+/* ── Scrubber: vertical line + point dot + floating date/value tag ────────── */
+.gScrubLine {
+  position: absolute; top: 0; bottom: 0; width: 1px;
+  background: rgba(255, 255, 255, 0.18); transform: translateX(-0.5px);
+  pointer-events: none; opacity: 0; transition: opacity 120ms; z-index: 2;
+}
+.gScrubLineShow { opacity: 1; }
+.gScrubDot {
+  position: absolute; width: 11px; height: 11px; border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0); pointer-events: none;
+  transition: transform 150ms var(--spring); box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55);
+  z-index: 3;
+}
+.gScrubDotShow { transform: translate(-50%, -50%) scale(1); }
+.gScrubTag {
+  position: absolute; pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px)); white-space: nowrap;
+  font-size: 0.62rem; padding: 5px 9px; border-radius: 9px;
+  background: #10120f; border: 1px solid var(--border-strong);
+  opacity: 0; transition: opacity 120ms; font-variant-numeric: tabular-nums; z-index: 4;
+}
+.gScrubTagShow { opacity: 1; }
+/* At-rest axis context: y-scale chips (left) + time-span endpoints (bottom). */
+.gYLabel {
+  position: absolute; left: 0; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.04em;
+  color: var(--muted); background: rgba(11, 13, 12, 0.62);
+  padding: 0 4px; border-radius: 3px; pointer-events: none;
+  font-variant-numeric: tabular-nums; white-space: nowrap; z-index: 1;
+}
+.gXLabel {
+  position: absolute; bottom: 0;
+  font-family: var(--font-serif), Georgia, serif; font-style: italic;
+  font-size: 0.52rem; color: var(--muted);
+  background: rgba(11, 13, 12, 0.55); padding: 0 4px; border-radius: 3px;
+  pointer-events: none; z-index: 1;
+}
+.gXLabelL { left: 0; }
+.gXLabelR { right: 0; }
+
+.gScrubDate { font-family: var(--font-serif), Georgia, serif; font-style: italic; color: var(--muted); margin-right: 7px; }
+.gScrubVal { font-weight: 600; color: var(--fg); }
+.gScrubDelta { margin-left: 7px; }
+.gScrubUp { color: #6EE7B7; }
+.gScrubDn { color: #e9c87a; }
+
+/* Expand-to-fullscreen control, top-right of the panel graph. Faintly visible
+   at rest so it is tappable on phones (no hover there), brightens to mint on
+   hover/focus. Opens the prebuilt GraphFullscreen with this goal's real series. */
+.graphExpand {
+  position: absolute; top: 6px; right: 6px; z-index: 2;
+  width: 24px; height: 24px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); border-radius: 7px;
+  background: rgba(10, 12, 11, 0.55);
+  color: var(--n-muted-strong);
+  opacity: 0.5; cursor: pointer;
+  transition: opacity 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.graphSlot:hover .graphExpand { opacity: 1; }
+.graphExpand:hover, .graphExpand:focus-visible { opacity: 1; color: var(--mint); border-color: var(--mint); }
+.graphExpand svg { width: 13px; height: 13px; }
+.graphEmpty { display: flex; align-items: center; justify-content: center; padding: 0 22px; }
+/* The ghost preview: the framed line this graph WILL become - faint mint,
+   gradient-filled, with a breathing dot at its tip. A premium promise. */
+.ghostLine {
+  stroke: #6EE7B7; stroke-width: 1.7;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0.34;
+}
+.ghostDot {
+  fill: #6EE7B7;
+  filter: drop-shadow(0 0 5px rgba(110, 231, 183, 0.7));
+  animation: ghostBreath 2.6s ease-in-out infinite;
+}
+@keyframes ghostBreath {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.32; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ghostDot { animation: none; opacity: 0.6; }
+}
+/* The five-word caption, a clean centered pill floating over the ghost line. */
+.graphAskChip {
+  position: relative; z-index: 1;
+  font-family: var(--mono); font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted-strong);
+  background: rgba(10, 13, 12, 0.72);
+  border: 1px solid var(--border);
+  padding: 5px 11px; border-radius: 999px;
+  white-space: nowrap; backdrop-filter: blur(2px);
+}
+
+/* The life strip: your real numbers as premium mini stat tiles - a tiny mono
+   label stacked over a tabular value, a tone accent bar on the left. Reads as
+   a quality readout, not a flat gray chip. */
+.lifeStrip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding: 0 2px; }
+.lifeChip {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 68px; padding: 8px 12px 9px 14px;
+  border: 1px solid var(--border); border-radius: 11px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.008));
+}
+.lifeChip::before {
+  content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px;
+  border-radius: 0 2px 2px 0; background: var(--muted-strong); opacity: 0.55;
+}
+.lifeLabel {
+  font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--muted);
+}
+.lifeValue {
+  font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums; color: var(--fg);
+}
+.lifeChipMint::before { background: #6EE7B7; opacity: 0.9; }
+.lifeChipMint .lifeValue { color: #6EE7B7; }
+.lifeChipAmber::before { background: #e9c87a; opacity: 0.9; }
+.lifeChipAmber .lifeValue { color: #e9c87a; }
+
+/* "what steers this": the quiet mono binding chip + its cozy picker drop */
+.bindChip { color: var(--muted-strong); border-color: var(--border-strong); background: transparent; }
+.bindChip b { font-weight: 600; color: #a7f3d0; }
+.bindChip:hover { border-color: rgba(110, 231, 183, 0.45); }
+.bindPick {
+  margin-top: 9px; padding: 11px 12px 12px;
+  border: 1px solid var(--border); border-radius: 14px; background: var(--card-elevated);
+  transform-origin: top center; animation: bindIn 0.32s var(--spring) both;
+}
+@keyframes bindIn {
+  from { opacity: 0; transform: translateY(-5px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.bindLbl { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+.bindOpts { display: flex; flex-wrap: wrap; gap: 7px; }
+.bindOpt {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 36px;
+  font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted-strong); border: 1px solid var(--border-strong); border-radius: var(--pill);
+  padding: 7px 11px; background: transparent; cursor: pointer;
+  transition: color 0.16s var(--ease), border-color 0.16s var(--ease), background 0.16s var(--ease), transform 0.16s var(--ease);
+}
+.bindOpt:hover { border-color: rgba(110, 231, 183, 0.5); color: #a7f3d0; }
+.bindOpt:active { transform: scale(0.96); }
+.bindOptOn { color: #a7f3d0; border-color: rgba(110, 231, 183, 0.75); background: rgba(110, 231, 183, 0.08); box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.25); }
+.bindTag { font-size: 0.44rem; letter-spacing: 0.12em; color: var(--iris-hi); border: 1px solid rgba(167, 139, 250, 0.35); border-radius: var(--pill); padding: 2px 6px; }
+
+/* the push meter's meaning line: the level's REAL drift cadence, under the chips */
+.pushMeaning {
+  flex-basis: 100%; display: flex; align-items: center; gap: 7px; margin: 3px 0 0;
+  font-family: var(--mono); font-size: 0.53rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); line-height: 1.6;
+}
+
+/* "Create a tile for this" - the iris-outline door when no module lever exists */
+.createTileBtn {
+  display: inline-flex; align-items: center; gap: 8px; font: 500 0.86rem var(--sans);
+  color: var(--iris-hi); background: transparent; border: 1px solid rgba(167, 139, 250, 0.42); border-radius: 12px;
+  padding: 11px 16px; cursor: pointer; white-space: nowrap; text-decoration: none;
+  transition: color 0.26s var(--ease), background 0.26s var(--ease), border-color 0.26s var(--ease), transform 0.22s var(--ease), box-shadow 0.3s var(--ease);
+}
+.createTileBtn svg { width: 15px; height: 15px; flex: none; transition: transform 0.42s var(--spring); }
+.createTileBtn:hover { color: #1b1140; background: #c4b5fd; border-color: #c4b5fd; transform: translateY(-2px); box-shadow: 0 12px 28px -15px rgba(167, 139, 250, 0.45); }
+.createTileBtn:hover svg { transform: scale(1.16); }
+.createTileBtn:active { transform: scale(0.97); }
+
+/* day-one auto-track suggestions, wearing the goals-board row language:
+   gTitle/gSub type scale, neutral glyph, one quiet iris add chip. */
+.suggest { display: flex; align-items: center; gap: 13px; padding: 13px 15px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); transition: border-color 0.2s var(--ease); }
+.suggest:hover { border-color: var(--border-strong); }
+.sGlyph { flex: none; width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--muted-strong); border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.02); }
+.sBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.sName { font-size: 0.94rem; font-weight: 600; color: #fff; line-height: 1.2; }
+.sWhy { font-family: var(--mono); font-size: 0.53rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.addBtn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 34px;
+  font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--iris-hi); border: 1px solid rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.06);
+  border-radius: var(--pill); padding: 8px 13px; cursor: pointer;
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.addBtn:hover { background: rgba(167, 139, 250, 0.13); }
+.addBtn:active { transform: scale(0.97); }
+.addBtn:disabled { opacity: 0.5; cursor: default; }
+
+/* "this week with vitality" - the quiet mono disclosure (v1.2). Watched-chip
+   language: hairline pill, mono uppercase, a small spark that warms on open.
+   The drop opens with a cozy spring, never an always-open block. */
+.weekDisclose {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 2px; padding: 7px 12px 7px 10px;
+  font-family: var(--mono); font-size: 0.56rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border); border-radius: var(--pill); cursor: pointer;
+  transition: color 0.3s, border-color 0.3s;
+}
+.weekDisclose:hover { color: var(--muted-strong); border-color: var(--border-strong); }
+.weekSpark { width: 11px; height: 11px; flex: none; color: #a7f3d0; opacity: 0.55; transition: opacity 0.3s; }
+.weekDisclose:hover .weekSpark, .weekOpen .weekSpark { opacity: 1; }
+.weekChev { width: 12px; height: 12px; flex: none; transition: transform 0.35s var(--spring); }
+.weekOpen .weekChev { transform: rotate(180deg); }
+.weekDrop {
+  display: flex; flex-direction: column; gap: 0.9rem;
+  transform-origin: top center;
+  animation: weekIn 0.55s var(--spring) both;
+}
+@keyframes weekIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.subIntro { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin: 0 0 -4px; max-width: 52ch; }
+@media (prefers-reduced-motion: reduce) {
+  .weekDrop, .weekChev, .bindPick { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,196 @@
+/*
+ * GemBurst — reusable pulse-burst overlay for any Vitality gem. CSS lifted from
+ * app/app/dashboardHeaderGem.module.css (rings / particles / sparkles) so bursts
+ * read identically to the lab + dashboard, plus a confetti burst for big wins.
+ * Drop <GemBurst burst={burst} /> inside a position:relative gem stage.
+ */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55%;
+  height: 55%;
+  margin-left: -27.5%;
+  margin-top: -27.5%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(110, 231, 183, 0.75);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.08) 0%, rgba(110, 231, 183, 0) 65%);
+  opacity: 0;
+  animation: gemburst-ring 1.6s ease-out forwards;
+}
+
+.ring1 { animation-delay: 0ms; }
+.ring2 { animation-delay: 180ms; }
+.ring3 { animation-delay: 360ms; }
+
+@keyframes gemburst-ring {
+  0%   { transform: scale(0.55); opacity: 0;    border-width: 2px;   }
+  12%  {                          opacity: 0.85;                      }
+  100% { transform: scale(2.4);  opacity: 0;    border-width: 0.4px; }
+}
+
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--mint, #6EE7B7);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.7), 0 0 20px rgba(110, 231, 183, 0.45);
+  opacity: 0;
+  animation: gemburst-particle 1.5s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+  transform-origin: center;
+  --angle: 0deg;
+}
+
+@keyframes gemburst-particle {
+  0%   { transform: rotate(var(--angle)) translateY(0)     scale(0.4); opacity: 0; }
+  15%  {                                                                opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-90px) scale(0.7); opacity: 0; }
+}
+
+.sparkle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(167,243,208,0.6) 45%, rgba(110,231,183,0) 70%);
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.7);
+  opacity: 0;
+  animation: gemburst-sparkle 1.8s ease-out forwards;
+}
+
+@keyframes gemburst-sparkle {
+  0%   { opacity: 0; transform: scale(0.3); }
+  25%  { opacity: 1; transform: scale(1.4); }
+  55%  { opacity: 0.6; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* Confetti — celebratory bits radiate out, spin, and fade. For big wins. */
+.confetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 9px;
+  margin-left: -3px;
+  margin-top: -4.5px;
+  border-radius: 1.5px;
+  background: var(--mint, #6EE7B7);
+  box-shadow: 0 0 8px rgba(110, 231, 183, 0.5);
+  opacity: 0;
+  animation: gemburst-confetti 1.7s cubic-bezier(0.16, 0.7, 0.4, 1) forwards;
+  transform-origin: center;
+  --angle: 0deg;
+  --dist: 120px;
+  --spin: 540deg;
+}
+
+@keyframes gemburst-confetti {
+  0%   { transform: rotate(var(--angle)) translateY(0)                       rotate(0);          opacity: 0; }
+  12%  {                                                                                          opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(calc(-1 * var(--dist)))  rotate(var(--spin)); opacity: 0; }
+}
+
+/* ── Extra kinds ported from the gem-library lab, rescaled for the smaller
+   reusable gem (they fire on the question gem, ~160px). ── */
+
+/* Rays — sharp starburst of light shards. */
+.ray {
+  position: absolute; top: 50%; left: 50%;
+  width: 2.5px; height: 42px; margin-left: -1.25px; margin-top: -21px;
+  border-radius: 2px;
+  background: linear-gradient(to top, rgba(110, 231, 183, 0) 0%, rgba(167, 243, 208, 0.9) 50%, rgba(224, 255, 240, 1) 100%);
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.85);
+  opacity: 0; transform-origin: center center;
+  animation: gemburst-ray 0.78s cubic-bezier(0.12, 0.9, 0.35, 1) forwards;
+  --angle: 0deg; --len: 1;
+}
+@keyframes gemburst-ray {
+  0%   { transform: rotate(var(--angle)) translateY(-10px) scaleY(0.3); opacity: 0; }
+  18%  { transform: rotate(var(--angle)) translateY(-46px) scaleY(calc(1.1 * var(--len))); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-112px) scaleY(calc(1.5 * var(--len))); opacity: 0; }
+}
+
+/* Orbit — dots swing around the gem then drift off. */
+.orbit {
+  position: absolute; top: 50%; left: 50%;
+  width: 8px; height: 8px; margin-left: -4px; margin-top: -4px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(224,255,240,1) 35%, rgba(110,231,183,0.95) 65%, rgba(110,231,183,0) 80%);
+  box-shadow: 0 0 14px rgba(110, 231, 183, 0.95), 0 0 24px rgba(110, 231, 183, 0.5);
+  opacity: 0;
+  animation: gemburst-orbit 1.9s cubic-bezier(0.3, 0, 0.3, 1) forwards;
+  --start: 0deg; --sweep: 300deg;
+}
+@keyframes gemburst-orbit {
+  0%   { transform: rotate(var(--start)) translateX(72px) scale(0.3); opacity: 0; }
+  16%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.16)) translateX(84px) scale(1.3); opacity: 1; }
+  55%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.55)) translateX(102px) scale(1); opacity: 1; }
+  82%  { opacity: 1; }
+  100% { transform: rotate(calc(var(--start) + var(--sweep))) translateX(116px) scale(0.55); opacity: 0; }
+}
+
+/* Bloom — soft teardrop petals open outward like a flower. */
+.bloom {
+  position: absolute; top: 50%; left: 50%;
+  width: 30px; height: 44px; margin-left: -15px; margin-top: -22px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 34%, rgba(167,243,208,0.92) 0%, rgba(110,231,183,0.4) 46%, rgba(110,231,183,0) 76%);
+  opacity: 0; transform-origin: center bottom; --angle: 0deg;
+  animation: gemburst-bloom 1.5s cubic-bezier(0.18, 0.7, 0.3, 1) forwards;
+}
+@keyframes gemburst-bloom {
+  0%   { transform: rotate(var(--angle)) translateY(-30px) scale(0.2); opacity: 0; }
+  28%  { opacity: 0.95; }
+  100% { transform: rotate(var(--angle)) translateY(-96px) scale(1.12); opacity: 0; }
+}
+
+/* Spiral — dots swing outward in a galaxy swirl. */
+.spiral {
+  position: absolute; top: 50%; left: 50%;
+  width: 6px; height: 6px; margin-left: -3px; margin-top: -3px; border-radius: 50%;
+  background: #6EE7B7; box-shadow: 0 0 9px rgba(110,231,183,0.8), 0 0 18px rgba(110,231,183,0.4);
+  opacity: 0; --angle: 0deg; --spin: 150deg;
+  animation: gemburst-spiral 1.7s cubic-bezier(0.2, 0.5, 0.3, 1) forwards;
+}
+@keyframes gemburst-spiral {
+  0%   { transform: rotate(var(--angle)) translateX(70px) scale(0.3); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: rotate(calc(var(--angle) + var(--spin))) translateX(152px) scale(0.65); opacity: 0; }
+}
+
+/* Ripple — slow, soft concentric water rings (%-based, scales with the gem). */
+.ripple {
+  position: absolute; top: 50%; left: 50%;
+  width: 58%; height: 58%; margin-left: -29%; margin-top: -29%; border-radius: 50%;
+  border: 1.5px solid rgba(110, 231, 183, 0.5);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.05) 0%, rgba(110, 231, 183, 0) 60%);
+  opacity: 0; animation: gemburst-ripple 2.4s ease-out forwards;
+}
+.ripple1 { animation-delay: 0ms; }
+.ripple2 { animation-delay: 420ms; }
+.ripple3 { animation-delay: 840ms; }
+@keyframes gemburst-ripple {
+  0%   { transform: scale(0.7); opacity: 0; border-width: 2px; }
+  15%  { opacity: 0.6; }
+  100% { transform: scale(2.7); opacity: 0; border-width: 0.3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring, .particle, .sparkle, .confetti,
+  .ray, .orbit, .bloom, .spiral, .ripple { animation: none; opacity: 0; }
+}

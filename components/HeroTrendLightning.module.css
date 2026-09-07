@@ -1,0 +1,152 @@
+/*
+ * HeroTrendLightning — subtle mint background trend strikes for the
+ * gem hero. Two paths (bottom-left→upper-right, bottom-right→upper-
+ * left) cycle on staggered timelines so the viewer catches one
+ * strike at a time from different directions.
+ */
+
+.trendLightning {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Dialed lower so the strikes read as a faint background impression,
+     not a feature you actively look at — the eye should clock them
+     subconsciously rather than read them as graphs. */
+  opacity: 0.35;
+}
+
+.trendLightning svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Each strike group: line draws via stroke-dashoffset, then flickers
+   via opacity, then a clip-path animation wipes the strike away from
+   bottom to top — the lower part of the line disappears first, the
+   peak/top lingers a moment longer before vanishing. Both paths share
+   the same animation but with different delays so they don't overlap. */
+.strike {
+  /* Start fully cropped (invisible). The clip animation lifts the
+     crop bottom away at the start of each cycle, then re-crops bottom-
+     to-top during the fade phase. */
+  clip-path: inset(0 0 100% 0);
+  -webkit-clip-path: inset(0 0 100% 0);
+}
+
+.trendPath {
+  /* Path length ~2200 SVG units (rough — slight over-shoot is fine). */
+  stroke-dasharray: 2200;
+  stroke-dashoffset: 2200;
+}
+
+/* Two paths cycle at 60s, staggered by 30s, so the viewer sees a
+   strike from one direction (bottom-left → up-right), then ~15s of
+   quiet, then a strike from the other (bottom-right → up-left), then
+   ~15s of quiet, repeat. */
+
+.strikeA {
+  animation: hero-strike-clip 60s linear infinite;
+}
+
+.strikeA .trendPath {
+  animation: hero-trend-line 60s linear infinite;
+}
+
+.strikeA circle {
+  animation: hero-trend-dots 60s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(167, 243, 208, 0.55));
+}
+
+.strikeB {
+  animation: hero-strike-clip 60s linear infinite;
+  animation-delay: -30s;
+}
+
+.strikeB .trendPath {
+  animation: hero-trend-line 60s linear infinite;
+  animation-delay: -30s;
+}
+
+.strikeB circle {
+  animation: hero-trend-dots 60s linear infinite;
+  animation-delay: -30s;
+  filter: drop-shadow(0 0 5px rgba(167, 243, 208, 0.55));
+}
+
+/* Clip envelope — uncovers the strike at the start of each cycle,
+   then crops bottom-to-top during the fade phase (24→33%). With a
+   60s cycle each strike is visible for ~20s before its slot ends. */
+@keyframes hero-strike-clip {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    -webkit-clip-path: inset(0 0 100% 0);
+  }
+  /* Uncovered (visible) during draw + hold + flicker fade (1–24%) */
+  1%, 24% {
+    clip-path: inset(0 0 0% 0);
+    -webkit-clip-path: inset(0 0 0% 0);
+  }
+  /* Bottom-to-top wipe (24→33%) — bottom disappears first, top last */
+  33%, 100% {
+    clip-path: inset(0 0 100% 0);
+    -webkit-clip-path: inset(0 0 100% 0);
+  }
+}
+
+/* Line animation: continuous flicker through the ENTIRE visible
+   window — not just the draw phase. Opacity oscillates irregularly
+   for the whole 0–33% slot so the strike never settles into a stable
+   line; it feels like a faint, restless flicker rather than a graph. */
+@keyframes hero-trend-line {
+  /* Draw + crackle flicker (0–10%) */
+  0%  { stroke-dashoffset: 2200; opacity: 0; }
+  1%  { opacity: 0.55; }
+  2%  { opacity: 0.1; }
+  3%  { opacity: 0.7; }
+  4%  { opacity: 0.25; }
+  5%  { opacity: 0.65; }
+  6%  { opacity: 0.15; }
+  8%  { stroke-dashoffset: 1100; opacity: 0.55; }
+  10% { stroke-dashoffset: 0; opacity: 0.6; }
+  /* Continuous restless flicker through the hold + fade (10–24%) —
+     opacity wanders so the line never feels stable */
+  11% { opacity: 0.3; }
+  12% { opacity: 0.55; }
+  13% { opacity: 0.2; }
+  14% { opacity: 0.5; }
+  15% { opacity: 0.7; }
+  16% { opacity: 0.25; }
+  17% { opacity: 0.5; }
+  18% { opacity: 0.15; }
+  19% { opacity: 0.45; }
+  20% { opacity: 0.6; }
+  21% { opacity: 0.2; }
+  22% { opacity: 0.4; }
+  23% { opacity: 0.1; }
+  24% { opacity: 0.35; }
+  /* Hold opacity through clip-fade so the directional wipe is what
+     makes the line disappear (not opacity going to 0) */
+  33% { stroke-dashoffset: 0; opacity: 0.35; }
+  /* Reset for next cycle */
+  34% { stroke-dashoffset: 2200; opacity: 0; }
+  100% { stroke-dashoffset: 2200; opacity: 0; }
+}
+
+/* Dots — fade in once the line finishes drawing, hold through the
+   fade-phase. Parent's clip-path crops them bottom-to-top. */
+@keyframes hero-trend-dots {
+  0% { opacity: 0; }
+  10% { opacity: 0.6; }
+  33% { opacity: 0.55; }
+  34% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trendLightning {
+    display: none;
+  }
+}

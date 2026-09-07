@@ -1,0 +1,230 @@
+/*
+ * Public makers directory: the Arts District index (Pillar 3, the social /
+ * creator layer). A calm, editorial grid of every Vitality tile maker, each
+ * card a doorway into their public /u/<username> page. Matches the maker
+ * profile look: pure-black, faint mint horizon glow, Inter as the workhorse,
+ * Instrument Serif italic only for the handle moment, mint used sparingly.
+ */
+
+.page {
+  --serif: var(--font-serif), Georgia, serif;
+  --sans: var(--font-inter), 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+}
+
+/* faint mint horizon glow behind the header */
+.glow {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(60% 50% at 50% -8%, rgba(110, 231, 183, 0.1), transparent 70%);
+}
+
+/* slim top bar */
+.bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+}
+.mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  color: var(--mint);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-decoration: none;
+}
+.barSpacer { flex: 1; }
+.barCta {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--muted-strong);
+  text-decoration: none;
+  padding: 8px 15px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease);
+}
+.barCta:hover { border-color: var(--mint); color: var(--mint); }
+
+/* editorial header */
+.head {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 60px 24px 34px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: up 0.7s var(--ease) 0.05s forwards;
+}
+.kicker {
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.title {
+  margin: 12px 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 3.6rem);
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 1.02;
+}
+.lede {
+  margin: 16px auto 0;
+  max-width: 520px;
+  font-size: 1.02rem;
+  line-height: 1.58;
+  color: var(--muted-strong);
+  letter-spacing: -0.006em;
+}
+
+/* the maker grid */
+.body {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 8px 24px 40px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 168px;
+  padding: 22px 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.015);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.22s var(--ease), transform 0.22s var(--ease), background 0.22s var(--ease);
+}
+.card:hover {
+  border-color: rgba(110, 231, 183, 0.28);
+  background: rgba(255, 255, 255, 0.028);
+  transform: translateY(-2px);
+}
+
+.handle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.bio {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: var(--muted-strong);
+  letter-spacing: -0.006em;
+  /* keep cards tidy: clamp long bios to three lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* footer strip: tile count, link host, walk-in arrow */
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+.count b { color: var(--mint); font-weight: 600; }
+.link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.arrow {
+  margin-left: auto;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  transition: color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.arrow svg { width: 18px; height: 18px; }
+.card:hover .arrow { color: var(--mint); transform: translateX(3px); }
+
+/* calm empty state */
+.empty {
+  text-align: center;
+  max-width: 560px;
+  margin: 12px auto 0;
+  padding: 56px 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.emptyLine {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--mint-cool, #A7F3D0);
+  line-height: 1.4;
+}
+.emptySub { margin-top: 8px; font-size: 0.88rem; color: var(--muted); }
+
+/* funnel footer: every maker page is a doorway into Vitality */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 24px 70px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+.footer a { color: var(--muted-strong); text-decoration: none; font-weight: 500; }
+.footer a:hover { color: var(--mint); }
+
+@keyframes up { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .head { animation: none; opacity: 1; transform: none; }
+}
+
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .head { padding: 44px 24px 26px; }
+}

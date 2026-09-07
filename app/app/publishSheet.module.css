@@ -1,0 +1,249 @@
+/* Publish sheet (Arts District v3). Calm, centered, on-brand. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  animation: fade 0.2s ease;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.win {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: var(--bg-elevated, #0a0a0a);
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8);
+  animation: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
+
+.x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--muted-strong);
+  cursor: pointer;
+}
+.x svg { width: 16px; height: 16px; }
+.x:hover { color: #fff; }
+
+/* cover preview: a live, recolorable poster of the tile's own design art.
+   The accent rides on `color` (inherited from the inline style), so the
+   background wash + art + byline all recolor together as the maker picks. */
+.cover {
+  position: relative;
+  height: 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--mint);
+  background:
+    radial-gradient(120% 120% at 50% 6%, color-mix(in srgb, currentColor 16%, transparent), transparent 62%),
+    radial-gradient(135% 110% at 60% 22%, rgba(15, 38, 30, 0.5), rgba(5, 9, 8, 0.55));
+  border-bottom: 1px solid var(--border);
+  transition: color 0.35s ease;
+  overflow: hidden;
+}
+/* a faint recessed frame so the face reads as a "poster", not a bare panel */
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0.9;
+  transition: color 0.35s ease;
+}
+.art :global(svg) { width: 92px; height: 92px; }
+.artFallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0.55;
+}
+.artFallback svg { width: 54px; height: 54px; }
+.coverName {
+  position: relative;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
+}
+.coverBy {
+  position: relative;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, currentColor 78%, #fff);
+  opacity: 0.92;
+}
+
+.body { padding: 22px 22px 24px; text-align: center; }
+
+/* success checkmark: celebratory but calm, on-brand mint */
+.doneMark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 4px;
+  border-radius: 999px;
+  color: var(--mint);
+  background: color-mix(in srgb, var(--mint) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mint) 40%, transparent);
+  animation: markPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.doneMark svg { width: 22px; height: 22px; }
+@keyframes markPop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.lede {
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--muted-strong);
+}
+.lede b { color: #fff; font-weight: 600; }
+
+/* live poster recolor: pick the accent the tile publishes with */
+.swatchGroup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 0;
+}
+.swatch {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+.swatch:hover { transform: translateY(-1px); }
+.swatchOn { border-color: color-mix(in srgb, currentColor 65%, transparent); }
+.swatchDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+.swatchOn .swatchDot {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset, 0 0 12px color-mix(in srgb, currentColor 55%, transparent);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 16px auto 0;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+}
+.track {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  flex: none;
+  transition: background 0.2s ease;
+}
+.track.on { background: var(--mint); }
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.track.on .knob { transform: translateX(16px); }
+.toggleLabel { font-size: 0.88rem; color: var(--muted-strong); }
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 18px;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.primary:hover { background: var(--mint-hover); }
+.primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* quiet secondary action: dismiss without leaving to /account */
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-strong);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.16s ease;
+}
+.ghost:hover { color: #fff; }
+
+.fine { margin: 12px 0 0; font-size: 0.74rem; color: var(--muted); }
+.error { margin: 14px 0 0; font-size: 0.85rem; color: var(--amber); }

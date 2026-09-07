@@ -1,0 +1,126 @@
+/* GraphFullscreen - the goal sparkline, expanded. Same real data as the 54px
+   sparkline, on a canvas that fills the screen: date axis, min/max, the state
+   word. Tokens fall back so the overlay stays on-brand even outside .noticed.
+   mint = moving right, amber = drifting, neutral = holding. Never red. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  background: rgba(4, 6, 10, 0.965);
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  animation: gfFade 0.26s ease both;
+  cursor: pointer;
+}
+@keyframes gfFade { from { opacity: 0; } to { opacity: 1; } }
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  animation: gfRise 0.5s cubic-bezier(0.26, 1.32, 0.42, 1) 0.05s both;
+}
+.title {
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  color: var(--n-fg, #f3f1fb);
+  line-height: 1.25;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 7px;
+}
+.state {
+  display: inline-flex;
+  font-family: var(--n-mono, ui-monospace, monospace);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2.5px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--n-border, rgba(255, 255, 255, 0.08));
+  color: var(--n-muted-strong, rgba(233, 239, 233, 0.72));
+}
+.stateUp { color: var(--mint-hi, #a7f3d0); border-color: rgba(110, 231, 183, 0.28); background: rgba(110, 231, 183, 0.07); }
+.stateDn { color: var(--amber-hi, #fbbf3f); border-color: rgba(245, 158, 11, 0.36); background: rgba(245, 158, 11, 0.07); }
+.detail {
+  font-family: var(--n-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--n-muted-strong, rgba(233, 239, 233, 0.72));
+}
+
+.close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--n-border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--n-muted-strong, rgba(233, 239, 233, 0.72));
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.close:hover { border-color: rgba(255, 255, 255, 0.32); color: var(--n-fg, #f3f1fb); }
+.close svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; }
+
+.stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  min-height: 0;
+}
+.chart {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  animation: gfRise 0.55s cubic-bezier(0.26, 1.32, 0.42, 1) 0.1s both;
+}
+@keyframes gfRise {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.gridLine { stroke: rgba(255, 255, 255, 0.06); stroke-width: 1; }
+.axis { stroke: rgba(255, 255, 255, 0.14); stroke-width: 1; }
+.axisLabel {
+  font-family: var(--n-mono, ui-monospace, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  fill: rgba(233, 239, 233, 0.55);
+}
+.yLabel {
+  font-family: var(--n-mono, ui-monospace, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  fill: rgba(233, 239, 233, 0.72);
+}
+.line { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.dot { }
+.hint {
+  text-align: center;
+  font-family: var(--n-mono, ui-monospace, monospace);
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--n-muted, rgba(233, 239, 233, 0.55));
+  animation: gfFade 0.4s ease 0.25s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .head, .chart, .hint { animation: none; }
+}

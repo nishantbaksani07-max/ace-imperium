@@ -1,0 +1,159 @@
+/*
+ * DeloadConfirm — the one explainer sheet before starting a deload week.
+ * Twilight-blue accent (rest / recovery), stays in the azure=good color lane.
+ * Centered overlay, portaled to <body> so the fixed backdrop is viewport-true.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: dlFade 200ms var(--ease-premium);
+}
+
+@keyframes dlFade { from { opacity: 0; } to { opacity: 1; } }
+
+.sheet {
+  width: 100%;
+  max-width: 392px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #0b0d12;
+  border: 1px solid rgba(138, 169, 255, 0.22);
+  border-radius: 18px;
+  padding: var(--space-6) var(--space-6) var(--space-8);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(138, 169, 255, 0.08);
+  animation: dlRise 320ms var(--ease-premium);
+}
+
+@keyframes dlRise { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #aebeff;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.9rem;
+  margin-top: 4px;
+}
+
+.why {
+  color: var(--muted-strong);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  margin-top: var(--space-3);
+}
+
+.splitRow {
+  display: flex;
+  gap: 8px;
+  margin-top: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.dayChip {
+  flex: 1 1 auto;
+  min-width: 64px;
+  text-align: center;
+  border: 1px solid rgba(138, 169, 255, 0.25);
+  border-radius: 10px;
+  padding: 10px 6px;
+  background: rgba(138, 169, 255, 0.05);
+}
+
+.dayName {
+  display: block;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.dayState {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 3px;
+  color: #aebeff;
+}
+
+.change {
+  margin-top: var(--space-5);
+  border: 1px solid rgba(138, 169, 255, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(138, 169, 255, 0.04);
+}
+
+.changeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  font-size: var(--text-sm);
+}
+
+.changeRow + .changeRow { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.changeRow svg { width: 17px; height: 17px; color: #aebeff; flex: none; }
+.changeRow b { font-weight: 600; }
+
+.safe {
+  margin-top: var(--space-4);
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: var(--text-sm);
+  color: var(--mint);
+  line-height: 1.5;
+}
+
+.safe svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+
+.confirm {
+  margin-top: var(--space-5);
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #8aa9ff, #6e8ef0);
+  color: #08122e;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: var(--text-base);
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(138, 169, 255, 0.35);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.confirm:hover { transform: translateY(-1px); box-shadow: 0 12px 34px rgba(138, 169, 255, 0.45); }
+.confirm:active { transform: translateY(0); }
+.confirm:disabled { opacity: 0.7; cursor: default; transform: none; }
+
+.cancel {
+  display: block;
+  margin: var(--space-4) auto 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .sheet { animation: none; }
+}

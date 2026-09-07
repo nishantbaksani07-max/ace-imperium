@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design Kit — Preview</title>
+  <!-- No build step. Just the design-system CSS + plain HTML using dk- classes. -->
+  <link rel="stylesheet" href="../theme.css" />
+  <style>
+    body { margin: 0; }
+    .wrap { padding: var(--space-12) var(--space-6); }
+    .row { display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; }
+    .col { display: flex; flex-direction: column; gap: var(--space-4); }
+    .swatch { width: 72px; height: 72px; border-radius: var(--radius-lg); border: 1px solid var(--border-strong); }
+    .sw-label { font-size: var(--text-xs); color: var(--muted); margin-top: var(--space-2); display: block; text-align: center; }
+    section { margin-bottom: var(--space-12); }
+  </style>
+</head>
+<body class="dk-root dk-grain">
+
+  <!-- ───── Full dashboard ───── -->
+  <div class="dk-page">
+    <div class="dk-shell">
+      <header class="dk-greeting">
+        <h1 class="dk-greeting-title">Good evening, <span class="dk-greeting-accent">Alex</span></h1>
+        <span class="dk-greeting-date">Tuesday · June 9</span>
+      </header>
+
+      <div class="dk-grid">
+        <a href="#" class="dk-poster dk-poster-active dk-slot-hero">
+          <div class="dk-poster-art dk-art-aurora"></div>
+          <span class="dk-poster-index">·01</span>
+          <span class="dk-poster-label">Training</span>
+          <span class="dk-poster-arrow">→</span>
+        </a>
+        <a href="#" class="dk-poster dk-poster-active dk-slot-wideTop">
+          <div class="dk-poster-art dk-art-duotone"></div>
+          <span class="dk-poster-index">·02</span>
+          <span class="dk-poster-label">Fuel</span>
+          <span class="dk-poster-arrow">→</span>
+        </a>
+        <a href="#" class="dk-poster dk-poster-active dk-slot-tall">
+          <div class="dk-poster-art dk-art-mountain">
+            <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden>
+              <defs>
+                <linearGradient id="mtn-fill" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.55" />
+                  <stop offset="60%" stop-color="#6EE7B7" stop-opacity="0.15" />
+                  <stop offset="100%" stop-color="#6EE7B7" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M 120 600 C 250 360, 360 320, 460 380 S 640 600, 760 420 S 980 280, 1080 360 L 1080 660 L 120 660 Z" fill="url(#mtn-fill)" />
+              <path d="M 120 600 C 250 360, 360 320, 460 380 S 640 600, 760 420 S 980 280, 1080 360" fill="none" stroke="#6EE7B7" stroke-width="3" stroke-linecap="round" />
+              <circle cx="760" cy="420" r="8" fill="#6EE7B7" />
+            </svg>
+          </div>
+          <span class="dk-poster-index">·03</span>
+          <span class="dk-poster-label">Peak</span>
+          <span class="dk-poster-arrow">→</span>
+        </a>
+        <a href="#" class="dk-poster dk-poster-active dk-slot-square">
+          <div class="dk-poster-art dk-art-frosted"></div>
+          <span class="dk-poster-index">·04</span>
+          <span class="dk-poster-label">Mind</span>
+          <span class="dk-poster-arrow">→</span>
+        </a>
+        <a href="#" class="dk-poster dk-poster-active dk-slot-square">
+          <div class="dk-poster-art dk-art-dots"></div>
+          <span class="dk-poster-index">·05</span>
+          <span class="dk-poster-label">Brand</span>
+          <span class="dk-poster-arrow">→</span>
+        </a>
+        <div class="dk-poster dk-slot-wideBot">
+          <div class="dk-poster-art dk-art-grid"></div>
+          <span class="dk-poster-index">·06</span>
+          <span class="dk-poster-label">Finance</span>
+          <span class="dk-poster-teaser">soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── Component gallery ───── -->
+  <div class="dk-container wrap">
+    <section>
+      <span class="dk-eyebrow">Color</span>
+      <div class="row" style="margin-top: var(--space-4)">
+        <div><div class="swatch" style="background: var(--bg)"></div><span class="sw-label">Black</span></div>
+        <div><div class="swatch" style="background: var(--mint)"></div><span class="sw-label">Mint</span></div>
+        <div><div class="swatch" style="background: var(--mint-deep)"></div><span class="sw-label">Mint deep</span></div>
+        <div><div class="swatch" style="background: var(--amber)"></div><span class="sw-label">Amber</span></div>
+        <div><div class="swatch" style="background: var(--wine)"></div><span class="sw-label">Wine</span></div>
+        <div><div class="swatch" style="background: var(--red)"></div><span class="sw-label">Red</span></div>
+      </div>
+    </section>
+
+    <section>
+      <span class="dk-eyebrow">Buttons</span>
+      <div class="row" style="margin-top: var(--space-4)">
+        <button class="dk-btn dk-btn-primary">Primary</button>
+        <button class="dk-btn dk-btn-ghost">Ghost</button>
+        <button class="dk-btn dk-btn-link">Link</button>
+        <button class="dk-btn dk-btn-danger">Danger</button>
+        <button class="dk-btn dk-btn-primary" disabled>Disabled</button>
+      </div>
+    </section>
+
+    <section>
+      <span class="dk-eyebrow">Badges</span>
+      <div class="row" style="margin-top: var(--space-4)">
+        <span class="dk-badge">Default</span>
+        <span class="dk-badge dk-badge-mint"><span class="dk-badge-dot"></span>Live</span>
+        <span class="dk-badge dk-badge-amber">Beta</span>
+        <span class="dk-badge dk-badge-red">Error</span>
+      </div>
+    </section>
+
+    <section>
+      <span class="dk-eyebrow">Card + form</span>
+      <div class="dk-card" style="max-width: 420px; margin-top: var(--space-4)">
+        <div class="col">
+          <h3 class="dk-heading-sm">Sign in</h3>
+          <div class="dk-field">
+            <label class="dk-label">Email</label>
+            <input class="dk-input" type="email" placeholder="you@example.com" />
+          </div>
+          <div class="dk-field">
+            <label class="dk-label">Password</label>
+            <input class="dk-input" type="password" placeholder="••••••••" />
+          </div>
+          <button class="dk-btn dk-btn-primary dk-btn-block">Continue</button>
+          <span class="dk-text-sm dk-text-muted" style="text-align:center">
+            New here? <a class="dk-link" href="#">Create an account</a>
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>

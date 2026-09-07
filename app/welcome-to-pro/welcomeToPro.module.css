@@ -1,0 +1,256 @@
+/* /welcome-to-pro — the high-emotion celebration screen.
+ *
+ * The rest of the app is "Apple Health × niche magazine": minimal, dark,
+ * editorial. This page breaks that on purpose — see memory:
+ * vitality-as-character. Brand anchors (dark base, Instrument Serif,
+ * mint accent) hold, but the atmosphere shifts to peach/amber/gold —
+ * morning-light warmth. The break is tasteful, not party-store.
+ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #050a09;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+}
+
+/* Aurora atmosphere — warm tones replace the usual cool-mint mix.
+ * Peach + amber + gold radial washes layered over a dim mint floor. */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 50% 25%, rgba(251, 191, 36, 0.18) 0%, transparent 70%),
+    radial-gradient(70% 60% at 25% 80%, rgba(254, 202, 202, 0.16) 0%, transparent 70%),
+    radial-gradient(70% 60% at 75% 75%, rgba(253, 230, 138, 0.16) 0%, transparent 70%),
+    radial-gradient(80% 80% at 50% 100%, rgba(31, 77, 61, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* A soft single-color centerwash that feels like a hearth glow. */
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(40% 30% at 50% 40%, rgba(255, 228, 196, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glowPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from { opacity: 0.55; }
+  to   { opacity: 0.95; }
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  text-align: center;
+  animation: shellFade 800ms var(--ease-premium) both;
+}
+
+@keyframes shellFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ── Eyebrow ───────────────────────────────────────────────────── */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: 0 auto;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fbbf24; /* warm amber — replaces the usual mint eyebrow */
+}
+
+.eyebrowRule {
+  width: 36px;
+  height: 1px;
+  background: #fbbf24;
+}
+
+/* ── Headline ──────────────────────────────────────────────────── */
+
+.headline {
+  margin: 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(40px, 7vw, 88px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: #fffaf2; /* warm cream — slightly off-white */
+}
+
+.headline em {
+  font-style: italic;
+}
+
+/* ── Subhead ───────────────────────────────────────────────────── */
+
+.subhead {
+  margin: 0 auto;
+  max-width: 520px;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.55;
+  color: rgba(255, 250, 242, 0.78);
+}
+
+/* ── Unlocked list ─────────────────────────────────────────────── */
+
+.unlocked {
+  margin: var(--space-4) auto 0;
+  width: 100%;
+  max-width: 520px;
+  padding: var(--space-5) var(--space-5);
+  background: rgba(255, 250, 242, 0.04);
+  border: 1px solid rgba(251, 191, 36, 0.18); /* faint amber outline */
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.unlockedHeading {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: var(--text-lg);
+  font-style: normal;
+  color: rgba(255, 250, 242, 0.95);
+  text-align: center;
+}
+
+.unlockedHeading em {
+  font-style: italic;
+}
+
+.unlockedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  text-align: left;
+}
+
+.unlockedList li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: rgba(255, 250, 242, 0.82);
+}
+
+.unlockedList li strong {
+  font-weight: 600;
+  color: #fffaf2;
+}
+
+.unlockedDot {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 22px;
+  line-height: 1;
+  color: #fbbf24; /* amber bullets */
+}
+
+/* ── CTA ───────────────────────────────────────────────────────── */
+
+.cta {
+  margin: var(--space-4) auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 14px 28px;
+  font-family: var(--font-sans), 'Inter', system-ui, sans-serif;
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: #050a09;
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow:
+    0 8px 32px rgba(251, 191, 36, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: transform var(--duration) var(--ease-premium),
+              box-shadow var(--duration) var(--ease-premium);
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 40px rgba(251, 191, 36, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cta:active {
+  transform: translateY(0);
+}
+
+.ctaArrow {
+  transition: transform var(--duration) var(--ease-premium);
+}
+
+.cta:hover .ctaArrow {
+  transform: translateX(3px);
+}
+
+/* ── Founder note ──────────────────────────────────────────────── */
+
+.founderNote {
+  margin: var(--space-4) auto 0;
+  max-width: 520px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: rgba(255, 250, 242, 0.55);
+}
+
+/* ── Reduced motion ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .shell {
+    animation: none;
+  }
+  .glow {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+/* ── Mobile tweaks ─────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .page {
+    padding: var(--space-6) var(--space-4);
+  }
+  .shell {
+    gap: var(--space-5);
+  }
+  .unlocked {
+    padding: var(--space-4);
+  }
+}

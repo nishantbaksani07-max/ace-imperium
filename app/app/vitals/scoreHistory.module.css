@@ -1,0 +1,44 @@
+/* Vitals score history — SplitLog HistoryModal scrubber, re-flavoured azure.
+   Ported from the approved public/vitals-score-kit.html. */
+.card { border: 1px solid var(--border); border-radius: 18px; padding: var(--space-6, 1.5rem) var(--space-8, 2rem) var(--space-8, 2rem); background: var(--card); }
+@media (max-width: 680px) { .card { padding: var(--space-5, 1.25rem); } }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+.lead { display: flex; flex-direction: column; gap: 3px; }
+.eyb { font-family: var(--font-mono, monospace); font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+.big { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.85rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.sub { font-family: var(--font-mono, monospace); font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.sub b { color: var(--muted-strong); font-weight: 500; }
+
+.range { display: inline-flex; gap: 3px; border: 1px solid var(--border); border-radius: 11px; padding: 3px; }
+.range button { font-family: var(--font-mono, monospace); font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: none; border: none; padding: 6px 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+.range button.on { background: rgba(94, 155, 255, 0.14); color: var(--accent); }
+
+.graph { position: relative; height: 168px; touch-action: none; cursor: crosshair; user-select: none; }
+.graph svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gridLabel { position: absolute; right: 0; transform: translateY(-50%); font-family: var(--font-mono, monospace); font-size: 0.56rem; color: var(--muted); background: rgba(8, 10, 14, 0.6); padding: 1px 5px; border-radius: 3px; font-variant-numeric: tabular-nums; pointer-events: none; }
+.scrubLine { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, 0.18); pointer-events: none; transition: opacity 0.12s; }
+.scrubDot { position: absolute; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; transform: translate(-50%, -50%); pointer-events: none; box-shadow: 0 0 0 4px rgba(94, 155, 255, 0.16); }
+.scrubTag { position: absolute; transform: translate(-50%, calc(-100% - 14px)); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.12s; background: #0c1018; border: 1px solid var(--border-strong); border-radius: 10px; padding: 7px 11px; display: flex; flex-direction: column; gap: 3px; }
+.scrubTag.show { opacity: 1; }
+.stDate { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 0.8rem; color: var(--muted); }
+.stRow { display: flex; align-items: baseline; gap: 8px; }
+.stScore { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.35rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.stTier { font-family: var(--font-mono, monospace); font-size: 0.54rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.stDelta { font-family: var(--font-mono, monospace); font-size: 0.58rem; letter-spacing: 0.04em; margin-top: 1px; }
+
+.stats { display: flex; gap: 8px; margin-top: 18px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; }
+.stat { flex: 1; text-align: center; display: flex; flex-direction: column; gap: 3px; }
+.stat .lbl { font-family: var(--font-mono, monospace); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.stat .val { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+
+.minis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px; }
+@media (max-width: 680px) { .minis { grid-template-columns: 1fr 1fr; } }
+.hm { border: 1px solid var(--border); border-radius: 13px; padding: 12px 13px; display: flex; flex-direction: column; gap: 8px; background: rgba(255, 255, 255, 0.012); min-height: 74px; }
+.hmTop { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.hmName { font-family: var(--font-mono, monospace); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.hmVal { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.hmVal small { font-style: normal; font-family: var(--font-mono, monospace); font-size: 0.56rem; color: var(--muted); margin-left: 2px; }
+.hm svg { display: block; width: 100%; height: 30px; }
+
+.empty { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.05rem; color: var(--muted); text-align: center; padding: 36px 0; }

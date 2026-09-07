@@ -1,0 +1,244 @@
+/* SessionVerdict — the progress read on the finish screen ("Push in the books").
+   Logger-native: Instrument Serif headline, JetBrains mono micro-labels, a
+   hairline card with a per-state radial wash. Color law: mint = progress,
+   neutral = held, amber = a lighter day (never red, never shame). */
+
+.card {
+  width: 100%;
+  max-width: 392px;
+  margin: 0 auto var(--space-6);
+  text-align: left;
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-lg, 12px);
+  padding: 19px 18px 14px;
+  background:
+    radial-gradient(120% 130% at 0% 0%, var(--v-wash), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.004));
+  animation: verdictIn 0.6s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) 0.82s both;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+}
+@keyframes verdictIn {
+  0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+  100% { opacity: 1; transform: none; }
+}
+
+.card[data-state='up'] {
+  --v-line: rgba(110, 231, 183, 0.3);
+  --v-wash: rgba(110, 231, 183, 0.1);
+  --v-soft: rgba(110, 231, 183, 0.12);
+  --v-ink: var(--mint);
+}
+.card[data-state='held'] {
+  --v-line: rgba(255, 255, 255, 0.18);
+  --v-wash: rgba(255, 255, 255, 0.045);
+  --v-soft: rgba(255, 255, 255, 0.06);
+  --v-ink: var(--fg);
+}
+.card[data-state='down'] {
+  --v-line: rgba(245, 158, 11, 0.3);
+  --v-wash: rgba(245, 158, 11, 0.09);
+  --v-soft: rgba(245, 158, 11, 0.12);
+  --v-ink: var(--amber);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.meta {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mint);
+  flex: none;
+}
+.saved::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mint);
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+.arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--v-soft);
+  border: 1px solid var(--v-line);
+  color: var(--v-ink);
+}
+.arrow svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.word {
+  flex: 1;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--v-ink);
+}
+.delta {
+  flex: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--v-ink);
+  background: var(--v-soft);
+  border: 1px solid var(--v-line);
+  border-radius: var(--radius-pill);
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 15px;
+}
+.pips {
+  display: inline-flex;
+  gap: 5px;
+}
+.pip {
+  width: 17px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.pipUp { background: var(--mint); }
+.pipHeld { background: var(--muted); }
+.pipDown { background: var(--amber); }
+.pipNew { background: transparent; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22); }
+.count {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--muted-strong);
+}
+.count b { color: var(--fg); font-weight: 500; }
+
+.story {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: rgba(240, 255, 245, 0.78);
+  margin-top: 15px;
+}
+
+.more {
+  margin-top: 14px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 0 1px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.16s var(--ease);
+}
+.more:hover { color: var(--muted-strong); }
+.more svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--v-ink);
+  stroke-width: 2;
+  fill: none;
+  transition: transform 0.26s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+}
+.cardOpen .more svg { transform: rotate(180deg); }
+
+.rows {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.36s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
+}
+.cardOpen .rows { grid-template-rows: 1fr; }
+.rowsIn { overflow: hidden; }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.row:first-child { border-top: none; }
+.nm {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.06rem;
+  line-height: 1.1;
+  color: var(--fg);
+}
+.nums {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.nums .now { color: var(--muted-strong); }
+
+.chip {
+  flex: none;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.54rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+.chipBest { color: var(--mint-ink, #06281d); background: var(--mint); border: 1px solid var(--mint); }
+.chipUp { color: var(--mint); background: rgba(110, 231, 183, 0.12); border: 1px solid rgba(110, 231, 183, 0.3); }
+.chipHeld { color: var(--muted-strong); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.18); }
+.chipDown { color: var(--amber); background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.32); }
+.chipNew { color: var(--muted); background: none; border: 1px dashed rgba(255, 255, 255, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+  .more svg, .rows { transition: none; }
+}

@@ -1,0 +1,609 @@
+/*
+ * /welcome — first-time greeting from the Vitality gem.
+ *
+ * Editorial canon: aurora wash + mountains + drifting particles,
+ * same recipe as the landing and setup wizard so the page feels like
+ * an extension of those, not a new vibe. Single-column layout: gem
+ * up top, three-beat copy underneath, one mint pill CTA.
+ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg);
+  isolation: isolate;
+  overflow-x: hidden;
+
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --mint-glow: rgba(110, 231, 183, 0.4);
+}
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(60% 50% at 50% 30%, rgba(110, 231, 183, 0.16) 0%, rgba(110, 231, 183, 0.06) 32%, rgba(110, 231, 183, 0) 65%),
+    radial-gradient(28% 22% at 50% 38%, rgba(255, 226, 181, 0.07) 0%, rgba(255, 226, 181, 0) 70%),
+    radial-gradient(120% 80% at 50% 100%, rgba(14, 38, 30, 0.5) 0%, rgba(4, 6, 10, 0.95) 75%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.mountainsLayer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 30vh;
+  min-height: 180px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.mountainsLayer svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particles span {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background: rgba(233, 239, 233, 0.7);
+  border-radius: 50%;
+  animation: welcome-drift linear infinite;
+  box-shadow: 0 0 6px rgba(167, 243, 208, 0.5);
+}
+
+@keyframes welcome-drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.55; }
+  100% { transform: translate3d(var(--dx, 12px), var(--dy, -100vh), 0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles span { animation: none; }
+}
+
+.shell {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  gap: var(--space-6);
+  text-align: center;
+}
+
+/* Checklist phase — NO layout direction change. Greeting panel
+   fades out, checklist panel fades in. Gem translates left + scales
+   via transform-only. This avoids the layout-reflow "glitch" the
+   user reported (flex direction changes can't be smoothly animated). */
+.shellChecklist {
+  /* Reserve a bit of right-side room on desktop so the absolutely-
+     positioned checklist panel doesn't run off the edge. */
+}
+
+/* Gem stage — the canvas the Three.js Ghost renders into.
+   Square aspect so the icosahedron sits centered. Scales with viewport
+   but capped so it doesn't dominate the eye line. The outer glow
+   "breathes" on a ~3.9s cycle that mirrors the Three.js emissive +
+   V breathing inside HeroCrystal — together they make the gem feel
+   like a single warm pulsing heartbeat instead of a static prop. */
+.gemStage {
+  width: clamp(280px, 50vmin, 460px);
+  height: clamp(280px, 50vmin, 460px);
+  position: relative;
+  animation: gemHalo 3.9s ease-in-out infinite;
+  /* Only transform animates — width/height changes would re-layout
+     the Three.js canvas mid-anim, which reads as a glitch. Swift,
+     premium easeOut so the float-to-left feels decisive, not floaty. */
+  transition: transform 680ms cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
+  transform-origin: center;
+  /* Keep the gem above the absolutely-positioned checklist panel
+     while it's transitioning in — the canvas should always read clean. */
+  z-index: 2;
+}
+
+/* Checklist phase — default (mobile/tablet): JUST shrink. The gem
+   stays centered and the checklist sits below it (handled by the
+   .checklistPanel rules). On wide viewports the desktop override
+   below also translates the gem left so the checklist can sit
+   beside it. Both are GPU-only transforms. */
+.gemStageFloated {
+  transform: scale(0.7);
+}
+
+/* Desktop side-by-side — needs ~1100px of real estate to fit gem +
+   460px checklist with breathing room. Below that we stack. */
+@media (min-width: 1100px) {
+  .gemStageFloated {
+    transform: translateX(-22vw) scale(0.74);
+  }
+}
+
+@keyframes gemHalo {
+  0%, 100% {
+    filter: drop-shadow(0 0 50px rgba(110, 231, 183, 0.16))
+            drop-shadow(0 0 110px rgba(110, 231, 183, 0.07));
+  }
+  50% {
+    filter: drop-shadow(0 0 90px rgba(110, 231, 183, 0.32))
+            drop-shadow(0 0 180px rgba(110, 231, 183, 0.18));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gemStage {
+    animation: none;
+    filter: drop-shadow(0 0 60px rgba(110, 231, 183, 0.18))
+            drop-shadow(0 0 120px rgba(110, 231, 183, 0.08));
+  }
+}
+
+/* Pulse-layer container — wraps any of the three burst effects so
+   they sit absolutely under the gem canvas + don't interfere with
+   pointer events. */
+.pulseLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Effect 1: Rings — three staggered concentric expanding rings ── */
+.pulseRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55%;
+  height: 55%;
+  margin-left: -27.5%;
+  margin-top: -27.5%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(110, 231, 183, 0.75);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.08) 0%, rgba(110, 231, 183, 0) 65%);
+  opacity: 0;
+  animation: pulseRing 1.6s ease-out forwards;
+}
+
+.pulseRing1 { animation-delay: 0ms; }
+.pulseRing2 { animation-delay: 180ms; }
+.pulseRing3 { animation-delay: 360ms; }
+
+@keyframes pulseRing {
+  0%   { transform: scale(0.55); opacity: 0;    border-width: 2px;   }
+  12%  {                          opacity: 0.85;                      }
+  100% { transform: scale(2.4);  opacity: 0;    border-width: 0.4px; }
+}
+
+/* ── Effect 2: Particles — 14 dots radiating outward ──
+   Each particle is rotated by `--angle` (set inline per-index), then
+   `translateY(-Xpx)` moves it OUTWARD along that rotated axis. The
+   keyframe animates that translateY distance + fades the dot out. */
+.particleDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--mint, #6EE7B7);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.7), 0 0 20px rgba(110, 231, 183, 0.45);
+  opacity: 0;
+  animation: particleBurst 1.5s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+  transform-origin: center;
+  --angle: 0deg;
+}
+
+@keyframes particleBurst {
+  0%   { transform: rotate(var(--angle)) translateY(0)     scale(0.4); opacity: 0;    }
+  15%  {                                                                opacity: 1;    }
+  100% { transform: rotate(var(--angle)) translateY(-160px) scale(0.7); opacity: 0;    }
+}
+
+/* ── Effect 3: Sparkles — twinkling perimeter motes ──
+   Position is set inline (left/top) per dot. Each sparkle has its
+   own animation-delay (also inline) so the cluster twinkles into and
+   out of existence raggedly — never all at once. */
+.sparkleDot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(167,243,208,0.6) 45%, rgba(110,231,183,0) 70%);
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.7);
+  opacity: 0;
+  animation: sparkleTwinkle 1.8s ease-out forwards;
+}
+
+@keyframes sparkleTwinkle {
+  0%   { opacity: 0; transform: scale(0.3); }
+  25%  { opacity: 1; transform: scale(1.4); }
+  55%  { opacity: 0.6; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseRing, .particleDot, .sparkleDot { animation: none; opacity: 0; }
+}
+
+/* Canvas inside the gem stage needs to sit above the rings so the
+   gem isn't haloed by them. (relative + z-index 1)
+
+   It also reveals itself: the canvas starts faded + slightly small and
+   eases up to full once HeroCrystal commits its first frame (it adds
+   `crystal-ready` to <html>), so the gem grows + glows into place instead
+   of just popping in. Same mechanism the landing + onboarding gems use; a
+   soft bloom (below) covers the gap before that first frame. */
+.gemStage > canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 720ms ease, transform 980ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+:global(html.crystal-ready) .gemStage > canvas {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Soft mint bloom where the gem will land, shown only until it's ready —
+   covers the first-frame gap so the reveal is graceful, not a blank. */
+:global(html:not(.crystal-ready):not(.crystal-fallback)) .gemStage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(110, 231, 183, 0.18), rgba(110, 231, 183, 0) 70%);
+  filter: blur(18px);
+  animation: gemBloom 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes gemBloom {
+  0%, 100% { opacity: 0.4; transform: scale(0.96); }
+  50%      { opacity: 0.7; transform: scale(1.02); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gemStage > canvas { transition: opacity 200ms linear; transform: none; }
+  .gemStage::after { animation: none; }
+}
+
+/* SSR-loading placeholder — keeps layout stable while the JS bundle
+   for the gem mounts. Mint glow so the user doesn't see a hole. */
+.gemFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.18) 0%, rgba(110, 231, 183, 0) 70%);
+  animation: gemBreathe 3.2s ease-in-out infinite;
+}
+
+@keyframes gemBreathe {
+  0%, 100% { opacity: 0.5; transform: scale(0.96); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+
+/* Three-beat copy stack — each line fades in on its own beat so the
+   gem feels like it's thinking through what to say. */
+.copyStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 36ch;
+}
+
+.line {
+  margin: 0;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 4.5vw, 2.5rem);
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  line-height: 1.15;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 600ms var(--ease-premium), transform 600ms var(--ease-premium);
+}
+
+.line em {
+  font-style: italic;
+  color: var(--mint);
+}
+
+.muted {
+  color: var(--ink-dim);
+  font-style: normal;
+  font-family: inherit;
+}
+
+.lineSub {
+  margin: var(--space-2) 0 0;
+  font-family: inherit;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  color: var(--ink-dim);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 720ms var(--ease-premium), transform 720ms var(--ease-premium);
+  max-width: 40ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lineSub em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--mint);
+}
+
+.lineIn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line, .lineSub {
+    transition: opacity 200ms linear;
+    transform: none;
+  }
+}
+
+/* Primary CTA — same mint pill as the rest of the app, sized larger
+   here because it's the only interactive element on the page. Fades
+   in only after the third copy beat lands so the user isn't tempted
+   to skip past the greeting. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 36px;
+  background: var(--mint);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 32px -6px var(--mint-glow);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease),
+    opacity 720ms var(--ease-premium);
+}
+
+.ctaIn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cta:hover {
+  background: var(--mint-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 0 44px -4px var(--mint-glow);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 4px;
+}
+
+/* ─── Greeting panel ───
+   Always mounted. Holds the 3-beat copy + the "take me in" CTA.
+   Fades out (opacity + tiny translateY) when phase flips to checklist
+   so the underlying flex column layout doesn't reflow. */
+.greetingPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  /* Collapsible on every viewport — when hidden, the greeting drops
+     to max-height 0 so the gem can settle back to true viewport
+     center (instead of sitting high because of reserved space). */
+  max-height: 1200px;
+  overflow: hidden;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 280ms ease,
+    max-height 440ms cubic-bezier(0.4, 0, 0.2, 1) 40ms,
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.greetingPanelHidden {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  max-height: 0;
+  margin: 0;
+}
+
+/* ─── Checklist panel ───
+   Default (mobile/tablet): in-flow flex child, sits below the gem.
+   Collapsed max-height + opacity 0 in phase 1, expands when visible.
+
+   Desktop (≥1100px): absolute, anchored to right side of viewport
+   so the gem (which translates left via transform) sits comfortably
+   on the left half and the checklist on the right half. No flex
+   reflow → no glitch. */
+.checklistPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  text-align: left;
+  width: 100%;
+  max-width: 540px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  /* Small lift only — the checklist card runs its own cozy spring-in, so
+     the panel just needs to fade up swiftly and let the card be the star. */
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity 420ms ease 140ms,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1) 140ms,
+    max-height 580ms ease 0ms;
+}
+
+.checklistPanelVisible {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 2000px;
+  pointer-events: auto;
+}
+
+/* Small museum-tag eyebrow above the checklist card. Gives the
+   panel cluster a defined header without competing with the gem's
+   own GemPrompt line. Mint rule prefix matches the chrome used
+   elsewhere in the app. */
+.panelEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 4px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.7);
+}
+
+.panelEyebrow::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--mint);
+  opacity: 0.5;
+}
+
+@media (min-width: 1100px) {
+  .checklistPanel {
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    width: clamp(360px, 36vw, 500px);
+    max-height: none;
+    overflow: visible;
+    transform: translate(28px, -50%);
+    transition:
+      opacity 440ms ease 140ms,
+      transform 560ms cubic-bezier(0.22, 1, 0.36, 1) 140ms;
+  }
+  .checklistPanelVisible {
+    transform: translate(0, -50%);
+  }
+}
+
+/* "All set" empty state — shown on /welcome when both tasks are
+   already done (returning users hitting the URL). Calm serif italic
+   in a soft mint-bordered card so the layout doesn't collapse. */
+.allSet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  background: rgba(110, 231, 183, 0.04);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.1), 0 0 28px -14px var(--mint-glow);
+}
+
+.allSetEyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.allSetLine {
+  margin: 0;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+.allSetLine em { font-style: italic; color: var(--mint); }
+
+/* Mobile-only rules slot — base .greetingPanel handles collapse now
+   for every viewport; reserved here for future mobile-specific tweaks. */
+
+@media (prefers-reduced-motion: reduce) {
+  .greetingPanel,
+  .checklistPanel {
+    transition: opacity 200ms linear;
+  }
+}
+
+.continueBtn {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  background: transparent;
+  color: var(--muted-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.continueBtn:hover {
+  color: var(--mint);
+  border-color: var(--mint);
+  background: rgba(110, 231, 183, 0.04);
+}
+
+@media (max-width: 880px) {
+  .continueBtn { align-self: center; }
+}
+
+@media (max-width: 560px) {
+  .gemStage { width: 70vmin; height: 70vmin; }
+  .cta { padding: 12px 28px; }
+}

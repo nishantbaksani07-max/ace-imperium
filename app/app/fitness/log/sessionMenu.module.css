@@ -1,0 +1,1587 @@
+/*
+ * SessionMenu — the day-card grid for /app/fitness/log.
+ *
+ * 8 cards in a 4×2 grid on desktop, 2×4 on tablet, single column on mobile.
+ * Each card has a subtle category-specific gradient art layer behind the
+ * content. Today's card gets a mint glow + "Next up" cue. Rest days are
+ * muted but still navigable (the day logger handles the rest-day empty
+ * state on the inside).
+ *
+ * Page chrome (.page / .shell) and header (.back / .title / .subtitle)
+ * come from dashboard.module.css + fitness.module.css. The editorial
+ * atmosphere layers (.atmosphere / .mountainsLayer / .particles) below
+ * are scoped to this page and follow the canon documented in SKILL.md
+ * "Editorial visual language" section.
+ */
+
+/* ───────── Editorial atmosphere — applies the brand canon ──────── */
+
+/* Page wrapper override — declares the landing-scoped tokens and gives
+   the page a true editorial night-sky bg instead of inheriting the
+   dashboard's pure black. position: relative so absolute children
+   layer behind the shell. */
+.editorialPage {
+  position: relative;
+  isolation: isolate;
+
+  --bg: #04060a;
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --rule: rgba(233, 239, 233, 0.14);
+  --rule-strong: rgba(233, 239, 233, 0.22);
+  --mint: #6ee7b7;
+  --mint-soft: #a7f3d0;
+  --mint-glow: rgba(110, 231, 183, 0.4);
+
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+/* Full-page atmosphere — smooth gradient that covers the entire
+ * section height. Identical recipe to SplitLog's .editorialAtmosphere
+ * so the two fitness pages share the exact same background instead
+ * of one being short-content (top-glow only) and one being long-
+ * content (visible cutoff). */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      90% 30vh at 50% 0%,
+      rgba(110, 231, 183, 0.14) 0%,
+      rgba(110, 231, 183, 0.04) 40%,
+      rgba(110, 231, 183, 0) 75%
+    ),
+    linear-gradient(
+      to bottom,
+      #0a1612 0%,
+      #07110d 25%,
+      #050a08 55%,
+      #04060a 100%
+    );
+}
+
+/* Mountain horizon at the bottom — same SVG paths as the gem hero. */
+.mountainsLayer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 32vh;
+  min-height: 180px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.mountainsLayer svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Drifting particles — full page coverage, vh-based drift distance. */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particles span {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background: rgba(233, 239, 233, 0.7);
+  border-radius: 50%;
+  animation: session-drift linear infinite;
+  box-shadow: 0 0 6px rgba(167, 243, 208, 0.5);
+}
+
+@keyframes session-drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.55; }
+  100% { transform: translate3d(var(--dx, 12px), var(--dy, -100vh), 0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles span { animation: none; }
+}
+
+/* Shell sits in front of all atmosphere layers — the dashboard's
+   .shell rule doesn't set z-index, so without this an atmosphere
+   sibling at z:2 would visually cover the cards. */
+.editorialShell {
+  position: relative;
+  z-index: 5;
+}
+
+/* ───────── Top row (back link + unit toggle) ───────── */
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* Two-segment toggle: kg | lbs. The active half fills with mint, inactive
+   reads as a quiet ghost button. Click either half to switch. Matches the
+   pill language used everywhere else in the logger. */
+
+.unitToggle {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  padding: 3px;
+  gap: 2px;
+}
+
+.unitOption {
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--muted);
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    color var(--duration) var(--ease),
+    background var(--duration) var(--ease);
+}
+
+.unitOption:hover:not(.unitOptionActive) {
+  color: var(--fg);
+}
+
+.unitOptionActive {
+  background: var(--mint);
+  color: #000;
+}
+
+.unitOption:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+/* ───────── Settings popover (one gear, two actions) ─────────
+ * Single gear button anchors a small popover with the unit toggle and
+ * a link to /app/fitness/setup. Replaces the older two-affordance pattern
+ * (inline kg|lbs toggle + separate setup-edit link) to cut header clutter
+ * down to a single tap target.
+ */
+
+.settingsWrap {
+  position: relative;
+}
+
+.settingsBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--mint);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  cursor: pointer;
+  transition:
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.settingsBtn:hover {
+  color: var(--mint-hover);
+  border-color: var(--mint);
+  background: var(--card-elevated);
+  transform: rotate(15deg);
+}
+
+.settingsBtn:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+.settingsPopover {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  min-width: 240px;
+  padding: var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  z-index: 20;
+  animation: popoverIn 180ms var(--ease-premium);
+}
+
+@keyframes popoverIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settingsPopover {
+    animation: none;
+  }
+}
+
+.settingsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.settingsSectionLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.settingsItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  color: var(--fg);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.settingsItem em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.settingsItem:hover {
+  background: var(--card-elevated);
+  color: var(--mint);
+}
+
+.settingsItem:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: -2px;
+}
+
+.settingsItemArrow {
+  color: var(--muted);
+  transition: transform var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.settingsItem:hover .settingsItemArrow {
+  color: var(--mint);
+  transform: translateX(3px);
+}
+
+/* ───────── Top-row right cluster ──────────
+ * Pairs the wide "Adjust your training" pill with the settings gear so
+ * they read as one chrome group anchored to the top-right of the page.
+ * Same pill-button vocabulary as the gear (hairline border, mint accent,
+ * --card bg) — the pill is just wider with a label + arrow.
+ */
+.topRowRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.adjustPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 36px;
+  padding: 0 var(--space-4) 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  color: var(--fg);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  line-height: 1;
+  transition:
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease);
+}
+
+.adjustPill:hover {
+  border-color: var(--mint);
+  background: var(--card-elevated);
+}
+
+.adjustPill:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+.adjustPillIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mint);
+  flex-shrink: 0;
+}
+
+.adjustPillText {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: var(--text-base);
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.adjustPillText em {
+  font-style: italic;
+}
+
+.adjustPillArrow {
+  color: var(--mint);
+  font-size: var(--text-base);
+  flex-shrink: 0;
+  transition: transform var(--duration) var(--ease);
+}
+
+.adjustPill:hover .adjustPillArrow {
+  transform: translateX(3px);
+}
+
+/* On narrow screens collapse the pill to icon + arrow only so it
+   doesn't crowd the back link. Tap target stays the same. */
+@media (max-width: 560px) {
+  .adjustPillText {
+    display: none;
+  }
+  .adjustPill {
+    padding: 0 12px;
+  }
+}
+
+/* ───────── Grid ───────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  padding-bottom: 160px; /* room for the fitness atmosphere mountains */
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+}
+
+/* ───────── Swipe-to-edit slot ─────────
+   Wraps each day tile. The card slides left within this clip to peel back
+   the Edit panel pinned to the right. */
+.cardSlot {
+  position: relative;
+  display: flex;
+  border-radius: 18px;
+  /* Clip the card as it slides left so its left edge never spills out of
+     the tile, and the revealed action keeps the tile's rounded corners. */
+  overflow: hidden;
+  isolation: isolate;
+  /* Staggered entrance lives here (not on .card) so the card's transform
+     stays free for the swipe. animationDelay is set inline per tile.
+     `backwards` (NOT `forwards`): the rise plays from the keyframe's `from`
+     state, then the element settles back to transform:none. A lingering
+     transform on a rounded overflow:hidden box makes iOS + Chrome re-rasterize
+     its top edge every scroll frame — the "top glitches as you scroll" bug. */
+  animation: cardIn 700ms var(--ease-premium) backwards;
+}
+
+.cardSlot > .card {
+  flex: 1;
+  /* Always above the Edit action and always opaque — the action can never
+     bleed through, no matter the stacking. */
+  z-index: 1;
+  background-color: #060b0a;
+  /* Let the browser own vertical scroll; we only intercept horizontal. */
+  touch-action: pan-y;
+  /* iOS: stop the long-press callout / native link-drag from eating the
+     swipe before our pointer handlers see it. */
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+
+/* Solid "Edit" action sitting behind the card — an iOS Mail-style swipe
+   action. HIDDEN at rest (opacity 0); only painted while the slot is being
+   dragged. This is the whole fix for the old "Edit bleeds through every
+   card" bug — visibility is driven by the active state, never by whether
+   the card happens to cover it. */
+.editReveal {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  border-radius: 18px;
+  overflow: hidden;
+  /* Rich mint fill that covers the WHOLE revealed area edge-to-edge — even
+     past the rubber-band overshoot — so there's never a dark seam between
+     the card and the action. Deepens toward the edge for premium depth. */
+  background: linear-gradient(90deg, #0c1d17 0%, #103325 55%, #154835 100%);
+  opacity: 0;
+  transition: opacity 120ms linear;
+  pointer-events: none;
+}
+
+.cardSlotActive .editReveal {
+  opacity: 1;
+}
+
+.cardSlotActive > .card {
+  box-shadow:
+    0 24px 60px -24px rgba(0, 0, 0, 0.9),
+    0 14px 44px -18px rgba(110, 231, 183, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Icon + label, centered in the right slice the card uncovers. No own
+   background now — the reveal carries the colour all the way. */
+.editRevealInner {
+  width: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--mint);
+}
+
+.editRevealIcon {
+  transform: scale(calc(0.94 + 0.1 * var(--p, 0)));
+  transition: transform 120ms var(--ease-premium);
+}
+
+.editRevealLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* While a card is mid-drag, suppress its hover lift and text selection so
+   the gesture feels like dragging an object, not selecting a link. */
+.cardDragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  /* THE phone-lag fix. The card carries backdrop-filter: blur(6px); dragging
+     a backdrop-blurred surface forces the GPU to re-rasterize the blur of
+     everything behind it every frame — smooth on desktop, brutal on a phone
+     (this is why swipe.html, which has no blur, always felt fine). Drop the
+     blur and promote the card to its own compositor layer for the duration of
+     the drag so the translate is a cheap GPU transform. */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  will-change: transform;
+}
+
+/* ───────── Card base ───────── */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+  padding: var(--space-5);
+  /* Glass surface — same recipe as the pricing card, so the day cards
+     read as siblings to it in the editorial canon. The per-category
+     gradient art (.cardArt below) still sits behind this. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  text-decoration: none;
+  color: inherit;
+  isolation: isolate;
+  /* NOTE: the entrance animation (opacity + translateY rise) lives on
+     .cardSlot, NOT here. A CSS animation on `transform` with fill-mode
+     forwards overrides the inline `translateX` we use for the swipe, so
+     the card would never slide. Keeping transform free here is what makes
+     the swipe animate at all. */
+  /* Subtle layered depth + a hint of mint-tinted outer glow, plus an
+     inset top highlight so the surface looks lit from above. */
+  box-shadow:
+    0 12px 36px -20px rgba(0, 0, 0, 0.7),
+    0 4px 12px -8px rgba(110, 231, 183, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  /* No backdrop-filter: on iOS Safari a backdrop-blur over the animated
+     atmosphere re-rasterizes every scroll frame and paints the card top a
+     frame late — reads as the tile "glitching" / getting cut off while you
+     scroll. The glass look is fully carried by the gradient + border + shadow.
+     (Same reason .cardDragging strips it during a swipe.) */
+  transition:
+    transform var(--duration-lift) var(--ease-premium),
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration-lift) var(--ease-premium);
+  cursor: pointer;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card:hover {
+  /* Light up only — no translate. The old translateY(-4px) made the card
+     rise and clip against the slot's overflow, and fought the swipe
+     transform. Hover should glow, not move. */
+  border-color: var(--rule-strong);
+  box-shadow:
+    0 20px 50px -20px rgba(0, 0, 0, 0.85),
+    0 12px 40px -16px rgba(110, 231, 183, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ───────── Card art (per category) ───────── */
+
+.cardArt {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Pulled back so the glass surface above reads as the primary
+     finish — the gradient still gives the card its category color
+     identity, just less aggressive than before. */
+  opacity: 0.45;
+  transition: opacity var(--duration-lift) var(--ease-premium);
+  z-index: 0;
+}
+
+.card:hover .cardArt {
+  opacity: 0.7;
+}
+
+.cardBody {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+/* Push — mint radial top-left, deep teal undertone */
+.artPush {
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 20%, rgba(110, 231, 183, 0.18), transparent 65%),
+    radial-gradient(ellipse 60% 60% at 80% 90%, rgba(31, 77, 61, 0.5), transparent 70%),
+    linear-gradient(160deg, #05130e 0%, #000000 100%);
+}
+
+/* Pull — cooler mint with a hint of blue */
+.artPull {
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 20%, rgba(110, 231, 183, 0.14), transparent 65%),
+    radial-gradient(ellipse 65% 55% at 20% 85%, rgba(56, 100, 130, 0.32), transparent 70%),
+    linear-gradient(200deg, #04111a 0%, #000000 100%);
+}
+
+/* Legs — deeper, warmer (the rare amber + wine accents) */
+.artLegs {
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 25%, rgba(245, 158, 11, 0.16), transparent 65%),
+    radial-gradient(ellipse 70% 55% at 80% 85%, rgba(124, 45, 18, 0.48), transparent 70%),
+    linear-gradient(180deg, #110806 0%, #000000 100%);
+}
+
+/* Upper — top-weighted mint glow (mass at top, mirrors Lower) */
+.artUpper {
+  background:
+    radial-gradient(ellipse 75% 50% at 50% 0%, rgba(110, 231, 183, 0.18), transparent 65%),
+    radial-gradient(ellipse 60% 55% at 20% 85%, rgba(31, 77, 61, 0.42), transparent 70%),
+    linear-gradient(180deg, #05130e 0%, #000000 100%);
+}
+
+/* Lower — base-weighted mint glow (mass at base, mirrors Upper) */
+.artLower {
+  background:
+    radial-gradient(ellipse 75% 50% at 50% 100%, rgba(110, 231, 183, 0.18), transparent 65%),
+    radial-gradient(ellipse 60% 55% at 80% 15%, rgba(31, 77, 61, 0.42), transparent 70%),
+    linear-gradient(0deg, #05130e 0%, #000000 100%);
+}
+
+/* Rest — muted, faint mint hairline texture */
+.artRest {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px,
+      transparent 16px,
+      rgba(255, 255, 255, 0.015) 16px,
+      rgba(255, 255, 255, 0.015) 17px
+    ),
+    linear-gradient(160deg, #050505 0%, #000000 100%);
+  opacity: 0.5;
+}
+
+/* ───────── Card top row (day num + today badge) ───────── */
+
+.cardTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dayNum {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--mint);
+  opacity: 0.75;
+  letter-spacing: -0.01em;
+}
+
+/* Left group in the top row — day number + (optional) today badge sit
+   inline so the right side is free for the category glyph. */
+.dayMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Category sigil in the top-right corner of every card. Faint by
+   default; brightens on hover and on today's card so the active session
+   announces itself without shouting. */
+.cardGlyph {
+  color: rgba(233, 239, 233, 0.45);
+  transition:
+    color var(--duration) var(--ease),
+    transform var(--duration-lift) var(--ease-premium);
+}
+
+.card:hover .cardGlyph {
+  color: var(--mint);
+  transform: translateY(-1px);
+}
+
+.cardToday .cardGlyph {
+  color: var(--mint);
+  opacity: 0.85;
+}
+
+.cardRest .cardGlyph {
+  color: rgba(233, 239, 233, 0.28);
+}
+
+.todayBadge {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xs);
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.08);
+  border: 1px solid rgba(110, 231, 183, 0.4);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.02em;
+}
+
+/* ───────── Day name ───────── */
+
+.dayName {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 3.5vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  margin: var(--space-3) 0 var(--space-2);
+  /* Long split names ("Full Body Strength A") shrink + wrap instead of
+     clipping against the card's rounded overflow. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* ───────── Card bottom row ───────── */
+
+.cardBottomRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.pill {
+  /* Mono font for the caps label — matches the editorial eyebrow /
+     museum-tag coordinate language used across the brand. */
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+}
+
+.pillHeavy {
+  color: var(--mint);
+  border-color: rgba(110, 231, 183, 0.4);
+  background: rgba(110, 231, 183, 0.05);
+}
+
+.pillVolume {
+  color: var(--amber);
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.pillRest {
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.exCount {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ink-faint, rgba(233, 239, 233, 0.6));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ───────── Today cue ───────── */
+
+.todayCue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--mint);
+  margin-top: var(--space-2);
+  animation: todayCuePulse 4s ease-in-out infinite;
+}
+
+@keyframes todayCuePulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+/* ───────── Arrow indicator (corner of every card) ───────── */
+
+.arrow {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: rgba(255, 255, 255, 0.35);
+  z-index: 1;
+  transition: color var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+.card:hover .arrow {
+  color: var(--mint);
+  transform: translateX(3px);
+}
+
+/* ───────── Card variants ───────── */
+
+/* Today — mint inner glow + brighter border */
+.cardToday {
+  border-color: rgba(110, 231, 183, 0.5);
+  box-shadow:
+    0 0 60px rgba(110, 231, 183, 0.08),
+    inset 0 0 60px rgba(110, 231, 183, 0.03);
+}
+
+.cardToday:hover {
+  border-color: var(--mint);
+  box-shadow:
+    0 0 80px rgba(110, 231, 183, 0.15),
+    inset 0 0 60px rgba(110, 231, 183, 0.05);
+}
+
+/* Rest — dimmed but still navigable */
+.cardRest {
+  opacity: 0.75;
+}
+
+.cardRest:hover {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardSlot,
+  .card,
+  .todayCue {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ───────── Header meta row (date + edit-split link) ───────── */
+
+.headerMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* Tucked, quiet deload entry — rare (~3-4x/year), so it sits beside the date
+   as a calm twilight spark action rather than a prominent button. */
+.deloadEntry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  color: rgba(174, 190, 255, 0.78);
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  cursor: pointer;
+  transition: color 0.2s var(--ease), text-shadow 0.2s var(--ease);
+  align-self: center;
+}
+.deloadEntry svg { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.deloadEntry:hover {
+  color: #c3cdff;
+  text-shadow: 0 0 16px rgba(138, 169, 255, 0.4);
+}
+.deloadEntry:hover svg { transform: rotate(-12deg) scale(1.1); }
+
+.settingsBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--mint);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  transition:
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.settingsBtn:hover {
+  color: var(--mint-hover);
+  border-color: var(--mint);
+  background: var(--card-elevated);
+  transform: rotate(20deg);
+}
+
+/* ═════════ Completed tile ═════════
+   When a day's workout is submitted: the planning text relaxes off, a
+   mint seal comes on, and the footer becomes three quiet actions. The
+   day is "set in stone". */
+.cardDone {
+  cursor: default;
+  border-color: rgba(110, 231, 183, 0.22);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.05), rgba(110, 231, 183, 0.012));
+}
+
+.cardDone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(90% 80% at 100% 0%, rgba(110, 231, 183, 0.1), transparent 55%);
+}
+
+.cardDone:hover {
+  transform: none;
+  border-color: rgba(110, 231, 183, 0.34);
+}
+
+/* Mint seal — replaces the category glyph on a completed day. */
+.doneSeal {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #06281d;
+  background: linear-gradient(150deg, #a7f3d0, var(--mint) 60%);
+  box-shadow: 0 0 16px rgba(110, 231, 183, 0.4);
+}
+
+.doneSeal svg { width: 16px; height: 16px; }
+
+/* Ring that pulses out of the seal as the day stamps "done". */
+.doneSeal::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--mint);
+  opacity: 0;
+  animation: doneRing 0.62s ease-out 0.9s;
+}
+@keyframes doneRing {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(2.4); }
+}
+
+/* Small sparkle burst out of the seal — mint with a couple of gold flecks. */
+.doneSparks { position: absolute; inset: 0; pointer-events: none; }
+.doneSparks span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 6px var(--mint);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: doneSpark 0.6s ease-out 0.9s;
+}
+.doneSparks span:nth-child(3n) {
+  background: #e9c87a;
+  box-shadow: 0 0 6px #e9c87a;
+}
+@keyframes doneSpark {
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateX(2px) scale(0.4); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateX(22px) scale(0.5); }
+}
+
+/* Red X cross-off drawn across the finished day's title. */
+.doneNameWrap { position: relative; display: inline-block; }
+.doneStrike {
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(100% + 8px);
+  height: 0.92em;
+  overflow: visible;
+  pointer-events: none;
+}
+.doneStrike path {
+  fill: none;
+  stroke: #e0555f;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: doneStrikeDraw 0.24s cubic-bezier(0.5, 0, 0.35, 1) 0.5s forwards;
+}
+.doneStrike path:last-child { animation-delay: 0.66s; }
+@keyframes doneStrikeDraw { to { stroke-dashoffset: 0; } }
+
+/* ───────── In-progress tile ───────── */
+.cardInProgress {
+  border-color: rgba(110, 231, 183, 0.45);
+  box-shadow:
+    0 0 54px rgba(110, 231, 183, 0.07),
+    inset 0 0 54px rgba(110, 231, 183, 0.025);
+}
+.progPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  border-radius: var(--radius-pill);
+  padding: 3px 9px;
+}
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint);
+  animation: liveDotPulse 1.6s ease-in-out infinite;
+}
+@keyframes liveDotPulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+.progBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+.progLabel {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(233, 239, 233, 0.7);
+}
+.progLabel b { color: var(--mint); font-weight: 600; }
+.progTrack {
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.progFill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--mint), #5fd398);
+}
+.progCue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--mint);
+  margin: 2px 0 0;
+  animation: todayCuePulse 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doneStrike path { animation: none; stroke-dashoffset: 0; }
+  .doneSeal::after,
+  .doneSparks span,
+  .liveDot,
+  .progCue { animation: none; }
+  .doneSparks span { opacity: 0; }
+}
+
+.donePill {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 3px 9px;
+  margin-left: 9px;
+}
+
+/* Title softens once the day is done. */
+.dayNameDone { color: rgba(240, 255, 245, 0.78); }
+
+.doneMeta {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: var(--space-2);
+}
+
+.doneCount {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.doneInBooks {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+/* Footer — three minimal actions, sits in the same slot as the arrow. */
+.doneFoot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 7px;
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(110, 231, 183, 0.12);
+}
+
+.doneBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.05);
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  border-radius: 11px;
+  padding: 9px 6px;
+  cursor: pointer;
+  transition: background var(--duration), transform var(--duration) cubic-bezier(0.34, 1.56, 0.64, 1), color var(--duration);
+}
+
+.doneBtn:hover { background: rgba(110, 231, 183, 0.12); transform: translateY(-1px); }
+.doneBtn:active { transform: translateY(0) scale(0.97); }
+.doneBtn:disabled { opacity: 0.5; cursor: default; transform: none; }
+.doneBtnIcon { display: inline-flex; }
+.doneBtnIcon svg { width: 13px; height: 13px; }
+
+.doneBtnDel {
+  color: var(--muted);
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.doneBtnDel:hover {
+  color: var(--amber);
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+/* ═════════ Not-finished tile ═════════
+   A past day that was started but never submitted. Warm amber, never
+   red — the split is a rotation, not a calendar; a missed day is just
+   waiting to be finished. */
+.cardUnfinished {
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow:
+    0 0 50px rgba(245, 158, 11, 0.06),
+    inset 0 0 50px rgba(245, 158, 11, 0.025);
+}
+
+.cardUnfinished:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.unfinishedCue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--amber);
+  margin-top: var(--space-2);
+}
+
+/* ═════════ Toast ═════════ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--fg);
+  background: #0c140f;
+  border: 1px solid rgba(110, 231, 183, 0.16);
+  border-radius: 12px;
+  padding: 11px 18px;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.25s var(--ease), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 90;
+}
+
+.toastShow {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═════════ Schedule action pills (deload + new week) ═════════
+   Promoted into the top-row chrome cluster next to "Adjust your training".
+   Same hairline-pill vocabulary as adjustPill; the icon carries the accent
+   (iris for deload/recovery, mint for a fresh start) so the row stays calm. */
+.actPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  color: var(--fg);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.actPill svg { flex-shrink: 0; transition: transform var(--duration-lift) var(--ease-premium); }
+.actPill:hover { transform: translateY(-1px); background: var(--card-elevated); }
+.actPill:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+.deloadPill svg { color: #aebeff; }
+.deloadPill:hover { border-color: rgba(174, 190, 255, 0.5); }
+.deloadPill:hover svg { transform: rotate(-18deg) scale(1.08); }
+
+/* Active-deload badge that sits beside the "Today's session" title (the start
+   pill in the top cluster is hidden while active). Same periwinkle language as
+   the day logger's .deloadBadge, with a divided "end" segment so ending the
+   week is a deliberate tap, not mistaken for a plain status chip. */
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+/* The title eases to periwinkle when a deload is active — a quiet, on-theme cue
+   that pairs with the badge. Transition lives on the element so the recolor
+   glides in (no hard flip) when the deload starts and the class is applied. */
+.titleRow h1 { transition: color 520ms var(--ease-premium); }
+.titleDeload { color: #aebeff; }
+.deloadBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(174, 190, 255, 0.45);
+  background: linear-gradient(180deg, rgba(138, 169, 255, 0.14), rgba(138, 169, 255, 0.05));
+  box-shadow: 0 0 22px rgba(138, 169, 255, 0.1);
+  color: #aebeff;
+  cursor: pointer;
+  /* Fade + glide in beside the title so starting a deload feels seamless, not a
+     glitchy pop. Plays on mount (when deloadActive flips true after refresh). */
+  animation: deloadBadgeIn 480ms var(--ease-premium) both;
+  transition:
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease);
+}
+@keyframes deloadBadgeIn {
+  from { opacity: 0; transform: translateX(-10px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deloadBadge { animation: none; }
+  .titleRow h1 { transition: none; }
+}
+.deloadBadge:hover { border-color: rgba(174, 190, 255, 0.7); background: rgba(138, 169, 255, 0.18); }
+.deloadBadge:focus-visible { outline: 2px solid #aebeff; outline-offset: 2px; }
+.deloadBadge svg { flex: none; color: #aebeff; }
+.deloadBadgeLabel {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #c3cdff;
+}
+.deloadBadgeEnd {
+  padding-left: 7px;
+  border-left: 1px solid rgba(174, 190, 255, 0.3);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.weekPill svg { color: var(--mint); }
+.weekPill:hover { border-color: rgba(110, 231, 183, 0.5); }
+.weekPill:hover svg { transform: rotate(40deg); }
+
+/* Log a past workout — a slate "time/history" tone, distinct from the mint
+   (new week) and periwinkle (deload) pills. The clock rewinds on hover. */
+.pastPill svg { color: #8ab4d0; }
+.pastPill:hover { border-color: rgba(138, 180, 208, 0.5); }
+.pastPill:hover svg { transform: rotate(-32deg); }
+
+@media (max-width: 560px) {
+  .pillLabel { display: none; }
+  .actPill { padding: 0 11px; }
+}
+
+/* ═════════ Completed tile as a launchpad ═════════
+   Override the earlier "set in stone" cursor/hover so a done day invites a tap —
+   it's openable, never a dead end. Light up only, NO translate: the slot is
+   overflow:hidden, so a translateY(-4px) slid the tile's top edge under the clip
+   and made it look cut off (same reason the base .card:hover dropped its lift). */
+.cardDone { cursor: pointer; }
+.cardDone:hover { border-color: rgba(110, 231, 183, 0.4); box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.18), 0 18px 40px rgba(0, 0, 0, 0.4); }
+.cardDone:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+
+/* seal + set count + "in the books" on one quiet line */
+.doneRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  row-gap: 6px;
+  margin-top: var(--space-3);
+}
+
+/* "Start it again →" — the proof you're never trapped. Quiet at rest, brightens
+   on hover so a finished day reads as "go again", not "closed". */
+.againCue {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--space-4);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--mint);
+  opacity: 0.6;
+  white-space: nowrap;
+  transition: opacity var(--duration) var(--ease), transform var(--duration-lift) var(--ease-premium);
+}
+
+.cardDone:hover .againCue { opacity: 1; transform: translateX(2px); }
+
+/* overflow "..." → view / copy / delete, tucked top-right of a done tile */
+.moreBtn {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--ink-faint, rgba(233, 239, 233, 0.5));
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.moreBtn:hover { color: var(--mint); border-color: rgba(110, 231, 183, 0.3); background: rgba(110, 231, 183, 0.06); }
+.moreBtn:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+.moreBtn svg { width: 16px; height: 16px; }
+/* Invisible inset extends the tap target from 30px to ~44px (iOS HIG) without
+   changing the visible circle, so it's not easy to fat-finger into the card. */
+.moreBtn::before { content: ''; position: absolute; inset: -7px; border-radius: 50%; }
+
+.moreMenu {
+  position: absolute;
+  top: 50px;
+  right: 16px;
+  z-index: 30;
+  min-width: 150px;
+  padding: 6px;
+  background: #0a120e;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: moreMenuIn 160ms var(--ease-premium);
+}
+
+@keyframes moreMenuIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+.moreItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--fg);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 0.92rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.moreItem:hover { background: var(--card-elevated); color: var(--mint); }
+.moreItem:disabled { opacity: 0.5; cursor: default; }
+.moreItemIcon { display: inline-flex; color: var(--ink-faint, rgba(233, 239, 233, 0.5)); transition: color var(--duration) var(--ease); }
+.moreItemIcon svg { width: 14px; height: 14px; }
+.moreItem:hover .moreItemIcon { color: var(--mint); }
+.moreItemDel:hover { color: var(--amber); }
+.moreItemDel:hover .moreItemIcon { color: var(--amber); }
+
+/* ═════════ Revert ("undo new week") bar ═════════
+   Lingers after a reset (up to an hour, or until you leave) so a new week is
+   never a final, scary action. */
+.revertBar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(110, 231, 183, 0.06);
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  border-radius: 12px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--mint-soft, #a7f3d0);
+  animation: moreMenuIn 280ms var(--ease-premium);
+}
+
+.revertBar > svg { color: var(--mint); flex-shrink: 0; }
+
+.revertUndo {
+  background: none;
+  border: none;
+  color: var(--mint);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.revertUndo:hover { color: var(--mint-soft, #a7f3d0); }
+
+.revertNote {
+  font-size: 0.72rem;
+  color: var(--ink-faint, rgba(233, 239, 233, 0.45));
+  border-left: 1px solid var(--rule);
+  padding-left: 10px;
+}
+
+@media (max-width: 560px) {
+  .revertNote { display: none; }
+}
+
+/* ═════════ Delete-session confirm ═════════
+   Deleting a logged workout is permanent + unrecoverable, so it ALWAYS asks
+   first. "Keep it" is the prominent (safe) action; "Remove" is the quiet,
+   amber (caution) one — never red, never the default. */
+.deleteScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: deleteFade 180ms var(--ease-premium);
+}
+
+@keyframes deleteFade { from { opacity: 0; } to { opacity: 1; } }
+
+.deleteSheet {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  background: #120c0a;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 18px;
+  padding: var(--space-6);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 50px rgba(245, 158, 11, 0.06);
+  animation: deleteRise 300ms var(--ease-premium);
+}
+
+@keyframes deleteRise { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.deleteEyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+.deleteTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.5rem;
+  margin-top: 6px;
+}
+
+.deleteMsg {
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  line-height: 1.5;
+  margin-top: var(--space-3);
+}
+
+.deleteBtns {
+  display: flex;
+  gap: 10px;
+  margin-top: var(--space-5);
+}
+
+.deleteKeep,
+.deleteRemove {
+  flex: 1;
+  padding: 13px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  transition: transform 0.18s var(--ease), background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.deleteKeep {
+  background: linear-gradient(180deg, #a7f3d0, var(--mint));
+  border: 1px solid var(--mint);
+  color: #06281d;
+  font-weight: 600;
+}
+
+.deleteKeep:hover { transform: translateY(-1px); }
+
+.deleteRemove {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: var(--amber);
+}
+
+.deleteRemove:hover { background: rgba(245, 158, 11, 0.12); }
+.deleteRemove:disabled { opacity: 0.6; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .deleteScrim, .deleteSheet { animation: none; }
+}

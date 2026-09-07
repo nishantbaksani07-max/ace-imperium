@@ -1,0 +1,63 @@
+/*
+ * Layout for the wearable partner row in the landing hero.
+ * Each brand has a small geometric glyph + a wordmark with
+ * brand-specific typographic treatment to evoke the real brand
+ * without claiming to be the official logo.
+ */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  color: var(--muted-strong);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm);
+  line-height: 1;
+}
+
+.glyph {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Brand-specific wordmark treatments — chosen to evoke each brand's
+   typographic identity without copying their letterforms exactly. */
+
+.whoop {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.garmin {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.oura {
+  font-weight: 500;
+  letter-spacing: 0.16em;
+}
+
+.fitbit {
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 519px) {
+  .row {
+    gap: var(--space-3);
+    justify-content: center;
+  }
+
+  .brand {
+    font-size: var(--text-xs);
+  }
+}

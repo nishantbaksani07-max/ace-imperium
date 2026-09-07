@@ -1,0 +1,2485 @@
+/* =====================================================================
+   TILE BUILDER, the three-act workbench. Pixel spec: public/tile-builder-final.html.
+   Act 1 the opening, Act 2 the birth, Act 3 the craft.
+   The tile itself is the REAL sealed iframe; this file styles the world
+   and the chrome around it. Vanilla CSS module, no Tailwind.
+   ===================================================================== */
+
+@property --acc {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #6ee7b7;
+}
+@property --accInk {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #042a1c;
+}
+
+.world {
+  --bg: #04060a;
+  --mint: #6ee7b7;
+  --mint-hover: #5dd6a6;
+  --mint-ink: #042a1c;
+  --amber: #f59e0b;
+  --line: rgba(167, 243, 208, 0.16);
+  --line-soft: rgba(167, 243, 208, 0.09);
+  --tx: #f2f6f4;
+  --tx-dim: rgba(255, 255, 255, 0.62);
+  --tx-faint: rgba(255, 255, 255, 0.36);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --acc: #6ee7b7;
+  --accInk: #042a1c;
+  transition: --acc 0.6s var(--ease), --accInk 0.6s var(--ease);
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+/* Resets stay at zero extra specificity (:where) so component classes
+   below win, exactly like the standalone's bare element resets. Scoping
+   them as .world button/.world input made them BEAT .goBtn/.seed/etc,
+   which stripped the mint circle and the chip pills. */
+.world :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.world :where(input) {
+  font: inherit;
+  color: inherit;
+}
+.world svg {
+  display: block;
+}
+.world :where(button:focus-visible, input:focus-visible) {
+  outline: 1.5px solid var(--mint);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ------------------------------------------------ world dressing */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* the world reacts once, softly, when a tile is born */
+.birthGlow {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.orb {
+  width: min(620px, 120vw);
+  height: min(620px, 120vw);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.2), rgba(110, 231, 183, 0.06) 42%, transparent 68%);
+  opacity: 0;
+  transform: scale(0.9);
+}
+.birthGlowGo .orb {
+  animation: birthPulse 1.6s var(--ease) both;
+}
+@keyframes birthPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+/* a brief swell of brighter particles when something is born */
+.burstLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.burstLayer i {
+  position: absolute;
+  border-radius: 50%;
+  background: #c9f7e2;
+  box-shadow: 0 0 10px 2.5px rgba(110, 231, 183, 0.55);
+  opacity: 0;
+  animation: burstUp var(--bd, 1.8s) cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+@keyframes burstUp {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--wx, 0px), -46vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------ shared motion */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes popKf {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.09);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes nudgeKf {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(3px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+}
+@keyframes pulseKf {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes sparkGlow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.86);
+  }
+}
+@keyframes think {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+/* Runs on the child span inside the already-centered ghost, so the
+   transform is span-relative. translateY(-50%) here (the parent's
+   centering transform) shoved the span half a line up into the
+   parent's overflow:hidden and clipped the placeholder. */
+@keyframes ghostSwap {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------ layout */
+.main {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(18px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom));
+}
+.act {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.leave {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity 0.38s var(--ease), transform 0.38s var(--ease);
+}
+
+/* ================================================================
+   ACT I, THE OPENING
+   ================================================================ */
+.actOpen {
+  width: min(640px, 92vw);
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+.oEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: var(--mint);
+  animation: riseIn 0.8s var(--ease) 0.05s both;
+}
+.oEyebrow svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--mint);
+  animation: sparkGlow 3.4s var(--ease) infinite;
+}
+.oTitle {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(38px, 7.4vw, 62px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 22px 0 10px;
+  animation: riseIn 0.9s var(--ease) 0.14s both;
+}
+.oTitle em {
+  font-style: italic;
+  color: var(--mint);
+}
+.oLede {
+  color: var(--tx-dim);
+  font-size: 15.5px;
+  max-width: 40ch;
+  margin: 0 auto;
+  animation: riseIn 0.9s var(--ease) 0.22s both;
+}
+
+.openBar {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  border-radius: 20px;
+  padding: 0 9px 0 20px;
+  margin: 38px auto 0;
+  background: rgba(9, 13, 12, 0.72);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+  animation: riseIn 0.9s var(--ease) 0.32s both;
+}
+.openBar:focus-within {
+  border-color: rgba(167, 243, 208, 0.34);
+  box-shadow: 0 0 54px rgba(110, 231, 183, 0.09);
+}
+.barNudge {
+  animation: nudgeKf 0.35s ease !important;
+}
+.oSpark {
+  width: 18px;
+  height: 18px;
+  fill: var(--mint);
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+.openBar input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: var(--tx);
+  caret-color: var(--mint);
+  position: relative;
+  z-index: 2;
+}
+/* Never let browser autofill paint its own box inside a capsule. */
+.openBar input:-webkit-autofill,
+.refineBar input:-webkit-autofill {
+  -webkit-text-fill-color: var(--tx);
+  caret-color: var(--mint);
+  transition: background-color 999999s ease-out;
+}
+.openGhost {
+  position: absolute;
+  left: 50px;
+  right: 72px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: rgba(255, 255, 255, 0.36);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.38s ease, transform 0.38s ease;
+}
+.openGhost span {
+  display: block;
+  animation: ghostSwap 0.5s var(--ease) both;
+}
+.hasText .openGhost,
+.hasText .refineGhost {
+  opacity: 0;
+}
+.goBtn {
+  position: relative;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--mint);
+  color: var(--mint-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.25s var(--ease), opacity 0.3s;
+  animation: invite 1.6s ease-in-out infinite;
+}
+.goBtn:active {
+  transform: scale(0.92);
+}
+.goBtn[disabled] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+.goBtn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+@keyframes invite {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.22);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(110, 231, 183, 0);
+  }
+}
+
+.oQuiet {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--tx-faint);
+  margin-top: 16px;
+  animation: riseIn 0.9s var(--ease) 0.42s both;
+}
+.seeds {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 34px;
+  max-width: 520px;
+  animation: riseIn 0.9s var(--ease) 0.5s both;
+}
+.seed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 9px 16px 9px 13px;
+  font-size: 13px;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease), opacity 0.3s;
+}
+.seed svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--mint);
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+.seed[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* The always-there way home (fixed top-left, above the world) */
+.homePill {
+  position: fixed;
+  top: calc(14px + env(safe-area-inset-top, 0px));
+  left: calc(16px + env(safe-area-inset-left, 0px));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 12, 10, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 14px 8px 10px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+}
+.homePill svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: rotate(180deg);
+}
+@media (hover: hover) {
+  .homePill:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    color: var(--tx);
+    transform: translateX(-1px);
+  }
+}
+
+/* THE RACK - the six-shape menu, the quick tile's visible ceiling */
+.rack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 34px;
+  width: min(560px, 100%);
+  animation: riseIn 0.9s var(--ease) 0.5s both;
+}
+.rackCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 15px 10px 13px;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease), opacity 0.3s;
+}
+.rackCard svg {
+  width: 15px;
+  height: 15px;
+  fill: var(--mint);
+  opacity: 0.9;
+  margin-bottom: 3px;
+}
+.rackShape {
+  font-size: 13.5px;
+  color: var(--tx);
+  letter-spacing: 0.01em;
+}
+.rackHint {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+}
+.rackCard[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+@media (max-width: 479px) {
+  .rack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Big Brother's shelf card - quiet, wide, one honest line */
+.claudeCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(560px, 100%);
+  margin-top: 26px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.015);
+  padding: 14px 16px;
+  text-align: left;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease);
+  animation: riseIn 0.9s var(--ease) 0.62s both;
+}
+.claudeCard > svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--mint);
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+.claudeCardText {
+  flex: 1;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--tx-dim);
+}
+.claudeCardText b {
+  color: var(--tx);
+  font-weight: 500;
+}
+.claudeCardGo {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--tx-faint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  transition: stroke 0.3s, transform 0.3s var(--ease);
+}
+@media (hover: hover) {
+  .claudeCard:hover {
+    border-color: rgba(167, 243, 208, 0.3);
+    background: rgba(167, 243, 208, 0.03);
+  }
+  .claudeCard:hover .claudeCardGo {
+    stroke: var(--mint);
+    transform: translateX(2px);
+  }
+}
+
+/* The knobs - bounded, tappable controls (the editor's whole vocabulary) */
+.knob {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 4px;
+}
+.knobLabel {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--tx-faint);
+}
+.knobChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.knobChip {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px 14px;
+  font-size: 12.5px;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, background 0.3s, transform 0.3s var(--ease), opacity 0.3s;
+}
+.knobChip[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.knobChipOn {
+  border-color: color-mix(in srgb, var(--acc) 55%, transparent);
+  background: color-mix(in srgb, var(--acc) 10%, transparent);
+  color: var(--tx);
+}
+@media (hover: hover) {
+  .knobChip:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    color: var(--tx);
+    transform: translateY(-1px);
+  }
+}
+.error {
+  color: var(--amber);
+  font-size: 13px;
+  margin-top: 16px;
+  line-height: 1.5;
+  text-align: center;
+}
+.advanced {
+  margin-top: 34px;
+  text-align: center;
+  animation: riseIn 0.9s var(--ease) 0.6s both;
+}
+.advancedLink {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--tx-faint);
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 2px;
+  transition: color 0.25s, border-color 0.25s;
+}
+.advancedLink:hover {
+  color: var(--tx-dim);
+  border-color: rgba(167, 243, 208, 0.3);
+}
+
+/* ================================================================
+   THE BEAT, Vee takes the sentence
+   ================================================================ */
+.beat {
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.beatShow {
+  opacity: 1;
+}
+.beatInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.beatSpark {
+  width: 22px;
+  height: 22px;
+  fill: var(--mint);
+  animation: sparkGlow 1.4s var(--ease) infinite;
+}
+.beatDots {
+  display: flex;
+  gap: 6px;
+}
+.beatDots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mint);
+  animation: think 1s var(--ease) infinite;
+}
+.beatDots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.beatDots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.beatText {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: var(--tx-dim);
+}
+
+/* ================================================================
+   ACT III, THE CRAFT (born on mount: staged entrance)
+   ================================================================ */
+.actCraft {
+  width: min(560px, 92vw);
+}
+
+/* -------- top bar */
+.top {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp 0.6s var(--ease) 1.58s both;
+}
+.back {
+  justify-self: start;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+}
+.back svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.brandBlk {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--acc);
+  opacity: 0.85;
+}
+.headSerif {
+  font-family: var(--serif);
+  font-size: 21px;
+  color: var(--tx-dim);
+  line-height: 1.15;
+}
+.headSerif em {
+  font-style: italic;
+  color: var(--acc);
+}
+.draft {
+  justify-self: end;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--tx-faint);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 11px;
+  white-space: nowrap;
+}
+@media (max-width: 479px) {
+  .draft {
+    display: none;
+  }
+}
+
+/* -------- the piece: the REAL tile in its frame + the dock, one object */
+.pieceWrap {
+  position: relative;
+  animation: pieceIn 0.85s var(--ease) both;
+}
+@keyframes pieceIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.965);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.pieceGlow {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: min(540px, 110%);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--acc) 14%, transparent), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glowIn 1.1s var(--ease) 0.45s both;
+}
+@keyframes glowIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.piece {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--acc) 5%, transparent), transparent 60%), #05080a;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 36px 90px -28px rgba(0, 0, 0, 0.85), 0 0 120px color-mix(in srgb, var(--acc) 5%, transparent);
+  overflow: hidden;
+}
+/* soft flash when Vee applies a change */
+.piece::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(80% 60% at 50% 38%, color-mix(in srgb, var(--acc) 12%, transparent), transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.55s var(--ease);
+}
+.pieceFlash::after {
+  opacity: 1;
+  transition: opacity 0.12s var(--ease);
+}
+
+.frameStack {
+  position: relative;
+  height: 470px;
+}
+.frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+.framePrev {
+  z-index: 1;
+}
+.frameLive {
+  z-index: 2;
+  animation: frameIn 0.45s var(--ease) both;
+}
+@keyframes frameIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* the whole tile is tappable: a veil over the sealed iframe opens it full screen */
+.frameVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s var(--ease);
+}
+.frameStack[data-building='true'] .frameVeil {
+  background: rgba(4, 6, 10, 0.22);
+}
+.tileHint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translate(-50%, -6px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--tx-dim);
+  background: rgba(4, 6, 10, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 11px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.tileHint svg {
+  width: 9px;
+  height: 9px;
+  stroke: var(--acc);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* -------- the instrument dock, fused to the base of the piece */
+.dock {
+  position: relative;
+  z-index: 4;
+  flex-shrink: 0;
+  border-top: 1px solid var(--line-soft);
+  background: linear-gradient(180deg, rgba(167, 243, 208, 0.045), rgba(167, 243, 208, 0.015));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 0 0 21px 21px;
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: stretch;
+  animation: fadeUp 0.7s var(--ease) 1.45s both;
+}
+.dockNoGoal {
+  grid-template-columns: 1fr max-content;
+}
+.cell {
+  padding: 15px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  justify-content: center;
+  min-width: 0;
+}
+.cell + .cell {
+  border-left: 1px solid var(--line-soft);
+}
+.cell label,
+.cellLabel {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--tx-faint);
+}
+@media (max-width: 479px) {
+  .dock {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cellName {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-bottom: 1px solid var(--line-soft);
+    order: -1;
+  }
+  .cellGoal {
+    border-left: none;
+  }
+  .cellAccent {
+    border-left: 1px solid var(--line-soft);
+  }
+  .dockNoGoal .cellAccent {
+    grid-column: 1 / -1;
+    border-left: none;
+  }
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.stepBtn {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, transform 0.25s var(--ease), opacity 0.3s;
+}
+.stepBtn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+}
+.stepBtn:active {
+  transform: scale(0.9);
+}
+.stepBtn[disabled] {
+  opacity: 0.28;
+  pointer-events: none;
+}
+.goalNum {
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1;
+  min-width: 34px;
+  text-align: center;
+  color: var(--tx);
+  white-space: nowrap;
+  animation: popKf 0.55s var(--ease);
+}
+
+.cellName input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  padding: 4px 1px 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--tx);
+  caret-color: var(--acc);
+  border-radius: 0;
+  transition: border-color 0.35s;
+}
+.cellName input:focus {
+  border-bottom-color: var(--acc);
+}
+
+.swatches {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding-top: 3px;
+  flex-wrap: wrap;
+}
+.swatch {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: var(--sw);
+  color: var(--sw);
+  flex: none;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s, opacity 0.3s;
+}
+.swatch:active {
+  transform: scale(0.88);
+}
+.swatchSel {
+  box-shadow: 0 0 0 3px #070b0d, 0 0 0 4.5px currentColor;
+}
+
+/* ================================================================
+   ON YOUR DASHBOARD, the compact poster
+   ================================================================ */
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  align-items: center;
+  animation: fadeUp 0.7s var(--ease) 1.8s both;
+}
+.boardHead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.boardLabel {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--tx-faint);
+}
+.boardDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--tx-faint);
+}
+.boardHint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--acc);
+}
+.boardHint svg {
+  width: 9px;
+  height: 9px;
+  stroke: var(--acc);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.boardGrid {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.ghostTile {
+  flex: 1;
+  min-width: 0;
+  max-width: 116px;
+  height: 164px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+  opacity: 0.5;
+}
+@media (max-width: 479px) {
+  .ghostTile {
+    display: none;
+  }
+}
+
+.poster {
+  position: relative;
+  flex: none;
+  width: 164px;
+  height: 164px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--acc) 7%, transparent), transparent 60%), #05080a;
+  box-shadow: 0 24px 52px -22px rgba(0, 0, 0, 0.85);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+  text-align: left;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
+}
+.poster:active {
+  transform: scale(0.97);
+}
+.posterTop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.posterTop svg {
+  width: 11px;
+  height: 11px;
+  fill: var(--acc);
+  flex-shrink: 0;
+}
+.posterName {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.posterBody {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.posterRing {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+.posterRing svg {
+  width: 100%;
+  height: 100%;
+}
+.prTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+.prArc {
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.7s var(--ease), stroke 0.5s;
+}
+.posterNum {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--tx);
+}
+.posterFoot {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.posterExpand {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 2;
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  background: rgba(4, 6, 10, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.posterExpand svg {
+  width: 10px;
+  height: 10px;
+  stroke: var(--acc);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ================================================================
+   REFINE, Vee in your words
+   ================================================================ */
+.refine {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeUp 0.7s var(--ease) 1.68s both;
+}
+.refineHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+.refineLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--tx-faint);
+}
+.refineLabel svg {
+  width: 11px;
+  height: 11px;
+  fill: var(--acc);
+  animation: sparkGlow 3.4s var(--ease) infinite;
+}
+.refineLabel b {
+  color: var(--acc);
+  font-weight: 500;
+}
+/* The tweak vocabulary, visible: the refine bar's own little ceiling. */
+.refineVocab {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: var(--tx-faint);
+  white-space: nowrap;
+}
+@media (max-width: 479px) {
+  .refineVocab {
+    display: none;
+  }
+}
+
+.refineBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 58px;
+  border-radius: 18px;
+  padding: 0 8px 0 18px;
+  background: rgba(9, 13, 12, 0.72);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.refineBar:focus-within {
+  border-color: rgba(167, 243, 208, 0.32);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--acc) 7%, transparent);
+}
+.refineSpark {
+  width: 17px;
+  height: 17px;
+  fill: var(--acc);
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+.refineBar input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: var(--tx);
+  caret-color: var(--acc);
+  position: relative;
+  z-index: 2;
+}
+.refineGhost {
+  position: absolute;
+  left: 47px;
+  right: 66px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16.5px;
+  color: rgba(255, 255, 255, 0.34);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+.refineGhost span {
+  display: block;
+  animation: ghostSwap 0.5s var(--ease) both;
+}
+
+.send {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--acc);
+  color: var(--accInk);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s var(--ease), background 0.5s;
+}
+.send:active {
+  transform: scale(0.92);
+}
+.send svg {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.iArrow {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.25s, transform 0.25s var(--ease);
+}
+.iCheck path {
+  stroke-dasharray: 21;
+  stroke-dashoffset: 21;
+}
+.sendSent .iArrow {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.sendSent .iCheck path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.5s var(--ease) 0.1s;
+}
+
+/* Vee confirmation: thinking dots, then a drawn check */
+.confirm {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 26px;
+  padding: 0 4px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
+}
+.confirmShow {
+  opacity: 1;
+  transform: translateY(0);
+}
+.thinking {
+  display: none;
+  gap: 5px;
+  align-items: center;
+  padding-left: 3px;
+}
+.confirmBusy .thinking {
+  display: flex;
+}
+.confirmBusy .doneWrap {
+  display: none;
+}
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--acc);
+  animation: think 1s var(--ease) infinite;
+}
+.thinking i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.thinking i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.doneWrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.checkRing {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--acc) 12%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkRing svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.checkRing path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+}
+.confirmShow:not(.confirmBusy) .checkRing path {
+  animation: drawCheck 0.5s var(--ease) 0.05s forwards;
+}
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.msg {
+  font-size: 13px;
+  color: var(--tx);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.msgTag {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  color: var(--acc);
+  margin-right: 8px;
+}
+.confirmWarn .checkRing {
+  background: rgba(245, 158, 11, 0.12);
+}
+.confirmWarn .checkRing svg {
+  stroke: var(--amber);
+}
+.confirmWarn .msgTag {
+  color: var(--amber);
+}
+
+/* Vee idea lines: labelled, never bare chips */
+.ideas {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 2px;
+}
+.idea {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--tx-dim);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), opacity 0.3s;
+}
+.ideaSpark {
+  width: 11px;
+  height: 11px;
+  fill: var(--acc);
+  flex-shrink: 0;
+}
+.idea b {
+  color: var(--acc);
+  font-weight: 600;
+  margin-right: 2px;
+}
+.ideaGo {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  stroke: var(--tx-faint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), stroke 0.3s;
+}
+.ideaApplied {
+  pointer-events: none;
+  color: var(--tx-faint);
+}
+.ideaApplied .ideaSpark {
+  fill: var(--tx-faint);
+}
+.ideaApplied b {
+  color: var(--tx-faint);
+}
+.ideaApplied .ideaGo {
+  opacity: 1;
+  transform: none;
+  stroke: var(--acc);
+}
+.idea[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ================================================================
+   COMMIT
+   ================================================================ */
+.ctaWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  animation: fadeUp 0.7s var(--ease) 1.94s both;
+}
+.cta {
+  position: relative;
+  width: 100%;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 12px 34px -12px rgba(110, 231, 183, 0.45);
+  transition: background 0.3s, transform 0.25s var(--ease), box-shadow 0.3s;
+  overflow: hidden;
+}
+.cta:active {
+  transform: scale(0.985);
+}
+.ctaLabel,
+.ctaDone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition: opacity 0.35s, transform 0.45s var(--ease);
+}
+.ctaDone {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.ctaDone svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.ctaDone svg path {
+  stroke-dasharray: 21;
+  stroke-dashoffset: 21;
+}
+.ctaAdded {
+  background: var(--mint-hover);
+  cursor: default;
+}
+.ctaAdded .ctaLabel {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.ctaAdded .ctaDone {
+  opacity: 1;
+  transform: translateY(0);
+}
+.ctaAdded .ctaDone svg path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.5s var(--ease) 0.15s;
+}
+.quiet {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--tx-faint);
+  text-align: center;
+}
+.again {
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--mint);
+  border-bottom: 1px solid rgba(110, 231, 183, 0.4);
+  padding-bottom: 1px;
+  text-decoration: none;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+/* ================================================================
+   FULL SCREEN, the opened tile (mirrors the real .openCard)
+   ================================================================ */
+.fs {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+}
+.fsBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: fsFade 0.4s ease both;
+}
+@keyframes fsFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fsCard {
+  position: relative;
+  width: min(640px, 92vw);
+  height: min(86vh, 760px);
+  background: #04070a;
+  border: 1px solid rgba(167, 243, 208, 0.16);
+  border-radius: 22px;
+  box-shadow: 0 50px 130px -30px rgba(0, 0, 0, 0.9), 0 0 120px color-mix(in srgb, var(--acc) 5%, transparent);
+  overflow: hidden;
+  animation: fsRise 0.55s var(--ease) both;
+}
+@keyframes fsRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.965);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.fsClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 6;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(4, 6, 10, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tx-dim);
+  transition: color 0.3s, border-color 0.3s, transform 0.25s var(--ease);
+}
+.fsClose:active {
+  transform: scale(0.9);
+}
+.fsClose svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+}
+.fsFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+
+/* ================================================================
+   RESPONSIVE: mobile stacks (default), desktop is a wide workbench
+   ================================================================ */
+.leftCol,
+.rightCol {
+  display: contents;
+}
+.actCraft .pieceWrap {
+  order: 1;
+}
+.actCraft .refine {
+  order: 2;
+}
+.actCraft .board {
+  order: 3;
+}
+.actCraft .ctaWrap {
+  order: 4;
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding: calc(30px + env(safe-area-inset-top)) clamp(36px, 4vw, 80px) calc(40px + env(safe-area-inset-bottom));
+  }
+  .actOpen {
+    width: min(960px, 90vw);
+  }
+  .oTitle {
+    font-size: clamp(58px, 6vw, 86px);
+    margin: 26px 0 14px;
+  }
+  .oLede {
+    font-size: 17px;
+    max-width: 48ch;
+  }
+  .openBar {
+    max-width: 660px;
+    height: 70px;
+  }
+  .seeds {
+    max-width: 740px;
+    margin-top: 40px;
+  }
+
+  .actCraft {
+    width: min(1320px, 94vw);
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(400px, 460px);
+    grid-template-areas: 'top top' 'left right';
+    column-gap: clamp(48px, 5vw, 92px);
+    row-gap: 30px;
+    align-items: start;
+  }
+  .leftCol,
+  .rightCol {
+    display: flex;
+    flex-direction: column;
+  }
+  .actCraft .top {
+    grid-area: top;
+  }
+  .leftCol {
+    grid-area: left;
+    gap: 26px;
+    width: 100%;
+    max-width: 640px;
+    justify-self: center;
+  }
+  .rightCol {
+    grid-area: right;
+    gap: 22px;
+    align-self: stretch;
+    justify-content: center;
+    min-width: 0;
+  }
+  .actCraft .pieceWrap,
+  .actCraft .refine,
+  .actCraft .board,
+  .actCraft .ctaWrap {
+    order: 0;
+  }
+  .frameStack {
+    height: min(60vh, 560px);
+  }
+}
+
+/* ------------------------------------------------ hover, pointer devices */
+@media (hover: hover) {
+  .back:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    color: var(--tx);
+    transform: translateX(-1px);
+  }
+  .stepBtn:hover {
+    border-color: var(--acc);
+    color: var(--acc);
+  }
+  .swatch:hover {
+    transform: scale(1.12);
+  }
+  .send:hover {
+    transform: scale(1.04);
+  }
+  .seed:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    color: var(--tx);
+    transform: translateY(-1px);
+  }
+  .rackCard:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    background: rgba(167, 243, 208, 0.04);
+    transform: translateY(-2px);
+  }
+  .goBtn:hover {
+    background: var(--mint-hover);
+  }
+  .idea:hover {
+    background: color-mix(in srgb, var(--acc) 6%, transparent);
+    color: var(--tx);
+  }
+  .idea:hover .ideaGo {
+    opacity: 1;
+    transform: translateX(0);
+    stroke: var(--acc);
+  }
+  .cta:hover:not(:disabled) {
+    background: var(--mint-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 40px -12px rgba(110, 231, 183, 0.55);
+  }
+  .again:hover {
+    color: var(--mint-hover);
+    border-color: var(--mint-hover);
+  }
+  .frameVeil:hover .tileHint {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .poster:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 32px 62px -22px rgba(0, 0, 0, 0.9);
+    border-color: rgba(167, 243, 208, 0.3);
+  }
+  .poster:hover .posterExpand {
+    opacity: 1;
+  }
+  .fsClose:hover {
+    color: var(--tx);
+    border-color: rgba(167, 243, 208, 0.35);
+  }
+}
+
+/* ------------------------------------------------ reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .world,
+  .world *,
+  .world *::before,
+  .world *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
+  .burstLayer i {
+    display: none;
+  }
+}
+
+/* ── The honesty gate: Vee hands off to Claude Code ──────────────────────
+   A cinematic straight-talk moment, same DNA as the opening: serif hero,
+   mono micro-labels, mint on the dark world. Every element rises in on the
+   staggered ease; the burst layer fires on entry from the TSX. */
+.handoffWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.hTitle {
+  animation: riseIn 0.9s var(--ease) 0.08s both;
+}
+.hVee {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 22px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--tx-dim);
+  max-width: 52ch;
+  text-align: left;
+  animation: riseIn 0.9s var(--ease) 0.2s both;
+}
+.hVeeTag {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: 999px;
+  padding: 3px 9px;
+  transform: translateY(-2px);
+}
+.hSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 34px;
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+  animation: riseIn 0.9s var(--ease) 0.32s both;
+}
+.hStep {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 15px 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  font-size: 14.5px;
+  color: var(--tx);
+  line-height: 1.55;
+}
+.hStepNum {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  color: var(--mint);
+  font-family: var(--mono);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(4px);
+}
+.hStepBody {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+.hCmd {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.06);
+  border: 1px solid rgba(110, 231, 183, 0.18);
+  border-radius: 8px;
+  padding: 8px 11px;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.hSoon {
+  margin-top: 20px;
+  font-size: 13.5px;
+  color: var(--tx-faint);
+  font-style: italic;
+  animation: riseIn 0.9s var(--ease) 0.42s both;
+}
+.hActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+  animation: riseIn 0.9s var(--ease) 0.5s both;
+}
+.hCopy {
+  padding: 13px 28px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  transition: background 0.25s, transform 0.25s var(--ease);
+}
+.hCopy:hover { background: var(--mint-hover); transform: translateY(-1px); }
+.hCopy:active { transform: scale(0.97); }
+.hBack {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--tx-faint);
+  padding: 8px 14px;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.hBack:hover { color: var(--mint); text-shadow: 0 0 16px rgba(110, 231, 183, 0.4); }
+
+@media (max-width: 640px) {
+  .hVee { font-size: 15px; }
+  .hStep { font-size: 13.5px; padding: 13px 14px; }
+}
+
+/* ── BUILD80 · THE LIBRARY ─────────────────────────────────────────────────
+   The finder + the shelves. Pieces are small pills (area glyph + name); rows
+   read like shelves in a shop. Search flips to one ranked grid. */
+.shelves {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: min(640px, 100%);
+  margin-top: 34px;
+  animation: riseIn 0.9s var(--ease) 0.5s both;
+}
+.shelfRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.shelfLabel {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: var(--tx-faint);
+  text-align: center;
+  margin-top: 4px;
+}
+.shelfItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 9px 15px 9px 12px;
+  font-size: 13px;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, background 0.3s, transform 0.3s var(--ease), opacity 0.3s;
+}
+.pCard svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--mint);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.pCard[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.pName {
+  color: var(--tx);
+  letter-spacing: 0.01em;
+}
+.pArea {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+}
+.shelfGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: min(640px, 100%);
+  margin-top: 30px;
+  animation: riseIn 0.5s var(--ease) both;
+}
+.noMatch {
+  width: min(560px, 100%);
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: riseIn 0.5s var(--ease) both;
+}
+.noMatchVee {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--tx-dim);
+  text-align: center;
+}
+.noMatchActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.packLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  color: var(--tx-faint);
+}
+.packLine svg {
+  width: 10px;
+  height: 10px;
+  fill: var(--acc);
+  opacity: 0.9;
+}
+@media (hover: hover) {
+  .pCard:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    background: rgba(167, 243, 208, 0.04);
+    transform: translateY(-1px);
+  }
+}
+
+/* ── BUILD81 · THE SPECIMEN CARDS ──────────────────────────────────────────
+   One library piece, shown like it matters: its micro-visual on a dark stage,
+   the name with its area mark, one serif line of voice, and the honest mono
+   spec of what it builds. Shared chassis; personality inside the stage. */
+.spec {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0 0 13px;
+  overflow: hidden;
+  text-align: left;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease), opacity 0.3s, box-shadow 0.3s;
+}
+.spec[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.specStage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 68px;
+  width: 100%;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(110, 231, 183, 0.05), transparent 55%), rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.specStage .lv {
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+.specEnter {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  font-family: var(--mono);
+  font-size: 6.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: rgba(4, 42, 28, 0.55);
+}
+.specName {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 13px 0;
+  font-size: 13.5px;
+  color: var(--tx);
+  letter-spacing: 0.01em;
+}
+.specName svg {
+  width: 11px;
+  height: 11px;
+  fill: var(--mint);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.specDesc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--tx-dim);
+  padding: 0 13px;
+  min-height: 34px;
+}
+.specFoot {
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--tx-faint);
+  padding: 0 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.specFirst {
+  border-color: rgba(110, 231, 183, 0.5);
+  box-shadow: 0 10px 34px -14px rgba(110, 231, 183, 0.45);
+}
+.specBlank {
+  background: rgba(255, 255, 255, 0.012);
+}
+.specBlank .specStage {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* browsing: a shelf you slide along; open: the whole wall laid out */
+.specRow {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 4px 12px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.specRow::-webkit-scrollbar {
+  display: none;
+}
+.specWrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(172px, 1fr));
+  gap: 12px;
+  width: 100%;
+  padding: 2px 0 10px;
+}
+/* the wall arrives as choreography, not a dump: cards rise in sequence */
+.specWrap .spec {
+  animation: fadeUp 0.5s var(--ease) both;
+}
+.specWrap .spec:nth-child(1) { animation-delay: 0.02s; }
+.specWrap .spec:nth-child(2) { animation-delay: 0.06s; }
+.specWrap .spec:nth-child(3) { animation-delay: 0.1s; }
+.specWrap .spec:nth-child(4) { animation-delay: 0.14s; }
+.specWrap .spec:nth-child(5) { animation-delay: 0.18s; }
+.specWrap .spec:nth-child(6) { animation-delay: 0.22s; }
+.specWrap .spec:nth-child(7) { animation-delay: 0.26s; }
+.specSearch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: min(820px, 100%);
+  margin-top: 30px;
+  animation: riseIn 0.5s var(--ease) both;
+}
+.libToggle {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 9px 18px;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--tx-dim);
+  transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+}
+.libToggle svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s var(--ease);
+}
+@media (hover: hover) {
+  .spec:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    background: rgba(167, 243, 208, 0.03);
+    transform: translateY(-2px);
+  }
+  .libToggle:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    color: var(--tx);
+  }
+}
+@media (max-width: 479px) {
+  .specWrap {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .shelves {
+    width: 100%;
+  }
+}
+
+/* explore mode breathes wider; the default shelves stay the original compact */
+.shelvesWide {
+  width: min(920px, 100%);
+}
+
+/* ── BUILD81b · THE RECOMMENDER ────────────────────────────────────────────
+   Typing surfaces ranked pieces as one quiet spotlight list under the bar:
+   area mark, name, its voice in serif, the honest spec at the right. The
+   first row wears the mint edge and the ENTER chip. Minimal on purpose. */
+.sugList {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: riseIn 0.45s var(--ease) both;
+}
+.sugList .sugRow {
+  animation: fadeUp 0.4s var(--ease) both;
+}
+.sugList .sugRow:nth-child(1) { animation-delay: 0.02s; }
+.sugList .sugRow:nth-child(2) { animation-delay: 0.05s; }
+.sugList .sugRow:nth-child(3) { animation-delay: 0.08s; }
+.sugList .sugRow:nth-child(4) { animation-delay: 0.11s; }
+.sugList .sugRow:nth-child(5) { animation-delay: 0.14s; }
+.sugList .sugRow:nth-child(6) { animation-delay: 0.17s; }
+.sugList .sugRow:nth-child(7) { animation-delay: 0.2s; }
+.sugRow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px 15px;
+  text-align: left;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease), opacity 0.3s;
+}
+.sugRow[disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.sugIcon {
+  width: 12px;
+  height: 12px;
+  fill: var(--mint);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.sugName {
+  font-size: 13.5px;
+  color: var(--tx);
+  white-space: nowrap;
+}
+.sugDesc {
+  flex: 1;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--tx-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sugFoot {
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--tx-faint);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sugEnter {
+  font-family: var(--mono);
+  font-size: 6.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--mint);
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  border-radius: 999px;
+  padding: 3px 7px;
+  flex-shrink: 0;
+}
+.sugFirst {
+  border-color: rgba(110, 231, 183, 0.42);
+  background: rgba(110, 231, 183, 0.035);
+}
+@media (hover: hover) {
+  .sugRow:hover {
+    border-color: rgba(167, 243, 208, 0.35);
+    background: rgba(167, 243, 208, 0.04);
+    transform: translateY(-1px);
+  }
+}
+@media (max-width: 560px) {
+  .sugDesc {
+    display: none;
+  }
+  .sugName {
+    flex: 1;
+  }
+}

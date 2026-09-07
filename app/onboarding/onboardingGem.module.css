@@ -1,0 +1,709 @@
+/*
+ * Gem-led onboarding — full-screen, atmospheric, editorial. Pairs the
+ * HeroCrystal "character" with the same serif-italic / mint aesthetic
+ * the /welcome page and tailoring quizzes use. New users meet Vitality
+ * as a character from question one, not a form.
+ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-5);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Atmospheric radial mint glow under everything */
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(60% 40% at 50% 40%, rgba(110, 231, 183, 0.10) 0%, rgba(110, 231, 183, 0.04) 35%, rgba(110, 231, 183, 0) 70%),
+    radial-gradient(80% 60% at 50% 100%, rgba(8, 16, 14, 0.85) 0%, rgba(0,0,0,0) 60%);
+}
+
+/* Drifting mint motes — same recipe as /welcome */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Distant mountain ridges at the bottom — same silhouette as /welcome and
+   the workout logger, so onboarding feels like the same world. Sits behind
+   the content (shell is z-index 1). */
+.mountains {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  height: 30vh;
+  min-height: 180px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+.mountains svg { width: 100%; height: 100%; display: block; }
+.particles span {
+  position: absolute;
+  background: var(--mint, #6EE7B7);
+  border-radius: 50%;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(110, 231, 183, 0.5));
+  animation: drift linear infinite;
+}
+@keyframes drift {
+  0%   { opacity: 0; transform: translate(0, 0); }
+  15%  { opacity: 0.45; }
+  85%  { opacity: 0.45; }
+  100% { opacity: 0; transform: translate(var(--dx, 0), var(--dy, -100vh)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .particles span { animation: none; opacity: 0; }
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 540px;
+  text-align: center;
+  /* One content-column width shared by every input, option list, and the
+     foot, so all four question steps line up to the exact same left/right
+     edges. */
+  --q-content: 420px;
+}
+
+/* Gem — bigger on intro/done, smaller on question screens so the
+   actual question gets the focus. Smooth scale transition. */
+.gemStage {
+  position: relative;
+  transition: width 360ms cubic-bezier(0.4, 0, 0.2, 1),
+              height 360ms cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 50px rgba(110, 231, 183, 0.18))
+          drop-shadow(0 0 110px rgba(110, 231, 183, 0.08));
+  animation: gemHalo 3.9s ease-in-out infinite;
+}
+/* Gem fades in once HeroCrystal commits its first frame (it adds
+   `crystal-ready` to <html>) so it never pops from the fallback glow to the
+   rendered gem. Same mechanism the landing hero uses. */
+.gemStage > canvas { width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 600ms ease; }
+:global(html.crystal-ready) .gemStage > canvas { opacity: 1; }
+
+/* Soft mint bloom where the gem will land, shown only until it's ready —
+   covers the load gap so the first 0.5s is a graceful reveal, not a blank. */
+:global(html:not(.crystal-ready):not(.crystal-fallback)) .gemStage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(110, 231, 183, 0.18), rgba(110, 231, 183, 0) 70%);
+  filter: blur(18px);
+  animation: gemBloom 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes gemBloom {
+  0%, 100% { opacity: 0.4; transform: scale(0.96); }
+  50%      { opacity: 0.7; transform: scale(1.02); }
+}
+.gemStageBig   { width: clamp(220px, 36vmin, 320px); height: clamp(220px, 36vmin, 320px); }
+.gemStageSmall { width: clamp(120px, 18vmin, 160px); height: clamp(120px, 18vmin, 160px); }
+
+@keyframes gemHalo {
+  0%, 100% {
+    filter: drop-shadow(0 0 40px rgba(110, 231, 183, 0.14))
+            drop-shadow(0 0 100px rgba(110, 231, 183, 0.06));
+  }
+  50% {
+    filter: drop-shadow(0 0 70px rgba(110, 231, 183, 0.26))
+            drop-shadow(0 0 160px rgba(110, 231, 183, 0.14));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gemStage { animation: none; }
+}
+
+.gemFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.18) 0%, rgba(110, 231, 183, 0) 70%);
+}
+
+/* Floating "z"s while the gem sleeps — a soft Zzz stream rising off the top of
+   the gem, ported from the gem-library lab and scaled for the smaller
+   question-screen gem. Each grows + drifts up-right + fades on a staggered
+   loop. Rendered inside .gemStage (which has no overflow clip). */
+.sleepZs {
+  position: absolute;
+  left: 56%;
+  top: 6%;
+  z-index: 3;
+  pointer-events: none;
+}
+.sleepZ {
+  position: absolute;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+  color: rgba(214, 252, 234, 0.92);
+  text-shadow: 0 0 10px rgba(110, 231, 183, 0.7), 0 0 24px rgba(110, 231, 183, 0.4);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: onb-sleepZ 4.6s ease-in-out infinite;
+}
+@keyframes onb-sleepZ {
+  0%   { transform: translate(0, 6px)      scale(0.45) rotate(-9deg); opacity: 0;   }
+  22%  { opacity: 0.92;                                                             }
+  60%  { opacity: 0.7;                                                              }
+  100% { transform: translate(24px, -82px) scale(1.5)  rotate(11deg); opacity: 0;   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sleepZ { animation: none; opacity: 0; }
+}
+
+/* Stage — wraps the beats so step changes cross-fade instead of hard-cutting
+   to black. The entering beat sits in normal flow (it defines the height); the
+   leaving beat is overlaid absolutely on top and fades + lifts away, so the
+   two ease together with no blank gap (worst case: focus → done). */
+.stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Beat — the active content block (intro, a question, or done). */
+.beat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
+.beatEntering {
+  animation: beatIn 420ms cubic-bezier(0.16, 0.84, 0.44, 1) both;
+}
+.beatLeaving {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  animation: beatOut 340ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes beatIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes beatOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-10px) scale(0.985); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beatEntering { animation: none; }
+  .beatLeaving { animation: none; opacity: 0; }
+}
+/* The leaving layer is a fresh subtree (new key), so every entrance animation
+   inside it would restart from frame zero while the layer fades. Freeze them
+   at their settled end state so the old step leaves as a faithful still. */
+.beatLeaving .word,
+.beatLeaving .entPop,
+.beatLeaving .entRise,
+.beatLeaving .entDeal,
+.beatLeaving .eyebrowReveal {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+/* the rule line's settled opacity (0.6) comes from the base .eyebrowRule */
+.beatLeaving .eyebrowReveal .eyebrowRule,
+.beatLeaving .entDraw {
+  animation: none;
+  transform: none;
+}
+
+/* Chapter progress (4 dots) — same vocabulary as Quiz.tsx */
+.progress {
+  display: flex;
+  gap: 8px;
+  margin-bottom: var(--space-2);
+}
+.progressSeg {
+  width: 28px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  transition: background 280ms ease, transform 280ms ease;
+}
+.progressSegCurrent {
+  background: var(--mint, #6EE7B7);
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.5);
+  transform: scaleY(1.2);
+}
+.progressSegDone {
+  background: rgba(110, 231, 183, 0.55);
+}
+
+/* Eyebrow — small mono caps with leading rule */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mint, #6EE7B7);
+}
+.eyebrowRule {
+  width: 22px;
+  height: 1px;
+  background: var(--mint, #6EE7B7);
+  opacity: 0.6;
+}
+.eyebrowSep { opacity: 0.4; margin: 0 4px; }
+.eyebrowCount { color: rgba(110, 231, 183, 0.7); }
+
+/* Serif italic heading — the gem's voice */
+.heading {
+  margin: 0;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.7rem, 4.4vw, 2.4rem);
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+  color: var(--fg);
+  max-width: 36ch;
+}
+.heading em { font-style: italic; color: var(--mint, #6EE7B7); }
+
+/* Cozy per-word cascade for the intro heading — each word springs up in
+   sequence with the same overshoot the loader card uses (cozyPop). Delays
+   are set inline per word. fill-mode:both holds the word hidden before its
+   delay, visible after. */
+.word {
+  display: inline-block;
+  white-space: pre;
+  animation: cozyWordPop 0.62s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cozyWordPop {
+  0%   { opacity: 0; transform: scale(0.8) translateY(10px); }
+  60%  { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Intro eyebrow — a slow, visible reveal so "first things first" reads as it
+   arrives (it used to snap in with the block). The text fades up and the little
+   rule line draws out from the left. Leads the heading word-cascade. */
+.eyebrowReveal { animation: eyebrowFade 0.8s ease both; }
+.eyebrowReveal .eyebrowRule {
+  transform-origin: left center;
+  animation: eyebrowRuleDraw 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes eyebrowFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes eyebrowRuleDraw {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word, .eyebrowReveal, .eyebrowReveal .eyebrowRule { animation: none; }
+}
+
+/* ── Per-question entrance choreography ──
+   The question beat remounts on each step (key={step}), so these replay every
+   question. Each question wears its own personality by which parts use which
+   class + delay: pop (springy overshoot), rise (calm premium lift), draw (the
+   eyebrow rule sweeping out), deal (cards dropping in staggered, like dealing).
+   Inspired by the quiz-animations lab, tuned warmer + slower here. */
+.entPop  { opacity: 0; animation: entPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.entRise { opacity: 0; animation: entRise 0.52s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.entDraw { transform-origin: left center; animation: entDraw 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.entDeal { opacity: 0; animation: entDeal 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+@keyframes entPop {
+  0%   { opacity: 0; transform: scale(0.82) translateY(8px); }
+  60%  { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes entRise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes entDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes entDeal {
+  0%   { opacity: 0; transform: translateY(18px) scale(0.96) rotate(var(--rot, -2deg)); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+/* Q4 focus rows alternate their deal tilt for a hand-dealt feel. */
+.choiceStack .entDeal:nth-child(even) { --rot: 2.5deg; }
+.choiceStack .entDeal:nth-child(odd)  { --rot: -2.5deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .entPop, .entRise, .entDeal { animation: none; opacity: 1; transform: none; }
+  .entDraw { animation: none; transform: none; }
+}
+
+.sub {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--ink-dim, rgba(233, 239, 233, 0.7));
+  line-height: 1.55;
+  max-width: 44ch;
+}
+
+.qHint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-faint, rgba(233, 239, 233, 0.55));
+  font-style: italic;
+  letter-spacing: 0.01em;
+  max-width: 44ch;
+  text-align: center;
+}
+
+/* ── Inputs ───────────────────────────────────────────────── */
+
+.textInput {
+  width: 100%;
+  max-width: var(--q-content);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-md, 12px);
+  padding: 14px 18px;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: var(--text-lg);
+  letter-spacing: 0.005em;
+  text-align: center;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.textInput::placeholder { color: rgba(255, 255, 255, 0.28); font-style: italic; }
+.textInput:focus {
+  outline: none;
+  border-color: var(--mint, #6EE7B7);
+  background: rgba(110, 231, 183, 0.06);
+  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.12);
+}
+
+.dateInput, .numInput {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-md, 12px);
+  padding: 12px 14px;
+  color: var(--fg);
+  font-family: inherit;
+  font-size: var(--text-base);
+  text-align: center;
+  color-scheme: dark;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+.dateInput:focus, .numInput:focus {
+  outline: none;
+  border-color: var(--mint, #6EE7B7);
+  background: rgba(110, 231, 183, 0.06);
+}
+
+.fieldStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--q-content);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.fieldLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fieldLabel > span:first-child {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted, rgba(255,255,255,0.55));
+}
+
+.ftInRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.unitTag {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--muted, rgba(255,255,255,0.55));
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Units toggle (segmented) ─────────────────────────────── */
+
+.unitsToggle {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  gap: 4px;
+}
+.unitBtn {
+  background: transparent;
+  border: none;
+  color: var(--muted, rgba(255,255,255,0.55));
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+.unitBtnActive {
+  background: var(--mint, #6EE7B7);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+/* ── Choice tiles (sex, goal) — mirrors Quiz.tsx ────────── */
+
+.choicesRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.choiceStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: var(--q-content);
+}
+.choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-md, 12px);
+  color: var(--fg);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition:
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+.choice:hover {
+  border-color: rgba(110, 231, 183, 0.4);
+  background: rgba(110, 231, 183, 0.04);
+}
+.choiceActive {
+  border-color: var(--mint, #6EE7B7);
+  background: rgba(110, 231, 183, 0.08);
+  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.3), 0 0 24px -8px var(--mint-glow);
+}
+.choiceText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+.choiceLabel {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  letter-spacing: -0.005em;
+}
+.choiceSub {
+  font-size: var(--text-xs);
+  color: var(--ink-dim, rgba(233, 239, 233, 0.55));
+  letter-spacing: 0.01em;
+}
+.choiceCheck {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mint, #6EE7B7);
+  color: var(--bg);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--duration) var(--ease), transform var(--duration) var(--ease);
+  flex-shrink: 0;
+}
+.choiceActive .choiceCheck {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Sex tiles (step 2) read centered — label centered, check tucked to the
+   corner so it doesn't pull the label off-center. (Focus tiles in step 4 keep
+   their left-aligned label + description layout.) */
+.choicesRow .choice {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+}
+.choicesRow .choiceCheck {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* When the user has hit the multi-select cap (e.g. 3 of 3 focus areas),
+   unpicked tiles dim slightly so the cap is obvious without an error. */
+.choiceDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.choiceDisabled:hover {
+  border-color: var(--border, rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Inline count badge inside the hint line — e.g. "· 2/3 picked". */
+.qHintCount {
+  color: var(--mint, #6EE7B7);
+  font-style: normal;
+  letter-spacing: 0.04em;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+}
+
+/* ── Footer (back / next pills) ───────────────────────────── */
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.10));
+  width: 100%;
+  max-width: var(--q-content);
+  margin-top: var(--space-2);
+}
+.footBack {
+  background: transparent;
+  border: none;
+  color: var(--muted, rgba(255,255,255,0.55));
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+.footBack:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+.footNext, .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 22px;
+  background: var(--mint, #6EE7B7);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 0 22px -8px var(--mint-glow);
+  transition: background var(--duration) var(--ease), transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.footNext:hover, .cta:hover {
+  background: var(--mint-hover, #5dd3a3);
+  transform: translateY(-1px);
+  box-shadow: 0 0 32px -4px var(--mint-glow);
+}
+.footNext:disabled, .cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+.cta { padding: 13px 26px; font-size: var(--text-base); }
+
+/* Secondary "← edit my answers" on the done screen. Pairs with the
+   mint cta above it — ghost button so the primary stays primary, but
+   visible enough that a hesitant user knows revising is allowed. */
+.doneBack {
+  margin-top: var(--space-2);
+  background: transparent;
+  border: none;
+  color: var(--ink-dim, rgba(233, 239, 233, 0.45));
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: color var(--duration) var(--ease);
+}
+.doneBack:hover {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.doneBack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  padding: 8px 14px;
+  background: rgba(248, 113, 113, 0.10);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #f87171;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+}
+
+/* Mobile tuning */
+@media (max-width: 560px) {
+  .gemStageBig   { width: clamp(180px, 50vmin, 240px); height: clamp(180px, 50vmin, 240px); }
+  .gemStageSmall { width: clamp(96px, 24vmin, 130px);  height: clamp(96px, 24vmin, 130px); }
+  .shell { gap: var(--space-4); }
+  .heading { font-size: clamp(1.45rem, 6.2vw, 2rem); }
+  .foot { flex-direction: row; }
+}

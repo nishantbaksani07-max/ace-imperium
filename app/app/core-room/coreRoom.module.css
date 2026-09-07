@@ -1,0 +1,268 @@
+/* =====================================================================
+   THE CORE ROOM - the graph library. Same world DNA as the rest of the
+   house: near-black, grain-free calm, serif hero with one mint em word,
+   mono eyebrows, hairline cards. Motion = one rise-in, transform/opacity
+   only, reduced-motion safe. Vanilla CSS module, no Tailwind.
+   ===================================================================== */
+
+.world {
+  --bg: #04060a;
+  --mint: #6ee7b7;
+  --line: rgba(167, 243, 208, 0.14);
+  --card: rgba(9, 13, 12, 0.72);
+  --tx: #f2f6f4;
+  --tx-dim: rgba(255, 255, 255, 0.6);
+  --tx-faint: rgba(255, 255, 255, 0.34);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes roomRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------ head */
+.head {
+  position: relative;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: calc(20px + env(safe-area-inset-top)) 20px 8px;
+  text-align: center;
+  animation: roomRise 0.7s var(--ease) both;
+}
+.back {
+  position: absolute;
+  top: calc(18px + env(safe-area-inset-top));
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 12, 10, 0.55);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--tx-dim);
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.back:hover {
+  color: var(--tx);
+  border-color: rgba(167, 243, 208, 0.35);
+}
+.back svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.eyebrow {
+  margin-top: 34px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: var(--mint);
+}
+.title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 6vw, 52px);
+  line-height: 1.08;
+  margin: 14px 0 8px;
+}
+.title em {
+  font-style: italic;
+  color: var(--mint);
+}
+.lede {
+  color: var(--tx-dim);
+  font-size: 14.5px;
+  margin: 0 0 18px;
+}
+.search {
+  width: min(480px, 92vw);
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--tx);
+  font: inherit;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.25s;
+}
+.search::placeholder {
+  color: var(--tx-faint);
+}
+.search:focus {
+  border-color: rgba(110, 231, 183, 0.45);
+}
+
+/* ------------------------------------------------ shelves */
+.main {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 10px 20px calc(48px + env(safe-area-inset-bottom));
+}
+.shelf {
+  margin-top: 34px;
+  animation: roomRise 0.7s var(--ease) 0.08s both;
+}
+.shelfHead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.shelfLabel {
+  font-family: var(--serif);
+  font-size: 24px;
+}
+.shelfWord {
+  font-size: 12.5px;
+  color: var(--tx-faint);
+}
+.shelfCount {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--tx-faint);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+/* ------------------------------------------------ one graph card */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  transition: border-color 0.25s, transform 0.25s var(--ease);
+}
+.card:hover {
+  border-color: rgba(167, 243, 208, 0.3);
+  transform: translateY(-1px);
+}
+.cardDim {
+  opacity: 0.55;
+}
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.cardLabel {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cardTop svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: var(--tx-faint);
+}
+.cardValue {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.cardValue strong {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1;
+}
+.cardValue span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+}
+.noData {
+  font-size: 19px;
+  color: var(--tx-faint);
+}
+.lineSvg {
+  width: 100%;
+  height: 64px;
+  display: block;
+}
+.lineEmpty {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(148, 163, 158, 0.22);
+  border-radius: 10px;
+}
+.lineEmpty span {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+}
+.cardFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tx-faint);
+}
+
+.none {
+  margin-top: 44px;
+  text-align: center;
+  color: var(--tx-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head,
+  .shelf {
+    animation: none;
+  }
+  .card:hover {
+    transform: none;
+  }
+}

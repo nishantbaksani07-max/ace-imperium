@@ -1,0 +1,325 @@
+/* Privacy - calm public legal page in the Noticed-card voice.
+   Palette scoped here so the look is exact anywhere: mint = your data,
+   iris = the AI layer, amber = heads-up. Never red. Serif ledes, mono
+   labels, Inter body. */
+
+.page {
+  --iris: #a78bfa;
+  --iris-hi: #c4b5fd;
+  --iris-glow: rgba(167, 139, 250, 0.42);
+  --mint-hi: #a7f3d0;
+  --amber-hi: #fbbf3f;
+  --amber-bd: rgba(245, 158, 11, 0.36);
+  --p-fg: #f3f1fb;
+  --p-muted: rgba(233, 239, 233, 0.55);
+  --p-muted-strong: rgba(233, 239, 233, 0.72);
+  --p-border: rgba(255, 255, 255, 0.08);
+  --p-border-strong: rgba(255, 255, 255, 0.16);
+  --p-serif: var(--font-serif, 'Instrument Serif', Georgia, serif);
+  --p-mono: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  --p-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(110% 55% at 50% 0%, rgba(110, 231, 183, 0.045), transparent 62%),
+    var(--bg);
+  color: var(--p-fg);
+  padding: 0 22px calc(env(safe-area-inset-bottom, 0px) + 88px);
+}
+
+.inner {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* top chrome */
+.chrome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 0 0;
+}
+.wordmark {
+  font-family: var(--p-serif);
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  color: var(--p-fg);
+}
+.chromeLink {
+  font-family: var(--p-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--p-muted-strong);
+  transition: color 0.2s var(--p-ease);
+}
+.chromeLink:hover {
+  color: var(--mint-hi);
+}
+
+/* header */
+.head {
+  padding: clamp(48px, 9vh, 84px) 0 8px;
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.eyebrow .lbl {
+  font-family: var(--p-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--p-muted-strong);
+  white-space: nowrap;
+}
+.eyebrow .rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--p-border-strong), transparent);
+}
+.title {
+  font-family: var(--p-serif);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 6vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0 0 18px;
+}
+.title em {
+  font-style: italic;
+  color: var(--mint-hi);
+}
+.lede {
+  color: var(--p-muted-strong);
+  font-size: 1.02rem;
+  line-height: 1.65;
+  max-width: 56ch;
+  margin: 0;
+}
+.lede b {
+  color: var(--p-fg);
+  font-weight: 600;
+}
+.effective {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-family: var(--p-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+  border: 1px solid var(--p-border);
+  border-radius: 999px;
+  padding: 6px 11px;
+}
+.effective b {
+  color: var(--p-muted-strong);
+  font-weight: 500;
+}
+
+/* numbered sections */
+.section {
+  margin-top: 52px;
+}
+.secHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.secHead .num {
+  font-family: var(--p-serif);
+  font-style: italic;
+  font-size: 1.18rem;
+  color: var(--mint-hi);
+  line-height: 1;
+}
+.secHead .numIris {
+  color: var(--iris-hi);
+}
+.secHead .lbl {
+  font-family: var(--p-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--p-muted-strong);
+  white-space: nowrap;
+}
+.secHead .rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--p-border-strong), transparent);
+}
+.body {
+  color: var(--p-muted-strong);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 62ch;
+  margin: 0 0 12px;
+}
+.body b {
+  color: var(--p-fg);
+  font-weight: 600;
+}
+.body a {
+  color: var(--mint-hi);
+  border-bottom: 1px solid rgba(110, 231, 183, 0.35);
+  transition: border-color 0.2s var(--p-ease);
+}
+.body a:hover {
+  border-color: var(--mint-hi);
+}
+
+/* the "what we collect" rows */
+.rows {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--p-border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.004));
+}
+.row {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 13px 16px;
+}
+.row + .row {
+  border-top: 1px solid var(--p-border);
+}
+.rowTag {
+  flex: none;
+  width: 118px;
+  font-family: var(--p-mono);
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mint-hi);
+}
+.rowText {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--p-muted-strong);
+}
+@media (max-width: 480px) {
+  .row {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .rowTag {
+    width: auto;
+  }
+}
+
+/* the health-data promise card - the load-bearing section */
+.promise {
+  border: 1px solid rgba(110, 231, 183, 0.22);
+  border-radius: 16px;
+  padding: 18px 19px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(110, 231, 183, 0.05), transparent 55%),
+    rgba(255, 255, 255, 0.012);
+}
+.promiseLine {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--p-muted-strong);
+}
+.promiseLine + .promiseLine {
+  margin-top: 11px;
+}
+.promiseLine b {
+  color: var(--p-fg);
+  font-weight: 600;
+}
+.promiseLine svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 3px;
+  color: var(--mint-hi);
+}
+
+/* the Claude connection card - iris, the AI layer */
+.claude {
+  border: 1px solid rgba(167, 139, 250, 0.26);
+  border-radius: 16px;
+  padding: 18px 19px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(167, 139, 250, 0.07), transparent 55%),
+    rgba(255, 255, 255, 0.012);
+  box-shadow: 0 0 56px -38px var(--iris-glow);
+}
+.claude .body {
+  margin-bottom: 0;
+}
+.claude .body b {
+  color: var(--iris-hi);
+}
+
+/* contact + footer */
+.contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  font-family: var(--p-mono);
+  font-size: 0.8rem;
+  color: var(--mint-hi);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: 12px;
+  padding: 11px 15px;
+  transition: 0.22s var(--p-ease);
+}
+.contact svg {
+  width: 14px;
+  height: 14px;
+}
+.contact:hover {
+  border-color: var(--mint-hi);
+  background: rgba(110, 231, 183, 0.06);
+  transform: translateY(-1px);
+}
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 64px;
+  padding-top: 22px;
+  border-top: 1px solid var(--p-border);
+  font-family: var(--p-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--p-muted);
+}
+.footDot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--mint-hi);
+  margin-right: 9px;
+  vertical-align: 1px;
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.4);
+}
+.foot a {
+  color: var(--p-muted);
+  transition: color 0.2s var(--p-ease);
+}
+.foot a:hover {
+  color: var(--mint-hi);
+}

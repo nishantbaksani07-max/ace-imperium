@@ -1,0 +1,212 @@
+/* GoalCard — readings-page goal progress / achievement card */
+
+.card {
+  /* Azure re-theme: Vitals accent is azure, not the app mint (matches the
+     Signal card + the rest of the page). */
+  --accent: #5e9bff;
+  --accent-ink: #06203e;
+  background: var(--card, rgba(255,255,255,0.02));
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: 18px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* mint-tinted card when there's a real target to track */
+.cardActive {
+  border-color: rgba(94, 155, 255, 0.18);
+  background: linear-gradient(180deg, rgba(94, 155, 255, 0.04), transparent 60%), var(--card, rgba(255,255,255,0.02));
+}
+
+/* cardHeader row: dot + label */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(94, 155, 255, 0.4);
+  flex: none;
+}
+
+.cardLabel {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── provisional / not-ready state ──────────────────── */
+.softState {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.softTitle {
+  font-size: var(--text-sm);
+  color: var(--muted, rgba(255,255,255,0.5));
+  line-height: 1.55;
+}
+
+.indeterminateBar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.indeterminateBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(94, 155, 255, 0.3), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* ── achievement state ───────────────────────────────── */
+.achieved {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+
+.achievedGem {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+}
+
+.achievedTitle {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  color: var(--fg);
+}
+
+.achievedSub {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.achievedBtn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity var(--duration) ease, transform var(--duration) ease;
+}
+.achievedBtn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── progress state ──────────────────────────────────── */
+.goalTitle {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: var(--fg);
+}
+
+.progressWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressLine {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.progressLine strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(94,155,255,0.6), var(--accent));
+  transition: width 0.8s cubic-bezier(0.2, 1, 0.4, 1);
+  min-width: 4px;
+}
+
+/* Scale row: start · baseline → now · avg → target · target */
+.scaleRow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 2px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.scaleMark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.scaleVal {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-strong, rgba(255,255,255,0.7));
+}
+
+.scaleValNow {
+  color: var(--accent);
+}
+
+.scaleKey {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+
+.scaleSep {
+  color: rgba(255,255,255,0.15);
+  padding: 0 4px;
+  font-size: 12px;
+  align-self: center;
+}

@@ -1,0 +1,561 @@
+/* Swap / Add modal. Centered card on desktop; a keyboard-aware bottom sheet on
+   mobile (≤560px) — pinned to the visible band above the on-screen keyboard via
+   a visualViewport-bound inline height (see SwapModal.tsx), with the results
+   list scrolling inside so the sheet never grows behind the keyboard. */
+
+/* top + height are driven by an inline style bound to window.visualViewport
+   (see SwapModal.tsx) so the backdrop spans exactly the visible band above the
+   keyboard. No `bottom`/`inset` here, or it would override that height. The
+   100dvh fallback covers the no-JS / no-visualViewport case. */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  z-index: 100;
+  animation: swapBackdropIn 200ms var(--ease-premium);
+}
+
+@keyframes swapBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Shell values are kept identical to exerciseSettings.module.css (the Tune
+   sheet) so Swap and Tune read as one component. Only max-height + overflow
+   are Swap-specific, to let the library list scroll inside the card. */
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: 86vh;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  animation: swapSheetIn 280ms var(--ease-premium);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow: hidden;
+}
+
+/* Mobile: a centered card (same as desktop), but capped to the backdrop —
+   which is clamped to window.visualViewport (see SwapModal.tsx) — so it stays
+   fully above the on-screen keyboard, centered in the visible band, with its
+   results list scrolling inside instead of growing behind the keyboard. */
+@media (max-width: 560px) {
+  .sheet {
+    max-width: 100%;
+    /* % (not vh) so it caps to the keyboard-clamped backdrop, not the full
+       viewport — keeps the card and its scrolling list above the keyboard. */
+    max-height: 100%;
+    padding: var(--space-5) var(--space-4);
+    gap: var(--space-3);
+  }
+  .title {
+    font-size: var(--text-xl);
+  }
+}
+
+@keyframes swapSheetIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ── */
+.closeBtn {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.closeBtn svg {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.closeBtn:hover {
+  color: var(--fg);
+  border-color: var(--mint);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  /* leave room for the close button */
+  padding-right: 44px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mint);
+  font-weight: 600;
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-2xl);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  line-height: 1.5;
+}
+
+.subtitle em {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* ── Sections ── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Fixed-height sections (header, recommended) must NOT shrink, or their
+     rows spill over the scrolling section below them. */
+  flex-shrink: 0;
+}
+
+/* Once you type, the results live here. The card stays COMPACT: the section
+   sizes to its content (search field + a short, capped results list) rather
+   than stretching to fill the sheet — so the card shows only a few lifts and
+   scrolls for the rest, instead of ballooning to full height. */
+.searchSectionActive {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+/* Matches .fieldLabel in exerciseSettings.module.css (the Tune sheet). */
+.sectionLabel {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── Rows (recommended + library) ── */
+.recList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  transition: background var(--duration) var(--ease),
+              border-color var(--duration) var(--ease),
+              transform var(--duration) var(--ease);
+}
+
+.recList .row + .row {
+  margin-top: var(--space-2);
+}
+
+.row:hover {
+  background: var(--card-elevated);
+  border-color: var(--mint);
+}
+
+.row:active {
+  transform: scale(0.99);
+}
+
+/* Library search results read as a clean native list, not a stack of bordered
+   cards: no per-row border/fill, just a faint hairline between rows. Far less
+   busy on a phone, and lets ~10 lifts show at once instead of ~5. */
+.libList .row {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: var(--space-3) var(--space-2);
+}
+
+.libList .row:last-child {
+  border-bottom: none;
+}
+
+.libList .row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.libList .row:active {
+  background: rgba(255, 255, 255, 0.05);
+  transform: none;
+}
+
+.rowName {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.rowMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.rowWeight {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.rowUnit {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin-left: 3px;
+}
+
+.rowArrow {
+  width: 14px;
+  height: 14px;
+  color: var(--mint);
+  flex-shrink: 0;
+}
+
+/* "Add your own lift" row — sits under the search results when the library
+   doesn't have what they typed. Mint-tinted pill so it reads as a create
+   action, not another library hit. Re-asserts a fill/radius because the clean
+   list strips per-row borders (.libList .row above). */
+.libList .createRow {
+  justify-content: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  border-style: dashed;
+  border-radius: var(--radius-md);
+  background: rgba(110, 231, 183, 0.04);
+}
+.libList .createRow:hover {
+  border-color: var(--mint);
+  background: rgba(110, 231, 183, 0.08);
+}
+.createRow .rowName {
+  color: var(--mint);
+}
+.createPlus {
+  width: 16px;
+  height: 16px;
+  color: var(--mint);
+  flex-shrink: 0;
+}
+
+/* ── Search ── */
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration) var(--ease);
+  flex-shrink: 0;
+}
+
+.searchRow:focus-within {
+  border-color: var(--mint);
+}
+
+.searchIcon {
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--text-base);
+  padding: var(--space-3) 0;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: var(--muted);
+}
+
+.searchClear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--duration) var(--ease);
+}
+
+.searchClear:hover { color: var(--fg); }
+.searchClear svg { width: 14px; height: 14px; }
+
+/* ── Library list ── Capped to ~4 rows so the card stays small; the rest
+   scrolls inside. Flush rows separated by hairlines (no gap) read as a tight
+   native list and fit more in less height. */
+.libList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 216px;
+  overflow-y: auto;
+  margin: 0 calc(var(--space-3) * -1);
+  padding: 0 var(--space-3);
+  -webkit-overflow-scrolling: touch;
+}
+
+.libList::-webkit-scrollbar { width: 6px; }
+.libList::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+
+.empty {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  text-align: center;
+  padding: var(--space-5) 0;
+}
+
+/* ── Wizard head (NameLiftCard) ── full-width so the WizardSteps progress track
+   reaches both edges (no close button to leave room for, unlike .head). */
+.wizardHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* ── Body-part picker (NameLiftCard) ── label + a horizontally-scrolling strip
+   of icon+label chips. Single-select, optional — classifies a custom lift so it
+   shows the same muscle glyph as a built-in. One compact row keeps the card
+   short above the on-screen keyboard. */
+.bodyPartSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.bodyPartLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.bodyPartRow {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  margin: 0 calc(var(--space-3) * -1);
+  padding: 2px var(--space-3);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.bodyPartRow::-webkit-scrollbar { display: none; }
+
+.bodyChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 5px 10px 5px 7px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  color: var(--muted-strong);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.bodyChip:hover {
+  border-color: var(--mint);
+  color: var(--fg);
+}
+
+.bodyChipOn {
+  border-color: var(--mint);
+  background: rgba(110, 231, 183, 0.1);
+  color: var(--mint);
+}
+
+.bodyChipLabel {
+  line-height: 1;
+}
+
+/* ── Keep-in-library toggle (NameLiftCard) ── a quiet label/hint pair on the
+   left, a mint pill switch on the right. The whole row is the tap target. */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-3) 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.toggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.toggleLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.toggleHint {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.switch {
+  position: relative;
+  width: 46px;
+  height: 27px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+  transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.switchOn {
+  background: var(--mint);
+  border-color: var(--mint);
+}
+
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: var(--muted-strong);
+  transition: transform var(--duration) var(--ease-premium), background var(--duration) var(--ease);
+}
+
+.switchOn .knob {
+  transform: translateX(19px);
+  background: #04130d;
+}
+
+/* ── Wizard actions (NameLiftCard back / next) ── mirrors the Tune sheet's
+   cancel / save pair so the create flow feels like one family. */
+.wizardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  flex-shrink: 0;
+}
+
+.backBtn,
+.nextBtn {
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+}
+
+.backBtn {
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--muted-strong);
+}
+.backBtn:hover { color: var(--fg); }
+
+.nextBtn {
+  border: 1px solid var(--mint);
+  background: var(--mint);
+  color: #04130d;
+}
+.nextBtn:hover { background: var(--mint-hover); border-color: var(--mint-hover); }
+.nextBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border-strong);
+}

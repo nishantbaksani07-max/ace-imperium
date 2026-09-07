@@ -1,0 +1,394 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg, #000);
+  color: var(--ink, #f2f5f3);
+  padding: clamp(40px, 7vmin, 80px) var(--space-6, 24px) 90px;
+  overflow-x: hidden;
+}
+
+/* Iris-leaning atmosphere to match Echo's colorway. */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(90% 50vh at 50% -8%, rgba(150, 130, 255, 0.1), transparent 70%),
+    radial-gradient(70% 40vh at 50% 110%, rgba(110, 231, 183, 0.04), transparent 70%);
+}
+
+.head {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+  margin: 0 auto clamp(28px, 5vmin, 48px);
+  text-align: center;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(170, 150, 245, 0.75);
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(2rem, 5vmin, 3rem);
+  font-weight: 400;
+  margin: 8px 0 12px;
+}
+
+.sub {
+  color: var(--ink-dim, rgba(233, 239, 233, 0.55));
+  font-size: var(--text-sm, 0.92rem);
+  line-height: 1.55;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.shell {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 5vmin, 52px);
+}
+
+/* Gems read muddy under ~280px — give Echo real room. */
+.gemStage {
+  width: clamp(280px, 42vmin, 360px);
+  height: clamp(280px, 42vmin, 360px);
+  position: relative;
+  flex-shrink: 0;
+  animation: echo-halo 4.2s ease-in-out infinite;
+}
+
+.gemStage > canvas { width: 100%; height: 100%; display: block; }
+
+@keyframes echo-halo {
+  0%, 100% { filter: drop-shadow(0 0 44px rgba(150, 130, 255, 0.16)); }
+  50%      { filter: drop-shadow(0 0 84px rgba(150, 130, 255, 0.28)); }
+}
+
+.deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5, 28px);
+  width: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3, 12px);
+}
+
+.eyebrowSm {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(170, 150, 245, 0.6);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3, 12px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 22px;
+  background: rgba(150, 130, 255, 0.05);
+  color: var(--ink-dim, rgba(233, 239, 233, 0.7));
+  border: 1px solid rgba(150, 130, 255, 0.22);
+  border-radius: var(--radius-pill, 999px);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm, 0.92rem);
+  cursor: pointer;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.btn:hover {
+  color: #cdbcff;
+  border-color: rgba(170, 150, 245, 0.7);
+  background: rgba(150, 130, 255, 0.09);
+  box-shadow: 0 0 28px -10px rgba(150, 130, 255, 0.6);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #9b8cff;
+  outline-offset: 3px;
+}
+
+/* Empty scaffold slot — intentional placeholder, not unfinished. */
+.empty {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 0.86rem;
+  color: rgba(233, 239, 233, 0.3);
+  border: 1px dashed rgba(150, 130, 255, 0.18);
+  border-radius: var(--radius-pill, 999px);
+  padding: 8px 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gemStage { animation: none; filter: drop-shadow(0 0 50px rgba(150, 130, 255, 0.18)); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Echo effect system — ported from gem-library, tinted IRIS to match
+   Echo's colorway. Bursts sit behind the gem canvas (which is z-index 1)
+   so they read once they clear the silhouette. ── */
+
+.gemStage :global(canvas) { position: relative; z-index: 1; }
+
+/* drifting iris particle field */
+.particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.particles span {
+  position: absolute; width: 1.5px; height: 1.5px;
+  background: rgba(233, 235, 245, 0.7); border-radius: 50%;
+  animation: echo-drift linear infinite;
+  box-shadow: 0 0 6px rgba(190, 176, 255, 0.5);
+}
+@keyframes echo-drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.55; }
+  100% { transform: translate3d(var(--dx, 12px), var(--dy, -100vh), 0); opacity: 0; }
+}
+
+/* ── happy-burst layers ── */
+.pulseLayer { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+.pulseRing {
+  position: absolute; top: 50%; left: 50%; width: 55%; height: 55%;
+  margin-left: -27.5%; margin-top: -27.5%; border-radius: 50%;
+  border: 1.5px solid rgba(150, 130, 255, 0.75);
+  background: radial-gradient(circle, rgba(150, 130, 255, 0.08) 0%, rgba(150, 130, 255, 0) 65%);
+  opacity: 0; animation: echo-ring 1.6s ease-out forwards;
+}
+.pulseRing1 { animation-delay: 0ms; }
+.pulseRing2 { animation-delay: 180ms; }
+.pulseRing3 { animation-delay: 360ms; }
+@keyframes echo-ring {
+  0%   { transform: scale(0.55); opacity: 0;    border-width: 2px;   }
+  12%  {                          opacity: 0.85;                      }
+  100% { transform: scale(2.4);  opacity: 0;    border-width: 0.4px; }
+}
+
+.particleDot {
+  position: absolute; top: 50%; left: 50%; width: 5px; height: 5px;
+  margin-left: -2.5px; margin-top: -2.5px; border-radius: 50%;
+  background: #9b8cff;
+  box-shadow: 0 0 10px rgba(150, 130, 255, 0.7), 0 0 20px rgba(150, 130, 255, 0.45);
+  opacity: 0; transform-origin: center; --angle: 0deg;
+  animation: echo-particle 1.5s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+}
+@keyframes echo-particle {
+  0%   { transform: rotate(var(--angle)) translateY(0)     scale(0.4); opacity: 0; }
+  15%  {                                                                opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-160px) scale(0.7); opacity: 0; }
+}
+
+.sparkleDot {
+  position: absolute; width: 7px; height: 7px; margin-left: -3.5px; margin-top: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(190,176,255,0.6) 45%, rgba(150,130,255,0) 70%);
+  box-shadow: 0 0 12px rgba(150, 130, 255, 0.7);
+  opacity: 0; animation: echo-sparkle 1.8s ease-out forwards;
+}
+@keyframes echo-sparkle {
+  0%   { opacity: 0; transform: scale(0.3); }
+  25%  { opacity: 1; transform: scale(1.4); }
+  55%  { opacity: 0.6; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+.rayLine {
+  position: absolute; top: 50%; left: 50%; width: 3px; height: 64px;
+  margin-left: -1.5px; margin-top: -32px; border-radius: 2px;
+  background: linear-gradient(to top, rgba(150, 130, 255, 0) 0%, rgba(190, 176, 255, 0.9) 50%, rgba(232, 226, 255, 1) 100%);
+  box-shadow: 0 0 14px rgba(150, 130, 255, 0.85);
+  opacity: 0; transform-origin: center center; --angle: 0deg; --len: 1;
+  animation: echo-ray 0.78s cubic-bezier(0.12, 0.9, 0.35, 1) forwards;
+}
+@keyframes echo-ray {
+  0%   { transform: rotate(var(--angle)) translateY(-102px) scaleY(0.3);                   opacity: 0; }
+  18%  { transform: rotate(var(--angle)) translateY(-150px) scaleY(calc(1.1 * var(--len))); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-256px) scaleY(calc(1.5 * var(--len))); opacity: 0; }
+}
+
+.confettiBit {
+  position: absolute; top: 50%; left: 50%; width: 10px; height: 4px;
+  margin-left: -5px; margin-top: -2px; border-radius: 2px;
+  background: rgba(190, 176, 255, 0.98);
+  box-shadow: 0 0 9px rgba(150, 130, 255, 0.7);
+  opacity: 0; --angle: 0deg; --dist: 120px; --spin: 540deg;
+  animation: echo-confetti 1.5s cubic-bezier(0.15, 0.75, 0.35, 1) forwards;
+}
+@keyframes echo-confetti {
+  0%   { transform: rotate(var(--angle)) translateY(-90px)  rotate(0deg)         scale(0.5);  opacity: 0; }
+  12%  { transform: rotate(var(--angle)) translateY(-150px) rotate(40deg)        scale(1.25); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(calc(-1 * var(--dist))) rotate(var(--spin)) scale(0.85); opacity: 0; }
+}
+
+.orbitDot {
+  position: absolute; top: 50%; left: 50%; width: 9px; height: 9px;
+  margin-left: -4.5px; margin-top: -4.5px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(232, 226, 255, 1) 35%, rgba(150, 130, 255, 0.95) 65%, rgba(150, 130, 255, 0) 80%);
+  box-shadow: 0 0 16px rgba(150, 130, 255, 0.95), 0 0 28px rgba(150, 130, 255, 0.5);
+  opacity: 0; --start: 0deg; --sweep: 300deg;
+  animation: echo-orbit 1.9s cubic-bezier(0.3, 0, 0.3, 1) forwards;
+}
+@keyframes echo-orbit {
+  0%   { transform: rotate(var(--start))                             translateX(150px) scale(0.3); opacity: 0; }
+  16%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.16)) translateX(168px) scale(1.3); opacity: 1; }
+  55%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.55)) translateX(196px) scale(1);   opacity: 1; }
+  82%  {                                                                                            opacity: 1; }
+  100% { transform: rotate(calc(var(--start) + var(--sweep)))        translateX(214px) scale(0.55); opacity: 0; }
+}
+
+/* ── ponder (curious) ── */
+.ponderRing {
+  position: absolute; top: 50%; left: 50%; width: 64%; height: 64%;
+  margin-left: -32%; margin-top: -32%; border-radius: 50%;
+  border: 2px solid rgba(190, 176, 255, 0.7);
+  background: radial-gradient(circle, rgba(150, 130, 255, 0.10) 0%, rgba(150, 130, 255, 0) 62%);
+  opacity: 0; animation: echo-ponderRing 1.7s ease-out forwards;
+}
+@keyframes echo-ponderRing {
+  0%   { transform: scale(0.7);  opacity: 0;    border-width: 2.5px; }
+  16%  {                         opacity: 0.8;                        }
+  100% { transform: scale(2.7);  opacity: 0;    border-width: 0.3px; }
+}
+.ponderGlow {
+  position: absolute; top: 50%; left: 50%; width: 70%; height: 70%;
+  margin-left: -35%; margin-top: -35%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(214, 205, 255, 0.5) 0%, rgba(150, 130, 255, 0.22) 38%, rgba(150, 130, 255, 0) 68%);
+  opacity: 0; animation: echo-ponderGlow 1.4s ease-out forwards;
+}
+@keyframes echo-ponderGlow {
+  0%   { transform: scale(0.5); opacity: 0; }
+  22%  {                        opacity: 1; }
+  100% { transform: scale(2.3); opacity: 0; }
+}
+.ponderMote {
+  position: absolute; top: 50%; left: 50%; width: 6.5px; height: 6.5px;
+  margin-left: -3.25px; margin-top: -3.25px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 226, 255, 1) 0%, rgba(190, 176, 255, 0.95) 55%, rgba(150, 130, 255, 0) 78%);
+  box-shadow: 0 0 14px rgba(150, 130, 255, 0.85), 0 0 26px rgba(150, 130, 255, 0.5);
+  opacity: 0; transform-origin: center; --angle: 0deg;
+  animation: echo-ponderMote 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+@keyframes echo-ponderMote {
+  0%   { transform: rotate(var(--angle)) translateY(-135px) scale(0.4); opacity: 0; }
+  25%  {                                                                opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-210px) scale(0.85); opacity: 0; }
+}
+
+/* ── loading sonar ── */
+.loadRing {
+  position: absolute; top: 50%; left: 50%; width: 300px; height: 300px;
+  margin: -150px 0 0 -150px; border-radius: 50%;
+  border: 1px solid rgba(150, 130, 255, 0.34);
+  box-shadow: 0 0 34px rgba(150, 130, 255, 0.2), inset 0 0 30px rgba(150, 130, 255, 0.1);
+  opacity: 0; transform-origin: center center;
+  animation: echo-loadRing 2.4s cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+@keyframes echo-loadRing {
+  0%   { transform: scale(0.96); opacity: 0; }
+  22%  {                         opacity: 0.4; }
+  100% { transform: scale(1.7);  opacity: 0; }
+}
+.loadRingResolve {
+  border-color: rgba(190, 176, 255, 0.85);
+  box-shadow: 0 0 40px rgba(150, 130, 255, 0.5), inset 0 0 26px rgba(150, 130, 255, 0.2);
+  animation: echo-loadRingResolve 0.9s cubic-bezier(0.12, 0.8, 0.3, 1) forwards;
+}
+@keyframes echo-loadRingResolve {
+  0%   { transform: scale(0.95); opacity: 0; }
+  10%  {                         opacity: 0.9; }
+  100% { transform: scale(2.15); opacity: 0; }
+}
+
+/* ── sleepy z's ── */
+.sleepZs { position: absolute; left: 52%; top: 17%; z-index: 3; pointer-events: none; }
+.sleepZ {
+  position: absolute; font-family: var(--font-serif), Georgia, serif;
+  font-style: italic; font-weight: 600; font-size: 30px; line-height: 1;
+  color: rgba(222, 214, 255, 0.92);
+  text-shadow: 0 0 12px rgba(150, 130, 255, 0.7), 0 0 28px rgba(150, 130, 255, 0.4);
+  opacity: 0; will-change: transform, opacity;
+  animation: echo-sleepZ 4.6s ease-in-out infinite;
+}
+@keyframes echo-sleepZ {
+  0%   { transform: translate(0, 8px)       scale(0.45) rotate(-9deg); opacity: 0;    }
+  22%  { opacity: 0.92;                                                               }
+  60%  { opacity: 0.72;                                                               }
+  100% { transform: translate(34px, -116px) scale(1.55) rotate(11deg); opacity: 0;    }
+}
+
+/* ── new bursts (iris): bloom, spiral, ripple ── */
+.bloomPetal {
+  position: absolute; top: 50%; left: 50%; width: 44px; height: 62px;
+  margin-left: -22px; margin-top: -31px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 34%, rgba(190, 176, 255, 0.92) 0%, rgba(150, 130, 255, 0.4) 46%, rgba(150, 130, 255, 0) 76%);
+  opacity: 0; transform-origin: center bottom; --angle: 0deg;
+  animation: echo-bloom 1.5s cubic-bezier(0.18, 0.7, 0.3, 1) forwards;
+}
+@keyframes echo-bloom {
+  0%   { transform: rotate(var(--angle)) translateY(-78px)  scale(0.2); opacity: 0; }
+  28%  {                                                                opacity: 0.95; }
+  100% { transform: rotate(var(--angle)) translateY(-176px) scale(1.12); opacity: 0; }
+}
+
+.spiralDot {
+  position: absolute; top: 50%; left: 50%; width: 7px; height: 7px;
+  margin-left: -3.5px; margin-top: -3.5px; border-radius: 50%;
+  background: #9b8cff; box-shadow: 0 0 10px rgba(150, 130, 255, 0.8), 0 0 20px rgba(150, 130, 255, 0.4);
+  opacity: 0; --angle: 0deg; --spin: 150deg;
+  animation: echo-spiral 1.7s cubic-bezier(0.2, 0.5, 0.3, 1) forwards;
+}
+@keyframes echo-spiral {
+  0%   { transform: rotate(var(--angle)) translateX(146px) scale(0.3); opacity: 0; }
+  20%  {                                                               opacity: 1; }
+  100% { transform: rotate(calc(var(--angle) + var(--spin))) translateX(280px) scale(0.65); opacity: 0; }
+}
+
+.rippleRing {
+  position: absolute; top: 50%; left: 50%; width: 58%; height: 58%;
+  margin-left: -29%; margin-top: -29%; border-radius: 50%;
+  border: 1.5px solid rgba(150, 130, 255, 0.5);
+  background: radial-gradient(circle, rgba(150, 130, 255, 0.05) 0%, rgba(150, 130, 255, 0) 60%);
+  opacity: 0; animation: echo-ripple 2.4s ease-out forwards;
+}
+.rippleRing1 { animation-delay: 0ms; }
+.rippleRing2 { animation-delay: 420ms; }
+.rippleRing3 { animation-delay: 840ms; }
+@keyframes echo-ripple {
+  0%   { transform: scale(0.7); opacity: 0;   border-width: 2px; }
+  15%  {                        opacity: 0.6;                    }
+  100% { transform: scale(2.7); opacity: 0;   border-width: 0.3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles span,
+  .pulseRing, .particleDot, .sparkleDot, .rayLine, .confettiBit, .orbitDot,
+  .ponderRing, .ponderGlow, .ponderMote, .loadRing, .loadRingResolve, .sleepZ,
+  .bloomPetal, .spiralDot, .rippleRing { animation: none; opacity: 0; }
+}

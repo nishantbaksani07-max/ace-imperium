@@ -1,0 +1,308 @@
+/*
+ * TrainerDoorway — the "Ask Claude, mid-set" bottom sheet.
+ *
+ * Mint accent (logger-native). Structure mirrors the Vee "open in Claude"
+ * doorway (app/app/mentor/mentor.module.css .door). Tokens are declared locally
+ * on .wrap so the sheet renders correctly regardless of which page mounts it.
+ */
+
+.wrap {
+  --accent: var(--mint, #6ee7b7);
+  --accent-hi: var(--mint-hover, #5dd6a6);
+  --accent-ink: var(--mint-ink, #042a1c);
+  --accent-soft: rgba(110, 231, 183, 0.1);
+  --accent-line: rgba(110, 231, 183, 0.26);
+  --accent-wash: rgba(110, 231, 183, 0.04);
+  --accent-glow: rgba(110, 231, 183, 0.4);
+  --d-ink: #e9efe9;
+  --d-ink-dim: rgba(233, 239, 233, 0.62);
+  --d-ink-faint: rgba(233, 239, 233, 0.34);
+  --d-rule: rgba(233, 239, 233, 0.12);
+  --d-rule-strong: rgba(233, 239, 233, 0.22);
+  --d-serif: var(--font-serif), Georgia, serif;
+  --d-mono: var(--font-mono, 'SF Mono'), monospace;
+  --d-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --d-ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  pointer-events: none;
+}
+.wrap[data-open='true'] {
+  pointer-events: auto;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.28s var(--d-ease);
+}
+.wrap[data-open='true'] .scrim {
+  opacity: 1;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 10px 12px calc(16px + env(safe-area-inset-bottom));
+  transform: translateY(104%);
+  transition: transform 0.42s var(--d-ease-premium);
+}
+.wrap[data-open='true'] .sheet {
+  transform: translateY(0);
+}
+
+.door {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--accent-line);
+  border-radius: 22px 22px 18px 18px;
+  padding: 20px;
+  background:
+    linear-gradient(180deg, var(--accent-soft), var(--accent-wash)), #060807;
+  color: var(--d-ink);
+  font-family: var(--font-inter), -apple-system, sans-serif;
+}
+.door::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -50px;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--accent-glow), transparent 65%);
+  opacity: 0.45;
+}
+
+.grab {
+  width: 38px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--d-rule-strong);
+  margin: 0 auto 16px;
+}
+
+.secHead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 12px;
+}
+.eyebrow {
+  font-family: var(--d-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.secRule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--d-rule-strong), transparent);
+}
+
+.doorHead {
+  position: relative;
+  font-family: var(--d-serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.14;
+}
+.doorBody {
+  position: relative;
+  margin: 9px 0 0;
+  color: var(--d-ink-dim);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* The question box — the user's words lead; the session attaches under it. */
+.input {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  resize: none;
+  border: 1px solid var(--d-rule-strong);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--d-ink);
+  font-family: var(--font-inter), -apple-system, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding: 13px 14px;
+  caret-color: var(--accent);
+  transition:
+    border-color 0.18s var(--d-ease),
+    background 0.18s var(--d-ease);
+}
+.input::placeholder {
+  color: var(--d-ink-faint);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--accent-line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* "your live session is attached" — collapsed by default, taps to reveal. */
+.ctxToggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 11px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--d-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--d-ink-faint);
+  transition: color 0.18s var(--d-ease);
+}
+.ctxToggle:hover {
+  color: var(--d-ink-dim);
+}
+.ctxToggleIcon {
+  width: 13px;
+  height: 13px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.22s var(--d-ease-premium);
+}
+.ctxToggleIconOpen {
+  transform: rotate(45deg);
+}
+
+/* "what Claude sees" — built from the live snapshot */
+.ctx {
+  position: relative;
+  margin-top: 9px;
+  border: 1px dashed var(--d-rule-strong);
+  border-radius: 13px;
+  padding: 12px 13px;
+  background: rgba(255, 255, 255, 0.015);
+}
+.ctxLabel {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--d-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--d-ink-faint);
+  margin-bottom: 9px;
+}
+.ctxLabel svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.7;
+}
+.ctxDay {
+  font-family: var(--d-serif);
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--d-ink);
+  margin-bottom: 6px;
+}
+.ctxList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ctxList li {
+  font-family: var(--d-mono);
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--d-ink-dim);
+}
+.ctxEmpty {
+  font-family: var(--d-mono);
+  font-size: 0.74rem;
+  color: var(--d-ink-faint);
+}
+
+.openBtn {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 17px;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: 0.18s var(--d-ease);
+}
+.openBtn:hover {
+  background: var(--accent-hi);
+  box-shadow: 0 10px 30px -8px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.openBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.trust {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.trustItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--d-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--d-ink-faint);
+}
+.trustItem svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.6;
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .sheet {
+    transition: none;
+  }
+}

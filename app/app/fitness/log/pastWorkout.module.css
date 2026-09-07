@@ -1,0 +1,199 @@
+/*
+ * Log a past workout — back-dated session entry reached from the logger's
+ * Settings sheet. Editorial mint logger DNA: pure-black page, mint aurora,
+ * serif-italic titles, the real Train set-pill vocabulary when a lift is
+ * expanded to per-set entry.
+ */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  position: relative;
+  /* Clear the iOS status bar / notch so the "← Logger" back link is never cut
+     off (and stays tappable); pad the bottom past the home indicator. */
+  padding: calc(env(safe-area-inset-top, 0px) + 22px) 16px calc(env(safe-area-inset-bottom, 0px) + 100px);
+  overflow-x: hidden;
+}
+
+/* The back link sits at the very top — give it a comfortable tap target. */
+.back { min-height: 32px; }
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(55% 38% at 50% -8%, rgba(110, 231, 183, 0.08), transparent 70%);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  text-decoration: none;
+  margin-bottom: 22px;
+  transition: color var(--duration) var(--ease);
+}
+.back:hover { color: var(--fg); }
+
+.head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+.eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mint); font-weight: 600; }
+.title { font-family: var(--font-serif), Georgia, serif; font-weight: 400; font-size: var(--text-3xl); line-height: 1.05; letter-spacing: -0.01em; }
+.title em, .lede em { font-style: italic; }
+.lede { font-family: var(--font-serif), Georgia, serif; color: var(--muted); font-size: var(--text-sm); line-height: 1.5; }
+
+.step { margin-top: 26px; }
+.stepLabel { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 12px; }
+
+/* chips */
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  font: inherit; font-size: 13px; font-weight: 500; color: var(--muted-strong);
+  padding: 8px 14px; border-radius: var(--radius-pill);
+  background: var(--card); border: 1px solid var(--border-strong); cursor: pointer;
+  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
+}
+.chip:hover { color: var(--fg); border-color: var(--muted); }
+.chipOn { background: var(--mint); color: var(--mint-ink); border-color: var(--mint); font-weight: 600; }
+
+.dateField {
+  margin-top: 11px; display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-serif), Georgia, serif; font-style: italic; font-size: 14.5px; color: var(--muted-strong);
+}
+.dateField input[type=date] {
+  font: inherit; font-style: normal; color: var(--mint); background: transparent;
+  border: none; border-bottom: 1px solid var(--border-strong); padding: 2px 0; cursor: pointer; color-scheme: dark;
+}
+
+/* lift card */
+.lifts { display: flex; flex-direction: column; gap: 10px; }
+.lift {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 14px 13px;
+}
+.liftHead { display: flex; align-items: center; gap: 8px; }
+.liftName { font: inherit; font-size: 14.5px; font-weight: 600; color: var(--fg); background: transparent; border: none; flex: 1; min-width: 0; padding: 2px 0; }
+.liftName:focus { outline: none; }
+.liftName::placeholder { color: var(--muted); font-weight: 500; }
+.liftDel { width: 24px; height: 24px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--muted); background: transparent; border: 1px solid var(--border); cursor: pointer; transition: color .15s var(--ease), border-color .15s var(--ease); }
+.liftDel:hover { color: var(--amber); border-color: rgba(245, 158, 11, 0.4); }
+
+/* simple (default) row */
+.simple { display: flex; align-items: center; gap: 8px; margin-top: 11px; flex-wrap: wrap; }
+.num { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 16px; color: var(--mint); background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-strong); border-radius: 7px; width: 52px; text-align: center; padding: 7px 2px; }
+.num:focus { outline: none; border-color: var(--mint); }
+.numDark { color: var(--fg); width: 44px; }
+.uline { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-size: 12px; color: var(--muted); }
+.times { color: var(--muted); }
+.stepper { display: inline-flex; align-items: center; gap: 4px; margin-left: 2px; }
+.stepper button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--card); color: var(--muted-strong); font-size: 16px; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: color .15s var(--ease), border-color .15s var(--ease); }
+.stepper button:hover { color: var(--fg); border-color: var(--mint); }
+.setsN { min-width: 56px; text-align: center; font-size: 13px; color: var(--muted-strong); }
+.differ { margin-left: auto; font: inherit; font-size: 12px; font-weight: 600; color: var(--mint); background: transparent; border: none; cursor: pointer; opacity: 0.85; padding: 4px 0; }
+.differ:hover { opacity: 1; }
+
+/* per-set — the Train pills */
+.perset { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; }
+.pill {
+  display: flex; align-items: center; gap: 11px; padding: 11px 14px; border-radius: 14px;
+  border: 1px solid var(--border); background: rgba(255, 255, 255, 0.022);
+  transition: background .3s var(--ease-premium), border-color .3s var(--ease-premium), color .3s var(--ease-premium);
+}
+.ri { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-size: 15px; color: var(--muted); width: 18px; flex: none; }
+.val { font-size: 17px; font-variant-numeric: tabular-nums; font-weight: 500; display: flex; align-items: center; }
+.pillInput { font: inherit; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; width: 46px; text-align: center; background: transparent; border: none; border-bottom: 1px solid transparent; color: inherit; padding: 1px 0; }
+.pillInput:focus { outline: none; border-bottom-color: currentColor; }
+.u { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-size: 0.66em; color: var(--muted); margin-left: 2px; }
+.x { color: var(--muted); margin: 0 5px; }
+.spacer { flex: 1; }
+.missBtn { font: inherit; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: transparent; border: none; cursor: pointer; padding: 4px 6px; transition: color .15s var(--ease); }
+.missBtn:hover { color: var(--red); }
+.tag { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* pill states (match the live SetPill) */
+.pillDone { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); }
+.pillDone .ri { color: rgba(4, 42, 28, 0.55); }
+.pillDone .u, .pillDone .x { color: rgba(4, 42, 28, 0.5); }
+.pillDone .missBtn { color: rgba(4, 42, 28, 0.55); }
+.pillDone .missBtn:hover { color: #7a1414; }
+
+.pillPartial { background: rgba(245, 158, 11, 0.13); border-color: var(--amber); color: var(--fg); }
+.pillPartial .ri { color: var(--amber); }
+.pillPartial .tag { color: var(--amber); }
+
+.pillMissed { background: rgba(239, 68, 68, 0.11); border-color: var(--red); color: var(--muted-strong); }
+.pillMissed .ri { color: var(--red); }
+.pillMissed .tag { color: var(--red); }
+.pillMissed .pillInput { text-decoration: line-through; color: var(--muted-strong); }
+.pillMissed .missBtn { color: var(--red); }
+
+.persetFoot { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; }
+.addset, .collapse { font: inherit; font-size: 12px; font-weight: 600; color: var(--mint); background: transparent; border: none; cursor: pointer; padding: 6px 2px; opacity: .85; }
+.addset:hover, .collapse:hover { opacity: 1; }
+.collapse { color: var(--muted-strong); }
+
+.addEx {
+  margin-top: 10px; width: 100%; font: inherit; font-size: 13px; font-weight: 600; color: var(--mint);
+  padding: 11px; border-radius: var(--radius-md); cursor: pointer; background: transparent;
+  border: 1px dashed rgba(110, 231, 183, 0.3); display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background .15s var(--ease), border-color .15s var(--ease);
+}
+.addEx:hover { background: rgba(110, 231, 183, 0.05); border-color: var(--mint); }
+
+.error { color: var(--amber); font-size: var(--text-sm); margin-top: 16px; text-align: center; }
+
+.save {
+  margin-top: 22px; width: 100%; font: inherit; font-size: 15px; font-weight: 600; color: var(--mint-ink);
+  padding: 15px; border-radius: var(--radius-md); cursor: pointer; background: var(--mint); border: none;
+  transition: background .15s var(--ease), transform .12s var(--ease);
+}
+.save:hover { background: var(--mint-hover); }
+.save:active { transform: scale(.99); }
+.save:disabled { opacity: 0.6; cursor: progress; }
+.saveHint { text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 9px; }
+.saveHint em { font-family: var(--font-serif), Georgia, serif; font-style: italic; }
+
+/* replace-confirm dialog */
+.scrim {
+  position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 20px;
+  animation: fadeIn 200ms var(--ease-premium);
+}
+.confirm {
+  width: 100%; max-width: 380px; background: var(--bg-elevated); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; gap: 12px;
+  animation: popIn 280ms var(--ease-premium);
+}
+.confirmTitle { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; font-size: var(--text-xl); }
+.confirmBody { font-size: var(--text-sm); color: var(--muted-strong); line-height: 1.5; }
+.confirmBody b { color: var(--fg); }
+.confirmRow { display: flex; gap: 10px; margin-top: 6px; }
+.confirmCancel, .confirmGo { flex: 1; font: inherit; font-size: var(--text-sm); font-weight: 600; padding: 12px; border-radius: var(--radius-md); cursor: pointer; }
+.confirmCancel { background: var(--card); border: 1px solid var(--border-strong); color: var(--fg); }
+.confirmCancel:hover { border-color: var(--muted); }
+.confirmGo { background: var(--amber); border: none; color: #000; }
+.confirmGo:hover { background: var(--amber-warm); }
+
+/* done state */
+.doneWrap { position: relative; z-index: 1; max-width: 420px; margin: 22vh auto 0; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; animation: popIn 420ms var(--ease-premium); }
+.doneSeal { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: var(--mint-ink); background: var(--mint); box-shadow: 0 0 40px rgba(110, 231, 183, 0.35); }
+.doneSeal svg { width: 30px; height: 30px; }
+.doneTitle { font-family: var(--font-serif), Georgia, serif; font-style: italic; font-weight: 400; font-size: var(--text-2xl); }
+.doneSub { font-size: var(--text-sm); color: var(--muted-strong); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim, .confirm, .doneWrap { animation: none; }
+}

@@ -1,0 +1,1423 @@
+/*
+ * Vee, the mentor — themed 1:1 to public/mentor-theme-kit.html (canonical).
+ * Cozy system tuned to iris: Instrument Serif italic headlines, Hanken
+ * Grotesk body, JetBrains Mono labels, near-black #04060a, soft radial sky.
+ */
+
+.page {
+  --iris: #a78bfa;
+  --iris-hi: #c4b5fd;
+  --mint: #6ee7b7;
+  --ink: #e9efe9;
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --rule: rgba(233, 239, 233, 0.12);
+  --rule-strong: rgba(233, 239, 233, 0.22);
+  --serif: var(--font-serif), Georgia, serif;
+  --sans: var(--font-hanken), var(--font-inter), -apple-system, sans-serif;
+  --mono: var(--font-mono), 'SF Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #04060a;
+  color: var(--ink);
+  font-family: var(--sans);
+  padding: calc(28px + env(safe-area-inset-top)) 22px 120px;
+}
+
+/* iris-led sky glow, mint whisper on the right — straight from the kit */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(78% 32vh at 50% 0%, rgba(167, 139, 250, 0.12), transparent 70%),
+    radial-gradient(46% 30vh at 84% 8%, rgba(110, 231, 183, 0.06), transparent 70%);
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+/* ── top chrome ── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-decoration: none;
+  transition: color 0.18s var(--ease);
+}
+
+.back:hover {
+  color: var(--ink-dim);
+}
+
+.kick {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ── 00 presence ── */
+.presence {
+  display: flex;
+  gap: 26px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gemHero {
+  width: 280px;
+  height: 280px;
+  flex: none;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .gemHero {
+    margin: 0;
+  }
+}
+
+.greet {
+  flex: 1;
+  min-width: 240px;
+}
+
+.hello {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.helloName {
+  color: var(--iris-hi);
+}
+
+.greetSub {
+  color: var(--ink-dim);
+  margin-top: 8px;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--iris);
+}
+
+.stateDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--iris);
+  box-shadow: 0 0 9px var(--iris);
+}
+
+/* ── live ticker ── */
+.ticker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.012);
+  overflow: hidden;
+}
+
+.tickerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--iris);
+  flex: none;
+}
+
+.tickerDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--iris);
+  box-shadow: 0 0 8px var(--iris);
+  animation: pulseDot 2.4s var(--ease) infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.tickerViewport {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.tickerTrack {
+  display: inline-flex;
+  gap: 26px;
+  white-space: nowrap;
+  animation: tickerScroll linear infinite;
+  will-change: transform;
+}
+
+.ticker:hover .tickerTrack {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.tickerItem {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.tickerLabel {
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.tickerValue {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--ink-dim);
+}
+
+/* ── 01 voice ── */
+.chatCard {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.004));
+}
+
+.chatLog {
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.chatIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chatIntroLine {
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.reply {
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  color: var(--iris-hi);
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 999px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.reply:hover {
+  background: rgba(167, 139, 250, 0.16);
+  transform: translateY(-1px);
+}
+
+.chatThread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bubVee,
+.bubUser,
+.bubThink {
+  padding: 13px 16px;
+  border-radius: 16px;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  max-width: 84%;
+}
+
+.bubVee {
+  align-self: flex-start;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.26);
+  border-bottom-left-radius: 5px;
+}
+
+.bubUser {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rule-strong);
+  border-bottom-right-radius: 5px;
+  color: var(--ink-dim);
+  white-space: pre-wrap;
+}
+
+/* Wrapper for a Vee turn that renders as an ask card (left, wider than a bubble). */
+.askWrap {
+  align-self: flex-start;
+  width: 100%;
+  max-width: 94%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubThink {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(167, 139, 250, 0.07);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+}
+
+.dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--iris);
+  animation: think 1.3s ease-in-out infinite;
+}
+
+.dots i:nth-child(2) { animation-delay: 0.18s; }
+.dots i:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes think {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+
+.thinkLabel {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ── Vee's replies render as designed content, not a text blob ──
+   A lead headline, then tile-style bullet rows with an iris diamond marker.
+   The one bold phrase per line is the signal the eye lands on. */
+.mdPara {
+  margin: 0;
+}
+
+/* The first line of a reply is the headline: bigger, brighter, the takeaway. */
+.bubVee > .mdPara:first-child {
+  font-size: 1.04rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.mdPara + .mdPara,
+.mdList + .mdPara,
+.mdPara + .mdList,
+.mdList + .mdList {
+  margin-top: 11px;
+}
+
+.mdList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mdList li {
+  position: relative;
+  padding: 9px 13px 9px 30px;
+  border-radius: 11px;
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  line-height: 1.42;
+  animation: mdRise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* iris diamond marker — echoes the void shard + gem facets */
+.mdList li::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 15px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--iris-hi);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px -1px var(--iris);
+}
+
+/* numbered lists get an iris count chip instead of the diamond */
+.mdListOrdered {
+  counter-reset: mdstep;
+}
+.mdListOrdered li {
+  padding-left: 38px;
+  counter-increment: mdstep;
+}
+.mdListOrdered li::before {
+  content: counter(mdstep);
+  top: 50%;
+  left: 10px;
+  width: 19px;
+  height: 19px;
+  border-radius: 6px;
+  transform: translateY(-50%) rotate(0);
+  background: rgba(167, 139, 250, 0.16);
+  box-shadow: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--iris-hi);
+}
+
+.mdList li:nth-child(1) { animation-delay: 0.04s; }
+.mdList li:nth-child(2) { animation-delay: 0.11s; }
+.mdList li:nth-child(3) { animation-delay: 0.18s; }
+.mdList li:nth-child(4) { animation-delay: 0.25s; }
+.mdList li:nth-child(n + 5) { animation-delay: 0.3s; }
+
+@keyframes mdRise {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: none; }
+}
+
+.mdBold {
+  color: var(--iris-hi);
+  font-weight: 600;
+}
+
+/* follow-up connector — a card that continues from the message above.
+   A short curved line + reply glyph, WhatsApp-style, so threading reads. */
+.followLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: -2px 0 -4px 6px;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.7);
+}
+.followLink svg {
+  width: 15px;
+  height: 15px;
+  stroke: rgba(167, 139, 250, 0.6);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── ask bar ── */
+.ask {
+  margin-top: 16px;
+}
+
+.askRow {
+  display: flex;
+  gap: 10px;
+}
+
+.askInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 13px 16px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  resize: none;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.askInput::placeholder {
+  color: var(--ink-faint);
+}
+
+.askInput:focus {
+  outline: none;
+  border-color: rgba(167, 139, 250, 0.6);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+}
+
+.askSend {
+  border: none;
+  border-radius: 14px;
+  background: var(--iris);
+  width: 46px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.askSend:hover:not(:disabled) {
+  background: var(--iris-hi);
+}
+
+.askSend:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.askHint {
+  margin-top: 9px;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.chatErrorText {
+  margin-bottom: 9px;
+  font-size: 0.82rem;
+  color: #f9a8a8;
+}
+
+/* ── section head (kit secHead) ── */
+.secHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.secEyebrow {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--iris);
+}
+
+.secTitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.4rem;
+}
+
+.secRule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--rule-strong), transparent);
+}
+
+/* ── 05 memory ── */
+.memEmpty {
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.memList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.memRow {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.012);
+}
+
+/* Freshness tiers — newer memory is more vibrant mint, then quietly fades as it
+ * ages. --fc = dot/accent color, --fa = how strong it reads. Set per row. */
+.fresh_now   { --fc: #6ee7b7; --fa: 1;   }
+.fresh_hours { --fc: #7fd9c0; --fa: 0.82; }
+.fresh_today { --fc: #8fb6ad; --fa: 0.55; }
+.fresh_days  { --fc: #9aa6a2; --fa: 0.34; }
+.fresh_old   { --fc: #8b938f; --fa: 0.24; }
+
+.memDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--fc, var(--ink-faint));
+  opacity: var(--fa, 0.5);
+}
+
+/* Just-logged: full mint + a soft expanding pulse so it visibly "lands". */
+.memDotLive {
+  opacity: 1;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--fc) 60%, transparent);
+  animation: memPulse 1.9s ease-out infinite;
+}
+@keyframes memPulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--fc) 60%, transparent); }
+  70%  { box-shadow: 0 0 0 7px rgba(110, 231, 183, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(110, 231, 183, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .memDotLive { animation: none; }
+}
+
+.memSrc {
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex: none;
+  color: var(--ink-faint);
+}
+
+.memFact {
+  font-size: 0.95rem;
+  color: var(--ink);
+  flex: 1;
+  line-height: 1.45;
+}
+
+.memWhen {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  flex: none;
+  color: color-mix(in srgb, var(--fc, var(--ink-faint)) 60%, var(--ink-faint));
+  opacity: calc(var(--fa, 1) * 0.55 + 0.45);
+}
+
+/* ── the void ── */
+.voidCard {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.05), rgba(255, 255, 255, 0.004));
+}
+
+.voidHeader {
+  margin-bottom: 16px;
+}
+
+.voidEyebrow {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--iris);
+}
+
+.voidTitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.55rem;
+  margin-top: 6px;
+}
+
+.voidQuote {
+  color: var(--ink-dim);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-top: 8px;
+  max-width: 520px;
+}
+
+.voidForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.voidInput {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 13px 16px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  resize: none;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.voidInput::placeholder {
+  color: var(--ink-faint);
+}
+
+.voidInput:focus {
+  outline: none;
+  border-color: rgba(167, 139, 250, 0.6);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+}
+
+.voidFormRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voidGoalToggle {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.voidGoalToggle:hover {
+  color: var(--ink-dim);
+  border-color: var(--rule-strong);
+}
+
+.voidGoalToggleActive {
+  color: var(--iris-hi);
+  border-color: rgba(167, 139, 250, 0.4);
+  background: rgba(167, 139, 250, 0.1);
+}
+
+.voidStatus {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--iris-hi);
+  min-height: 1em;
+}
+
+.voidThrow {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: #160d2e;
+  background: var(--iris);
+  border: none;
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: 0.18s;
+}
+
+.voidThrow:hover:not(:disabled) {
+  background: var(--iris-hi);
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.25);
+}
+
+.voidThrow:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.voidEmpty {
+  margin-top: 16px;
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+.voidShards {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shard {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: 13px;
+  padding: 12px 38px 12px 38px;
+  background: rgba(255, 255, 255, 0.012);
+  animation: shardIn 0.5s var(--spring) both;
+}
+
+@keyframes shardIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.shardSpark {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: var(--iris);
+  font-size: 0.75rem;
+}
+
+.shardDelete {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+
+.shardDelete:hover {
+  color: var(--ink-dim);
+}
+
+.shardBody {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.shardMeta {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.dayCheck{margin-bottom:4px}
+
+/* ── 01 Vent · the "Open Vee in Claude" doorway (hero) ── */
+.door {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.26);
+  border-radius: 18px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.08), rgba(167, 139, 250, 0.015));
+}
+.door::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -50px;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.16), transparent 65%);
+}
+.doorHead {
+  position: relative;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+.doorBody {
+  position: relative;
+  margin: 9px 0 0;
+  color: var(--ink-dim);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 460px;
+}
+.doorThread {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 18px 0 4px;
+}
+.doorTag {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 2px 0 0 4px;
+}
+.doorActions {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 18px;
+}
+.doorBtnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: #160d2e;
+  background: var(--iris);
+  border: none;
+  border-radius: 14px;
+  padding: 15px 18px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.18s var(--ease);
+}
+.doorBtnPrimary:hover {
+  background: var(--iris-hi);
+  box-shadow: 0 10px 30px rgba(167, 139, 250, 0.28);
+  transform: translateY(-1px);
+}
+.doorBtnPrimary svg { width: 18px; height: 18px; }
+.doorBtnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: 0.18s var(--ease);
+}
+.doorBtnGhost:hover { color: var(--ink); border-color: var(--rule-strong); }
+.trust {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.trustItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.trustItem svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--mint);
+  fill: none;
+  stroke-width: 1.6;
+  opacity: 0.8;
+}
+
+/* ── 02 Context · "Folded Notes" cozy progressive disclosure ──
+   Ported from public/vee-mental-health-preview.html. Tokens cascade from .page. */
+.contextSec {
+  display: block;
+}
+.ctxLead {
+  margin: 0 0 3px;
+  color: var(--ink-dim);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  animation: ctxLeadIn 0.4s var(--ease) both;
+}
+.ctxReassure {
+  margin: 0 0 17px;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  animation: ctxLeadIn 0.4s var(--ease) 0.05s both;
+}
+@keyframes ctxLeadIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.veeNotes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.veeNote {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.004));
+  animation: noteSettle 0.5s var(--spring) both;
+  transition: border-color 0.22s var(--ease);
+}
+.veeNote:nth-child(1) { animation-delay: 0.09s; }
+.veeNote:nth-child(2) { animation-delay: 0.18s; }
+.veeNote:nth-child(3) { animation-delay: 0.27s; }
+@keyframes noteSettle {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.veeNote.open { border-color: rgba(167, 139, 250, 0.28); }
+
+.noteHead {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 13px 15px;
+  font-family: inherit;
+  color: inherit;
+}
+.noteTile {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: rgba(167, 139, 250, 0.06);
+  transition: background 0.22s var(--ease);
+}
+.noteHead:hover .noteTile,
+.veeNote.open .noteTile { background: rgba(167, 139, 250, 0.13); }
+.noteGlyph {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: url(#vstroke);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.noteGlyph path,
+.noteGlyph circle { stroke-dasharray: 1; animation: glyphDraw 0.6s ease both; }
+.veeNote:nth-child(1) .noteGlyph path, .veeNote:nth-child(1) .noteGlyph circle { animation-delay: 0.30s; }
+.veeNote:nth-child(2) .noteGlyph path, .veeNote:nth-child(2) .noteGlyph circle { animation-delay: 0.39s; }
+.veeNote:nth-child(3) .noteGlyph path, .veeNote:nth-child(3) .noteGlyph circle { animation-delay: 0.48s; }
+@keyframes glyphDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.noteText { flex: 1; min-width: 0; }
+.noteLabel {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.2;
+}
+.noteHelp {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  transition: color 0.25s;
+}
+.noteDiamond {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  transform: rotate(45deg);
+  animation: diamondPop 0.4s var(--spring) both;
+}
+.veeNote:nth-child(1) .noteDiamond { animation-delay: 0.16s; }
+.veeNote:nth-child(2) .noteDiamond { animation-delay: 0.25s; }
+.veeNote:nth-child(3) .noteDiamond { animation-delay: 0.34s; }
+@keyframes diamondPop {
+  0% { transform: rotate(45deg) scale(0); }
+  60% { transform: rotate(45deg) scale(1.12); }
+  100% { transform: rotate(45deg) scale(1); }
+}
+.veeNote.done .noteDiamond {
+  background: var(--mint);
+  border-color: var(--mint);
+  box-shadow: 0 0 8px -1px var(--mint);
+  animation: diamondBloom 0.35s var(--spring) both;
+}
+@keyframes diamondBloom {
+  0% { background: transparent; transform: rotate(45deg) scale(1); }
+  50% { transform: rotate(45deg) scale(1.18); }
+  100% { background: var(--mint); transform: rotate(45deg) scale(1); }
+}
+.noteChev {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.26s var(--spring), stroke 0.22s;
+}
+.veeNote.open .noteChev { transform: rotate(90deg); stroke: var(--iris-hi); }
+
+.noteBody {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.38s var(--ease), opacity 0.24s var(--ease);
+}
+.veeNote.open .noteBody { max-height: 720px; opacity: 1; }
+.noteInner { padding: 2px 15px 15px; }
+.noteStubs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.moreLink,
+.handFwd {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.57rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--iris-hi);
+  transition: 0.18s var(--ease);
+}
+.moreLink svg,
+.handFwd svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.18s var(--ease);
+}
+.moreLink:hover svg { transform: scale(1.18); }
+.moreDone {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* a context row — base = a saved fact (iris fill + glowing diamond) */
+.ctxRow {
+  position: relative;
+  padding: 11px 34px 11px 32px;
+  border-radius: 12px;
+  background: rgba(167, 139, 250, 0.05);
+  border: 1px solid rgba(167, 139, 250, 0.14);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ink);
+  animation: stubRise 0.42s var(--spring) both;
+}
+.ctxRow::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 15px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--iris-hi);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px -1px var(--iris);
+}
+.ctxRow.ghost {
+  cursor: pointer;
+  opacity: 0.72;
+  color: var(--ink-dim);
+  background: rgba(167, 139, 250, 0.04);
+  border-color: rgba(167, 139, 250, 0.12);
+}
+.ctxRow.ghost::before { background: rgba(196, 181, 253, 0.5); box-shadow: none; }
+.ctxRow.ghost:hover { opacity: 0.94; border-color: var(--rule-strong); }
+.ctxRow.calm { opacity: 0.56; }
+.ctxRow.calm:hover { opacity: 0.74; }
+@keyframes stubRise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.ctxDelete {
+  position: absolute;
+  right: 9px;
+  top: 8px;
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  transition: color 0.18s;
+}
+.ctxDelete:hover { color: var(--ink-dim); }
+
+.blank {
+  display: inline-block;
+  min-width: 48px;
+  border-bottom: 1px dotted rgba(167, 139, 250, 0.6);
+  color: var(--iris);
+  margin: 0 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: blankDraw 0.32s ease 0.16s forwards, pulseDot 2.4s var(--ease) 0.5s infinite;
+}
+@keyframes blankDraw { to { transform: scaleX(1); } }
+.stubRow { display: flex; align-items: center; gap: 10px; }
+.stubText { flex: 1; line-height: 1.5; }
+.blankInput {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.6);
+  color: var(--ink);
+  font: inherit;
+  caret-color: var(--mint);
+  outline: none;
+  min-width: 66px;
+  field-sizing: content; /* underline hugs the text/placeholder so it fits */
+  padding: 0 2px;
+}
+/* placeholder is just a faint, small hint and must never overflow the underline */
+.blankInput::placeholder { color: var(--ink-faint); font-style: italic; font-size: 0.72rem; }
+.saveStub {
+  flex: none;
+  border: 1px solid var(--rule);
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--iris-hi);
+  border-radius: 9px;
+  padding: 6px 13px;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.18s var(--ease);
+}
+.saveStub:hover { background: rgba(167, 139, 250, 0.18); }
+
+.plentyLink {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  transition: color 0.18s;
+}
+.plentyLink:hover { color: var(--ink-dim); }
+.ctxClosed {
+  text-align: center;
+  color: var(--ink-dim);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  padding: 8px 0 4px;
+  animation: ctxLeadIn 0.4s var(--ease) both;
+}
+.addRow { display: flex; gap: 9px; margin-top: 13px; }
+.addInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule);
+  border-radius: 13px;
+  padding: 12px 14px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.addInput::placeholder { color: var(--ink-faint); }
+.addInput:focus {
+  outline: none;
+  border-color: rgba(167, 139, 250, 0.55);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+}
+.freeLink {
+  display: block;
+  text-align: center;
+  margin-top: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  transition: color 0.18s;
+}
+.freeLink:hover { color: var(--ink-dim); }
+
+/* ── 03 Mood · one-tap daily check-in ── */
+.moodCard {
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.004));
+}
+.moodQ { margin: 0 0 4px; font-family: var(--serif); font-style: italic; font-size: 1.18rem; }
+.moodSub { margin: 0 0 16px; color: var(--ink-faint); font-size: 0.82rem; }
+.moodPick { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.moodOpt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 4px;
+  border-radius: 13px;
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.012);
+  cursor: pointer;
+  transition: 0.18s var(--ease);
+}
+.moodOpt:hover { border-color: var(--rule-strong); transform: translateY(-2px); }
+.moodOpt svg {
+  width: 26px;
+  height: 26px;
+  stroke: var(--ink-faint);
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: 0.18s var(--ease);
+}
+.moodOpt span {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  transition: 0.18s var(--ease);
+}
+.moodOpt.on { background: rgba(167, 139, 250, 0.1); border-color: rgba(167, 139, 250, 0.4); }
+.moodOpt.on svg { stroke: var(--lvl); filter: drop-shadow(0 0 7px var(--lvl)); }
+.moodOpt.on span { color: var(--ink); }
+/* level tints, low to high. low end is a calm slate, never red. */
+.m1 { --lvl: #8fa0c4; }
+.m2 { --lvl: #9a93d6; }
+.m3 { --lvl: #a78bfa; }
+.m4 { --lvl: #7fd9c0; }
+.m5 { --lvl: #6ee7b7; }
+.strip { display: flex; align-items: flex-end; gap: 6px; margin-top: 20px; height: 46px; }
+.strip .bar { flex: 1; border-radius: 5px 5px 3px 3px; opacity: 0.85; background: var(--lvl, rgba(167, 139, 250, 0.4)); }
+.strip .barToday { outline: 1px solid var(--iris-hi); outline-offset: 2px; }
+.stripLbls { display: flex; gap: 6px; margin-top: 7px; }
+.stripLbls span {
+  flex: 1;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blank { transform: scaleX(1) !important; }
+  .veeNote, .ctxRow, .noteDiamond { opacity: 1 !important; transform: none !important; }
+  .noteGlyph path, .noteGlyph circle { stroke-dashoffset: 0 !important; }
+}

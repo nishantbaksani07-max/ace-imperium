@@ -1,0 +1,136 @@
+/* ───────── App-open splash: "The Swipe" ─────────
+   Ported 1:1 from the approved public/vitality-intro-a.html: the V mark
+   streaks in from the RIGHT trailing mint motion lines, and the VITALITY
+   letters catch up and settle right to left in its wake. Pure presentation
+   overlay: opacity / transform / filter / stroke only, zero layout impact,
+   and it sits above every app surface (highest z-index in the app is 1000). */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.55s var(--ease-premium), transform 0.55s var(--ease-premium);
+}
+
+/* faint top ambience, same as the preview's stage */
+.overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 55% at 50% -8%, rgba(110, 231, 183, 0.05), transparent 62%);
+}
+
+/* release: the whole splash lifts away to reveal the dashboard beneath */
+.hide {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.985);
+  pointer-events: none;
+}
+
+.lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* the V mark glides in from the right edge */
+.vWrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  animation: vGlide 1.05s var(--ease-premium) both;
+  will-change: transform, opacity;
+}
+@keyframes vGlide {
+  0% { transform: translateX(min(72vw, 340px)); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* soft mint glow that travels with the V, then calms */
+.vGlow {
+  position: absolute;
+  inset: -34px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.34), rgba(110, 231, 183, 0.08) 45%, transparent 70%);
+  animation: glowCalm 1.5s var(--ease-premium) both;
+  pointer-events: none;
+}
+@keyframes glowCalm {
+  0% { opacity: 0.95; transform: scale(1.25); }
+  60% { opacity: 0.75; }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+/* motion streaks trailing off the V while it travels */
+.streak {
+  position: absolute;
+  right: -8px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(to left, rgba(110, 231, 183, 0.55), transparent);
+  transform-origin: right center;
+  animation: streakOut 1s var(--ease-premium) both;
+  pointer-events: none;
+}
+.s1 { top: 32%; width: 120px; }
+.s2 { top: 58%; width: 84px; animation-delay: 0.05s; }
+@keyframes streakOut {
+  0% { opacity: 0; transform: scaleX(1.4); }
+  25% { opacity: 0.8; }
+  80% { opacity: 0; transform: scaleX(0.1); }
+  100% { opacity: 0; transform: scaleX(0.1); }
+}
+
+.vSvg {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+}
+
+/* wordmark letters stream in behind the V, rightmost first */
+.word {
+  display: flex;
+  font-family: var(--font-serif), 'Iowan Old Style', Georgia, serif;
+  font-size: 33px;
+  letter-spacing: 0.14em;
+  color: #f2f5f3;
+  line-height: 1;
+}
+.lt {
+  opacity: 0;
+  display: inline-block;
+  animation: ltIn 0.75s var(--ease-premium) both;
+  animation-delay: var(--d, 0s);
+  will-change: transform, opacity, filter;
+}
+.lt:nth-child(odd) { color: #eafaf1; }
+@keyframes ltIn {
+  0% { opacity: 0; transform: translateX(52px); filter: blur(9px); }
+  100% { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+/* reduced motion: brief static fade, no transforms, no streak theatrics */
+@media (prefers-reduced-motion: reduce) {
+  .vWrap,
+  .lt {
+    animation: introRmFade 0.45s ease both;
+    transform: none;
+    filter: none;
+  }
+  .streak,
+  .vGlow { display: none; }
+  .overlay { transition-duration: 0.25s; }
+  .hide { transform: none; }
+}
+@keyframes introRmFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

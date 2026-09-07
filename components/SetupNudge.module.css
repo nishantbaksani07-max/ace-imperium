@@ -1,0 +1,122 @@
+/*
+ * SetupNudge — global pill that nudges users back to /welcome when
+ * any onboarding quiz is still pending. Sits at the top of every
+ * gated /app route, top-right corner so it doesn't fight with the
+ * page's main content.
+ */
+
+.nudge {
+  position: fixed;
+  top: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 8px 16px 8px 14px;
+  background: rgba(8, 12, 16, 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  border-radius: var(--radius-pill);
+  color: var(--fg);
+  text-decoration: none;
+  font-family: inherit;
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.1),
+    0 12px 32px -10px rgba(0, 0, 0, 0.6),
+    0 0 24px -8px var(--mint-glow);
+  transition:
+    background var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+  animation: nudgeIn 460ms var(--ease-premium);
+}
+
+@keyframes nudgeIn {
+  from { opacity: 0; transform: translate(-50%, -8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nudge { animation: none; }
+}
+
+.nudge:hover {
+  background: rgba(8, 12, 16, 0.92);
+  border-color: var(--mint);
+  transform: translateX(-50%) translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.22),
+    0 14px 36px -8px rgba(0, 0, 0, 0.7),
+    0 0 32px -4px var(--mint-glow);
+}
+
+/* Pulsing mint dot — same heartbeat cadence as the gem dot in the
+   OnboardingChecklist so the gem's "voice" is consistent everywhere. */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 3px rgba(110, 231, 183, 0.16), 0 0 10px var(--mint-glow);
+  flex-shrink: 0;
+  animation: nudgeDotPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes nudgeDotPulse {
+  0%, 100% { transform: scale(0.92); box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.12), 0 0 8px var(--mint-glow); }
+  50%      { transform: scale(1.12); box-shadow: 0 0 0 5px rgba(110, 231, 183, 0.22), 0 0 16px var(--mint-glow); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
+}
+
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
+}
+
+.labelText {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--fg);
+}
+
+.sep {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.count {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mint);
+  letter-spacing: 0.04em;
+}
+
+.arrow {
+  color: var(--mint);
+  font-size: var(--text-base);
+  line-height: 1;
+  transition: transform var(--duration) var(--ease);
+}
+
+.nudge:hover .arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 560px) {
+  .nudge {
+    top: var(--space-3);
+    padding: 7px 14px 7px 12px;
+  }
+  .label { font-size: var(--text-xs); }
+}

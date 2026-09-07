@@ -1,0 +1,185 @@
+/*
+ * Fitness sub-dashboard chrome — just the header.
+ * Page canvas (.page, .shell, aurora bg, grain) is shared from
+ * ../dashboard.module.css.
+ */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  opacity: 0;
+  animation: fadeUp 700ms var(--ease-premium) forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-2);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--mint);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+  width: fit-content;
+}
+
+.back:hover {
+  color: var(--mint-hover);
+  border-color: var(--border-strong);
+  background: var(--card-elevated);
+  transform: translateX(-2px);
+}
+
+.backArrow {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.title {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.subtitle {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    animation: none !important;
+    opacity: 1;
+  }
+}
+
+/* ───────── Atmospheric layer ───────── */
+
+/*
+ * Lives at the bottom of the viewport across every /app/fitness/* route.
+ * Pointer-events:none so it never intercepts clicks; pure decoration.
+ * z-index sits between the page's ::before aurora (0) and the .shell
+ * content (1).
+ */
+.atmosphere {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 320px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Soft mint radial above the front ridge — dawn glow. */
+.horizonGlow {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  height: 240px;
+  background:
+    radial-gradient(
+      ellipse 60% 80% at 50% 100%,
+      rgba(110, 231, 183, 0.12) 0%,
+      rgba(110, 231, 183, 0.04) 30%,
+      transparent 70%
+    );
+  filter: blur(24px);
+  animation: horizonPulse 24s ease-in-out infinite alternate;
+}
+
+@keyframes horizonPulse {
+  0%   { opacity: 0.85; transform: translateY(0); }
+  100% { opacity: 1;    transform: translateY(-4px); }
+}
+
+/* Back layer — distant pale peaks, slow drift for parallax depth. */
+.mountainsBack {
+  position: absolute;
+  bottom: 40px;
+  left: -2%;
+  width: 104%;
+  height: 130px;
+  display: block;
+  animation: mountainsDrift 80s ease-in-out infinite alternate;
+}
+
+@keyframes mountainsDrift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-18px); }
+}
+
+/* Front ridge — sharper, near-black with a mint hairline edge. */
+.mountainsFront {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  display: block;
+}
+
+/* On shorter viewports the atmosphere takes too much vertical space —
+   compress it. */
+@media (max-height: 720px) {
+  .atmosphere {
+    height: 240px;
+  }
+  .mountainsBack {
+    height: 100px;
+    bottom: 30px;
+  }
+  .mountainsFront {
+    height: 80px;
+  }
+  .horizonGlow {
+    bottom: 40px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 560px) {
+  .atmosphere {
+    height: 220px;
+  }
+  .mountainsBack {
+    height: 90px;
+  }
+  .mountainsFront {
+    height: 70px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizonGlow,
+  .mountainsBack {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,425 @@
+/* Food Coach section (·02 Your Coach) on /app/fuel.
+   Cozy-theme pass: a soft editorial panel that feels like a warm room. Serif
+   italic voice, mono museum-tag chrome, a faint mint/violet atmosphere behind
+   the content, gentle rise-ins, mint focus glow. Style only, the copy and the
+   way the coach talks live elsewhere. Class names unchanged so the TSX is
+   untouched. */
+
+.section { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.eyebrow { display: flex; align-items: center; gap: var(--space-3); }
+.eyebrowNum { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: var(--text-lg); color: var(--mint); line-height: 1; }
+.eyebrowLbl { font-family: var(--font-mono, monospace); font-size: var(--text-xs); letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-strong); }
+.eyebrowRule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border-strong), transparent); }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.004));
+  padding: var(--space-6) var(--space-8);
+  display: grid;
+  grid-template-columns: auto 1px minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+/* a soft room-light behind everything: mint warmth from the gem side, a faint
+   violet note up high. very low opacity so it reads as atmosphere, not color. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(46% 70% at 14% 50%, rgba(110, 231, 183, 0.12), transparent 70%),
+    radial-gradient(52% 56% at 94% 6%, rgba(167, 139, 250, 0.10), transparent 72%);
+}
+.card > * { position: relative; z-index: 1; }
+.card:hover { border-color: rgba(110, 231, 183, 0.28); box-shadow: 0 0 44px -18px var(--mint-glow); }
+
+.divider { background: var(--border); width: 1px; align-self: stretch; }
+
+/* ── left: the coach gem (Echo, real gem-library gem — needs >=280px to read) ── */
+.gemStage {
+  width: 300px; height: 300px; flex: 0 0 auto; display: grid; place-items: center;
+  position: relative;
+}
+/* a quiet halo so Echo feels held in warm light rather than floating on black */
+.gemStage::before {
+  content: '';
+  position: absolute;
+  width: 78%; height: 78%;
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(167, 139, 250, 0.12), transparent 70%);
+  filter: blur(8px);
+}
+
+/* ── celebration moment: card glow + a burst of mint particles from the gem ── */
+.cardCelebrate { animation: coachGlow 1.7s var(--ease-premium); }
+@keyframes coachGlow {
+  0%, 100% { box-shadow: none; }
+  40% { box-shadow: 0 0 52px -8px var(--mint-glow); border-color: rgba(110, 231, 183, 0.5); }
+}
+.burst { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.burst i {
+  position: absolute; top: 50%; left: 50%;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--mint); box-shadow: 0 0 9px var(--mint-glow);
+  transform: translate(-50%, -50%);
+  animation: coachBurst 1.5s var(--ease-premium) forwards;
+}
+@keyframes coachBurst {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1); }
+}
+
+/* ── right: score + ask stacked ── */
+.contentCol { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+.scoreBody { min-width: 0; }
+.scoreLabel { font-family: var(--font-mono, monospace); font-size: var(--text-xs); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted-strong); }
+.scoreNum { font-family: var(--font-serif, Georgia, serif); font-size: 3.4rem; line-height: 0.9; color: var(--mint); font-variant-numeric: tabular-nums; margin: 4px 0 10px; }
+.scoreOf { color: var(--muted); font-size: 1.4rem; }
+.reason {
+  max-width: 62ch;
+  margin-top: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid rgba(110, 231, 183, 0.22);
+  border-left: 2px solid var(--mint);
+  border-radius: var(--radius-lg);
+  background: rgba(110, 231, 183, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+/* the cozy-loader voice: a little mono Echo tag + a clean sans answer.
+   serif stays on the display bits (score number, eyebrows). */
+.coachTag {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #06281d;
+  background: var(--mint);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  width: fit-content;
+}
+.coachBody {
+  margin: 0;
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: #eef6f1;
+}
+/* ready for the mood-highlight the coach copy will add: one phrase glowing.
+   defaults to mint; data-tone on the card can shift the whole mood later. */
+.reason :global(.hl), .msgCoach :global(.hl) { color: var(--mint); font-weight: 600; font-style: inherit; }
+
+/* ─── locked coach (until the food-story quiz unlocks it) ─── */
+.cardLocked { align-items: center; }
+.lockBadge {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-elevated, #0a0a0a);
+  border: 1px solid var(--border-strong);
+  color: var(--muted-strong);
+  z-index: 2;
+}
+.lockBadge svg { width: 13px; height: 13px; }
+.lockedCol { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.lockedTag {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+.lockedTitle {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: var(--text-2xl);
+  line-height: 1.08;
+  margin: 0;
+}
+.lockedTitle em { color: var(--mint); font-style: italic; }
+.lockedSub { color: var(--muted-strong); font-size: 0.9rem; line-height: 1.5; margin: 0; max-width: 90%; }
+.lockedCta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 2px;
+  background: var(--mint);
+  color: #04221a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: background var(--duration) var(--ease-premium);
+}
+.lockedCta svg { width: 14px; height: 14px; }
+.lockedCta:hover { background: var(--mint-hover, #5dd6a6); }
+
+.rescore {
+  margin-top: var(--space-4);
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  padding: 6px 13px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.rescore:hover { color: var(--mint); border-color: rgba(110, 231, 183, 0.5); }
+.rescore:disabled { opacity: 0.4; cursor: default; }
+
+/* ── right: talk deeper in Claude (iris doorway trigger) ──
+   A spark action: flat iris text+icon that lights up on hover/tap, no idle glow.
+   Iris (not mint) because this is Echo/Vee's voice and the doorway sheet is iris. */
+.askCol { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; margin-top: auto; }
+.claudePill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(167, 139, 250, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.28);
+  border-radius: var(--radius-pill);
+  padding: 11px 18px;
+  cursor: pointer;
+  color: #c9bbfb;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: border-color var(--duration) var(--ease-premium), background var(--duration) var(--ease-premium), color var(--duration) var(--ease-premium), box-shadow var(--duration) var(--ease-premium);
+}
+.claudePillText { line-height: 1; }
+.claudePillSpark { width: 16px; height: 16px; color: #a78bfa; transition: transform 0.4s var(--ease-premium), color var(--duration) var(--ease-premium); }
+.claudePillArrow { width: 15px; height: 15px; opacity: 0.6; transition: transform var(--duration) var(--ease-premium), opacity var(--duration) var(--ease-premium); }
+.claudePill:hover {
+  border-color: rgba(167, 139, 250, 0.6);
+  background: rgba(167, 139, 250, 0.12);
+  color: #ece9f7;
+  box-shadow: 0 8px 28px -12px rgba(167, 139, 250, 0.5);
+}
+.claudePill:hover .claudePillSpark { transform: rotate(90deg); color: #c4b5fd; }
+.claudePill:hover .claudePillArrow { transform: translateX(3px); opacity: 1; }
+.claudeHint { font-family: var(--font-mono, monospace); font-size: 0.6rem; letter-spacing: 0.04em; color: var(--muted); }
+
+/* stack on narrow viewports */
+@media (max-width: 720px) {
+  .card { grid-template-columns: 1fr; justify-items: center; padding: var(--space-5) var(--space-5); }
+  .divider { display: none; }
+  .gemStage { width: clamp(280px, 82vw, 300px); height: clamp(280px, 82vw, 300px); }
+  .contentCol { width: 100%; }
+  .reason { max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reason { animation: none; }
+  .burst { display: none; }
+  .cardCelebrate { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Goal-aware coach: score rings, goal cue, headline, context question, chip
+   tabs, and the animated detail card. Ported from the approved preview onto the
+   real tokens. Mint = good, amber = caution, never red.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* tighten the content column: each block below sets its own top margin */
+.contentCol { gap: 0; }
+
+/* two score rings */
+.scores { display: flex; align-items: flex-start; gap: var(--space-6); flex-wrap: wrap; }
+.score { display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; }
+.scoreK { font-family: var(--font-mono, monospace); font-size: 0.56rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.scoreCap { font-size: 0.79rem; color: var(--muted-strong); max-width: 16ch; line-height: 1.3; }
+.ringWrap { position: relative; }
+
+.ring { position: relative; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.ringTrack { fill: none; stroke: rgba(255, 255, 255, 0.11); stroke-width: 6; }
+.ringVal { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.1s var(--ease); }
+.ring[data-tone='good'] .ringVal { stroke: var(--mint); filter: drop-shadow(0 0 3px var(--mint-glow)); }
+.ring[data-tone='watch'] .ringVal { stroke: var(--amber); filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4)); }
+.ringNum { position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; gap: 1px; font-family: var(--font-serif, Georgia, serif); }
+.ringN { font-size: 2.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.ring[data-tone='good'] .ringN { color: var(--mint); }
+.ring[data-tone='watch'] .ringN { color: var(--amber); }
+.ringOf { font-size: 0.78rem; color: var(--muted); }
+
+/* The simple day score: one big number out of ten, serif, in the two Vitality
+   colors (mint good / amber watch). No ring. */
+.dayScore { display: inline-flex; align-items: baseline; gap: 5px; font-family: var(--font-serif, Georgia, serif); line-height: 0.85; }
+.dayScoreN { font-size: 5.4rem; font-variant-numeric: tabular-nums; line-height: 0.85; }
+.dayScore[data-tone='good'] .dayScoreN { color: var(--mint); text-shadow: 0 0 34px rgba(110, 231, 183, 0.25); }
+.dayScore[data-tone='watch'] .dayScoreN { color: var(--amber); text-shadow: 0 0 34px rgba(245, 158, 11, 0.22); }
+.dayScoreOf { font-size: 1.35rem; color: var(--muted); font-style: italic; }
+
+/* the flying +1 / -1 token */
+.deltaFly { position: absolute; left: 50%; top: 28%; font-family: var(--font-serif, Georgia, serif); font-size: 1.9rem; pointer-events: none; z-index: 5; animation: coachDeltaFly 1.15s var(--ease-premium) forwards; }
+.deltaGood { color: var(--mint); }
+.deltaBad { color: var(--amber); }
+@keyframes coachDeltaFly {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.7); }
+  22% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -42px) scale(1.15); }
+}
+
+/* goal cue */
+.goalCue { display: inline-flex; align-items: center; gap: 8px; margin-top: var(--space-4); }
+.goalPip { width: 8px; height: 8px; border-radius: 50%; background: var(--iris, #a78bfa); box-shadow: 0 0 8px rgba(167, 139, 250, 0.55); }
+.goalLbl { font-family: var(--font-mono, monospace); font-size: 0.54rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.goalPh { font-family: var(--font-serif, Georgia, serif); font-style: italic; color: var(--mint); font-size: 1.08rem; }
+
+/* goal-aware headline */
+.headline { font-size: 1rem; color: #eef6f1; margin: var(--space-3) 0 0; max-width: 56ch; line-height: 1.5; }
+.hl { color: var(--mint); font-weight: 600; font-style: normal; }
+.hlBold { font-weight: 600; font-style: normal; }
+
+/* context question strip */
+.ctxStrip { margin-top: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 13px 15px; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.022); animation: coachCtxPop 0.46s cubic-bezier(0.5, 1.5, 0.4, 1); }
+.ctxStrip::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; }
+.ctxStrip[data-tone='good'] { border-color: rgba(110, 231, 183, 0.22); }
+.ctxStrip[data-tone='good']::before { background: var(--mint); }
+.ctxStrip[data-tone='watch'] { border-color: rgba(245, 158, 11, 0.28); }
+.ctxStrip[data-tone='watch']::before { background: var(--amber); }
+@keyframes coachCtxPop { 0% { opacity: 0; transform: translateY(8px) scale(0.98); } 100% { opacity: 1; transform: none; } }
+.ctxAsk { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.ctxAskE { font-family: var(--font-serif, Georgia, serif); font-style: italic; color: var(--iris, #a78bfa); font-size: 0.92rem; }
+.ctxAskT { font-family: var(--font-mono, monospace); font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.ctxQ { font-size: 0.95rem; color: #eef6f1; margin-bottom: 11px; line-height: 1.45; }
+.ctxStrip[data-tone='good'] .ctxQ em { color: var(--mint); font-style: normal; font-weight: 600; }
+.ctxStrip[data-tone='watch'] .ctxQ em { color: var(--amber); font-style: normal; font-weight: 600; }
+.ctxBtns { display: flex; flex-wrap: wrap; gap: 8px; }
+.ctxBtn { cursor: pointer; font-family: inherit; font-size: 0.8rem; font-weight: 500; border-radius: 10px; padding: 8px 14px; border: 1px solid var(--border-strong); background: transparent; color: var(--muted-strong); transition: transform 0.2s cubic-bezier(0.5, 1.5, 0.4, 1), border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease); }
+.ctxBtn:hover { transform: translateY(-1px); }
+.ctxStrip[data-tone='good'] .ctxBtnYes:hover { border-color: rgba(110, 231, 183, 0.5); background: rgba(110, 231, 183, 0.1); color: var(--mint); }
+.ctxStrip[data-tone='watch'] .ctxBtnYes:hover { border-color: rgba(245, 158, 11, 0.5); background: rgba(245, 158, 11, 0.1); color: var(--amber); }
+.ctxBtnGhost { color: var(--muted); }
+.ctxBtn:active { transform: scale(0.95); }
+
+/* undo / grace bar */
+.graceUndo { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 0.8rem; color: var(--muted-strong); border: 1px solid var(--border-strong); border-radius: 10px; padding: 8px 13px; animation: coachCtxPop 0.4s cubic-bezier(0.5, 1.5, 0.4, 1); }
+.graceUndo button { cursor: pointer; background: none; border: none; color: var(--amber); font-family: inherit; font-size: 0.8rem; font-weight: 600; padding: 0; }
+.graceUndo button:hover { text-decoration: underline; }
+
+/* why label + chip tabs */
+.whyLabel { font-family: var(--font-mono, monospace); font-size: 0.56rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: var(--space-5) 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.chip { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 9px 13px; font-family: inherit; transition: transform 0.25s cubic-bezier(0.5, 1.5, 0.4, 1), border-color 0.25s var(--ease), background 0.25s var(--ease); }
+.chipLbl { font-family: var(--font-mono, monospace); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-strong); }
+.chipDelta { font-family: var(--font-mono, monospace); font-size: 0.72rem; font-weight: 500; color: var(--muted); min-width: 18px; text-align: right; }
+.chip[data-tone='good'] .chipDelta { color: var(--mint); opacity: 0.6; }
+.chip[data-tone='watch'] .chipDelta { color: var(--amber); }
+.chip:hover { border-color: var(--border-strong); }
+.chip[data-tone='good'].chipActive { background: rgba(110, 231, 183, 0.09); border-color: rgba(110, 231, 183, 0.4); box-shadow: 0 6px 24px -12px var(--mint-glow); transform: translateY(-1px); }
+.chip[data-tone='watch'].chipActive { background: rgba(245, 158, 11, 0.09); border-color: rgba(245, 158, 11, 0.42); box-shadow: 0 6px 24px -12px rgba(245, 158, 11, 0.4); transform: translateY(-1px); }
+.chip[data-tone='good'].chipActive .chipLbl { color: var(--mint); }
+.chip[data-tone='good'].chipActive .chipDelta { opacity: 1; }
+.chip[data-tone='watch'].chipActive .chipLbl { color: var(--amber); }
+
+/* animated detail card */
+.detail { margin-top: 14px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: rgba(255, 255, 255, 0.022); padding: 16px 18px; position: relative; overflow: hidden; animation: coachCtxPop 0.42s cubic-bezier(0.5, 1.5, 0.4, 1); }
+.detail::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.detail[data-tone='good']::before { background: var(--mint); }
+.detail[data-tone='watch']::before { background: var(--amber); }
+.detail[data-tone='good'] { box-shadow: 0 0 40px -22px var(--mint-glow); }
+.detail[data-tone='watch'] { box-shadow: 0 0 40px -22px rgba(245, 158, 11, 0.4); }
+.dTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.dName { font-family: var(--font-mono, monospace); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-strong); }
+.dRight { display: flex; align-items: center; gap: 12px; }
+.dPips { display: flex; gap: 5px; }
+.dPip { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.13); }
+.detail[data-tone='good'] .dPipOn { background: var(--mint); box-shadow: 0 0 7px var(--mint-glow); }
+.detail[data-tone='watch'] .dPipOn { background: var(--amber); box-shadow: 0 0 7px rgba(245, 158, 11, 0.4); }
+.dDelta { font-family: var(--font-serif, Georgia, serif); font-size: 1.5rem; line-height: 1; }
+.detail[data-tone='good'] .dDelta { color: var(--mint); }
+.detail[data-tone='watch'] .dDelta { color: var(--amber); }
+.dReason { font-size: 0.9rem; color: #e7efe9; line-height: 1.55; }
+.dPts { font-family: var(--font-mono, monospace); font-size: 0.56rem; letter-spacing: 0.06em; color: var(--muted); margin-top: 9px; }
+
+/* the Claude doorway sits a touch below the detail now */
+.askCol { margin-top: var(--space-5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .deltaFly { display: none; }
+  .ctxStrip, .detail, .graceUndo { animation: none; }
+  .ringVal { transition: none; }
+}
+
+/* ── Allergen guard (BUILD 2): warm amber caution, never red ── */
+.allergen {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(245, 158, 11, 0.06);
+  border-radius: 14px;
+}
+.allergenIco {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  color: var(--amber);
+  margin-top: 1px;
+}
+.allergenBody { display: flex; flex-direction: column; gap: 4px; }
+.allergenLine {
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  line-height: 1.5;
+  margin: 0;
+}
+.allergenLine b { color: var(--fg); font-weight: 600; }
+.allergenNote {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* ── dietStyle focus line: leads with the user's own signal ── */
+.styleNote {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--muted-strong);
+}
+.styleDot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 10px -1px var(--mint-glow);
+}
+.styleNote[data-tone="watch"] { color: var(--fg); }
+.styleNote[data-tone="watch"] .styleDot {
+  background: var(--amber);
+  box-shadow: 0 0 10px -1px rgba(245, 158, 11, 0.5);
+}

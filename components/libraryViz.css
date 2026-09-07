@@ -1,0 +1,305 @@
+/* libraryViz.css - the library's micro-visual language (BUILD81).
+   Plain global sheet (the veeTiles.css pattern) so lib/tiles/presetViz.tsx
+   stays importable anywhere. Everything is namespaced under .lv (the scenes)
+   and .lspec (the card scope that activates motion on hover / first match).
+   Motion is transform+opacity only and fully disabled under reduced motion. */
+
+.lv {
+  --lvm: rgba(110, 231, 183, 0.85);
+  --lvm-soft: rgba(110, 231, 183, 0.45);
+  --lvm-faint: rgba(110, 231, 183, 0.18);
+  --lvd: rgba(255, 255, 255, 0.22);
+  --lvd-fill: rgba(255, 255, 255, 0.1);
+  --lvease: cubic-bezier(0.22, 0.9, 0.3, 1);
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* shared marks */
+.lv .lvS {
+  fill: none;
+  stroke: var(--lvm);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lv .lvSd {
+  fill: none;
+  stroke: var(--lvd);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.lv .lvF {
+  fill: var(--lvm);
+}
+.lv .lvFd {
+  fill: var(--lvd-fill);
+}
+.lv .lvDash {
+  stroke-dasharray: 2 6;
+}
+.lv .lvT {
+  font: 500 7px 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.12em;
+  fill: rgba(255, 255, 255, 0.38);
+}
+.lv .lvTm {
+  font: 500 7px 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.08em;
+  fill: var(--lvm);
+}
+
+/* ── per-scene statics ─────────────────────────────────────────────────── */
+
+/* steps: footprints, lit ones walked */
+.lv-steps .fp ellipse { fill: var(--lvd-fill); }
+.lv-steps .fp.on ellipse { fill: var(--lvm-soft); }
+
+/* pushups: rep ticks under the bar */
+.lv-pushups .rep { stroke: var(--lvd); stroke-width: 1.6; stroke-linecap: round; }
+.lv-pushups .rep.on { stroke: var(--lvm-soft); }
+
+/* workouts: week columns */
+.lv-workouts .col { fill: none; stroke: var(--lvd); stroke-width: 1.2; }
+.lv-workouts .col.on { fill: var(--lvm-faint); stroke: var(--lvm-soft); }
+
+/* weight: the glowing now */
+.lv-weight .glowDot { fill: var(--lvm-faint); }
+
+/* waist: tape ticks */
+.lv-waist .tick { stroke: var(--lvd); stroke-width: 1.4; stroke-linecap: round; }
+.lv-waist .tick.on { stroke: var(--lvm); }
+
+/* cold plunge: droplets + frost rest hidden-ish */
+.lv-coldplunge .drop { fill: var(--lvm-soft); opacity: 0.35; }
+.lv-coldplunge .frost path { fill: var(--lvm-soft); opacity: 0.5; }
+
+/* sleep: hour meter + stars */
+.lv-sleep .moon path { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1.2; }
+.lv-sleep .hr { stroke: var(--lvd); stroke-width: 2; stroke-linecap: round; }
+.lv-sleep .hr.on { stroke: var(--lvm-soft); }
+.lv-sleep .star { fill: rgba(255, 255, 255, 0.5); }
+
+/* mood: dial ticks + needle pivot */
+.lv-mood .tk { stroke: var(--lvd); stroke-width: 1.5; stroke-linecap: round; }
+.lv-mood .tk.on { stroke: var(--lvm-soft); }
+.lv-mood .needle { transform-box: view-box; transform-origin: 50% 78%; }
+
+/* stress: the calm half breathes from its middle */
+.lv-stress .calm { transform-box: view-box; transform-origin: 64% 50%; }
+
+/* meditation: rings */
+.lv-meditation .ring { fill: none; stroke: var(--lvm-soft); stroke-width: 1.3; transform-box: view-box; transform-origin: 50% 50%; }
+.lv-meditation .ring.r2 { stroke: var(--lvm-faint); }
+.lv-meditation .ring.r3 { stroke: rgba(110, 231, 183, 0.1); }
+
+/* reading: pages + text lines */
+.lv-reading .page { fill: var(--lvd-fill); stroke: var(--lvd); stroke-width: 1.2; }
+.lv-reading .tx { stroke: var(--lvd); stroke-width: 1.3; stroke-linecap: round; }
+.lv-reading .tx.on { stroke: var(--lvm-soft); }
+
+/* gratitude: petals */
+.lv-gratitude .petal path { fill: var(--lvd-fill); transform-box: fill-box; transform-origin: center; }
+.lv-gratitude .petal.on path { fill: var(--lvm-soft); }
+
+/* screentime: the shrinking bar (origin bottom so less reads as a win) */
+.lv-screentime .usage { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1; transform-box: fill-box; transform-origin: 50% 100%; }
+.lv-screentime .goodArrow { stroke: var(--lvm-soft); }
+
+/* journaling: ink line ready to draw */
+.lv-journaling .ink { stroke-dasharray: 150; stroke-dashoffset: 0; }
+.lv-journaling .check { stroke: var(--lvm-soft); }
+
+/* spend: coins trailing out */
+.lv-spend .coin { fill: none; stroke: var(--lvm-soft); stroke-width: 1.4; }
+.lv-spend .coin.c2 { opacity: 0.55; }
+.lv-spend .coin.c3 { opacity: 0.25; }
+
+/* savings: the stack + the incoming coin */
+.lv-savings .coinS { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1.1; }
+.lv-savings .newCoin { opacity: 0; }
+
+/* nobuy: day cells */
+.lv-nobuy .day { fill: none; stroke: var(--lvd); stroke-width: 1.2; }
+.lv-nobuy .day.on { fill: var(--lvm-faint); stroke: var(--lvm-soft); }
+.lv-nobuy .strike { stroke: var(--lvm); stroke-width: 1.4; stroke-linecap: round; }
+
+/* water: glasses + fills (origin bottom = filling up) */
+.lv-water .glass { fill: none; stroke: var(--lvd); stroke-width: 1.1; }
+.lv-water .waterFill { fill: var(--lvm-faint); opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; }
+.lv-water .waterFill.on { opacity: 1; }
+
+/* coffee: steam at rest */
+.lv-coffee .steam { fill: none; stroke: var(--lvm-soft); stroke-width: 1.3; stroke-linecap: round; opacity: 0.4; }
+
+/* protein: the fill column */
+.lv-protein .pfill { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1; transform-box: fill-box; transform-origin: 50% 100%; }
+
+/* calories: the day ring, mostly eaten */
+.lv-calories .kring { fill: none; stroke: var(--lvm-soft); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 84 120; transform: rotate(-90deg); transform-box: fill-box; transform-origin: center; }
+
+/* creatine: falling grains */
+.lv-creatine .grain { fill: var(--lvm-soft); opacity: 0.5; }
+
+/* alcohol: pour level + the cap line */
+.lv-alcohol .pour { fill: var(--lvm-faint); }
+.lv-alcohol .capLine { stroke: var(--lvm-soft); stroke-width: 1.2; stroke-dasharray: 3 4; }
+
+/* cigarettes: two broken halves */
+.lv-cigarettes .cigL, .lv-cigarettes .cigR { transform-box: view-box; }
+.lv-cigarettes .zeroArrow { stroke: var(--lvm-soft); }
+
+/* gymstreak: flame + streak dots */
+.lv-gymstreak .flame path { fill: var(--lvm-soft); transform-box: fill-box; transform-origin: 50% 90%; }
+.lv-gymstreak .dot { fill: var(--lvd-fill); }
+.lv-gymstreak .dot.on { fill: var(--lvm-soft); }
+
+/* wake early: the sun on the line */
+.lv-wakeearly .sun { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1.2; }
+.lv-wakeearly .ray { stroke: var(--lvm-soft); stroke-width: 1.4; stroke-linecap: round; opacity: 0.7; }
+.lv-wakeearly .sunG { transform-box: view-box; }
+
+/* no vaping: the thinning cloud */
+.lv-novaping .fadeDot { fill: var(--lvd); }
+.lv-novaping .fd0 { opacity: 0.5; } .lv-novaping .fd1 { opacity: 0.38; }
+.lv-novaping .fd2 { opacity: 0.26; } .lv-novaping .fd3 { opacity: 0.14; }
+.lv-novaping .fd4 { opacity: 0.07; }
+.lv-novaping .cleanSpark path { fill: var(--lvm-soft); }
+
+/* made bed: pillow + blanket + the tucked fold */
+.lv-madebed .pillow { fill: var(--lvd-fill); stroke: var(--lvd); stroke-width: 1.1; }
+.lv-madebed .blanket { fill: var(--lvm-faint); stroke: var(--lvm-soft); stroke-width: 1.1; }
+.lv-madebed .fold { fill: var(--lvm-soft); }
+.lv-madebed .check { stroke: var(--lvm-soft); }
+
+/* blanks: dashed stage, quiet mark */
+.lv-blank .frame { fill: none; stroke: var(--lvd); stroke-width: 1.2; stroke-dasharray: 4 6; }
+.lv-blank .mark { fill: var(--lvm-soft); }
+
+/* ── motion (hover / first-match only; transform+opacity only) ─────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* activation scope: a hovered card, or the finder's current first match */
+  .lspec:hover .lv-steps .fp, .lspec-first .lv-steps .fp { animation: lvBlink 1.8s var(--lvease) infinite; }
+  .lspec:hover .lv-steps .fp:nth-of-type(2), .lspec-first .lv-steps .fp:nth-of-type(2) { animation-delay: 0.15s; }
+  .lspec:hover .lv-steps .fp:nth-of-type(3), .lspec-first .lv-steps .fp:nth-of-type(3) { animation-delay: 0.3s; }
+  .lspec:hover .lv-steps .fp:nth-of-type(4), .lspec-first .lv-steps .fp:nth-of-type(4) { animation-delay: 0.45s; }
+  .lspec:hover .lv-steps .fp:nth-of-type(5), .lspec-first .lv-steps .fp:nth-of-type(5) { animation-delay: 0.6s; }
+
+  .lspec:hover .lv-pushups .bar, .lspec-first .lv-pushups .bar { animation: lvPump 1.1s var(--lvease) infinite; }
+
+  .lspec:hover .lv-workouts .col.on, .lspec-first .lv-workouts .col.on { animation: lvPop 1.6s var(--lvease) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .lspec:hover .lv-workouts .col.on:nth-of-type(2), .lspec-first .lv-workouts .col.on:nth-of-type(2) { animation-delay: 0.12s; }
+  .lspec:hover .lv-workouts .col.on:nth-of-type(4), .lspec-first .lv-workouts .col.on:nth-of-type(4) { animation-delay: 0.24s; }
+  .lspec:hover .lv-workouts .col.on:nth-of-type(6), .lspec-first .lv-workouts .col.on:nth-of-type(6) { animation-delay: 0.36s; }
+
+  .lspec:hover .lv-weight .nowDot, .lspec-first .lv-weight .nowDot,
+  .lspec:hover .lv-weight .glowDot, .lspec-first .lv-weight .glowDot { animation: lvPulse 2s var(--lvease) infinite; transform-box: fill-box; transform-origin: center; }
+
+  .lspec:hover .lv-waist .tick, .lspec-first .lv-waist .tick { animation: lvBlink 2s var(--lvease) infinite; }
+  .lspec:hover .lv-waist .tick:nth-of-type(2), .lspec-first .lv-waist .tick:nth-of-type(2) { animation-delay: 0.15s; }
+  .lspec:hover .lv-waist .tick:nth-of-type(3), .lspec-first .lv-waist .tick:nth-of-type(3) { animation-delay: 0.3s; }
+  .lspec:hover .lv-waist .tick:nth-of-type(4), .lspec-first .lv-waist .tick:nth-of-type(4) { animation-delay: 0.45s; }
+  .lspec:hover .lv-waist .tick:nth-of-type(5), .lspec-first .lv-waist .tick:nth-of-type(5) { animation-delay: 0.6s; }
+
+  .lspec:hover .lv-coldplunge .drop, .lspec-first .lv-coldplunge .drop { animation: lvRiseFade 1.4s var(--lvease) infinite; }
+  .lspec:hover .lv-coldplunge .d2, .lspec-first .lv-coldplunge .d2 { animation-delay: 0.2s; }
+  .lspec:hover .lv-coldplunge .d3, .lspec-first .lv-coldplunge .d3 { animation-delay: 0.4s; }
+  .lspec:hover .lv-coldplunge .dip, .lspec-first .lv-coldplunge .dip { animation: lvBob 2.2s var(--lvease) infinite; transform-box: fill-box; transform-origin: center; }
+
+  .lspec:hover .lv-sleep .star, .lspec-first .lv-sleep .star { animation: lvTwinkle 2.4s var(--lvease) infinite; transform-box: fill-box; transform-origin: center; }
+  .lspec:hover .lv-sleep .s2, .lspec-first .lv-sleep .s2 { animation-delay: 1.1s; }
+
+  .lspec:hover .lv-mood .needle, .lspec-first .lv-mood .needle { animation: lvLean 2.4s var(--lvease) infinite; }
+
+  .lspec:hover .lv-stress .calm, .lspec-first .lv-stress .calm { animation: lvSettle 2.6s var(--lvease) infinite; }
+
+  .lspec:hover .lv-meditation .ring, .lspec-first .lv-meditation .ring { animation: lvBreathe 3.2s var(--lvease) infinite; }
+  .lspec:hover .lv-meditation .r2, .lspec-first .lv-meditation .r2 { animation-delay: 0.35s; }
+  .lspec:hover .lv-meditation .r3, .lspec-first .lv-meditation .r3 { animation-delay: 0.7s; }
+
+  .lspec:hover .lv-reading .rline, .lspec-first .lv-reading .rline { animation: lvInkIn 2.4s var(--lvease) infinite; }
+  .lspec:hover .lv-reading .rline.r1, .lspec-first .lv-reading .rline.r1 { animation-delay: 0.25s; }
+  .lspec:hover .lv-reading .rline.r2, .lspec-first .lv-reading .rline.r2 { animation-delay: 0.5s; }
+
+  .lspec:hover .lv-gratitude .petal path, .lspec-first .lv-gratitude .petal path { animation: lvBloom 2.2s var(--lvease) infinite; }
+  .lspec:hover .lv-gratitude .p2 path, .lspec-first .lv-gratitude .p2 path { animation-delay: 0.25s; }
+  .lspec:hover .lv-gratitude .p3 path, .lspec-first .lv-gratitude .p3 path { animation-delay: 0.5s; }
+  .lspec:hover .lv-gratitude .p4 path, .lspec-first .lv-gratitude .p4 path { animation-delay: 0.75s; }
+
+  .lspec:hover .lv-screentime .usage, .lspec-first .lv-screentime .usage { animation: lvShrink 2.4s var(--lvease) infinite; }
+  .lspec:hover .lv-screentime .goodArrow, .lspec-first .lv-screentime .goodArrow { animation: lvNudgeDown 2.4s var(--lvease) infinite; }
+
+  .lspec:hover .lv-journaling .ink, .lspec-first .lv-journaling .ink { animation: lvWrite 2.8s var(--lvease) infinite; }
+
+  .lspec:hover .lv-spend .coin, .lspec-first .lv-spend .coin { animation: lvSlideOut 2s var(--lvease) infinite; }
+  .lspec:hover .lv-spend .c2, .lspec-first .lv-spend .c2 { animation-delay: 0.18s; }
+  .lspec:hover .lv-spend .c3, .lspec-first .lv-spend .c3 { animation-delay: 0.36s; }
+
+  .lspec:hover .lv-savings .newCoin, .lspec-first .lv-savings .newCoin { animation: lvDrop 2.2s var(--lvease) infinite; }
+
+  .lspec:hover .lv-nobuy .day.next, .lspec-first .lv-nobuy .day.next { animation: lvNext 1.8s var(--lvease) infinite; }
+
+  .lspec:hover .lv-water .waterFill.next, .lspec-first .lv-water .waterFill.next { animation: lvFillUp 1.8s var(--lvease) infinite; }
+
+  .lspec:hover .lv-coffee .steam, .lspec-first .lv-coffee .steam { animation: lvSteam 2.2s var(--lvease) infinite; }
+  .lspec:hover .lv-coffee .s2, .lspec-first .lv-coffee .s2 { animation-delay: 0.3s; }
+  .lspec:hover .lv-coffee .s3, .lspec-first .lv-coffee .s3 { animation-delay: 0.6s; }
+
+  .lspec:hover .lv-protein .pfill, .lspec-first .lv-protein .pfill { animation: lvTopUp 2.2s var(--lvease) infinite; }
+
+  .lspec:hover .lv-calories .kring, .lspec-first .lv-calories .kring { animation: lvSweep 2.6s var(--lvease) infinite; }
+
+  .lspec:hover .lv-creatine .grain, .lspec-first .lv-creatine .grain { animation: lvGrainFall 1.6s var(--lvease) infinite; }
+  .lspec:hover .lv-creatine .g2, .lspec-first .lv-creatine .g2 { animation-delay: 0.25s; }
+  .lspec:hover .lv-creatine .g3, .lspec-first .lv-creatine .g3 { animation-delay: 0.5s; }
+
+  .lspec:hover .lv-alcohol .pour, .lspec-first .lv-alcohol .pour { animation: lvLower 2.4s var(--lvease) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+
+  .lspec:hover .lv-cigarettes .cigR, .lspec-first .lv-cigarettes .cigR { animation: lvBreakAway 2.2s var(--lvease) infinite; }
+
+  .lspec:hover .lv-gymstreak .flame path, .lspec-first .lv-gymstreak .flame path { animation: lvFlame 1.6s var(--lvease) infinite; }
+  .lspec:hover .lv-gymstreak .dot.next, .lspec-first .lv-gymstreak .dot.next { animation: lvNext 1.8s var(--lvease) infinite; }
+
+  .lspec:hover .lv-wakeearly .sunG, .lspec-first .lv-wakeearly .sunG { animation: lvSunrise 2.6s var(--lvease) infinite; }
+
+  .lspec:hover .lv-novaping .cloud, .lspec-first .lv-novaping .cloud { animation: lvThin 2.6s var(--lvease) infinite; }
+  .lspec:hover .lv-novaping .cleanSpark path, .lspec-first .lv-novaping .cleanSpark path { animation: lvTwinkle 2.6s var(--lvease) infinite; transform-box: fill-box; transform-origin: center; }
+
+  .lspec:hover .lv-madebed .fold, .lspec-first .lv-madebed .fold { animation: lvTuck 2.4s var(--lvease) infinite; transform-box: fill-box; transform-origin: 0% 0%; }
+  .lspec:hover .lv-madebed .check, .lspec-first .lv-madebed .check { animation: lvBlink 2.4s var(--lvease) infinite; }
+
+  .lspec:hover .lv-blank .mark, .lspec-first .lv-blank .mark { animation: lvPulse 2s var(--lvease) infinite; transform-box: fill-box; transform-origin: center; }
+}
+
+/* ── shared keyframes (small, purposeful) ──────────────────────────────── */
+@keyframes lvBlink { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@keyframes lvPulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.25); opacity: 1; } }
+@keyframes lvPump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@keyframes lvPop { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.14); } }
+@keyframes lvRiseFade { 0% { transform: translateY(4px); opacity: 0; } 35% { opacity: 0.9; } 100% { transform: translateY(-7px); opacity: 0; } }
+@keyframes lvBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2.5px); } }
+@keyframes lvTwinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.3); } }
+@keyframes lvLean { 0%, 100% { transform: rotate(0deg); } 55% { transform: rotate(9deg); } }
+@keyframes lvSettle { 0%, 100% { transform: scaleY(1); } 55% { transform: scaleY(0.82); } }
+@keyframes lvBreathe { 0%, 100% { transform: scale(1); opacity: 0.9; } 55% { transform: scale(1.12); opacity: 0.55; } }
+@keyframes lvInkIn { 0%, 20% { opacity: 0.25; } 60%, 100% { opacity: 1; } }
+@keyframes lvBloom { 0%, 100% { transform: scale(1) rotate(0deg); } 55% { transform: scale(1.22) rotate(10deg); } }
+@keyframes lvShrink { 0%, 100% { transform: scaleY(1); } 55% { transform: scaleY(0.72); } }
+@keyframes lvNudgeDown { 0%, 100% { transform: translateY(0); opacity: 0.7; } 55% { transform: translateY(3px); opacity: 1; } }
+@keyframes lvWrite { 0% { stroke-dashoffset: 150; } 60%, 100% { stroke-dashoffset: 0; } }
+@keyframes lvSlideOut { 0%, 100% { transform: translateX(0); } 55% { transform: translateX(6px); } }
+@keyframes lvDrop { 0%, 15% { transform: translateY(0); opacity: 0; } 40% { opacity: 1; } 70%, 100% { transform: translateY(11px); opacity: 1; } }
+@keyframes lvNext { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@keyframes lvFillUp { 0%, 15% { transform: scaleY(0.05); opacity: 0.4; } 70%, 100% { transform: scaleY(1); opacity: 1; } }
+@keyframes lvSteam { 0% { transform: translateY(2px); opacity: 0.15; } 50% { opacity: 0.75; } 100% { transform: translateY(-4px); opacity: 0.1; } }
+@keyframes lvTopUp { 0%, 100% { transform: scaleY(1); } 55% { transform: scaleY(1.28); } }
+@keyframes lvSweep { 0% { stroke-dasharray: 20 120; } 55%, 100% { stroke-dasharray: 84 120; } }
+@keyframes lvGrainFall { 0% { transform: translateY(-4px); opacity: 0; } 40% { opacity: 0.9; } 100% { transform: translateY(8px); opacity: 0; } }
+@keyframes lvLower { 0%, 100% { transform: scaleY(1); } 55% { transform: scaleY(0.7); } }
+@keyframes lvBreakAway { 0%, 100% { transform: rotate(9deg) translateX(0); } 55% { transform: rotate(12deg) translateX(4px); } }
+@keyframes lvFlame { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12) translateY(-1px); } }
+@keyframes lvSunrise { 0%, 100% { transform: translateY(0); } 55% { transform: translateY(-3.5px); } }
+@keyframes lvThin { 0%, 100% { opacity: 1; } 55% { opacity: 0.45; } }
+@keyframes lvTuck { 0%, 100% { transform: rotate(0deg); } 55% { transform: rotate(-8deg); } }

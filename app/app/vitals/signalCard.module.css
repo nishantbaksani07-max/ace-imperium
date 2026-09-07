@@ -1,0 +1,147 @@
+/* Vitals Signal card. Ported 1:1 from public/vitals-signals-kit.html (the azure
+   "Your signal" card). The azure palette is the Vitals sister to Mentor's iris;
+   it is scoped locally here so the card carries its own accent regardless of the
+   page tokens, while still leaning on the shared globals.css space / muted /
+   border / card tokens where they exist. Colorblind-safe: every chip's meaning
+   rides on its source + qualifier word + direction word, not hue alone. */
+.scope {
+  --accent: #5e9bff;
+  --accent-hi: #8db8ff;
+  --accent-glow: rgba(94, 155, 255, .42);
+  --accent-deep: #16335e;
+  --sig-amber: #f59e0b;
+  --sig-card-elevated: rgba(255, 255, 255, .04);
+  --sig-serif: 'Instrument Serif', Georgia, serif;
+  --sig-mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+.signalCard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(94, 155, 255, .22);
+  border-radius: 18px;
+  padding: var(--space-8, 2rem);
+  background:
+    radial-gradient(130% 90% at 0% 0%, rgba(94, 155, 255, .08), transparent 55%),
+    var(--card, rgba(255, 255, 255, .02));
+  box-shadow: 0 0 0 1px rgba(94, 155, 255, .07), 0 0 70px -30px var(--accent-glow);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+}
+@media (max-width: 680px) {
+  .signalCard { padding: var(--space-6, 1.5rem); }
+}
+
+.verdict { display: flex; align-items: center; gap: 14px; }
+
+.verdictBadge {
+  font-family: var(--sig-mono);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+}
+.badgeAccent {
+  color: var(--accent);
+  border: 1px solid rgba(94, 155, 255, .4);
+  background: rgba(94, 155, 255, .07);
+}
+.badgeAmber {
+  color: var(--sig-amber);
+  border: 1px solid rgba(245, 158, 11, .4);
+  background: rgba(245, 158, 11, .07);
+}
+.verdictBadge .ic { font-weight: 700; }
+
+.verdictLine {
+  font-family: var(--sig-serif);
+  font-style: italic;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  line-height: 1.2;
+  margin: 0;
+  color: var(--fg, #fff);
+}
+.verdictWhy {
+  font-size: var(--text-sm, .875rem);
+  color: var(--muted, rgba(255, 255, 255, .5));
+  line-height: 1.6;
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* the signals that fed the verdict, each labelled + sourced */
+.signalRow { display: flex; gap: 12px; flex-wrap: wrap; }
+.sigChip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border: 1px solid var(--border, rgba(255, 255, 255, .08));
+  border-radius: 13px;
+  background: var(--sig-card-elevated);
+}
+.sigArrow { font-family: var(--sig-mono); font-weight: 700; }
+.sigUp { color: var(--accent); }
+.sigFlat { color: var(--muted-strong, rgba(255, 255, 255, .7)); }
+.sigDown { color: var(--sig-amber); }
+.sigText { display: flex; flex-direction: column; line-height: 1.25; }
+.sigVal { font-size: .95rem; color: var(--fg, #fff); font-weight: 500; }
+.sigMeta {
+  font-family: var(--sig-mono);
+  font-size: .54rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted, rgba(255, 255, 255, .5));
+}
+
+/* goal momentum line */
+.momentum { display: flex; flex-direction: column; gap: 10px; }
+.momBar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  overflow: hidden;
+}
+.momFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+  box-shadow: 0 0 16px -2px var(--accent-glow);
+}
+.momMeta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--sig-mono);
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted, rgba(255, 255, 255, .5));
+}
+
+/* talk-about-this pill */
+.talkPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 6px;
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 155, 255, .4);
+  background: rgba(94, 155, 255, .07);
+  color: var(--accent);
+  font-size: var(--text-sm, .875rem);
+  cursor: pointer;
+  font-family: var(--sans, 'Inter', -apple-system, sans-serif);
+  transition: all .2s cubic-bezier(.16, 1, .3, 1);
+}
+.talkPill:hover {
+  background: rgba(94, 155, 255, .13);
+  border-color: rgba(94, 155, 255, .6);
+}

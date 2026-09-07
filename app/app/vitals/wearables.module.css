@@ -1,0 +1,139 @@
+/* Vitals · your wearables — ported 1:1 from public/vitals-wearables-final.html
+   (the locked design). Colour/font tokens are global; this file owns the arm
+   hero, the compact header, and the frosted device cards. */
+
+.page {
+  /* Azure re-theme: Vitals accent is azure, not the app mint (matches the
+     readings page + Signal card). */
+  --accent: #5e9bff;
+  --accent-glow: rgba(94, 155, 255, .42);
+  --accent-deep: #16335e;
+  position: relative;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--fg);
+  overflow: hidden;
+}
+
+/* ── the arm lives in a zone that STARTS below the cards, so it can never
+      touch a tile. Anything above the zone top is clipped (in empty space). ── */
+.armclip {
+  position: fixed; left: 0; right: 0; top: 450px; bottom: 0;
+  overflow: hidden; z-index: 1; pointer-events: none;
+}
+.arm {
+  position: absolute; right: -25px; bottom: -60px; width: min(500px, 35vw);
+  transform: scaleX(-1) rotate(-7deg); opacity: 0;
+  filter: drop-shadow(0 30px 70px rgba(0, 0, 0, 0.6)) contrast(1.04) brightness(1.04);
+  animation: armIn 1.5s cubic-bezier(.18, .86, .32, 1) .2s forwards;
+}
+/* dissolve the top/left edges into the black so it reads editorial, not pasted */
+.arm img {
+  display: block; width: 100%; height: auto;
+  -webkit-mask-image: linear-gradient(115deg, transparent 0, #000 22%);
+  mask-image: linear-gradient(115deg, transparent 0, #000 22%);
+}
+/* a soft mint glow blooms behind the wrist/band, then fades — adds the "pop" */
+.armglow {
+  position: absolute; z-index: 0; right: 12vw; bottom: 0; width: 340px; height: 340px;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--accent-glow, rgba(94, 155, 255, .42)), transparent 66%);
+  filter: blur(58px); opacity: 0;
+  animation: glowIn 2s ease 1s forwards;
+}
+/* pops out of the corner with a little overshoot, then holds dead still */
+@keyframes armIn {
+  0%   { opacity: 0; transform: scaleX(-1) rotate(-7deg) translate(110px, 90px) scale(.93); }
+  62%  { opacity: 1; transform: scaleX(-1) rotate(-7deg) translate(-6px, -6px) scale(1.01); }
+  100% { opacity: 1; transform: scaleX(-1) rotate(-7deg) translate(0, 0) scale(1); }
+}
+@keyframes glowIn { from { opacity: 0; } to { opacity: .28; } }
+@media (prefers-reduced-motion: reduce) {
+  .arm { animation: none; opacity: 1; transform: scaleX(-1) rotate(-7deg); }
+  .armglow { animation: none; opacity: .28; }
+}
+
+/* content above the arm — compact, so the arm gets room to show */
+.shell {
+  position: relative; z-index: 2;
+  max-width: 1340px; margin: 0 auto;
+  padding: calc(34px + env(safe-area-inset-top)) 56px calc(34px + env(safe-area-inset-bottom));
+}
+@media (max-width: 680px) {
+  .shell { padding-left: 20px; padding-right: 20px; padding-top: calc(24px + env(safe-area-inset-top)); }
+  .armclip { top: 520px; }
+}
+
+.eyebrow { display: flex; align-items: center; gap: 16px; }
+.back {
+  font-family: var(--font-mono, monospace); font-size: 12px; letter-spacing: .22em;
+  color: var(--accent); text-transform: uppercase; text-decoration: none;
+}
+.sep { width: 1px; height: 11px; background: var(--border, rgba(255, 255, 255, .08)); }
+.vtag {
+  font-family: var(--font-mono, monospace); font-size: 12px; letter-spacing: .3em;
+  color: var(--faint, #5b635f); text-transform: uppercase;
+}
+.title {
+  font-family: var(--font-serif, Georgia, serif); font-style: italic; font-weight: 400;
+  font-size: 60px; line-height: 1; letter-spacing: -.01em; margin-top: 14px;
+}
+@media (max-width: 680px) { .title { font-size: 44px; } }
+.sub {
+  font-family: var(--font-mono, monospace); font-size: 13px; letter-spacing: .12em;
+  color: var(--muted, #8a948f); text-transform: uppercase; margin-top: 14px;
+  line-height: 1.85; max-width: 560px;
+}
+
+.seclabel { display: flex; align-items: center; gap: 12px; margin-top: 22px; }
+.seclabel .n { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 18px; color: var(--accent); }
+.seclabel .t {
+  font-family: var(--font-mono, monospace); font-size: 12px; letter-spacing: .28em;
+  color: var(--faint, #5b635f); text-transform: uppercase;
+}
+
+.devices {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-top: 16px; max-width: 1180px;
+}
+@media (max-width: 920px) { .devices { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .devices { grid-template-columns: 1fr; } }
+
+/* tiles are frosted glass — they sit OVER the arm, keeping text crisp while
+   letting the arm read softly behind the right-hand ones */
+.dev {
+  border: 1px solid var(--border, rgba(255, 255, 255, .08)); border-radius: 14px;
+  padding: 18px; min-height: 188px; position: relative; display: block;
+  text-decoration: none; color: inherit;
+  background: rgba(8, 10, 9, .72);
+  backdrop-filter: blur(22px) saturate(1.05); -webkit-backdrop-filter: blur(22px) saturate(1.05);
+}
+.on {
+  border-color: var(--accent-deep, #16335e);
+  background: linear-gradient(180deg, rgba(94, 155, 255, .08), rgba(8, 10, 9, .74));
+}
+.ic {
+  width: 44px; height: 44px; border-radius: 12px;
+  border: 1px solid var(--border, rgba(255, 255, 255, .08));
+  display: grid; place-items: center; color: var(--muted, #8a948f);
+}
+.on .ic { color: var(--accent); border-color: var(--accent-deep, #16335e); }
+.pill {
+  position: absolute; top: 16px; right: 16px;
+  font-family: var(--font-mono, monospace); font-size: 9px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--faint, #5b635f);
+  border: 1px solid var(--border, rgba(255, 255, 255, .08)); border-radius: 100px; padding: 5px 10px;
+}
+.on .pill { color: var(--accent); border-color: var(--accent-deep, #16335e); }
+.devName {
+  font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 24px;
+  font-weight: 400; margin-top: 24px;
+}
+.meta {
+  font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: .1em;
+  color: var(--faint, #5b635f); text-transform: lowercase; margin-top: 7px;
+}
+.go {
+  font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: .06em;
+  color: var(--accent); position: absolute; left: 18px; bottom: 16px;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "design-kit",
+  "version": "1.0.0",
+  "description": "A dark, editorial, mint-accented React design system — tokens + components, drop-in.",
+  "private": true,
+  "type": "module",
+  "main": "components/index.ts",
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": false },
+    "react-dom": { "optional": false }
+  }
+}

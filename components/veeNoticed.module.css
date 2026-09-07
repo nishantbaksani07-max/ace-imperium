@@ -1,0 +1,366 @@
+/* Vee - the launch surface, stripped to its two things: the Echo gem (Vee's face)
+   and the one "Vitality Noticed" card. Backdrop + glass are the real Vitality
+   standard, harvested 1:1 from the mentor surface (aurora, mountains, drifting
+   particles, grain, mint-bordered glass). Iris is Echo's own gem tint; the surface
+   chrome stays mint per the app standard. No walls, no stacked sections. */
+
+.root {
+  --bg: #04060a;
+  --mint: #6ee7b7;
+  --amber: #f59e0b;
+  --iris: #a78bfa;
+  --iris-hi: #c4b5fd;
+  --tx: #f2f6f4;
+  --tx-dim: rgba(255, 255, 255, 0.62);
+  --tx-faint: rgba(255, 255, 255, 0.36);
+  --line: rgba(167, 243, 208, 0.16);
+  --hair: rgba(255, 255, 255, 0.1);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --serif: var(--font-serif), 'Iowan Old Style', Georgia, serif;
+  --mono: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --body: var(--font-inter), system-ui, sans-serif;
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: var(--body);
+  color: var(--tx);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+.root ::selection { background: rgba(110, 231, 183, 0.25); color: #fff; }
+:where(.root button) { font: inherit; color: inherit; background: none; border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:where(.root svg) { display: block; }
+:where(.root a) { color: inherit; text-decoration: none; }
+.root :focus-visible { outline: 1.5px solid var(--mint); outline-offset: 3px; border-radius: 8px; }
+
+/* ---------------------------------------------------- the world / atmosphere */
+.atmosphere {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(60% 50% at 50% 30%, color-mix(in srgb, #6ee7b7 16%, transparent) 0%, color-mix(in srgb, #6ee7b7 6%, transparent) 32%, transparent 65%),
+    radial-gradient(28% 22% at 50% 34%, rgba(196, 181, 253, 0.10) 0%, rgba(196, 181, 253, 0) 70%),
+    radial-gradient(120% 80% at 50% 100%, rgba(14, 38, 30, 0.5) 0%, rgba(4, 6, 10, 0.95) 75%);
+  background-repeat: no-repeat; background-size: 100% 100%;
+}
+.mountains { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1; height: 34vh; min-height: 200px; pointer-events: none; opacity: 0.8; }
+.mountains svg { width: 100%; height: 100%; display: block; }
+.particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.particles span {
+  position: absolute; border-radius: 50%;
+  background: rgba(233, 239, 233, 0.72);
+  box-shadow: 0 0 6px color-mix(in srgb, #a7f3d0 55%, transparent);
+  animation: drift linear infinite;
+}
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  10% { opacity: 0.7; } 90% { opacity: 0.55; }
+  100% { transform: translate3d(var(--dx, 12px), var(--dy, -100vh), 0); opacity: 0; }
+}
+.grain {
+  position: fixed; inset: 0; z-index: 3; pointer-events: none; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------- shared motion */
+@keyframes riseIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bloom {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  36% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.02); }
+  100% { opacity: 0.16; transform: translate(-50%, -50%) scale(1.1); }
+}
+@keyframes pulseDot { 0%, 100% { opacity: 0.5; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.15); } }
+
+/* ---------------------------------------------------- layout */
+/* v1.2: the page widens so the hero row can sit two-up; every section below the
+   hero row stays a centered .narrow column (the familiar 600px read). */
+.page {
+  position: relative; z-index: 5;
+  width: min(1020px, 92vw); margin: 0 auto;
+  padding: calc(20px + env(safe-area-inset-top)) 0 calc(56px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 30px;
+}
+.narrow { width: min(600px, 100%); margin-left: auto; margin-right: auto; }
+
+/* THE HERO ROW: gem + greeting left, the ·01 card right, both vertically
+   centered so neither column ever reads as filler. Mobile stacks gem-first. */
+.heroRow {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(28px, 5vw, 64px); align-items: center;
+  min-height: min(74vh, 620px);
+}
+.heroCard { min-width: 0; }
+@media (max-width: 860px) {
+  .heroRow { grid-template-columns: minmax(0, 1fr); gap: 34px; min-height: 0; }
+  .heroCard { width: min(600px, 100%); margin: 0 auto; }
+}
+
+/* ---------------------------------------------------- slim header */
+.head { display: flex; align-items: center; justify-content: flex-start; animation: riseIn 0.85s var(--ease) 0.05s both; }
+.back {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--hair); border-radius: 999px; background: rgba(8, 12, 10, 0.55);
+  padding: 8px 14px 8px 11px; font-family: var(--mono); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.18em; color: var(--tx-dim); transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+}
+.back:hover { border-color: var(--line); color: var(--tx); transform: translateX(-2px); }
+.back svg { width: 11px; height: 11px; fill: none; stroke: var(--mint); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------------------------------------------------- 1 · the Echo gem hero (Vee's face) */
+.hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; animation: riseIn 0.9s var(--ease) 0.12s both; }
+.gemStage { position: relative; width: min(300px, 74vw); aspect-ratio: 1; display: grid; place-items: center; }
+.gemStage::after {
+  content: ''; position: absolute; left: 50%; top: 54%; width: 66%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.26), rgba(167, 139, 250, 0.06) 46%, transparent 70%);
+}
+.gemStage > * { width: 100%; height: 100%; }
+.label { font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.26em; color: var(--iris-hi); opacity: 0.9; margin-top: 4px; }
+.greet { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 7vw, 42px); line-height: 1.06; letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.94); margin: 6px 0 0; }
+.greet em { font-style: italic; color: var(--iris-hi); }
+.presence { margin-top: 10px; font-size: 14.5px; color: var(--tx-dim); line-height: 1.5; max-width: 30ch; }
+.status { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tx-faint); }
+.status .sd { width: 5px; height: 5px; border-radius: 50%; background: var(--iris); box-shadow: 0 0 8px var(--iris); animation: pulseDot 2.8s ease-in-out infinite; }
+
+/* ---------------------------------------------------- 2 · the one "Vitality Noticed" card */
+.noticed {
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(110, 231, 183, 0.5); border-radius: 20px;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(110, 231, 183, 0.05), transparent 60%), rgba(255, 255, 255, 0.02);
+  box-shadow: 0 26px 70px -30px rgba(0, 0, 0, 0.85), 0 0 60px rgba(110, 231, 183, 0.06);
+  padding: 22px 22px 18px; animation: riseIn 0.9s var(--ease) 0.26s both;
+}
+.bloom {
+  position: absolute; left: 50%; top: 34%; width: 130%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.28), rgba(110, 231, 183, 0.07) 44%, transparent 68%);
+  pointer-events: none; z-index: 0; opacity: 0.16; transform: translate(-50%, -50%); animation: bloom 1.9s var(--ease) 0.4s both;
+}
+.noticed > *:not(.bloom) { position: relative; z-index: 1; }
+
+/* rarity spectrum - the gamified tier colour on the card. --rc drives the edge,
+   badge, gem and (for the top tiers) a richer border + glow. */
+.noticed { --rc: #aeb6c2; }
+.rCommon { --rc: #aeb6c2; } .rUncommon { --rc: #56e08a; } .rRare { --rc: #43a6ff; }
+.rEpic { --rc: #b98cff; } .rLegendary { --rc: #ffae3a; } .rMythic { --rc: #fdf3d6; }
+.rLegendary, .rMythic { border-color: color-mix(in srgb, var(--rc) 44%, transparent); box-shadow: 0 26px 70px -30px rgba(0, 0, 0, 0.85), 0 0 66px -14px color-mix(in srgb, var(--rc) 34%, transparent); }
+.rarityEdge { position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 2; background: linear-gradient(90deg, transparent, var(--rc), transparent); box-shadow: 0 0 16px -2px var(--rc); }
+
+/* head row - the V mark, the label, the rarity pill, and the watched chip */
+.noticedHead { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.vMark { flex: none; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; border: 1px solid rgba(167, 139, 250, 0.48); background: rgba(167, 139, 250, 0.14); color: var(--iris-hi); }
+.vMark svg { width: 14px; height: 14px; }
+.noticedLabel { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.24em; color: var(--iris-hi); }
+.headSpacer { flex: 1; }
+.watchedChip {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 8.5px;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--tx-faint);
+  border: 1px solid var(--hair); border-radius: 999px; padding: 5px 10px; white-space: nowrap;
+}
+.watchedChip svg { width: 11px; height: 11px; flex: none; }
+@media (max-width: 460px) { .watchedChip { font-size: 7.5px; padding: 4px 8px; } }
+.rbadge {
+  display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 8.5px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--rc); cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--rc) 48%, transparent); background: color-mix(in srgb, var(--rc) 12%, transparent);
+  border-radius: 999px; padding: 5px 11px 5px 9px; opacity: 0; transform: scale(0.8); animation: badgeLand 0.5s var(--spring, cubic-bezier(0.34,1.56,0.64,1)) both;
+  transition: box-shadow 0.3s; -webkit-tap-highlight-color: transparent;
+}
+.rbadge:hover { box-shadow: 0 0 18px -6px var(--rc); }
+@keyframes badgeLand { 0% { opacity: 0; transform: scale(0.7); } 60% { opacity: 1; transform: scale(1.12); } 100% { opacity: 1; transform: scale(1); } }
+.rgem { width: 8px; height: 8px; transform: rotate(45deg); background: var(--rc); border-radius: 2px; box-shadow: 0 0 9px var(--rc); }
+.rLegendary .rgem, .rMythic .rgem { animation: gemPulse 2s ease-in-out infinite; }
+@keyframes gemPulse { 0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--rc) 60%, transparent); } 50% { box-shadow: 0 0 18px color-mix(in srgb, var(--rc) 100%, transparent); } }
+
+/* tier meaning - one line, revealed on tapping the badge */
+.tierMeaning { margin-top: 12px; font-size: 13px; color: var(--tx-dim); line-height: 1.5; animation: fadeUp 0.4s var(--ease) both; }
+
+/* "show me another" - a quiet ghost arrow, inline in the foot */
+.nextBtn {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--tx-faint); border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.02);
+  transition: color 0.3s, border-color 0.3s, transform 0.3s var(--ease); -webkit-tap-highlight-color: transparent;
+}
+.nextBtn svg { width: 14px; height: 14px; }
+.nextBtn:hover { color: var(--mint); border-color: var(--line); transform: translateX(2px); }
+
+/* the big statement (showcase vt-lead): body face + color-coded strong spans */
+.statement { font-family: var(--body); font-weight: 450; font-size: clamp(16px, 4.4vw, 19px); line-height: 1.55; letter-spacing: -0.004em; color: var(--tx); margin: 14px 0 0; animation: fadeUp 0.55s var(--ease) 0.2s both; }
+.km { color: #a7f3d0; font-weight: 600; }
+.ka { color: #fbbf3f; font-weight: 600; }
+.ki { color: var(--iris-hi); font-weight: 700; }
+/* the lever beat (showcase .key): the engine-written phrase worth acting on */
+.kk { color: #a7f3d0; font-weight: 700; border-bottom: 2px solid rgba(110, 231, 183, 0.55); padding-bottom: 1px; text-shadow: 0 0 22px rgba(110, 231, 183, 0.35); }
+
+/* MOVES YOUR GOALS - the triangle goal chip row (taps down to the board) */
+.impactRow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--hair); animation: fadeUp 0.5s var(--ease) 0.28s both; }
+.il { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tx-faint); }
+.gimp { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; border: 1px solid; border-radius: 999px; padding: 5px 11px; transition: background 0.3s, border-color 0.3s; }
+.gimp svg { width: 11px; height: 11px; flex: none; }
+.gimpUp { color: #a7f3d0; border-color: rgba(110, 231, 183, 0.4); background: rgba(110, 231, 183, 0.06); }
+.gimpDn { color: #fbbf3f; border-color: rgba(245, 158, 11, 0.36); background: rgba(245, 158, 11, 0.06); }
+.impactRow:hover .gimpUp { background: rgba(110, 231, 183, 0.12); }
+.impactRow:hover .gimpDn { background: rgba(245, 158, 11, 0.12); }
+
+.receipts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; animation: fadeUp 0.4s var(--ease) both; }
+.receipt {
+  display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--hair); border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02); padding: 7px 13px 7px 11px; font-family: var(--mono); font-size: 9.5px;
+  font-weight: 500; letter-spacing: 0.08em; color: var(--tx-dim); animation: fadeUp 0.6s var(--ease) both;
+}
+.dot { width: 5px; height: 5px; border-radius: 50%; flex: none; }
+.dot.good { background: var(--mint); box-shadow: 0 0 6px rgba(110, 231, 183, 0.6); }
+.dot.warn { background: var(--amber); box-shadow: 0 0 6px rgba(245, 158, 11, 0.55); }
+/* the action row (showcase acts): mint one-tap + iris Claude outline + ghost next */
+.acts { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-top: 20px; animation: fadeUp 0.5s var(--ease) 0.34s both; }
+.actMint {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--body); font-size: 13px; font-weight: 500;
+  color: #04221a; background: var(--mint); border: 1px solid var(--mint); border-radius: 12px; padding: 11px 16px;
+  white-space: nowrap; transition: transform 0.25s var(--ease), box-shadow 0.3s;
+}
+.actMint svg { width: 14px; height: 14px; flex: none; transition: transform 0.4s var(--spring); }
+.actMint:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -14px rgba(110, 231, 183, 0.4); }
+.actMint:hover svg { transform: scale(1.16); }
+.actMint:active { transform: scale(0.97); }
+.clB {
+  display: inline-flex; align-items: center; gap: 9px; font-family: var(--body); font-size: 13px; font-weight: 500;
+  color: var(--iris-hi); background: transparent; border: 1px solid rgba(167, 139, 250, 0.44); border-radius: 12px;
+  padding: 11px 16px; white-space: nowrap; transition: color 0.26s var(--ease), background 0.26s var(--ease), border-color 0.26s var(--ease), transform 0.25s var(--ease), box-shadow 0.3s;
+}
+.clB svg { width: 14px; height: 14px; flex: none; transition: transform 0.4s var(--spring); }
+.clB:hover { color: #1c1240; background: var(--iris); border-color: var(--iris); transform: translateY(-2px); box-shadow: 0 14px 30px -14px rgba(167, 139, 250, 0.42); }
+.clB:hover svg { transform: rotate(90deg) scale(1.1); }
+.clB:active { transform: scale(0.97); }
+
+/* ---------------------------------------------------- cold start */
+/* ONE cozy card: the same frame language as .noticed (glass, mint border, rounded,
+   the top edge glow), holding the untouched RarityClimb. Iris --rc = Vee's accent
+   on the edge. Springy entrance reuses panelIn; the rungs inside keep their own
+   staggered cascade. Reduced motion: the .root * override renders it instantly. */
+.coldCard {
+  --rc: var(--iris);
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(110, 231, 183, 0.5); border-radius: 20px;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(110, 231, 183, 0.05), transparent 60%), rgba(255, 255, 255, 0.02);
+  box-shadow: 0 26px 70px -30px rgba(0, 0, 0, 0.85), 0 0 60px rgba(110, 231, 183, 0.06);
+  padding: 26px 20px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center;
+  animation: panelIn 0.6s var(--spring) 0.18s both;
+}
+.coldCard > * { position: relative; z-index: 1; }
+.coldSub { font-size: 14px; color: var(--tx-dim); line-height: 1.55; max-width: 46ch; margin: 0; animation: fadeUp 0.6s var(--ease) 1.85s both; }
+/* Inside the card the ladder breathes: full Noticed-card presence, not the
+   skinny intro-overlay column (Alex: "it's too skinny"). Overlay + info tab
+   keep the original 300px climb untouched. */
+.coldCard { padding: 34px 28px 30px; gap: 20px; }
+.coldCard .climb { width: min(560px, 100%); }
+.coldCard .climbRung { padding: 11px 16px; border-radius: 13px; }
+.coldCard .climbSweep { animation-name: climbSweepWide; }
+@keyframes climbSweepWide { 0% { transform: translateX(575px); opacity: 0; } 14% { opacity: 1; } 86% { opacity: 1; } 100% { transform: translateX(-84px); opacity: 0; } }
+
+/* ---------------------------------------------------- the Rarity Climb (intro + info) */
+.climbWrap { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+.climb { position: relative; display: flex; flex-direction: column; gap: 6px; width: min(300px, 84%); }
+/* the swipe: a bright light streak crosses right -> left; the rows reveal in its wake */
+.climbSweep {
+  position: absolute; top: -6px; bottom: -6px; left: 0; width: 74px; z-index: 4; pointer-events: none; border-radius: 40px;
+  background: linear-gradient(90deg, transparent, rgba(196, 181, 253, 0.5), rgba(255, 255, 255, 0.55), rgba(196, 181, 253, 0.5), transparent);
+  filter: blur(3px); opacity: 0; animation: climbSweep 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+@keyframes climbSweep { 0% { transform: translateX(315px); opacity: 0; } 14% { opacity: 1; } 86% { opacity: 1; } 100% { transform: translateX(-84px); opacity: 0; } }
+.climbRung {
+  display: flex; align-items: center; gap: 11px; padding: 8px 13px; border-radius: 11px;
+  border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.02);
+  opacity: 0; transform: translateX(20px); animation: rungIn 0.5s var(--ease) both;
+}
+.climbDiamond { width: 13px; height: 13px; flex: none; transform: rotate(45deg); background: var(--rc); border-radius: 3px; box-shadow: 0 0 12px var(--rc); }
+.climbLabel { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rc); white-space: nowrap; }
+.climbBar { flex: 1; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--rc), transparent); transform-origin: left; transform: scaleX(0); animation: climbBar 0.55s var(--ease) both; }
+.climbPulse .climbDiamond { animation: climbFlare 2s var(--ease) 1.1s infinite; }
+@keyframes rungIn { to { opacity: 1; transform: translateX(0); } }
+@keyframes climbBar { to { transform: scaleX(1); } }
+@keyframes climbFlare { 0%, 100% { box-shadow: 0 0 12px var(--rc); } 50% { box-shadow: 0 0 24px var(--rc), 0 0 44px color-mix(in srgb, var(--rc) 60%, transparent); } }
+.climbLine { font-family: var(--serif); font-style: italic; font-size: clamp(18px, 4.4vw, 23px); line-height: 1.28; color: var(--fg); max-width: 26ch; animation: fadeUp 0.7s var(--ease) 1.6s both; }
+.climbLine b { color: var(--iris-hi); font-style: normal; font-weight: 500; }
+
+/* the mono eyebrow (cold-start card + the first-ever-click intro overlay) */
+.introEyebrow { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--iris-hi); }
+
+/* "how Vee works" info pill (persistent, replays the climb) */
+.infoBtn {
+  display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--tx-faint); border: 1px solid var(--hair); border-radius: 999px; padding: 7px 13px;
+  transition: color 0.3s, border-color 0.3s; -webkit-tap-highlight-color: transparent; align-self: center;
+}
+.infoBtn:hover { color: var(--iris-hi); border-color: rgba(167, 139, 250, 0.4); }
+.infoBtn svg { width: 12px; height: 12px; }
+
+/* info overlay */
+.infoOverlay {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px;
+  background: rgba(4, 6, 10, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: overlayIn 0.3s var(--ease) both;
+}
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+.infoPanel {
+  position: relative; width: min(420px, 100%); border: 1px solid rgba(167, 139, 250, 0.24); border-radius: 22px;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(167, 139, 250, 0.08), transparent 60%), rgba(10, 12, 18, 0.96);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9); padding: 30px 26px 32px; display: flex; flex-direction: column; align-items: center; gap: 22px;
+  animation: panelIn 0.5s var(--spring) both;
+}
+@keyframes panelIn { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+.infoTitle { font-family: var(--serif); font-style: italic; font-size: 26px; color: var(--fg); }
+.explainer { font-size: 14px; line-height: 1.6; color: var(--tx-dim); text-align: center; max-width: 40ch; margin: -6px 0 0; }
+
+/* the first-ever-click Climb intro: full screen, before the page, tap to skip */
+.introOverlay {
+  position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 24px; cursor: pointer;
+  background: radial-gradient(70% 50% at 50% 30%, rgba(110, 231, 183, 0.06), transparent 65%), rgba(4, 6, 10, 0.94);
+  animation: overlayIn 0.35s var(--ease) both;
+}
+.introPanel { display: flex; flex-direction: column; align-items: center; gap: 20px; width: min(420px, 100%); text-align: center; animation: panelIn 0.55s var(--spring) 0.05s both; }
+.introSkip { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tx-faint); animation: fadeUp 0.6s var(--ease) 1.4s both; }
+.infoClose { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--tx-faint); border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.02); transition: color 0.3s, border-color 0.3s; }
+.infoClose:hover { color: var(--fg); border-color: var(--line); }
+.infoClose svg { width: 14px; height: 14px; }
+
+/* ---------------------------------------------------- run-stats proof strip */
+.stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+.stat {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px;
+  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tx-dim);
+  border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 8px 11px;
+}
+.stat b { color: var(--iris-hi); font-weight: 600; }
+.stat svg { width: 12px; height: 12px; color: var(--iris-hi); opacity: 0.9; flex: none; }
+
+/* ---------------------------------------------------- numbered section chrome */
+.pageSection { display: flex; flex-direction: column; animation: riseIn 0.9s var(--ease) 0.3s both; }
+.secHead { display: flex; align-items: center; gap: 13px; margin-bottom: 10px; }
+.secNum { font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--iris-hi); line-height: 1; }
+.secLbl { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.21em; text-transform: uppercase; color: var(--tx-dim); }
+.secRule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--hair), transparent); }
+.secLede { font-family: var(--serif); font-style: italic; font-size: 16.5px; line-height: 1.45; color: var(--tx-dim); max-width: 46ch; margin: 0 0 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .root *, .root *::after, .root *::before { animation: none !important; transition: none !important; }
+  .particles { display: none; }
+  .bloom { opacity: 0.16 !important; }
+  .rbadge, .climbRung, .climbLine { opacity: 1 !important; transform: none !important; }
+  .climbBar { opacity: 1 !important; transform: scaleX(1) !important; }
+}
+
+/* ------------------------------------------------ degraded (read hiccup) */
+/* loadNoticed.degraded: one calm amber-tinted line (caution law: amber, never
+   red). In the hero it sits under the stats strip; inside the .coldCard it
+   replaces the cold-start pitch entirely (see DEGRADED_LINE in VeeNoticed). */
+.degradedLine {
+  margin-top: 12px; font-size: 13px; line-height: 1.55; max-width: 44ch;
+  color: rgba(245, 158, 11, 0.78);
+  animation: fadeUp 0.6s var(--ease) 0.3s both;
+}
+/* The degraded card's line must not wait for the climb choreography's 1.85s
+   fadeUp delay (there is no climb in that card). */
+.coldCard .coldSub[role='status'] { animation-delay: 0.35s; color: rgba(245, 158, 11, 0.78); }

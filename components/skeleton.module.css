@@ -1,0 +1,58 @@
+/* Loading skeletons — shared shimmer primitives.
+ *
+ * Paired with components/Skeleton.tsx and the per-route loading.tsx files.
+ * A loading.tsx renders instantly on navigation (Next.js streams it while the
+ * page's server work runs), so tapping a dashboard tile shows this shimmer
+ * frame right away instead of hanging on the previous screen. Reuses the
+ * dashboard .page/.shell chrome so the swap to real content is seamless.
+ */
+
+.block {
+  background: var(--card);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.06));
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light sweep across each block. Subtle on pure black — matches the mint-on-
+   black aesthetic without strobing. Disabled under reduced-motion below. */
+.block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: skeletonSweep 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonSweep {
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block::after { animation: none; }
+}
+
+/* Layout helpers for arranging blocks inside a .shell (which already spaces its
+   direct children). Use these inside a sub-wrapper when a row/grid is needed. */
+.headRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}

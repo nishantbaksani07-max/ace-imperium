@@ -1,0 +1,38 @@
+{
+  "name": "vitality-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Alex Rivera",
+  "description": "MCP server that exposes a Vitality user's data (sleep, training, nutrition, weight, finances, notes) to Claude, with read tools plus 7 scope-gated write tools, a daily-briefing nudge engine, and a tile builder (scaffold_tile / check_tile / vitality_tile_kit / upload_tile).",
+  "repository": {
+    "type": "git",
+    "directory": "mcp"
+  },
+  "type": "module",
+  "bin": {
+    "vitality-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test 'src/**/*.test.ts'",
+    "briefing": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "jsdom": "^29.1.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=21.0.0"
+  }
+}

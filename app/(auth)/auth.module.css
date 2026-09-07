@@ -1,0 +1,281 @@
+/*
+ * Shared auth page styles (login / signup / forgot-password / reset-password).
+ * Editorial dark canvas with Google OAuth button, password eye toggle,
+ * forgot-password link, divider, error states.
+ *
+ * Lives next to the auth pages instead of in globals so the auth layout
+ * can stay focused on chrome (centering, brand mark).
+ */
+
+/* ── Mode tabs (sign in / create account) ── */
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  color: var(--muted-strong);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: calc(var(--radius-md) - 4px);
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.tab:hover:not(.tabActive) {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabActive {
+  background: var(--mint);
+  color: #000;
+  cursor: default;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
+}
+
+.heading {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  letter-spacing: -0.01em;
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+.subhead {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  margin-bottom: var(--space-6);
+}
+
+.subhead em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+/* ── OAuth button (Google) ── */
+
+.oauthBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--card-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.oauthBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.oauthBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── "or" divider ── */
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-5) 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Form ── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.forgotLink {
+  color: var(--mint);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  transition: color var(--duration) var(--ease);
+}
+
+.forgotLink em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.forgotLink:hover { color: var(--mint-hover); }
+
+.input {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+  font: inherit;
+  font-size: var(--text-base);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color var(--duration) var(--ease);
+  width: 100%;
+}
+
+.input::placeholder { color: var(--muted); }
+
+.input:focus { border-color: var(--mint); }
+
+/* Password row — input + eye-toggle button overlaid right side. */
+
+.passwordRow {
+  position: relative;
+}
+
+.passwordRow .input { padding-right: 44px; }
+
+.eyeBtn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.eyeBtn:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.eyeBtn:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 1px;
+}
+
+/* ── Error ── */
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--red);
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+/* ── Primary button ── */
+
+.primaryBtn {
+  background: var(--mint);
+  color: #000;
+  border: 1px solid var(--mint);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: 600;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--duration) var(--ease);
+}
+
+.primaryBtn:hover:not(:disabled) { background: var(--mint-hover); }
+.primaryBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Footer ── */
+
+.footer {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  margin-top: var(--space-5);
+}
+
+.link {
+  color: var(--mint);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover { color: var(--mint-hover); text-decoration: underline; }
+
+/* ── Success message (used on forgot-password confirmation) ── */
+
+.success {
+  font-size: var(--text-sm);
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.06);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  line-height: 1.55;
+}
+
+.success em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}

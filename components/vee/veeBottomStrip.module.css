@@ -1,0 +1,177 @@
+/* VeeBottomStrip - the kept bottom strip from the live mentor remodel,
+   polished into the page's one type system: quick questions + the Ask-Vee
+   composer (Claude handoff), the glass thoughts void (Noticed frame language,
+   serif micro-lede, dashed cozy inner), and the warm mood check-in (serif ask,
+   soft-glow faces). Discloses are quiet mono chips in the WATCHED chip
+   language, never wide-tracked links. Color tokens (--mint, --tx, --hair,
+   fonts) are inherited from the veeNoticed .root ancestor. NOTE: the
+   composer's static backdrop-blur never animates with a transform
+   (phone-jank law). */
+
+.strip { display: flex; flex-direction: column; gap: 30px; }
+/* zero-specificity resets (the .root pattern): a plain class can always win */
+:where(.strip button), :where(.strip input) { font: inherit; color: inherit; background: none; border: none; -webkit-tap-highlight-color: transparent; }
+:where(.strip button) { cursor: pointer; }
+:where(.strip input) { cursor: text; }
+:where(.strip svg) { display: block; }
+
+/* ---------------------------------------------------- ·03 ask (Claude) */
+/* v1.2: the composer IS the section. Quick questions demoted to small chips
+   under it; the OPEN IN CLAUDE pill closes the chip row in the iris Claude
+   accent. The old serif "work it through" head is gone (the section head
+   carries it now). */
+.work { display: flex; flex-direction: column; gap: 12px; }
+.claudeCorner {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(167, 139, 250, 0.34); border-radius: 999px;
+  background: rgba(167, 139, 250, 0.05); padding: 6px 11px 6px 10px;
+  font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em; color: var(--iris-hi);
+  white-space: nowrap; text-decoration: none; transition: border-color 0.3s, color 0.3s, background 0.3s, transform 0.3s var(--ease);
+  animation: stripFadeUp 0.55s var(--ease) 0.4s both;
+}
+.claudeCorner svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 0 2px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--hair); border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02); padding: 7px 13px 7px 11px; font-size: 12px; color: var(--tx-dim);
+  text-align: left; text-decoration: none; transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+  animation: stripFadeUp 0.55s var(--ease) both;
+}
+.chip svg { width: 10px; height: 10px; fill: var(--mint); opacity: 0.85; flex: none; }
+
+.composer {
+  position: relative; display: flex; align-items: center; gap: 12px; min-height: 60px; border-radius: 18px;
+  padding: 0 8px 0 18px; background: rgba(9, 13, 12, 0.72); border: 1px solid var(--line);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.composer:focus-within { border-color: rgba(167, 243, 208, 0.34); box-shadow: 0 0 44px rgba(110, 231, 183, 0.09); }
+.composerSpark { width: 17px; height: 17px; fill: var(--mint); opacity: 0.9; flex: none; }
+.composer input {
+  flex: 1; min-width: 0; height: 58px; background: transparent; border: none; outline: none;
+  font-family: var(--body); font-size: 15.5px; line-height: 1.5; color: var(--tx); caret-color: var(--mint);
+}
+.composer input::placeholder { color: var(--tx-faint); }
+.send {
+  flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--mint); color: #04221a;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s, transform 0.25s var(--ease), opacity 0.3s;
+  animation: stripInvite 1.6s ease-in-out infinite;
+}
+.send:active { transform: scale(0.92); }
+.send:disabled { opacity: 0.5; cursor: default; animation: none; }
+.send svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------------------------------------------------- ·04 the void */
+/* Alive, never greyed (v1.2): the showcase glass frame with its top edge lit
+   mint, a bright serif lede, and a mint spark on the dashed bar. Focus lifts
+   the whole card with a gentle glow so leaving a thought feels like an
+   invitation, not a form. */
+.void {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px;
+  border: 1px solid rgba(110, 231, 183, 0.34); border-radius: 20px;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(110, 231, 183, 0.06), transparent 60%), rgba(255, 255, 255, 0.02);
+  box-shadow: 0 26px 70px -30px rgba(0, 0, 0, 0.85), 0 0 60px rgba(110, 231, 183, 0.06);
+  padding: 20px 18px 16px;
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.void::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(110, 231, 183, 0.55), transparent);
+  box-shadow: 0 0 14px -2px rgba(110, 231, 183, 0.5); pointer-events: none;
+}
+.void:focus-within {
+  border-color: rgba(167, 243, 208, 0.5);
+  box-shadow: 0 26px 70px -30px rgba(0, 0, 0, 0.85), 0 0 54px rgba(110, 231, 183, 0.15);
+}
+.voidLede { font-family: var(--serif); font-style: italic; font-size: 17.5px; line-height: 1.4; color: rgba(255, 255, 255, 0.86); margin: 0; padding: 0 2px; }
+.voidBar {
+  display: flex; align-items: center; gap: 12px; min-height: 52px; border-radius: 16px; padding: 0 16px;
+  background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(167, 243, 208, 0.2);
+  transition: border-color 0.35s, background 0.35s;
+}
+.voidBar:focus-within { border-color: rgba(167, 243, 208, 0.38); background: rgba(167, 243, 208, 0.03); }
+.voidBar > svg { width: 15px; height: 15px; fill: none; stroke: var(--mint); opacity: 0.75; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.voidBar input { flex: 1; min-width: 0; height: 52px; background: transparent; border: none; outline: none; font-size: 14.5px; color: var(--tx); caret-color: var(--mint); }
+.voidBar input::placeholder { color: var(--tx-dim); font-style: italic; font-family: var(--serif); font-size: 16px; }
+.voidError { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--amber); padding-left: 2px; }
+/* the disclose, restyled as a quiet mono chip (the WATCHED chip language) */
+.voidDisclose {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--tx-faint); border: 1px solid var(--hair); border-radius: 999px; padding: 5px 10px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.voidDisclose svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s var(--ease); }
+.voidDisclose.open svg { transform: rotate(90deg); }
+.voidList { display: flex; flex-direction: column; gap: 8px; margin-top: 2px; }
+.voidItem {
+  position: relative; border: 1px solid var(--hair); border-radius: 12px; background: rgba(255, 255, 255, 0.02);
+  padding: 11px 36px 11px 14px; animation: stripFadeUp 0.4s var(--ease) both;
+}
+.voidItemBody { font-size: 13.5px; line-height: 1.5; color: var(--tx); }
+.voidItemMeta { display: block; margin-top: 6px; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tx-faint); }
+.voidDelete {
+  position: absolute; top: 9px; right: 9px; width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: var(--tx-faint);
+  transition: color 0.3s, background 0.3s;
+}
+.voidDelete svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.voidEmpty { font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--tx-faint); padding: 2px 2px; }
+
+/* ---------------------------------------------------- mood */
+/* The warm check-in: serif ask, faces a touch larger, a soft mint breath on
+   hover and selection. Presentation only; the taps behave exactly as before. */
+.mood { display: flex; flex-direction: column; gap: 16px; align-items: center; padding-top: 4px; }
+.moodLede { font-family: var(--serif); font-style: italic; font-size: clamp(19px, 4.4vw, 22px); line-height: 1.2; color: rgba(255, 255, 255, 0.88); }
+.faces { display: flex; gap: 14px; }
+.face {
+  width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--hair); background: rgba(255, 255, 255, 0.02);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease), box-shadow 0.35s;
+  animation: stripFadeUp 0.55s var(--ease) both;
+}
+.face svg { width: 27px; height: 27px; fill: none; stroke: var(--tx-dim); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.3s; }
+.face.sel {
+  border-color: rgba(110, 231, 183, 0.55); background: color-mix(in srgb, var(--mint) 10%, transparent);
+  transform: translateY(-2px); box-shadow: 0 0 22px -4px rgba(110, 231, 183, 0.35);
+}
+.face.sel svg { stroke: var(--mint); }
+/* the 7-day disclose, the same quiet mono chip as the thoughts one */
+.moodStrip {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 8.5px; font-weight: 500;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--tx-faint);
+  border: 1px solid var(--hair); border-radius: 999px; padding: 5px 10px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.moodStrip svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s var(--ease); }
+.moodStrip.open svg { transform: rotate(90deg); }
+.weekStrip { display: none; gap: 9px; align-items: flex-end; }
+.weekStrip.open { display: flex; }
+.weekStrip .col { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.weekStrip .bar { width: 8px; border-radius: 999px; background: color-mix(in srgb, var(--mint) 32%, transparent); }
+.weekStrip .barEmpty { background: rgba(255, 255, 255, 0.08); }
+.weekStrip .d { font-family: var(--mono); font-size: 7.5px; letter-spacing: 0.14em; color: var(--tx-faint); }
+
+@keyframes stripFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes stripInvite { 0%, 100% { box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.35); } 50% { box-shadow: 0 0 0 7px rgba(110, 231, 183, 0); } }
+
+@media (hover: hover) {
+  .claudeCorner:hover { border-color: rgba(167, 139, 250, 0.55); background: rgba(167, 139, 250, 0.1); transform: translateY(-1px); }
+  .chip:hover { border-color: rgba(167, 243, 208, 0.35); color: var(--tx); transform: translateY(-1px); }
+  .send:not(:disabled):hover { background: #a7f3d0; }
+  .voidDisclose:hover { color: var(--tx-dim); border-color: rgba(167, 243, 208, 0.3); }
+  .voidDisclose:hover svg { transform: translateX(2px); }
+  .voidDisclose.open:hover svg { transform: rotate(90deg); }
+  .voidDelete:hover { color: var(--tx); background: rgba(255, 255, 255, 0.05); }
+  .face:hover { border-color: rgba(167, 243, 208, 0.35); transform: translateY(-2px); box-shadow: 0 0 18px -6px rgba(110, 231, 183, 0.3); }
+  .face:hover svg { stroke: var(--tx); }
+  .moodStrip:hover { color: var(--tx-dim); border-color: rgba(167, 243, 208, 0.3); }
+  .moodStrip:hover svg { transform: translateX(2px); }
+  .moodStrip.open:hover svg { transform: rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip *, .strip *::before, .strip *::after { animation: none !important; transition: none !important; }
+  .chip, .face, .voidItem { opacity: 1 !important; transform: none !important; }
+}

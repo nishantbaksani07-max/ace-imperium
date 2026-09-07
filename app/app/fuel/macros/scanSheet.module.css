@@ -1,0 +1,524 @@
+/*
+ * Scan-context sheet — the cozy beat between snapping a plate and scanning it.
+ * Themed to the mentor's cozy language (Instrument Serif headlines, mono
+ * eyebrows, springy entrances) but tinted mint since this lives in Fuel.
+ * "When" and "Where it came from" share one even 2x2 option grid.
+ */
+
+.overlay {
+  --serif: var(--font-serif), Georgia, serif;
+  --sans: var(--font-hanken), var(--font-inter), -apple-system, sans-serif;
+  --mono: var(--font-mono), 'SF Mono', monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ink: #e9efe9;
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --rule: rgba(233, 239, 233, 0.1);
+  --rule-strong: rgba(233, 239, 233, 0.2);
+  --mint-hi: #a7f3d0;
+
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(2, 4, 7, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fade 0.3s ease forwards;
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: 94vh;
+  max-height: 94dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, #080b10, #05080c);
+  border: 1px solid var(--rule);
+  border-bottom: none;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  box-shadow: 0 -30px 80px rgba(0, 0, 0, 0.5);
+  padding: 4px 20px 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  animation: slideUp 0.5s var(--spring) forwards;
+}
+@keyframes slideUp {
+  from { transform: translateY(101%); }
+  to { transform: translateY(0); }
+}
+
+.grab {
+  width: 38px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--rule-strong);
+  margin: 8px auto 8px;
+}
+
+/* staggered entrance */
+.anim {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise 0.6s var(--spring) forwards;
+}
+@keyframes rise {
+  to { opacity: 1; transform: none; }
+}
+.pop {
+  opacity: 0;
+  transform: scale(0.88);
+  animation: pop 0.55s var(--spring) forwards;
+}
+@keyframes pop {
+  to { opacity: 1; transform: scale(1); }
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+  opacity: 0.85;
+}
+.head {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  margin: 5px 0 2px;
+}
+.headsub {
+  color: var(--ink-dim);
+  font-size: 0.84rem;
+  margin-bottom: 14px;
+}
+
+.thumb {
+  width: 100%;
+  height: 124px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  background: linear-gradient(135deg, #13261d, #0a140f);
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* ── cozy section heading: mint diamond + label + trailing hairline ── */
+.section {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0 0 11px;
+  transition: color 0.25s var(--ease);
+}
+/* a small gem-like diamond, faint mint by default, glows when answered */
+.tick {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 1.5px;
+  background: var(--mint);
+  opacity: 0.45;
+  transform: rotate(45deg) scale(0.9);
+  transition: opacity 0.3s var(--ease), transform 0.32s var(--spring), box-shadow 0.3s var(--ease);
+}
+/* a hairline that trails off to the right — editorial Vitality touch */
+.section::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  margin-left: 3px;
+  background: linear-gradient(90deg, var(--rule-strong), transparent 85%);
+  transition: background 0.3s var(--ease);
+}
+.sectionActive {
+  color: var(--mint-hi);
+}
+.sectionActive .tick {
+  opacity: 1;
+  transform: rotate(45deg) scale(1.15);
+  box-shadow: 0 0 10px var(--mint-glow, rgba(110, 231, 183, 0.6));
+}
+.sectionActive::after {
+  background: linear-gradient(90deg, rgba(110, 231, 183, 0.35), transparent 85%);
+}
+
+/* what's on the plate — leads the sheet */
+.detail {
+  margin-bottom: 16px;
+}
+.detailbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.012);
+  transition: border-color 0.2s var(--ease);
+}
+.detailbox:focus-within {
+  border-color: rgba(110, 231, 183, 0.4);
+  border-style: solid;
+}
+.detailbox svg {
+  color: var(--ink-faint);
+  flex: none;
+}
+.detailbox input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+.detailbox input::placeholder {
+  color: var(--ink-faint);
+}
+.hint {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-top: 7px;
+  padding-left: 2px;
+}
+
+/* ── one shared 2x2 grid for When + Where ── */
+.optGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+.opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 13px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.022);
+  color: var(--ink-dim);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.86rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.22s var(--ease), border-color 0.22s var(--ease), color 0.22s var(--ease), transform 0.18s var(--spring);
+}
+.opt:active {
+  transform: scale(0.97);
+}
+/* selected: green outline + tint. NOTE: no `animation` here — it would override
+   the .anim entrance fill and revert the tile to opacity:0 (the disappear bug). */
+.optOn {
+  background: rgba(110, 231, 183, 0.12);
+  border-color: var(--mint);
+  color: var(--mint-hi);
+  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.55), 0 0 16px rgba(110, 231, 183, 0.18);
+}
+/* animated checkmark badge, springs in on select */
+.check {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--mint-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.2s var(--ease), transform 0.32s var(--spring);
+  pointer-events: none;
+}
+.optOn .check {
+  opacity: 1;
+  transform: scale(1);
+}
+.optIcon {
+  display: flex;
+  flex: none;
+  color: var(--ink-faint);
+  transition: color 0.2s var(--ease);
+}
+.optOn .optIcon {
+  color: var(--mint);
+}
+.optLabel {
+  flex: 1;
+  min-width: 0;
+}
+.optInfo {
+  width: 19px;
+  height: 19px;
+  border-radius: 999px;
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--ink-faint);
+  flex: none;
+  cursor: pointer;
+  background: none;
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.15s var(--spring);
+}
+.optInfo:hover {
+  color: var(--mint);
+  border-color: rgba(110, 231, 183, 0.5);
+}
+.optInfo:active {
+  transform: scale(0.86);
+}
+
+/* ── scan, pinned so it is always in frame ── */
+.actions {
+  position: sticky;
+  bottom: 0;
+  margin: 14px -20px 0;
+  padding: 14px 20px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(6, 9, 13, 0) 0%, #06090d 32%);
+}
+.scan {
+  width: 100%;
+  background: var(--mint);
+  color: var(--mint-ink);
+  border: none;
+  border-radius: 16px;
+  padding: 15px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.96rem;
+  cursor: pointer;
+  transition: transform 0.18s var(--spring), filter 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+.scan:active {
+  transform: scale(0.98);
+  filter: brightness(1.05);
+}
+
+/* ── info card — what a source means, scannable in two seconds ── */
+.infoScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2, 4, 7, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fade 0.25s ease forwards;
+}
+.infoCard {
+  width: 100%;
+  max-width: 330px;
+  background: linear-gradient(180deg, #0a0e13, #070a0e);
+  border: 1px solid var(--rule-strong);
+  border-radius: 22px;
+  padding: 24px 22px 20px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  animation: infoPop 0.45s var(--spring) forwards;
+}
+@keyframes infoPop {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.infoDisc {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(110, 231, 183, 0.12);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  color: var(--mint);
+  animation: floaty 3s ease-in-out infinite;
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.infoTitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+.infoMeaning {
+  color: var(--ink-dim);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 18px;
+}
+.meterLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 7px;
+}
+.meterWord {
+  color: var(--mint-hi);
+  font-weight: 500;
+}
+.meterTrack {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.meterFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--mint), #34d399);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.4);
+  transition: width 1s var(--spring);
+}
+.infoExample {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ink-dim);
+  font-style: italic;
+}
+.infoClose {
+  margin-top: 20px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--rule-strong);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 12px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: transform 0.18s var(--spring), background 0.18s var(--ease);
+}
+.infoClose:active {
+  transform: scale(0.97);
+}
+
+/* ─── hidden-fat dial ─── */
+.fatRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 10px 2px 8px;
+}
+.fatRowWord {
+  color: var(--mint-hi);
+  font-weight: 500;
+}
+.fatSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  /* mint fill up to the thumb, faint track after — driven by --fill inline */
+  background: linear-gradient(90deg, var(--mint), #34d399) no-repeat,
+    rgba(255, 255, 255, 0.06);
+  background-size: var(--fill, 50%) 100%;
+  cursor: pointer;
+  outline: none;
+}
+.fatSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mint-hi);
+  border: 3px solid #0a0f0c;
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+  cursor: grab;
+}
+.fatSlider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.08);
+}
+.fatSlider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mint-hi);
+  border: 3px solid #0a0f0c;
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
+  cursor: grab;
+}
+.fatNote {
+  font-size: 0.7rem;
+  color: var(--ink-faint);
+  margin-top: 9px;
+  padding-left: 2px;
+  font-style: italic;
+}
+
+/* short screens: shrink the photo + gaps so the whole sheet fits without scroll */
+@media (max-height: 720px) {
+  .thumb { height: 88px; margin-bottom: 12px; }
+  .head { font-size: 1.4rem; }
+  .headsub { margin-bottom: 10px; }
+  .detail { margin-bottom: 12px; }
+  .optGrid { margin-bottom: 12px; }
+  .hint { margin-top: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .sheet, .anim, .pop, .infoCard, .infoDisc, .meterFill {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .anim, .pop {
+    opacity: 1;
+    transform: none;
+  }
+}

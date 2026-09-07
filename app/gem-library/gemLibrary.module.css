@@ -1,0 +1,680 @@
+/*
+ * /gem-library — Gem Library v2.
+ *
+ * The canonical-gem design lab. Atmosphere + gem-stage + happy-burst rules
+ * are lifted from /welcome so the gem reads byte-for-byte identical to
+ * production, but kept self-contained here (no shared module) so the lab
+ * can diverge as we build new moves without touching the live welcome
+ * surface. Library chrome (corner label, control deck) lives at the bottom.
+ */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg);
+  isolation: isolate;
+  overflow-x: hidden;
+
+  --ink-dim: rgba(233, 239, 233, 0.62);
+  --ink-faint: rgba(233, 239, 233, 0.34);
+  --mint-glow: rgba(110, 231, 183, 0.4);
+}
+
+/* ── Atmosphere: aurora wash + mountains + drifting particles ── */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(60% 50% at 50% 30%, rgba(110, 231, 183, 0.16) 0%, rgba(110, 231, 183, 0.06) 32%, rgba(110, 231, 183, 0) 65%),
+    radial-gradient(28% 22% at 50% 38%, rgba(255, 226, 181, 0.07) 0%, rgba(255, 226, 181, 0) 70%),
+    radial-gradient(120% 80% at 50% 100%, rgba(14, 38, 30, 0.5) 0%, rgba(4, 6, 10, 0.95) 75%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.mountainsLayer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 30vh;
+  min-height: 180px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.mountainsLayer svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particles span {
+  position: absolute;
+  width: 1.5px;
+  height: 1.5px;
+  background: rgba(233, 239, 233, 0.7);
+  border-radius: 50%;
+  animation: gemlib-drift linear infinite;
+  box-shadow: 0 0 6px rgba(167, 243, 208, 0.5);
+}
+
+@keyframes gemlib-drift {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.55; }
+  100% { transform: translate3d(var(--dx, 12px), var(--dy, -100vh), 0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles span { animation: none; }
+}
+
+/* ── Corner library label ── */
+.libLabel {
+  position: fixed;
+  top: var(--space-6);
+  left: var(--space-6);
+  z-index: 6;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.libEyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.72);
+}
+
+.libVersion {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+/* ── Layout shell: gem centered, controls beneath ── */
+.shell {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-6);
+  gap: var(--space-7, 56px);
+  text-align: center;
+}
+
+/* ── Gem stage — square canvas, breathing halo. Mirrors the Three.js
+   emissive + V breathing inside HeroCrystal so the whole gem reads as one
+   warm heartbeat. Transform-only animation so the WebGL canvas never
+   re-layouts mid-frame (that reads as a glitch). ── */
+.gemStage {
+  width: clamp(280px, 50vmin, 460px);
+  height: clamp(280px, 50vmin, 460px);
+  position: relative;
+  animation: gemlib-halo 3.9s ease-in-out infinite;
+  flex-shrink: 0;
+  transform-origin: center;
+  z-index: 2;
+}
+
+@keyframes gemlib-halo {
+  0%, 100% {
+    filter: drop-shadow(0 0 50px rgba(110, 231, 183, 0.16))
+            drop-shadow(0 0 110px rgba(110, 231, 183, 0.07));
+  }
+  50% {
+    filter: drop-shadow(0 0 90px rgba(110, 231, 183, 0.32))
+            drop-shadow(0 0 180px rgba(110, 231, 183, 0.18));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gemStage {
+    animation: none;
+    filter: drop-shadow(0 0 60px rgba(110, 231, 183, 0.18))
+            drop-shadow(0 0 120px rgba(110, 231, 183, 0.08));
+  }
+}
+
+.gemStage > canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gemFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.18) 0%, rgba(110, 231, 183, 0) 70%);
+  animation: gemlib-breathe 3.2s ease-in-out infinite;
+}
+
+@keyframes gemlib-breathe {
+  0%, 100% { opacity: 0.5; transform: scale(0.96); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+
+/* ── Happy-burst layers (rings / particles / sparkles) — verbatim from
+   /welcome so the celebration reads identically. ── */
+.pulseLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pulseRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55%;
+  height: 55%;
+  margin-left: -27.5%;
+  margin-top: -27.5%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(110, 231, 183, 0.75);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.08) 0%, rgba(110, 231, 183, 0) 65%);
+  opacity: 0;
+  animation: gemlib-ring 1.6s ease-out forwards;
+}
+
+.pulseRing1 { animation-delay: 0ms; }
+.pulseRing2 { animation-delay: 180ms; }
+.pulseRing3 { animation-delay: 360ms; }
+
+@keyframes gemlib-ring {
+  0%   { transform: scale(0.55); opacity: 0;    border-width: 2px;   }
+  12%  {                          opacity: 0.85;                      }
+  100% { transform: scale(2.4);  opacity: 0;    border-width: 0.4px; }
+}
+
+.particleDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--mint, #6EE7B7);
+  box-shadow: 0 0 10px rgba(110, 231, 183, 0.7), 0 0 20px rgba(110, 231, 183, 0.45);
+  opacity: 0;
+  animation: gemlib-particle 1.5s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+  transform-origin: center;
+  --angle: 0deg;
+}
+
+@keyframes gemlib-particle {
+  0%   { transform: rotate(var(--angle)) translateY(0)     scale(0.4); opacity: 0; }
+  15%  {                                                                opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-160px) scale(0.7); opacity: 0; }
+}
+
+.sparkleDot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(167,243,208,0.6) 45%, rgba(110,231,183,0) 70%);
+  box-shadow: 0 0 12px rgba(110, 231, 183, 0.7);
+  opacity: 0;
+  animation: gemlib-sparkle 1.8s ease-out forwards;
+}
+
+@keyframes gemlib-sparkle {
+  0%   { opacity: 0; transform: scale(0.3); }
+  25%  { opacity: 1; transform: scale(1.4); }
+  55%  { opacity: 0.6; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+/* ── Effect 5: Rays — a sharp starburst of light shards shooting outward.
+   Lines (not dots/rings) so it reads as a crisp burst of energy. ── */
+.rayLine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 64px;
+  margin-left: -1.5px;
+  margin-top: -32px;
+  border-radius: 2px;
+  background: linear-gradient(to top, rgba(110, 231, 183, 0) 0%, rgba(167, 243, 208, 0.9) 50%, rgba(224, 255, 240, 1) 100%);
+  box-shadow: 0 0 14px rgba(110, 231, 183, 0.85);
+  opacity: 0;
+  transform-origin: center center;
+  animation: gemlib-ray 0.78s cubic-bezier(0.12, 0.9, 0.35, 1) forwards;
+  --angle: 0deg;
+  --len: 1;
+}
+
+@keyframes gemlib-ray {
+  /* Shoot from the gem's rim outward into the dark (the burst layer is behind
+     the gem, so rays only read once they clear the silhouette ~150px out).
+     Snaps out hard, then a bright flash-peak before fading — reads as energy. */
+  0%   { transform: rotate(var(--angle)) translateY(-102px) scaleY(0.3);                 opacity: 0; }
+  18%  { transform: rotate(var(--angle)) translateY(-150px) scaleY(calc(1.1 * var(--len))); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-256px) scaleY(calc(1.5 * var(--len))); opacity: 0; }
+}
+
+/* ── Effect 6: Confetti — small mint dashes that fly out, tumble, and fade.
+   Celebratory, with per-bit distance + spin variance set inline. ── */
+.confettiBit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 4px;
+  margin-left: -5px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: rgba(167, 243, 208, 0.98);
+  box-shadow: 0 0 9px rgba(110, 231, 183, 0.7);
+  opacity: 0;
+  animation: gemlib-confetti 1.5s cubic-bezier(0.15, 0.75, 0.35, 1) forwards;
+  --angle: 0deg;
+  --dist: 120px;
+  --spin: 540deg;
+}
+
+@keyframes gemlib-confetti {
+  /* Erupts hard off the gem's rim, overshoots, then tumbles outward and fades.
+     The 12% scale-pop + overshoot gives the eruption real pop. */
+  0%   { transform: rotate(var(--angle)) translateY(-90px)                              rotate(0deg)         scale(0.5); opacity: 0; }
+  12%  { transform: rotate(var(--angle)) translateY(-150px)                             rotate(40deg)        scale(1.25); opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(calc(-1 * var(--dist))) rotate(var(--spin)) scale(0.85); opacity: 0; }
+}
+
+/* ── Effect 7: Orbit — dots that swing around the gem then drift off.
+   A rotational swirl, distinct from the radial bursts. ── */
+.orbitDot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(224, 255, 240, 1) 35%, rgba(110, 231, 183, 0.95) 65%, rgba(110, 231, 183, 0) 80%);
+  box-shadow: 0 0 16px rgba(110, 231, 183, 0.95), 0 0 28px rgba(110, 231, 183, 0.5);
+  opacity: 0;
+  animation: gemlib-orbit 1.9s cubic-bezier(0.3, 0, 0.3, 1) forwards;
+  --start: 0deg;
+  --sweep: 300deg;
+}
+
+@keyframes gemlib-orbit {
+  /* Swing AROUND the gem at a radius outside its silhouette so the dots read
+     against the dark. Wider sweep (--sweep, signed for counter-swirl), a
+     mid-swing scale-pop, and a drift outward make it the liveliest burst. */
+  0%   { transform: rotate(var(--start))                            translateX(150px) scale(0.3); opacity: 0; }
+  16%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.16)) translateX(168px) scale(1.3); opacity: 1; }
+  55%  { transform: rotate(calc(var(--start) + var(--sweep) * 0.55)) translateX(196px) scale(1);   opacity: 1; }
+  82%  {                                                                                            opacity: 1; }
+  100% { transform: rotate(calc(var(--start) + var(--sweep)))        translateX(214px) scale(0.55); opacity: 0; }
+}
+
+/* ── Loading sonar ring — a soft mint ring that emanates from the gem rim and
+   ripples outward once per breath beat. Starts at ~the gem silhouette (300px
+   box = ~150px radius) so it reads as coming FROM the gem, then expands past
+   it and fades. The resolve variant snaps out faster + brighter for the
+   satisfying "done" beat. ── */
+.loadRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin: -150px 0 0 -150px;
+  border-radius: 50%;
+  /* Softer + warmer than a crisp sonar sweep: a thin barely-there ring carried
+     mostly by a wide cozy bloom, so it reads as a gentle breath ripple. */
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  box-shadow: 0 0 34px rgba(110, 231, 183, 0.2), inset 0 0 30px rgba(110, 231, 183, 0.1);
+  opacity: 0;
+  transform-origin: center center;
+  animation: gemlib-loadRing 2.4s cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+
+@keyframes gemlib-loadRing {
+  0%   { transform: scale(0.96); opacity: 0; }
+  22%  {                         opacity: 0.38; }
+  100% { transform: scale(1.7);  opacity: 0; }
+}
+
+.loadRingResolve {
+  border-color: rgba(167, 243, 208, 0.85);
+  box-shadow: 0 0 40px rgba(110, 231, 183, 0.5), inset 0 0 26px rgba(110, 231, 183, 0.2);
+  animation: gemlib-loadRingResolve 0.9s cubic-bezier(0.12, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes gemlib-loadRingResolve {
+  0%   { transform: scale(0.95); opacity: 0; }
+  10%  {                         opacity: 0.9; }
+  100% { transform: scale(2.15); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Loading degrades to the gem's opacity breathe only — no ring motion. */
+  .loadRing, .loadRingResolve { animation: none; opacity: 0; }
+}
+
+/* ── Effect 4: Ponder — soft "?"-themed pulse for the curious mood.
+   Burst effects sit BEHIND the gem canvas, so anything inside the gem's
+   silhouette is hidden. To read, the pulse must extend past the gem: a soft
+   expanding ring (the visible "light pulse") + a gentle puff of bright motes
+   lifting off the rim into the dark. Softer + slower than the happy bursts
+   so it still feels like a quiet "hmm?", but clearly visible. ── */
+.ponderRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 64%;
+  height: 64%;
+  margin-left: -32%;
+  margin-top: -32%;
+  border-radius: 50%;
+  border: 2px solid rgba(167, 243, 208, 0.7);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.10) 0%, rgba(110, 231, 183, 0) 62%);
+  opacity: 0;
+  animation: gemlib-ponderRing 1.7s ease-out forwards;
+}
+
+@keyframes gemlib-ponderRing {
+  0%   { transform: scale(0.7);  opacity: 0;    border-width: 2.5px; }
+  16%  {                         opacity: 0.8;                        }
+  100% { transform: scale(2.7);  opacity: 0;    border-width: 0.3px; }
+}
+
+.ponderGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 70%;
+  margin-left: -35%;
+  margin-top: -35%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196, 250, 220, 0.5) 0%, rgba(110, 231, 183, 0.22) 38%, rgba(110, 231, 183, 0) 68%);
+  opacity: 0;
+  animation: gemlib-ponderGlow 1.4s ease-out forwards;
+}
+
+@keyframes gemlib-ponderGlow {
+  0%   { transform: scale(0.5); opacity: 0;   }
+  22%  {                        opacity: 1;   }
+  100% { transform: scale(2.3); opacity: 0;   }
+}
+
+.ponderMote {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6.5px;
+  height: 6.5px;
+  margin-left: -3.25px;
+  margin-top: -3.25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 255, 240, 1) 0%, rgba(167, 243, 208, 0.95) 55%, rgba(110, 231, 183, 0) 78%);
+  box-shadow: 0 0 14px rgba(110, 231, 183, 0.85), 0 0 26px rgba(110, 231, 183, 0.5);
+  opacity: 0;
+  animation: gemlib-ponderMote 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  transform-origin: center;
+  --angle: 0deg;
+}
+
+@keyframes gemlib-ponderMote {
+  /* Start at the gem's rim and drift OUT into the dark, where mint motes
+     actually contrast — travelling through the bright gem body washes them
+     out. So the puff reads as soft thoughts lifting off the gem. */
+  0%   { transform: rotate(var(--angle)) translateY(-135px) scale(0.4); opacity: 0; }
+  25%  {                                                                opacity: 1; }
+  100% { transform: rotate(var(--angle)) translateY(-210px) scale(0.85); opacity: 0; }
+}
+
+/* ── Effect 8: Bloom — soft teardrop petals open outward like a flower. ── */
+.bloomPetal {
+  position: absolute; top: 50%; left: 50%; width: 44px; height: 62px;
+  margin-left: -22px; margin-top: -31px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 34%, rgba(167, 243, 208, 0.92) 0%, rgba(110, 231, 183, 0.4) 46%, rgba(110, 231, 183, 0) 76%);
+  opacity: 0; transform-origin: center bottom; --angle: 0deg;
+  animation: gemlib-bloom 1.5s cubic-bezier(0.18, 0.7, 0.3, 1) forwards;
+}
+@keyframes gemlib-bloom {
+  0%   { transform: rotate(var(--angle)) translateY(-78px)  scale(0.2); opacity: 0; }
+  28%  {                                                                opacity: 0.95; }
+  100% { transform: rotate(var(--angle)) translateY(-176px) scale(1.12); opacity: 0; }
+}
+
+/* ── Effect 9: Spiral — dots swing outward in a galaxy swirl. ── */
+.spiralDot {
+  position: absolute; top: 50%; left: 50%; width: 7px; height: 7px;
+  margin-left: -3.5px; margin-top: -3.5px; border-radius: 50%;
+  background: #6EE7B7; box-shadow: 0 0 10px rgba(110, 231, 183, 0.8), 0 0 20px rgba(110, 231, 183, 0.4);
+  opacity: 0; --angle: 0deg; --spin: 150deg;
+  animation: gemlib-spiral 1.7s cubic-bezier(0.2, 0.5, 0.3, 1) forwards;
+}
+@keyframes gemlib-spiral {
+  0%   { transform: rotate(var(--angle)) translateX(146px) scale(0.3); opacity: 0; }
+  20%  {                                                               opacity: 1; }
+  100% { transform: rotate(calc(var(--angle) + var(--spin))) translateX(280px) scale(0.65); opacity: 0; }
+}
+
+/* ── Effect 10: Ripple — slow, soft concentric water rings. ── */
+.rippleRing {
+  position: absolute; top: 50%; left: 50%; width: 58%; height: 58%;
+  margin-left: -29%; margin-top: -29%; border-radius: 50%;
+  border: 1.5px solid rgba(110, 231, 183, 0.5);
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.05) 0%, rgba(110, 231, 183, 0) 60%);
+  opacity: 0; animation: gemlib-ripple 2.4s ease-out forwards;
+}
+.rippleRing1 { animation-delay: 0ms; }
+.rippleRing2 { animation-delay: 420ms; }
+.rippleRing3 { animation-delay: 840ms; }
+@keyframes gemlib-ripple {
+  0%   { transform: scale(0.7); opacity: 0;   border-width: 2px; }
+  15%  {                        opacity: 0.6;                    }
+  100% { transform: scale(2.7); opacity: 0;   border-width: 0.3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseRing, .particleDot, .sparkleDot,
+  .ponderRing, .ponderGlow, .ponderMote,
+  .rayLine, .confettiBit, .orbitDot,
+  .bloomPetal, .spiralDot, .rippleRing { animation: none; opacity: 0; }
+}
+
+/* ── Sleepy "z"s — a soft stream of italic z's rising off the top-right of
+   the gem while it's asleep. Each grows + drifts up-right + fades on a loop,
+   staggered so it reads as a continuous Zzz. ── */
+.sleepZs {
+  position: absolute;
+  /* Emanate from just above the gem's top, slightly off to one side, like
+     Zzz floating off a sleeping head. */
+  left: 52%;
+  top: 17%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.sleepZ {
+  position: absolute;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(214, 252, 234, 0.92);
+  text-shadow: 0 0 12px rgba(110, 231, 183, 0.7), 0 0 28px rgba(110, 231, 183, 0.4);
+  opacity: 0;
+  will-change: transform, opacity;
+  /* Slow rise; each z grows + drifts up-right and fades in then out. */
+  animation: gemlib-sleepZ 4.6s ease-in-out infinite;
+}
+
+@keyframes gemlib-sleepZ {
+  0%   { transform: translate(0, 8px)      scale(0.45) rotate(-9deg); opacity: 0;    }
+  22%  { opacity: 0.92;                                                              }
+  60%  { opacity: 0.72;                                                              }
+  100% { transform: translate(34px, -116px) scale(1.55) rotate(11deg); opacity: 0;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sleepZ { animation: none; opacity: 0; }
+}
+
+/* ── Control deck — the lab's working controls, one group per category. ── */
+.controlDeck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.controlsEyebrow {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.6);
+}
+
+.controlRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.controlBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 22px;
+  background: rgba(110, 231, 183, 0.04);
+  color: var(--ink-dim);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    background var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.controlBtn:hover {
+  color: var(--mint);
+  border-color: var(--mint);
+  background: rgba(110, 231, 183, 0.07);
+  box-shadow: 0 0 28px -10px var(--mint-glow);
+}
+
+.controlBtn:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+}
+
+/* Active/latched state — used by the looping "thinking" button so you can see
+   the gem is currently in loading mode. */
+.controlBtnActive,
+.controlBtnActive:hover {
+  color: var(--bg);
+  background: var(--mint);
+  border-color: var(--mint);
+  box-shadow: 0 0 30px -8px var(--mint-glow);
+}
+
+/* ── Shapes section — a row of the same character gem rendered as different
+   polyhedra. Each cell is a smaller gem stage with its own soft halo. ── */
+.shapesSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.shapesRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-6, 40px);
+}
+
+.shapeCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.shapeGem {
+  width: clamp(150px, 22vmin, 200px);
+  height: clamp(150px, 22vmin, 200px);
+  position: relative;
+  animation: gemlib-halo 3.9s ease-in-out infinite;
+  flex-shrink: 0;
+  transform-origin: center;
+}
+
+.shapeGem > canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.shapeLabel {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--ink-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shapeGem { animation: none; }
+}
+
+@media (max-width: 560px) {
+  .gemStage { width: 70vmin; height: 70vmin; }
+  .libLabel { top: var(--space-4); left: var(--space-4); }
+}

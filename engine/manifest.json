@@ -1,0 +1,42 @@
+{
+  "name": "vitality-tile-engine",
+  "what": "A forkable slice of Vitality: the design DNA + real tiles that let Claude Code build Vitality-native dashboard tiles as ambient context. No commands, no keys, no app.",
+  "selfContained": true,
+  "takesFrom": "vitality-only",
+  "entry": "ENGINE.md",
+  "selfCheck": "lint.mjs",
+  "dna": [
+    "README.md",
+    "components.md",
+    "example-workout-logger.md",
+    "feature-celebrations.md",
+    "feature-finance-brand.md",
+    "feature-fuel.md",
+    "feature-goals-water.md",
+    "feature-interactions.md",
+    "feature-onboarding-quiz.md",
+    "feature-peak.md",
+    "feature-vee.md",
+    "feature-vitals.md",
+    "feature-weight-supps.md",
+    "gotchas.md",
+    "icons.md",
+    "motion.md",
+    "showcase.html",
+    "theme.md",
+    "vee-noticed.md",
+    "voice.md"
+  ],
+  "examples": [
+    "focus-timer",
+    "habit-streak",
+    "mood-check",
+    "one-line-journal",
+    "water-daily"
+  ],
+  "regenerate": "node scripts/build-engine.mjs",
+  "sources": {
+    "dna": "mcp/dna/",
+    "examples": "lib/tiles/featuredHtml.json"
+  }
+}

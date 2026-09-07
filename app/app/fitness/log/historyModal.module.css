@@ -1,0 +1,884 @@
+/*
+ * History modal — faithful port of the compact-logger demo's per-lift
+ * HISTORY card (public/compact-logger.html, openHistory). Black canvas,
+ * mint accents, Instrument Serif italic on the emotive bits. The graph
+ * is fed by the user's REAL saved sessions; range tabs window them by
+ * date; the scrub line/dot/tag follow a finger across the line.
+ */
+
+/* Tokens the demo defines that aren't global. */
+.dialog {
+  --gold: #f1cf7a;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  animation: overlayIn 200ms var(--ease);
+}
+
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* .hcard */
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  max-height: 86vh;
+  border: 1px solid var(--border-strong);
+  border-radius: 26px;
+  background: #0a0b0a;
+  padding: 22px;
+  box-sizing: border-box;
+  transform: translateY(10px) scale(0.985);
+  animation: dialogIn 320ms var(--ease-premium) forwards;
+}
+
+@keyframes dialogIn { to { transform: none; } }
+
+/* ── Header (.hhd) ──────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+}
+
+.headText { min-width: 0; }
+
+.eyebrow {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.title {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--text-2xl);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--fg);
+  margin: 2px 0 0;
+}
+
+.closeIcon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: color var(--duration), background var(--duration);
+}
+
+.closeIcon:hover { color: var(--fg); background: rgba(255, 255, 255, 0.06); }
+.closeIcon svg { width: 14px; height: 14px; }
+
+/* ── Error / loading ────────────────────────────────────────────── */
+
+.loading,
+.error {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+  margin: 14px 0 0;
+}
+
+.error { color: var(--red); }
+.errorDetail {
+  display: block;
+  margin-top: var(--space-1);
+  font-style: normal;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+/* ── Range tabs (.htf) ──────────────────────────────────────────── */
+
+.rangeTabs {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin: 18px auto 0;
+  padding: 4px;
+  width: fit-content;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.rangeTab {
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  padding: 6px 13px;
+  cursor: pointer;
+  transition: color var(--duration), background 200ms var(--spring), transform var(--duration);
+}
+
+.rangeTab:hover { color: var(--muted-strong); }
+.rangeTab:active { transform: scale(0.94); }
+.rangeTabOn { color: #04140d; background: var(--mint); }
+
+/* ── Graph (.hgraph / .hgraphBox + scrubber) ────────────────────── */
+
+.graph {
+  margin: 18px 0 0;
+}
+
+.graphBox {
+  position: relative;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.graph svg {
+  width: 100%;
+  height: 88px;
+  display: block;
+  overflow: visible;
+}
+
+.line {
+  stroke: var(--mint);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* A calm marker on every past session along the line — present but quieter
+   than the latest dot, so the line stays the hero. */
+.dot {
+  fill: #0b0f0d;
+  stroke: var(--mint);
+  stroke-width: 1.5;
+}
+.dotLast { fill: var(--mint); }
+/* Amber when the most recent session's best set fell short of target — a
+   down-day, marked warmly (never red). */
+.dotLastPartial { fill: #e9c87a; }
+
+/* Off / sick day: a soft twilight dot sitting OFF the strength line, plus a
+   small moon tick on the baseline. Present so the day isn't "lost", but visibly
+   not part of the mint progression line. */
+.dotOff {
+  fill: rgba(138, 180, 208, 0.55);
+  stroke: rgba(138, 180, 208, 0.85);
+  stroke-width: 1;
+}
+.offTick { stroke: rgba(138, 180, 208, 0.6); stroke-width: 1.5; }
+
+/* Per-set tally under the graph: each logged set's reps, mint when it hit
+   target, amber when short or missed. So one tired set never reads as the
+   whole session. */
+.setTally {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  row-gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.setTallyLabel {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.setTallyPills { display: flex; gap: 6px; flex-wrap: wrap; }
+.setTallyPill {
+  min-width: 26px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  padding: 3px 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.setTallyFull {
+  color: var(--mint);
+  border-color: rgba(110, 231, 183, 0.32);
+  background: rgba(110, 231, 183, 0.06);
+}
+.setTallyShort {
+  color: #e9c87a;
+  border-color: rgba(233, 200, 122, 0.4);
+  background: rgba(233, 200, 122, 0.05);
+}
+/* Total reps for the selected day — pushed to the right end, mono mint so it
+   reads as a tidy volume count next to the per-set breakdown (not another
+   set pill). */
+.setTallyTotal {
+  margin-left: auto;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mint);
+  white-space: nowrap;
+}
+
+.dropLine {
+  stroke: rgba(127, 240, 178, 0.45);
+  stroke-width: 1.5;
+}
+
+/* Date chip sitting below the baseline at the last point's x — clear of the
+   gridlines and plotted line (esp. on wide windows where points bunch right). */
+.dropLabel {
+  position: absolute;
+  bottom: -15px;
+  transform: translateX(-50%);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 10px;
+  color: var(--mint);
+  background: rgba(11, 13, 12, 0.62);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.scrubLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.scrubLineShow { opacity: 1; }
+
+.scrubDot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  transition: transform 120ms var(--ease-premium);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.55);
+}
+.scrubDotShow { transform: translate(-50%, -50%) scale(1); }
+
+.scrubTag {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px));
+  white-space: nowrap;
+  font-size: var(--text-xs);
+  padding: 5px 9px;
+  border-radius: 9px;
+  background: #10120f;
+  border: 1px solid var(--border-strong);
+  opacity: 0;
+  transition: opacity 120ms;
+  font-variant-numeric: tabular-nums;
+}
+.scrubTagShow { opacity: 1; }
+
+.scrubTagDate {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--muted);
+  margin-right: 7px;
+}
+.scrubTagWeight { font-weight: 600; }
+.scrubTagReps {
+  margin-left: 7px;
+  color: var(--muted);
+  font-size: 0.92em;
+}
+.scrubTagDelta { margin-left: 7px; }
+.upc { color: var(--mint); }
+.downc { color: #f08a8a; } /* live scrub only: stock-style up/down */
+
+/* ── Axis (.haxis) ──────────────────────────────────────────────── */
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* ── Caption (.hcap) ────────────────────────────────────────────── */
+
+.cap {
+  text-align: center;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--muted);
+  margin-top: 12px;
+}
+.cap .up { color: var(--mint); }
+.cap .soft { color: #f3c98b; }
+.cap .flat { color: var(--muted-strong); }
+
+/* ── Graph card (stock-quote style) ─────────────────────────────────
+   Frames the sparkline like a trading card: a current-value readout up
+   top, the line + dashed baseline below, dates on the axis. */
+.graphCard {
+  margin-top: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 16px 16px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.graphCard .graph { margin-top: 4px; margin-bottom: 18px; }
+.graphCard .graph svg { height: 120px; }
+.graphCard .axis { margin-top: 6px; }
+
+/* Floating y-axis labels for the framed-grid graph. Positioned over the
+   gridlines at the left; a faint chip keeps them legible over the line. */
+.gridLabels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.gridLabel {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  background: rgba(11, 13, 12, 0.55);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+.quoteRow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.quotePrice {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 30px;
+  letter-spacing: -0.5px;
+  color: var(--fg);
+  line-height: 1;
+}
+.quotePrice small {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 3px;
+}
+.quoteChange {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.quoteChange.up { color: var(--mint); }
+.quoteChange.soft { color: #f3c98b; }
+.quoteChange.flat { color: var(--muted-strong); }
+
+/* ── Empty / "keep going" state (.hempty) ───────────────────────── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 96px;
+  text-align: center;
+  padding: 14px 20px;
+  animation: cozyItem 460ms var(--spring);
+}
+
+@keyframes cozyItem {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.emptyIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.09);
+  box-shadow: 0 0 20px rgba(110, 231, 183, 0.14);
+}
+.emptyIcon svg { width: 16px; height: 16px; }
+
+.emptyMain {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  color: #eafff5;
+}
+.emptySub { font-size: var(--text-xs); color: var(--muted); }
+
+/* ── Stats row (.hstats) ────────────────────────────────────────── */
+
+.stats {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 0;
+}
+
+.statCell { flex: 1; text-align: center; }
+
+.statLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statValue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-top: 6px;
+}
+.statValueUp { color: var(--mint); }
+.statValueFlat { color: var(--muted-strong); }
+.statValueSoft { color: #f3c98b; }    /* warm, never red */
+.statValueGold { color: var(--gold); }
+
+/* ── Log list (.hlogwrap / .hcols / .hrow) ──────────────────────── */
+
+.logWrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 1.6fr 50px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 8px;
+  font-size: 0.55rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cols span { text-align: center; }
+.cols span:first-child { text-align: left; }
+.cols span:last-child { text-align: right; }
+
+.log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -4px;
+  padding: 2px 4px;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+}
+
+.row + .row { margin-top: 2px; }
+
+.rowMain {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr 1.6fr 50px;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  cursor: pointer;
+  border-radius: 13px;
+  transition: background var(--duration);
+}
+.rowMain:hover { background: rgba(255, 255, 255, 0.03); }
+.rowOpen .rowMain { background: rgba(110, 231, 183, 0.05); }
+
+.cDate {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--fg);
+}
+.c {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  color: var(--muted-strong);
+}
+.w {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  color: var(--fg);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.w small { font-weight: 400; color: var(--muted); font-size: 0.74em; font-style: italic; }
+.wBest { color: var(--gold); text-shadow: 0 0 12px rgba(241, 207, 122, 0.3); }
+.gstar { width: 11px; height: 11px; color: var(--gold); filter: drop-shadow(0 0 4px rgba(241, 207, 122, 0.5)); }
+
+.delta {
+  text-align: right;
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.deltaUp { color: var(--mint); }
+.deltaFlat { color: var(--muted); }
+.deltaSoft { color: #f3c98b; }
+/* Off-day row: a calm twilight "off day" label instead of a progress number. */
+.deltaOff { color: rgba(138, 180, 208, 0.85); font-style: italic; }
+
+/* Off-day session row in the log list — dimmed + twilight-tinted so it reads as
+   a rest/recovery day, not a real progression session. */
+.rowOff .cDate { color: rgba(138, 180, 208, 0.9); }
+.rowOff .c,
+.rowOff .w { opacity: 0.55; }
+.moonGlyph {
+  width: 11px;
+  height: 11px;
+  color: rgba(138, 180, 208, 0.9);
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+
+/* expanding edit drawer (.hedit) */
+.edit {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms var(--ease-premium);
+}
+.rowOpen .edit { grid-template-rows: 1fr; }
+.editIn { overflow: hidden; }
+
+.editRow {
+  display: flex;
+  gap: 7px;
+  padding: 2px 12px 0;
+}
+
+.step {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 8px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+.stepLabel {
+  flex: none;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stepControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+}
+.stepBtn {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--mint);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background var(--duration), border-color var(--duration);
+}
+.stepBtn:hover:not(:disabled) { background: rgba(110, 231, 183, 0.08); border-color: rgba(110, 231, 183, 0.4); }
+.stepBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.stepValue {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-base);
+  color: var(--fg);
+}
+
+.remove {
+  display: block;
+  margin: 11px auto 12px;
+  background: none;
+  border: none;
+  /* A clear warning red — removing a session deletes real logged data. */
+  color: #f08a8a;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+.remove:hover:not(:disabled) { color: #f5a3a3; }
+.remove:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Centered delete-session confirmation, layered on top of the history modal.
+   Same centered-overlay pattern as .overlay / .dialog, one z-index above. */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  animation: overlayIn 180ms var(--ease);
+}
+.confirmCard {
+  --gold: #f1cf7a;
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid var(--border-strong);
+  border-radius: 22px;
+  background: #0a0b0a;
+  padding: 22px 20px 18px;
+  box-sizing: border-box;
+  text-align: center;
+  transform: translateY(8px) scale(0.97);
+  animation: dialogIn 300ms var(--ease-premium) forwards;
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.7);
+}
+.confirmTitle {
+  margin: 0 0 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--fg);
+}
+.confirmMsg {
+  margin: 0 0 16px;
+  color: var(--muted-strong);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.confirmError {
+  margin: 0 0 12px;
+  color: #f08a8a;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+.confirmBtns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.confirmKeep,
+.confirmRemove {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.confirmKeep {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--muted-strong);
+}
+.confirmKeep:hover:not(:disabled) {
+  color: var(--fg);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+.confirmRemove {
+  background: rgba(240, 138, 138, 0.14);
+  border: 1px solid rgba(240, 138, 138, 0.5);
+  color: #f08a8a;
+}
+.confirmRemove:hover:not(:disabled) {
+  background: rgba(240, 138, 138, 0.22);
+  color: #f5a3a3;
+}
+.confirmKeep:disabled,
+.confirmRemove:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.editError {
+  margin: 0 12px 8px;
+  font-size: var(--text-xs);
+  color: var(--red);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
+
+/* ── Add a session (.hadd) ──────────────────────────────────────── */
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: transparent;
+  border: 1px dashed rgba(110, 231, 183, 0.22);
+  border-radius: 13px;
+  color: var(--mint);
+  cursor: pointer;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-sm);
+  transition: background var(--duration);
+}
+.addBtn:hover { background: rgba(110, 231, 183, 0.05); }
+.addBtn svg { width: 12px; height: 12px; }
+
+/* ── Backfill / custom-log form (demo .clog, inline) ────────────── */
+
+.clog { margin-top: 14px; }
+.clogRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 13px;
+}
+.clogLabel {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.clog input {
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 13px;
+  color: var(--fg);
+  font-size: var(--text-base);
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  transition: border-color var(--duration);
+  color-scheme: dark;
+}
+.clog input:focus { border-color: rgba(110, 231, 183, 0.55); }
+.clog input:disabled { opacity: 0.55; cursor: not-allowed; }
+.clogGrid3 { display: flex; gap: 8px; margin-bottom: 13px; }
+.clogGrid3 .clogRow { flex: 1; margin-bottom: 0; }
+
+.clogHint {
+  margin: -4px 0 13px;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  font-style: italic;
+  font-family: var(--font-serif), Georgia, serif;
+  line-height: 1.5;
+}
+.clogError {
+  margin: -4px 0 13px;
+  font-size: var(--text-xs);
+  color: var(--red);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.clogBtns {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 6px;
+}
+.clogCancel {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: color var(--duration);
+}
+.clogCancel:hover:not(:disabled) { color: var(--fg); }
+.clogSave {
+  padding: 9px 18px;
+  background: var(--mint);
+  color: #04140d;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--duration), transform var(--duration);
+}
+.clogSave:hover:not(:disabled) { background: var(--mint-hover); transform: translateY(-1px); }
+.clogSave:disabled,
+.clogCancel:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .dialog,
+  .empty,
+  .clog { animation: none; }
+}

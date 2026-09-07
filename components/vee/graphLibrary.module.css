@@ -1,0 +1,196 @@
+/* =====================================================================
+   THE GRAPH LIBRARY - the goal card's picker at Library-tile quality.
+   Scrimmed, centered, serif title with one mint em word, mono labels,
+   hairline cards with real sparklines. Motion = one rise, transform/
+   opacity only, reduced-motion safe. Vanilla CSS module, no Tailwind.
+   ===================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 4, 7, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: glFade 0.25s ease both;
+}
+.card {
+  --mint: #6ee7b7;
+  position: relative;
+  width: min(880px, 96vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(167, 243, 208, 0.18);
+  border-radius: 22px;
+  background: #070b0a;
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+  animation: glRise 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes glFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes glRise {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.x {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.x:hover { color: #f2f6f4; border-color: rgba(167, 243, 208, 0.4); }
+.x svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+
+.head { padding: 22px 24px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.title { font-family: 'Instrument Serif', 'Iowan Old Style', Georgia, serif; font-weight: 400; font-size: 26px; color: #f2f6f4; }
+.title em { font-style: italic; color: var(--mint); }
+.sub { font-size: 12.5px; color: rgba(255, 255, 255, 0.45); margin-top: 2px; }
+.sub b { color: rgba(255, 255, 255, 0.75); font-weight: 600; }
+
+.quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.pill {
+  border: 1px solid rgba(167, 243, 208, 0.16);
+  border-radius: 999px;
+  background: none;
+  padding: 8px 14px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.pill:hover { border-color: rgba(167, 243, 208, 0.4); color: #f2f6f4; }
+.pillOn { border-color: rgba(110, 231, 183, 0.55); color: var(--mint); background: rgba(110, 231, 183, 0.07); }
+.pillVee { display: inline-flex; align-items: center; gap: 7px; }
+.pillVee svg { width: 10px; height: 10px; fill: none; stroke: #a78bfa; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+.search {
+  width: 100%;
+  margin-top: 14px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  background: rgba(9, 13, 12, 0.72);
+  color: #f2f6f4;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.25s;
+}
+.search::placeholder { color: rgba(255, 255, 255, 0.3); }
+.search:focus { border-color: rgba(110, 231, 183, 0.45); }
+
+.body { overflow-y: auto; padding: 6px 24px 24px; }
+.note {
+  padding: 30px 10px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13.5px;
+}
+
+.shelf { margin-top: 18px; }
+.shelfHead { display: flex; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.shelfName { font-family: 'Instrument Serif', 'Iowan Old Style', Georgia, serif; font-size: 19px; color: #f2f6f4; }
+.shelfWord { font-size: 11.5px; color: rgba(255, 255, 255, 0.34); }
+.shelfN { margin-left: auto; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 9.5px; color: rgba(255, 255, 255, 0.34); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.g {
+  position: relative;
+  text-align: left;
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  border-radius: 14px;
+  background: rgba(9, 13, 12, 0.72);
+  padding: 12px 12px 10px;
+  cursor: pointer;
+  color: #f2f6f4;
+  font: inherit;
+  transition: border-color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.g:hover:not(:disabled) { border-color: rgba(110, 231, 183, 0.45); transform: translateY(-1px); }
+.gDim { opacity: 0.5; cursor: default; }
+.gOn { border-color: rgba(110, 231, 183, 0.55); background: rgba(110, 231, 183, 0.05); }
+
+.gTop { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.gName { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gUnit { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.34); flex: none; }
+.g svg { width: 100%; height: 40px; display: block; margin-top: 6px; }
+.sparkEmpty {
+  height: 40px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(148, 163, 158, 0.22);
+  border-radius: 8px;
+}
+.sparkEmpty span {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+.gFoot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 5px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.34);
+}
+.use {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(4, 10, 8, 0.82);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--mint);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.g:hover:not(:disabled) .use { opacity: 1; }
+.gOn .use { opacity: 0; }
+.gOn:hover .use { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim, .card { animation: none; }
+  .g:hover:not(:disabled) { transform: none; }
+}

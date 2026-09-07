@@ -1,0 +1,413 @@
+import type { Tile, TileData, TileEnvelope, ReportKind } from './types'
+import { tileSkin, type Skin } from './tileSkin'
+import { tileDataSync } from './tileDataSync'
+
+/**
+ * tileStore is the ONLY module that touches persistence for user tiles.
+ *
+ * v1 is localStorage, scoped per user. Swapping this one module to Supabase
+ * later never touches a tile or the host. Every key is namespaced by userId so
+ * one user can never read another's tiles (multi-user from the ground up).
+ * Note: localStorage has no cross-user isolation on a shared device, so v1 is
+ * single-device. The Supabase swap adds RLS:
+ *   tiles(id, user_id, name, html, created_at, updated_at)
+ *   tile_data(tile_id, user_id, data jsonb)
+ *
+ * Keys:
+ *   vitality:<userId>:tiles            -> Tile[]  (the index, source order)
+ *   vitality:<userId>:tile:<id>:data   -> whatever Vitality.save() persisted
+ */
+
+const indexKey = (userId: string) => `vitality:${userId}:tiles`
+const dataKey = (userId: string, id: string) => `vitality:${userId}:tile:${id}:data`
+const legacyKey = (userId: string) => `vitality:${userId}:tile:draft` // BUILD71 single key
+
+const hasStorage = () => typeof window !== 'undefined' && !!window.localStorage
+
+/**
+ * A corrupted / non-JSON value in a key is treated as empty on read (never
+ * thrown), so one bad key can never white-screen a render. We log it ONCE per
+ * key in dev so the trap is visible while debugging, but stay silent in prod and
+ * never re-warn (a warn every render would itself be noise). Reads that hit this
+ * degrade to empty WITHOUT rewriting the key, so a recoverable value is never
+ * clobbered by the failure path.
+ */
+const warned = new Set<string>()
+function warnCorrupt(key: string, err: unknown): void {
+  if (process.env.NODE_ENV === 'production') return
+  if (warned.has(key)) return
+  warned.add(key)
+  // eslint-disable-next-line no-console
+  console.warn(`[tileStore] ignoring unreadable localStorage key "${key}"`, err)
+}
+
+function uuid(): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
+  return 'tile-' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+}
+
+function readIndex(userId: string): Tile[] {
+  if (!hasStorage()) return []
+  const key = indexKey(userId)
+  let raw: string | null = null
+  try {
+    raw = window.localStorage.getItem(key)
+  } catch (err) {
+    // getItem itself can throw in private mode / when storage is disabled.
+    warnCorrupt(key, err)
+    return []
+  }
+  if (!raw) return []
+  try {
+    const list = JSON.parse(raw)
+    return Array.isArray(list) ? list : []
+  } catch (err) {
+    // Corrupt / non-JSON registry: degrade the READ to empty. Do NOT rewrite the
+    // key here. The stored bytes may still be recoverable and we must never turn
+    // a parse hiccup into permanent data loss of the user's board.
+    warnCorrupt(key, err)
+    return []
+  }
+}
+
+/** Returns whether the write actually landed, so callers that promise persistence
+ *  (importTile) can signal failure instead of handing back a phantom tile. */
+function writeIndex(userId: string, list: Tile[]): boolean {
+  if (!hasStorage()) return false
+  try {
+    window.localStorage.setItem(indexKey(userId), JSON.stringify(list))
+    return true
+  } catch {
+    /* quota / blocked / private-mode throw. Fail quiet: the in-memory list the
+       caller already holds stays correct, the session keeps working, and we
+       report false so a caller that cares can react. */
+    return false
+  }
+}
+
+function listTiles(userId: string): Tile[] {
+  return readIndex(userId).sort((a, b) => b.createdAt - a.createdAt) // newest first
+}
+
+function getTile(userId: string, id: string): Tile | undefined {
+  return readIndex(userId).find((t) => t.id === id)
+}
+
+type CreateInput = {
+  name: string
+  html: string
+  category?: string
+  // the tile's declared stream (report contract), so share/publish
+  // round-trips keep it (PATCH21)
+  key?: string
+  label?: string
+  kind?: ReportKind
+  goalDirection?: 'up' | 'down'
+  fullPage?: boolean
+}
+
+/**
+ * Build a tile and persist it, reporting whether the write actually landed.
+ * Internal seam so createTile can keep its stable `Tile` return while importTile
+ * (which promises persistence) can observe a quota / blocked write and return
+ * null instead of a phantom tile that never reached storage.
+ */
+function persistNewTile(userId: string, input: CreateInput): { tile: Tile; saved: boolean } {
+  const now = Date.now()
+  const tile: Tile = {
+    id: uuid(),
+    name: input.name.trim() || 'Untitled tile',
+    html: input.html,
+    createdAt: now,
+    updatedAt: now,
+  }
+  if (input.category) tile.category = input.category
+  if (input.key) tile.key = input.key
+  if (input.label) tile.label = input.label
+  if (input.kind) tile.kind = input.kind
+  if (input.goalDirection) tile.goalDirection = input.goalDirection
+  if (input.fullPage) tile.fullPage = true
+  const list = readIndex(userId)
+  list.unshift(tile)
+  const saved = writeIndex(userId, list)
+  return { tile, saved }
+}
+
+function createTile(userId: string, input: CreateInput): Tile {
+  return persistNewTile(userId, input).tile
+}
+
+/**
+ * The default display category for a tile's report kind. A tile that reports a
+ * count shows a "Count" chip, a duration shows "Duration", and so on. Returns
+ * undefined for an unknown / absent kind so the caller can fall back to 'Custom'.
+ */
+const CATEGORY_FROM_KIND: Record<ReportKind, string> = {
+  intake: 'Intake',
+  count: 'Count',
+  duration: 'Duration',
+  rating: 'Rating',
+  measure: 'Measure',
+  money: 'Money',
+  done: 'Done',
+}
+function categoryFromKind(kind?: ReportKind): string | undefined {
+  return kind ? CATEGORY_FROM_KIND[kind] : undefined
+}
+
+/** A sealed tile's html is capped so one paste can never blow the storage budget. */
+const MAX_TILE_HTML = 1024 * 1024 // 1MB
+
+/**
+ * The ONE install pipe. Every platform pillar drops a tile through here: the
+ * Library upload paste box, the MCP's future upload_tile, and the Arts District.
+ * Validates the envelope, derives the display category, creates the tile, then
+ * seeds any design / color / size onto its skin. Returns the new tile, or null
+ * on any validation failure OR a failed persist (quota / blocked storage) so the
+ * caller can show a friendly message instead of celebrating a tile that never
+ * reached storage.
+ */
+function importTile(userId: string, envelope: TileEnvelope): Tile | null {
+  if (!envelope || typeof envelope !== 'object') return null
+  const { name, html } = envelope
+  if (typeof name !== 'string' || name.trim().length === 0) return null
+  if (typeof html !== 'string' || html.length === 0) return null
+  if (html.length > MAX_TILE_HTML) return null
+
+  // The envelope's DECLARED stream rides onto the tile so a later share or
+  // publish round-trips the report contract intact (PATCH21): without this a
+  // shared beer tile silently loses goalDirection:'down' and flips scoring mode.
+  const category = envelope.category || categoryFromKind(envelope.kind) || 'Custom'
+  const { tile, saved } = persistNewTile(userId, {
+    name,
+    html,
+    category,
+    key: typeof envelope.key === 'string' && envelope.key.trim() !== '' ? envelope.key.trim() : undefined,
+    label: typeof envelope.label === 'string' && envelope.label.trim() !== '' ? envelope.label.trim() : undefined,
+    kind: envelope.kind ?? undefined,
+    goalDirection:
+      envelope.goalDirection === 'up' || envelope.goalDirection === 'down'
+        ? envelope.goalDirection
+        : undefined,
+    fullPage: envelope.fullPage === true ? true : undefined,
+  })
+
+  // The persist did not land (quota exceeded / storage blocked / private mode).
+  // Signal failure the way importTile already does (return null) so the caller
+  // shows its friendly "could not save" message instead of celebrating a tile
+  // that never reached storage and would vanish on the next read.
+  if (!saved) return null
+
+  // Seed only the skin fields the envelope actually carries. An empty-string
+  // color / design (or a missing field) is treated as "use the default": guard
+  // each one explicitly so intent is clear and a blank never overwrites a default.
+  const patch: Partial<Skin> = {}
+  if (envelope.design != null && envelope.design !== '') patch.design = envelope.design
+  if (envelope.color != null && envelope.color !== '') patch.color = envelope.color
+  if (envelope.size != null) patch.size = envelope.size
+  if (patch.design != null || patch.color != null || patch.size != null) {
+    tileSkin.set(userId, tile.id, patch)
+  }
+
+  return tile
+}
+
+/**
+ * Adopt a tile that already has an id (e.g. one pulled from the server `tiles`
+ * table — an MCP-built or cross-device tile). No-op if a tile with that id is
+ * already in the local index, so a re-sync never duplicates. Additive: the
+ * localStorage v1 stays the source for everything else; this just lets the
+ * server sync layer (lib/tiles/tileSync.ts) fold server rows into the index.
+ */
+function adoptTile(userId: string, tile: Tile): boolean {
+  const list = readIndex(userId)
+  if (list.some((t) => t.id === tile.id)) return false
+  list.unshift(tile)
+  writeIndex(userId, list)
+  return true
+}
+
+/**
+ * Fold a server tile into the local index with last-write-wins: adopt it if new,
+ * overwrite the local copy when the server row is STRICTLY newer (a cross-device
+ * edit made elsewhere), else leave the newer-or-equal local copy untouched (a
+ * local edit still wins). Preserves the server `updatedAt` so timestamps stay
+ * comparable across devices. Used by the sync layer instead of adoptTile so an
+ * edit made on another device actually reaches this one.
+ */
+function syncServerTile(userId: string, tile: Tile): 'new' | 'updated' | 'stale' {
+  const list = readIndex(userId)
+  const existing = list.find((t) => t.id === tile.id)
+  if (!existing) {
+    list.unshift(tile)
+    writeIndex(userId, list)
+    return 'new'
+  }
+  if (tile.updatedAt > existing.updatedAt) {
+    existing.name = tile.name
+    existing.html = tile.html
+    if (tile.category !== undefined) existing.category = tile.category
+    else delete existing.category
+    // The declared report identity (PATCH21) refreshes across devices too — but
+    // ONLY when the incoming copy actually carries one. A stream-less server row
+    // (e.g. mirrored up before the stream column was written) must never strip a
+    // local declaration and silently flip the tile's scoring mode.
+    if (
+      tile.key !== undefined ||
+      tile.label !== undefined ||
+      tile.kind !== undefined ||
+      tile.goalDirection !== undefined
+    ) {
+      if (tile.key !== undefined) existing.key = tile.key
+      else delete existing.key
+      if (tile.label !== undefined) existing.label = tile.label
+      else delete existing.label
+      if (tile.kind !== undefined) existing.kind = tile.kind
+      else delete existing.kind
+      if (tile.goalDirection !== undefined) existing.goalDirection = tile.goalDirection
+      else delete existing.goalDirection
+    }
+    existing.updatedAt = tile.updatedAt
+    writeIndex(userId, list)
+    return 'updated'
+  }
+  return 'stale'
+}
+
+function renameTile(userId: string, id: string, name: string): Tile | undefined {
+  const list = readIndex(userId)
+  const tile = list.find((t) => t.id === id)
+  if (!tile) return undefined
+  tile.name = name.trim() || tile.name
+  tile.updatedAt = Date.now()
+  writeIndex(userId, list)
+  return tile
+}
+
+function updateHtml(userId: string, id: string, html: string): Tile | undefined {
+  const list = readIndex(userId)
+  const tile = list.find((t) => t.id === id)
+  if (!tile) return undefined
+  tile.html = html
+  tile.updatedAt = Date.now()
+  writeIndex(userId, list)
+  return tile
+}
+
+function deleteTile(userId: string, id: string) {
+  writeIndex(
+    userId,
+    readIndex(userId).filter((t) => t.id !== id),
+  )
+  void tileDataSync.remove(userId, id) // drop the mirrored server data too
+  if (!hasStorage()) return
+  try {
+    window.localStorage.removeItem(dataKey(userId, id))
+  } catch {
+    /* ignore */
+  }
+}
+
+const MAX_TILE_DATA = 512 * 1024 // ~512KB per tile, protects the shared localStorage budget
+
+/** Persist a tile's data. Returns whether the write actually landed so callers
+ *  never tell the user "Saved" for a payload that was silently dropped (oversized
+ *  or quota-blocked). */
+function saveData(userId: string, id: string, data: TileData): boolean {
+  if (!hasStorage()) return false
+  try {
+    const json = JSON.stringify(data)
+    if (json.length > MAX_TILE_DATA) return false // oversized payload, skip rather than blow the quota
+    window.localStorage.setItem(dataKey(userId, id), json)
+    void tileDataSync.push(userId, id, data) // best-effort server mirror; never blocks the boolean
+    return true
+  } catch {
+    /* quota / blocked. fail quiet */
+    return false
+  }
+}
+
+function loadData(userId: string, id: string): TileData {
+  if (!hasStorage()) return []
+  const key = dataKey(userId, id)
+  let raw: string | null = null
+  try {
+    raw = window.localStorage.getItem(key)
+  } catch (err) {
+    warnCorrupt(key, err)
+    return []
+  }
+  if (!raw) return []
+  try {
+    return JSON.parse(raw)
+  } catch (err) {
+    // Corrupt tile data: degrade to empty (the tile renders fresh) WITHOUT
+    // rewriting the key, so the bytes stay recoverable. Never throws into render.
+    warnCorrupt(key, err)
+    return []
+  }
+}
+
+/** Write server-pulled data into localStorage WITHOUT re-mirroring it. Used to
+ *  pre-warm a fresh device from tile_data before its tiles read their data, so a
+ *  hydrate never bounces straight back to the server. */
+function hydrateData(userId: string, id: string, data: TileData): void {
+  if (!hasStorage()) return
+  try {
+    const json = JSON.stringify(data)
+    if (json.length > MAX_TILE_DATA) return
+    window.localStorage.setItem(dataKey(userId, id), json)
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * One-time migration from the BUILD71 single-tile key, where
+ * vitality:<userId>:tile:draft held the saved data array directly (literal id
+ * "draft", no html persisted). If the registry is empty and that key exists,
+ * adopt its data into a real tile (html was never stored back then, so the
+ * caller supplies a default), then remove the legacy key. Guarded on an empty
+ * index so it never runs twice.
+ */
+function migrateLegacy(userId: string, defaultHtml: string): Tile | undefined {
+  if (!hasStorage()) return undefined
+  if (readIndex(userId).length > 0) return undefined
+  let legacyData: TileData = null
+  const key = legacyKey(userId)
+  try {
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return undefined
+    legacyData = JSON.parse(raw)
+  } catch (err) {
+    // A corrupt legacy blob: skip the migration and leave the key in place so a
+    // later run (or manual recovery) can still reach the original bytes. Never
+    // throws into the boot path that calls this.
+    warnCorrupt(key, err)
+    return undefined
+  }
+  const tile = createTile(userId, { name: 'My first tile', html: defaultHtml })
+  saveData(userId, tile.id, legacyData)
+  try {
+    window.localStorage.removeItem(legacyKey(userId))
+  } catch {
+    /* ignore */
+  }
+  return tile
+}
+
+export const tileStore = {
+  listTiles,
+  getTile,
+  createTile,
+  importTile,
+  adoptTile,
+  syncServerTile,
+  renameTile,
+  updateHtml,
+  deleteTile,
+  saveData,
+  loadData,
+  hydrateData,
+  migrateLegacy,
+}

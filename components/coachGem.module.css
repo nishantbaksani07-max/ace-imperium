@@ -1,0 +1,20 @@
+/* CoachGem wrapper — fills its parent by default (size the parent >=280px so
+   the real gem doesn't read muddy), or set an explicit square `size`. */
+.wrap {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wrap > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.16) 0%, transparent 70%);
+}

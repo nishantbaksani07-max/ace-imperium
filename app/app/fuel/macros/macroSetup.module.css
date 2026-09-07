@@ -1,0 +1,84 @@
+/* Macro setup — result screen only. The questions run on the shared Quiz engine
+   (components/Quiz + intakeQuiz.module.css), so this file just styles the "your
+   plan" reveal, mirroring the QuizComplete chrome (WelcomeBackdrop atmosphere,
+   mono-caps eyebrow with a mint rule, serif headline, mint CTA). */
+
+.resultShell {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  overflow: hidden;
+}
+
+.result {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: rise 0.55s var(--ease-premium) both;
+}
+.gemStage { display: flex; justify-content: center; margin-bottom: 0; margin-top: calc(-1 * var(--space-4)); }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.resultEyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-3);
+  font-family: var(--font-mono, monospace); font-size: var(--text-xs);
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--mint);
+}
+.resultRule { display: inline-block; width: 34px; height: 1px; background: var(--mint); opacity: 0.7; }
+
+.resultTitle {
+  font-family: var(--font-serif, Georgia, serif); font-weight: 400;
+  font-size: clamp(2.2rem, 6vw, 3.2rem); line-height: 1.04; letter-spacing: -0.02em;
+  margin: var(--space-3) 0 var(--space-3);
+}
+.resultTitle em { font-style: italic; }
+
+.resultReason {
+  font-family: var(--font-serif, Georgia, serif); font-style: italic;
+  font-size: var(--text-xl); color: var(--muted-strong); line-height: 1.45;
+  margin-bottom: var(--space-6); max-width: 46ch;
+}
+
+.cards { display: flex; gap: var(--space-4); flex-wrap: wrap; justify-content: center; width: 100%; }
+.target {
+  flex: 1; min-width: 200px; max-width: 300px; padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--border); border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.02); text-align: center;
+}
+.targetHi {
+  border-color: rgba(110, 231, 183, 0.4); background: rgba(110, 231, 183, 0.05);
+  box-shadow: 0 0 32px -16px var(--mint-glow);
+}
+.targetLabel { font-family: var(--font-mono, monospace); font-size: var(--text-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted-strong); }
+.targetKcal { display: block; font-family: var(--font-serif, Georgia, serif); font-size: 3rem; line-height: 0.95; color: var(--mint); font-variant-numeric: tabular-nums; margin: var(--space-2) 0; }
+.targetUnit { font-family: var(--font-mono, monospace); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--muted); margin-left: 8px; text-transform: uppercase; }
+.macros { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: var(--text-sm); color: var(--muted-strong); }
+.macros b { color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.note { margin-top: var(--space-6); font-size: var(--text-sm); color: var(--muted); line-height: 1.5; max-width: 48ch; }
+.err { margin-top: var(--space-3); font-family: var(--font-mono, monospace); font-size: var(--text-xs); color: var(--red); }
+
+.save {
+  margin-top: var(--space-6); display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  background: var(--mint); color: #06281d; border: none; border-radius: var(--radius-pill);
+  padding: var(--space-4) var(--space-8); font-size: var(--text-base); font-weight: 600; font-family: inherit;
+  transition: background var(--duration) var(--ease-premium);
+}
+.save:hover:not(:disabled) { background: var(--mint-hover); }
+.save:disabled { opacity: 0.5; cursor: default; }
+
+.redo {
+  margin-top: var(--space-4); cursor: pointer; background: none; border: none;
+  font-family: var(--font-mono, monospace); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); transition: color var(--duration) var(--ease);
+}
+.redo:hover { color: var(--mint); }
+
+@media (prefers-reduced-motion: reduce) { .result { animation: none; } }

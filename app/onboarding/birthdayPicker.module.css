@@ -1,0 +1,78 @@
+/* BirthdayPicker — three minimal typed slots (month / day / year) with faint
+   MM / DD / YYYY placeholders and slim "/" separators, so it reads as one
+   balanced, obviously-typeable date control. A single centered line below
+   confirms the date in plain language (3 → "March 23, 2006"). Underline-slot
+   "C" design, refined for symmetry. */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sep {
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: rgba(233, 239, 233, 0.22);
+  user-select: none;
+  transform: translateY(-2px);
+}
+
+.slotInput {
+  text-align: center;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: 1.9rem;
+  line-height: 1.1;
+  color: var(--fg, #eafff7);
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.16);
+  outline: none;
+  padding: 6px 0;
+  transition: border-color 0.2s ease;
+}
+.slotInput:focus { border-color: var(--mint, #6EE7B7); }
+.slotInput::placeholder {
+  color: rgba(233, 239, 233, 0.24);
+  font-style: italic;
+  letter-spacing: 0.06em;
+}
+
+/* Month and day share one width; year is a touch wider for its four digits but
+   close enough that the three slots read as a balanced row. */
+.mm, .dd { width: 64px; }
+.yy { width: 84px; }
+
+/* Plain-language confirm line — centered under the slots, reserves its own
+   height (so the row never jumps) and fades up in mint once a month is known. */
+.confirm {
+  min-height: 1.3em;
+  font-family: var(--font-serif), 'Times New Roman', Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--mint, #6EE7B7);
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.confirmOn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slotInput { transition: none; }
+  .confirm { transition: none; }
+}

@@ -1,0 +1,183 @@
+/*
+ * TuneCoachmark — one-time first-run explainer for the per-lift "tune" control.
+ * Mirrors NewWeekConfirm's centered mint sheet so the logger's onboarding reads
+ * as one family. Portaled to <body> so the fixed blurred backdrop is viewport-true.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(0, 0, 0, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  animation: tcFade 200ms var(--ease-premium);
+}
+
+@keyframes tcFade { from { opacity: 0; } to { opacity: 1; } }
+
+.sheet {
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  background: #07100c;
+  border: 1px solid rgba(110, 231, 183, 0.22);
+  border-radius: 18px;
+  padding: var(--space-8) var(--space-6);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(110, 231, 183, 0.08);
+  animation: tcRise 320ms var(--ease-premium);
+}
+
+@keyframes tcRise { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+.seal {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  color: #06281d;
+  background: linear-gradient(150deg, #a7f3d0, var(--mint) 60%);
+  box-shadow: 0 0 26px rgba(110, 231, 183, 0.4);
+}
+
+.seal svg { width: 28px; height: 28px; }
+
+.eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.9rem;
+  margin-top: 4px;
+}
+
+.why {
+  color: var(--muted-strong);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  margin-top: var(--space-3);
+}
+
+/* Mock of a Step 3 lift row, with its Tune button lit like the real one. */
+.pillDemo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space-5);
+  padding: 14px 14px 16px;
+  border: 1px solid rgba(110, 231, 183, 0.16);
+  border-radius: 14px;
+  background: rgba(110, 231, 183, 0.04);
+}
+
+.demoLiftRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.demoLiftName {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--muted-strong);
+}
+
+.demoTune {
+  flex: none;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+}
+
+.demoPillLit {
+  color: #06281d;
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #a7f3d0, var(--mint));
+  box-shadow: 0 0 20px rgba(110, 231, 183, 0.45);
+  animation: tcPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tcPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(110, 231, 183, 0.35); }
+  50% { box-shadow: 0 0 26px rgba(110, 231, 183, 0.6); }
+}
+
+.demoHint {
+  flex-basis: 100%;
+  margin-top: 6px;
+  font-size: var(--text-xs);
+  color: var(--mint);
+  font-style: italic;
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: var(--space-4);
+  text-align: left;
+  border: 1px solid rgba(110, 231, 183, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(110, 231, 183, 0.04);
+}
+
+.point {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  font-size: var(--text-sm);
+}
+
+.point + .point { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.point svg { width: 17px; height: 17px; color: var(--mint); flex: none; }
+.point b { font-weight: 600; }
+
+.confirm {
+  margin-top: var(--space-5);
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #a7f3d0, var(--mint));
+  color: #06281d;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: var(--text-base);
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(110, 231, 183, 0.32);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.confirm:hover { transform: translateY(-1px); box-shadow: 0 12px 34px rgba(110, 231, 183, 0.42); }
+.confirm:active { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .sheet, .demoPillLit { animation: none; }
+}

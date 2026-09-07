@@ -1,0 +1,209 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{box-sizing:border-box}
+body{background:transparent;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;accent-color:#6EE7B7;margin:0;-webkit-font-smoothing:antialiased}
+.wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vw,22px);padding:clamp(14px,3vw,28px);min-height:100vh}
+.ringbox{position:relative;width:clamp(150px,42vw,300px);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:7}
+.prog{fill:none;stroke:#6EE7B7;stroke-width:7;stroke-linecap:round;transition:stroke .6s cubic-bezier(.16,1,.3,1),stroke-dashoffset .35s cubic-bezier(.16,1,.3,1)}
+.center{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;z-index:2;text-align:center}
+.time{font-size:clamp(28px,9vw,64px);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1}
+.state{font-size:clamp(10px,2.4vw,14px);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);font-weight:500;min-height:1.1em;transition:color .4s cubic-bezier(.16,1,.3,1)}
+.state.done{color:#6EE7B7}
+.controls{display:flex;gap:clamp(8px,2vw,14px);flex-wrap:wrap;justify-content:center}
+button{font-family:inherit;font-size:clamp(12px,2.6vw,15px);font-weight:600;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:clamp(9px,1.8vw,12px) clamp(16px,3.6vw,26px);cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:transform .35s cubic-bezier(.16,1,.3,1),background .35s cubic-bezier(.16,1,.3,1),border-color .35s cubic-bezier(.16,1,.3,1),opacity .35s cubic-bezier(.16,1,.3,1);min-height:42px;-webkit-tap-highlight-color:transparent;user-select:none}
+button:hover{background:rgba(255,255,255,.1)}
+button:active{transform:scale(.95)}
+button.primary{background:rgba(110,231,183,.14);border-color:rgba(110,231,183,.4);color:#6EE7B7}
+button.primary:hover{background:rgba(110,231,183,.22)}
+button svg{width:15px;height:15px;display:block;flex:0 0 auto}
+.sessions{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.6);font-size:clamp(11px,2.4vw,14px);font-weight:500}
+.sessions svg{width:15px;height:15px;color:#6EE7B7;flex:0 0 auto}
+.sessions b{color:#fff;font-weight:600}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.finish .prog{stroke:#6EE7B7;animation:glow 1.4s ease-out}
+@keyframes glow{0%{filter:drop-shadow(0 0 0 rgba(110,231,183,0))}40%{filter:drop-shadow(0 0 10px rgba(110,231,183,.7))}100%{filter:drop-shadow(0 0 0 rgba(110,231,183,0))}}
+</style></head><body>
+<div class="wrap">
+  <div class="ringbox" id="ringbox">
+    <svg class="ring" viewBox="0 0 120 120">
+      <circle class="track" cx="60" cy="60" r="54"></circle>
+      <circle class="prog" id="prog" cx="60" cy="60" r="54"></circle>
+    </svg>
+    <div class="center">
+      <div class="time" id="time">25:00</div>
+      <div class="state" id="state">Ready</div>
+    </div>
+  </div>
+  <div class="controls" id="controls"></div>
+  <div class="sessions">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+    <span><b id="count">0</b> today</span>
+  </div>
+</div>
+<script>
+var Vitality={_w:{},save:function(d){parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);Vitality._w[id]=res;parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')})}};
+window.addEventListener('message',function(e){var m=e.data;if(m&&m.source==='vitality-host'&&m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id]}});
+
+var DEFAULT_MIN=25;
+var R=54, CIRC=2*Math.PI*R;
+var state={date:today(),sessions:0,minutes:DEFAULT_MIN};
+var running=false, paused=false, finished=false;
+var remaining=DEFAULT_MIN*60;
+var ticker=null;
+
+var elTime=document.getElementById('time');
+var elState=document.getElementById('state');
+var elCount=document.getElementById('count');
+var elProg=document.getElementById('prog');
+var elControls=document.getElementById('controls');
+var elRingbox=document.getElementById('ringbox');
+
+elProg.style.strokeDasharray=CIRC;
+elProg.style.strokeDashoffset=0;
+
+function today(){
+  var d=new Date();
+  var m=String(d.getMonth()+1).padStart(2,'0');
+  var day=String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+m+'-'+day;
+}
+
+function persist(){
+  Vitality.save({date:state.date,sessions:state.sessions,minutes:state.minutes});
+}
+
+function totalSecs(){return state.minutes*60;}
+
+function fmt(s){
+  if(s<0)s=0;
+  var mm=Math.floor(s/60), ss=Math.floor(s%60);
+  return String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+}
+
+function renderRing(){
+  var tot=totalSecs();
+  var frac=tot>0?(remaining/tot):0;
+  if(frac<0)frac=0; if(frac>1)frac=1;
+  elProg.style.strokeDashoffset=CIRC*(1-frac);
+}
+
+function renderTime(){
+  elTime.textContent=fmt(remaining);
+}
+
+function renderCount(){
+  elCount.textContent=state.sessions;
+}
+
+function svg(path){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
+}
+var ICON_PLAY=svg('<polygon points="6 4 19 12 6 20 6 4" fill="currentColor" stroke="none"></polygon>');
+var ICON_PAUSE=svg('<rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"></rect><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor" stroke="none"></rect>');
+var ICON_RESET=svg('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path>');
+
+function renderControls(){
+  var html='';
+  if(finished){
+    html+='<button class="primary" data-act="again">'+ICON_PLAY+'Again</button>';
+    html+='<button data-act="reset">'+ICON_RESET+'Reset</button>';
+  } else if(!running){
+    html+='<button class="primary" data-act="start">'+ICON_PLAY+(paused?'Resume':'Start')+'</button>';
+    html+='<button data-act="reset">'+ICON_RESET+'Reset</button>';
+  } else {
+    html+='<button data-act="pause">'+ICON_PAUSE+'Pause</button>';
+    html+='<button data-act="reset">'+ICON_RESET+'Reset</button>';
+  }
+  elControls.innerHTML=html;
+}
+
+function setState(txt,done){
+  elState.textContent=txt;
+  elState.classList.toggle('done',!!done);
+}
+
+function tick(){
+  remaining-=1;
+  if(remaining<=0){
+    remaining=0;
+    renderTime();renderRing();
+    complete();
+    return;
+  }
+  renderTime();renderRing();
+}
+
+function start(){
+  if(running)return;
+  finished=false;
+  elRingbox.classList.remove('finish');
+  running=true;paused=false;
+  setState('Focusing',false);
+  elTime.classList.remove('pulse');
+  renderControls();
+  ticker=setInterval(tick,1000);
+}
+
+function pause(){
+  if(!running)return;
+  running=false;paused=true;
+  clearInterval(ticker);ticker=null;
+  setState('Paused',false);
+  elTime.classList.add('pulse');
+  renderControls();
+}
+
+function reset(){
+  running=false;paused=false;finished=false;
+  clearInterval(ticker);ticker=null;
+  elRingbox.classList.remove('finish');
+  elTime.classList.remove('pulse');
+  remaining=totalSecs();
+  setState('Ready',false);
+  renderTime();renderRing();renderControls();
+}
+
+function complete(){
+  running=false;paused=false;finished=true;
+  clearInterval(ticker);ticker=null;
+  elTime.classList.remove('pulse');
+  state.sessions+=1;
+  renderCount();
+  setState('Nice. Session done.',true);
+  elRingbox.classList.add('finish');
+  renderControls();
+  persist();
+}
+
+elControls.addEventListener('click',function(e){
+  var btn=e.target.closest('button');
+  if(!btn)return;
+  var act=btn.getAttribute('data-act');
+  if(act==='start')start();
+  else if(act==='pause')pause();
+  else if(act==='reset')reset();
+  else if(act==='again'){reset();start();}
+});
+
+function boot(saved){
+  if(saved&&typeof saved==='object'){
+    var s=Number(saved.sessions);
+    var min=Number(saved.minutes);
+    state.minutes=(isFinite(min)&&min>0)?min:DEFAULT_MIN;
+    if(saved.date===today()){
+      state.sessions=(isFinite(s)&&s>=0)?Math.floor(s):0;
+    } else {
+      state.sessions=0;
+    }
+  }
+  state.date=today();
+  remaining=totalSecs();
+  renderTime();renderRing();renderCount();renderControls();setState('Ready',false);
+  persist();
+}
+
+Vitality.load().then(boot).catch(function(){boot(null);});
+</script>
+</body></html>

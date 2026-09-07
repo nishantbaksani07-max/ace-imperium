@@ -1,0 +1,88 @@
+/* Peak Tracker animations — ported from the Claude Design Today.html source. */
+
+@keyframes pt-drawLine {
+  from { stroke-dashoffset: var(--len, 1000); opacity: 0.2; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes pt-areaFade {
+  from { opacity: 0; transform: translateY(8px) scaleY(.96); }
+  to   { opacity: 1; transform: translateY(0)   scaleY(1); }
+}
+@keyframes pt-areaBreath {
+  0%, 100% { transform: scaleY(1);    filter: brightness(1); }
+  50%      { transform: scaleY(1.015); filter: brightness(1.08); }
+}
+@keyframes pt-nowPulse {
+  0%, 100% { transform: scale(1);   opacity: 0.22; }
+  50%      { transform: scale(1.7); opacity: 0.05; }
+}
+@keyframes pt-nowCore {
+  0%, 100% { transform: scale(1);   filter: drop-shadow(0 0 4px currentColor); }
+  50%      { transform: scale(1.15); filter: drop-shadow(0 0 10px currentColor); }
+}
+@keyframes pt-dotPop {
+  from { opacity: 0; transform: scale(0.4); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pt-rzPulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+@keyframes pt-sleepRibbonGlow {
+  0%, 100% { box-shadow: 0 0 18px rgba(91,234,168,0.22); filter: brightness(1); }
+  50%      { box-shadow: 0 0 28px rgba(91,234,168,0.42); filter: brightness(1.12); }
+}
+
+/* Slow background grid drift behind the curve. 14px step. */
+@keyframes pt-gridDrift {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(-14px, -14px); }
+}
+
+/* Curve hue cycle — sweep through harmonious greens, ±10°. */
+@keyframes pt-curveHue {
+  0%   { filter: hue-rotate(0deg)   saturate(1)    brightness(1); }
+  25%  { filter: hue-rotate(-8deg)  saturate(1.08) brightness(1.04); }
+  50%  { filter: hue-rotate(6deg)   saturate(1.12) brightness(1.08); }
+  75%  { filter: hue-rotate(-4deg)  saturate(1.05) brightness(1.02); }
+  100% { filter: hue-rotate(0deg)   saturate(1)    brightness(1); }
+}
+
+@keyframes pt-ringHueCycle {
+  0%   { filter: hue-rotate(0deg)   brightness(1); }
+  33%  { filter: hue-rotate(-10deg) brightness(1.06); }
+  66%  { filter: hue-rotate(10deg)  brightness(1.08); }
+  100% { filter: hue-rotate(0deg)   brightness(1); }
+}
+
+@keyframes pt-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pt-rise   { animation: pt-rise .7s cubic-bezier(.2,.7,.2,1) both; }
+.pt-rise-1 { animation-delay: .05s; }
+.pt-rise-2 { animation-delay: .15s; }
+.pt-rise-3 { animation-delay: .28s; }
+.pt-rise-4 { animation-delay: .42s; }
+.pt-rise-5 { animation-delay: .56s; }
+.pt-rise-6 { animation-delay: .70s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-rise,
+  .pt-rise-1, .pt-rise-2, .pt-rise-3, .pt-rise-4, .pt-rise-5, .pt-rise-6 {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Horizontal schedule row scrollbar — the "your day" hero strip. */
+.sched-scroll::-webkit-scrollbar { height: 6px; }
+.sched-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 3px; }
+.sched-scroll::-webkit-scrollbar-thumb { background: rgba(91, 234, 168, 0.3); border-radius: 3px; }
+.sched-scroll::-webkit-scrollbar-thumb:hover { background: rgba(91, 234, 168, 0.5); }
+.sched-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(91, 234, 168, 0.3) rgba(255, 255, 255, 0.03);
+}

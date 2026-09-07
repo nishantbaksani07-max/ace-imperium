@@ -1,0 +1,147 @@
+/* The Vitality "info button" (the /i_info pattern, as a React component): a
+   small circled-i that sits to the right of the "Today's fuel" title and opens
+   a spring-pop popup explaining the whole Fuel section. The theme (Step 1 of
+   /i_info) is already global via app/globals.css, so this only needs the button
+   + popup. Tokens come from globals.css. */
+
+.ib {
+  --d: 26px;
+  width: var(--d);
+  height: var(--d);
+  min-width: var(--d);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.05);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 160ms var(--ease), border-color 160ms var(--ease), background 160ms var(--ease);
+}
+/* 44px tap target without growing the visual mark */
+.ib::before { content: ""; position: absolute; inset: -9px; }
+.ib:hover { transform: scale(1.1); background: rgba(110, 231, 183, 0.12); border-color: var(--mint); }
+.ib:active { transform: scale(0.94); }
+.ib:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: max(24px, env(safe-area-inset-top)) 14px 40px;
+  overflow-y: auto;
+  animation: scrimIn 180ms var(--ease, ease) forwards;
+}
+@keyframes scrimIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated, #0a0a0a);
+  border-radius: 24px;
+  padding: 24px 22px 26px;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  animation: springPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes springPop {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { opacity: 1; transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--card, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border);
+  color: var(--fg);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 150ms var(--ease), color 150ms var(--ease);
+}
+.close:hover { border-color: var(--mint); color: var(--mint); }
+
+.eyebrow {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+.title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.9rem;
+  letter-spacing: -0.015em;
+  margin: 4px 0 0;
+}
+.gist {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 14px 0 0;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 18px;
+}
+.step {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--muted-strong, rgba(255, 255, 255, 0.7));
+}
+.n {
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  color: var(--mint);
+  width: 22px;
+  flex-shrink: 0;
+}
+.stepT { color: var(--fg); font-weight: 600; }
+.cues {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.cue {
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.16));
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: var(--muted-strong);
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal, .scrim { animation: none; }
+}

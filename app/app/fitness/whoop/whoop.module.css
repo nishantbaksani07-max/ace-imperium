@@ -1,0 +1,839 @@
+/*
+ * WHOOP module — approval-ready layout.
+ *
+ * Composition:
+ *   · title row carries the Vitality Score badge (the punchline)
+ *   · recovery hero pairs the ring with a 7-day mint sparkline
+ *   · 4-stat grid with delta chips (Sleep / Strain / HRV / RHR)
+ *   · sleep-debt card with a 7-night bar viz (surplus mint, deficit muted-red)
+ *   · "How to improve today" coach card with data-aware copy
+ *   · footer: legend + last-synced timestamp + sync/disconnect actions
+ *
+ * Tone palette is driven by data-tone attributes; switching state recolors
+ * ring stroke, glow, delta chips, and debt total in one place.
+ */
+
+/* ───────── Ticker (Nasdaq-style live insights) ───────── */
+
+.ticker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.05) 0%, var(--card) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  animation: fadeUp 700ms var(--ease-premium) both;
+  animation-delay: 60ms;
+}
+
+.tickerEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mint);
+  white-space: nowrap;
+  padding-right: var(--space-3);
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tickerPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 8px var(--mint-glow);
+  animation: tickerPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes tickerPulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.8); }
+}
+
+.tickerScroll {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+}
+
+.tickerTrack {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  animation: tickerScroll 38s linear infinite;
+  white-space: nowrap;
+  padding-left: var(--space-4);
+  will-change: transform;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.tickerItem {
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tickerItem::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.tickerItem[data-tone="mild"] {
+  color: var(--muted-strong);
+}
+
+.tickerItem[data-tone="urgent"] {
+  color: #f87171;
+  animation: tickerUrgent 1.8s ease-in-out infinite;
+}
+
+/* ───────── Stock-ticker cell (symbol + value + spark + delta) ───────── */
+
+.tickerCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: border-color 200ms var(--ease-premium);
+}
+
+.tickerCell[data-tone="good"]   { color: var(--mint); }
+.tickerCell[data-tone="watch"]  { color: var(--amber); }
+.tickerCell[data-tone="urgent"] {
+  color: #f87171;
+  animation: tickerUrgent 1.8s ease-in-out infinite;
+}
+
+.tickerSymbol {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.tickerValue {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.tickerUnit {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+@keyframes tickerFlash {
+  0%   { background: rgba(110, 231, 183, 0.32); box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.45); }
+  100% { background: transparent; box-shadow: 0 0 0 1px transparent; }
+}
+
+.tickerValueFlash {
+  animation: tickerFlash 700ms ease-out;
+}
+
+.tickerSpark {
+  width: 56px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--mint);
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+.tickerSpark[data-tone="watch"]  { color: var(--amber); filter: drop-shadow(0 0 2px currentColor); }
+.tickerSpark[data-tone="urgent"] { color: #f87171;       filter: drop-shadow(0 0 3px currentColor); }
+
+.tickerDelta {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@keyframes tickerUrgent {
+  0%, 100% {
+    color: #f87171;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.45);
+  }
+  50% {
+    color: #fca5a5;
+    text-shadow: 0 0 0 transparent;
+  }
+}
+
+.ticker:hover .tickerTrack { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerTrack, .tickerPulse, .tickerItem { animation: none !important; }
+}
+
+/* ───────── Banner ───────── */
+
+.banner {
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-strong);
+  animation: bannerFade 320ms var(--ease-premium);
+}
+.bannerOk    { color: var(--mint); border-color: var(--mint-glow); }
+.bannerError { color: #fca5a5; border-color: rgba(239, 68, 68, 0.32); }
+
+@keyframes bannerFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* ───────── Title row + Vitality Score badge ───────── */
+
+.titleRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.scoreBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(110, 231, 183, 0.06) 0%, var(--card) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 32px -16px var(--mint-glow);
+  animation: fadeUp 700ms var(--ease-premium) both;
+  animation-delay: 100ms;
+}
+
+.scoreNumber {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 4.2vw, 3.25rem);
+  line-height: 1;
+  color: var(--mint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.scoreCol { display: flex; flex-direction: column; gap: 2px; }
+
+.scoreLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.scoreTier {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--fg);
+}
+
+/* ───────── Connect (disconnected) ───────── */
+
+.connectPanel {
+  margin-top: var(--space-8);
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  backdrop-filter: blur(8px);
+  animation: fadeUp 700ms var(--ease-premium) both;
+  animation-delay: 200ms;
+}
+
+.connectIntro {
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  color: var(--fg);
+  margin: 0;
+}
+.connectIntro em {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--mint);
+  font-weight: 400;
+}
+
+.connectSub {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.connectCta { align-self: flex-start; margin-top: var(--space-2); }
+
+/* ───────── BYO-credentials form ───────── */
+.credSteps {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+.credSteps strong { color: var(--fg); font-weight: 600; }
+
+.credLink {
+  color: var(--mint);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--mint) 40%, transparent);
+}
+.credLink:hover { border-bottom-color: var(--mint); }
+
+.credUriRow {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.credUri {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-xs);
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+
+.credForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.credLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.credInput {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-sm);
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  transition: border-color 160ms var(--ease-premium);
+}
+.credInput:focus {
+  outline: none;
+  border-color: var(--mint);
+}
+.credError {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: #fca5a5;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ───────── Connected panel ───────── */
+
+.panel {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: fadeUp 700ms var(--ease-premium) both;
+  animation-delay: 160ms;
+}
+
+/* ───────── Recovery hero card ───────── */
+
+.heroCard {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr;
+  gap: var(--space-6);
+  align-items: center;
+  padding: var(--space-5);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* No tone-tinted card glow — the ring's own drop-shadow carries the
+ * tone signal, and a rectangular box-shadow on the card was reading as
+ * a visible boxed outline (the "border bug"). */
+.heroCard[data-tone="good"],
+.heroCard[data-tone="watch"],
+.heroCard[data-tone="low"]   { box-shadow: none; }
+@media (max-width: 820px) {
+  .heroCard { grid-template-columns: 1fr; gap: var(--space-5); }
+}
+
+.recoveryWrap { display: flex; justify-content: center; }
+
+.recoveryRing {
+  position: relative;
+  width: clamp(220px, 32vw, 300px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.ringSvg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.ringTrack { fill: none; stroke: rgba(255, 255, 255, 0.06); stroke-width: 8; }
+
+.ringFill {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 720ms var(--ease-premium);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.recoveryRing[data-tone="good"]  .ringFill { color: var(--mint); }
+.recoveryRing[data-tone="watch"] .ringFill { color: var(--amber); }
+.recoveryRing[data-tone="low"]   .ringFill { color: var(--red); }
+.recoveryRing[data-tone="muted"] .ringFill { color: var(--muted); }
+
+.recoveryInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.recoveryValue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 7vw, 5rem);
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.recoveryUnit {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--muted-strong);
+  margin-top: -8px;
+}
+.recoveryLabel {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+.recoveryTier {
+  margin-top: 2px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--fg);
+}
+
+/* ───────── 7-day sparkline ───────── */
+
+.trendWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.trendHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.serifTitle {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+
+.trendDelta {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.trendUp   { color: var(--mint); }
+.trendDown { color: var(--amber); }
+
+.trendSvg {
+  width: 100%;
+  height: clamp(64px, 11vw, 84px);
+  overflow: visible;
+}
+
+.trendLine {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px var(--mint-glow));
+}
+.trendArea { stroke: none; }
+.trendDot     { fill: var(--mint); opacity: 0.4; }
+.trendDotLast { fill: var(--mint); filter: drop-shadow(0 0 4px var(--mint)); }
+
+.trendTicks {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ───────── Stat grid ───────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+@media (max-width: 880px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+.stat:hover {
+  border-color: var(--border-strong);
+  background: var(--card-elevated);
+  transform: translateY(-1px);
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+
+.statValueRow { display: flex; align-items: baseline; gap: 6px; }
+.statValue {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  font-size: var(--text-3xl);
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.statUnit {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: var(--text-base);
+  color: var(--muted-strong);
+}
+
+.statSub {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.statDelta {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  align-self: flex-start;
+  border: 1px solid var(--border);
+  background: var(--card-elevated);
+}
+.statDelta[data-tone="good"]    { color: var(--mint);  border-color: var(--mint-glow); }
+.statDelta[data-tone="watch"]   { color: var(--amber); border-color: rgba(245, 158, 11, 0.32); }
+.statDelta[data-tone="low"]     { color: var(--red);   border-color: rgba(239, 68, 68, 0.32); }
+.statDelta[data-tone="neutral"] { color: var(--muted-strong); }
+
+/* ───────── Sleep debt card ───────── */
+
+.debtCard,
+.coachCard {
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  transition: border-color var(--duration) var(--ease);
+}
+.debtCard:hover,
+.coachCard:hover { border-color: var(--border-strong); }
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.debtTotal {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+.debtTotal em {
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-style: normal;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.debtTotal[data-tone="watch"] { color: #f87171; }
+.debtTotal[data-tone="good"]  { color: var(--mint); }
+
+.debtBars {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.debtCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.debtTrack {
+  position: relative;
+  width: 100%;
+  height: 96px;
+  display: flex;
+  align-items: center;
+}
+
+.debtBaseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: var(--border-strong);
+  z-index: 0;
+}
+
+.debtBarSurplus,
+.debtBarDeficit {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  border-radius: 3px 3px 0 0;
+  z-index: 1;
+}
+
+.debtBarSurplus {
+  bottom: 50%;
+  background: linear-gradient(180deg, var(--mint) 0%, rgba(110, 231, 183, 0.4) 100%);
+  box-shadow: 0 0 8px -2px var(--mint-glow);
+}
+.debtBarDeficit {
+  top: 50%;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.45) 0%, rgba(239, 68, 68, 0.18) 100%);
+}
+
+.debtLabel {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ───────── Coach card ───────── */
+
+.coachList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.coachList li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border);
+  transition: border-color var(--duration) var(--ease);
+}
+.coachList li:hover { border-left-color: var(--mint); }
+
+.coachMark {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  color: var(--mint);
+  font-size: var(--text-lg);
+  line-height: 1.2;
+  filter: drop-shadow(0 0 4px var(--mint-glow));
+}
+
+.coachList strong {
+  display: block;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 4px;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+.coachList li span:not(.coachMark) {
+  color: var(--muted-strong);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+/* ───────── Footer ───────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--muted-strong);
+  letter-spacing: 0.08em;
+}
+.legendDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.legendDot[data-tone="good"]  { background: var(--mint); box-shadow: 0 0 8px var(--mint-glow); }
+.legendDot[data-tone="watch"] { background: var(--amber); }
+.legendDot[data-tone="low"]   { background: var(--red); }
+
+.footerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.synced {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* WHOOP attribution — required by WHOOP brand guidelines: any data sourced
+   from WHOOP must be communicated as such ("Data by WHOOP"). Wordmark stays
+   monochrome (white on our black bg), undistorted, with clear space around it. */
+.whoopAttribution {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 4px 2px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.whoopAttribution .whoopMark {
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .footer { flex-direction: column; align-items: flex-start; }
+  .footerActions { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connectPanel,
+  .panel,
+  .scoreBadge,
+  .ringFill { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,151 @@
+/* Bespoke per-question widgets for the Vitals quiz.
+   Translated 1:1 from public/vitals-quiz-concepts-preview.html (signed off by
+   Alex). Each widget root carries its own token block so the look matches the
+   preview exactly regardless of the surrounding dialog. */
+
+.vars {
+  --mint: #6ee7b7;
+  --mint-soft: #a7f3d0;
+  --mint-deep: #34d399;
+  --mint-glow: rgba(110, 231, 183, .4);
+  --muted: #8a938c;
+  --muted-strong: #aab3ab;
+  --border: rgba(255, 255, 255, .08);
+  --border2: rgba(255, 255, 255, .13);
+  --serif: 'Instrument Serif', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* widget root — fade up gently on entrance */
+.root {
+  composes: vars;
+  display: block;
+  animation: wIn .5s var(--ease) both;
+}
+@keyframes wIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .root { animation: none; }
+}
+
+/* ---------- shared option chips row ---------- */
+.opts { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 4px; }
+/* equal-width grid for an odd option count (e.g. the 3 sleep choices) so every
+   chip + its icon line up symmetrically instead of one wrapping alone. */
+.opts3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+.opt {
+  display: flex; align-items: center; gap: 9px; padding: 11px 15px;
+  border-radius: 13px; border: 1px solid var(--border2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .008));
+  transition: all .2s var(--ease); color: inherit; cursor: pointer;
+  font-family: inherit; text-align: left;
+}
+/* in the equal grid, stack label over sub and center so narrow cells stay tidy */
+.opts3 .opt { flex-direction: column; align-items: center; text-align: center; gap: 7px; padding: 14px 12px; }
+.opts3 .ol { display: block; }
+.opts3 .os { display: block; margin-top: 1px; }
+.opt:hover { border-color: rgba(110, 231, 183, .5); transform: translateY(-2px); }
+.optSel { border-color: var(--mint); background: rgba(110, 231, 183, .08); box-shadow: 0 0 24px -10px var(--mint-glow); }
+.opt svg { width: 18px; height: 18px; stroke: var(--mint); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ol { font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
+.os { color: var(--muted); font-size: .74rem; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+/* 3 options: center the lone 3rd tile at one-column width so the row reads
+   balanced (two on top, one centered below) instead of an orphan on the left. */
+.grid2 > :nth-child(3):nth-last-child(1) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 9px / 2);
+}
+@media (max-width: 560px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .grid2 > :nth-child(3):nth-last-child(1) { width: auto; justify-self: stretch; }
+}
+
+/* ============ 1. SLEEP RHYTHM ============ */
+.rhythm {
+  position: relative; height: 120px; border-radius: 16px; border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(129, 140, 248, .05), rgba(255, 255, 255, .012));
+  overflow: hidden; margin-bottom: 16px;
+}
+.nights { position: absolute; inset: 0; display: flex; }
+.night { flex: 1; position: relative; border-right: 1px solid rgba(255, 255, 255, .04); }
+.night:last-child { border-right: none; }
+.dayname {
+  position: absolute; bottom: 7px; left: 0; right: 0; text-align: center;
+  font-family: var(--mono); font-size: 8px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase;
+}
+.moon {
+  position: absolute; top: 50%; left: 50%; width: 18px; height: 18px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--mint-soft), var(--mint-deep));
+  box-shadow: 0 0 14px -2px var(--mint-glow); transform: translate(-50%, -50%);
+  transition: top .6s var(--spring), left .5s var(--ease), opacity .4s; opacity: 0;
+}
+.rhythmOn .moon { opacity: 1; }
+.rline {
+  position: absolute; left: 0; right: 0; height: 1.5px; top: 50%;
+  background: linear-gradient(90deg, transparent, var(--mint), transparent);
+  opacity: 0; transition: opacity .5s;
+}
+.rhythmOn .rline { opacity: .5; }
+
+/* ============ 2. DAY ARC ============ */
+.arcWrap { position: relative; margin-bottom: 18px; }
+.arcWrap svg { display: block; width: 100%; height: 150px; overflow: visible; }
+.arcLabel {
+  display: flex; justify-content: space-between; font-family: var(--mono); font-size: 8.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 2px; padding: 0 6px;
+}
+
+/* ============ 3. FOCUS RING ============ */
+.gemWrap { display: flex; flex-direction: column; align-items: center; gap: 18px; margin-bottom: 8px; }
+.gem { width: 188px; height: 188px; overflow: visible; }
+.ringBg { fill: none; stroke: rgba(110, 231, 183, .16); stroke-width: 1; }
+.spoke { stroke: rgba(255, 255, 255, .05); stroke-width: 1; transition: stroke .4s, stroke-width .4s; }
+.spokeSel { stroke: rgba(110, 231, 183, .5); stroke-width: 1.4; }
+.nicon {
+  stroke: var(--muted-strong); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  opacity: .32; transition: opacity .35s, stroke .35s; pointer-events: none;
+}
+.niconSel { opacity: 1; stroke: var(--mint); }
+.node { fill: rgba(255, 255, 255, .14); transition: fill .35s, r .35s var(--spring); cursor: pointer; }
+.node:hover { fill: rgba(110, 231, 183, .55); }
+.nodeSel { fill: var(--mint); filter: drop-shadow(0 0 7px var(--mint-glow)); }
+.needle { transform-origin: 50px 50px; transition: transform .65s var(--spring), opacity .35s; opacity: 0; }
+.needleOn { opacity: 1; }
+.gemCenter { fill: rgba(255, 255, 255, .25); }
+.gemReadout { text-align: center; min-height: 42px; }
+.gl { font-family: var(--serif); font-style: italic; font-size: 1.3rem; color: var(--fg, #e9efe9); }
+.glMuted { color: var(--muted); }
+.gs { display: block; color: var(--muted); font-size: .8rem; margin-top: 2px; }
+
+/* ============ 4. PIN CHIPS ============ */
+.pins { display: flex; flex-wrap: wrap; gap: 10px; }
+.pin {
+  position: relative; display: flex; align-items: center; gap: 9px; padding: 12px 16px 12px 14px;
+  border-radius: 14px; border: 1px solid var(--border2);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .008));
+  transition: all .22s var(--spring); color: inherit; cursor: pointer; font-family: inherit;
+}
+.pin:hover { border-color: rgba(110, 231, 183, .45); transform: translateY(-2px); }
+.pinSel { border-color: var(--mint); background: rgba(110, 231, 183, .09); transform: translateY(-3px); box-shadow: 0 12px 30px -16px var(--mint-glow); }
+.pin svg.ic { width: 18px; height: 18px; stroke: var(--mint); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.pl { font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
+.pinDot {
+  position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--mint); display: grid; place-items: center;
+  transform: scale(0) rotate(-30deg); transition: transform .3s var(--spring);
+}
+.pinSel .pinDot { transform: scale(1) rotate(0); }
+.pinDot svg { width: 11px; height: 11px; stroke: #04110b; stroke-width: 2.6; fill: none; }
+.moreField { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .4s var(--ease), opacity .35s, margin .4s; }
+.moreFieldOpen { max-height: 120px; opacity: 1; margin-top: 12px; }
+.moreField textarea {
+  width: 100%; min-height: 60px; resize: none; border-radius: 13px; padding: 12px 14px; color: var(--fg, #e9efe9);
+  font-family: var(--serif); font-style: italic; font-size: 1rem; border: 1px solid var(--border2); background: rgba(255, 255, 255, .02);
+}
+.moreField textarea:focus { outline: none; border-color: rgba(110, 231, 183, .6); box-shadow: 0 0 0 3px rgba(110, 231, 183, .12); caret-color: var(--mint); }

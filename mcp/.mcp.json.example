@@ -1,0 +1,22 @@
+{
+  "_comment": "Copy the `mcpServers.vitality` block into your Claude Code .mcp.json (project root) or Claude Desktop config. Use the built path (npm run build first), or swap command/args to the tsx dev form shown below. Env can be inlined here OR left to mcp/.env.",
+
+  "mcpServers": {
+    "vitality": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/Vitality/mcp/dist/index.js"],
+      "env": {
+        "VITALITY_SUPABASE_URL": "https://YOUR-PROJECT.supabase.co",
+        "VITALITY_SUPABASE_ANON_KEY": "eyJ...",
+        "VITALITY_USER_EMAIL": "you@example.com",
+        "VITALITY_USER_PASSWORD": "your-vitality-password"
+      }
+    },
+
+    "vitality_dev_tsx": {
+      "command": "npx",
+      "args": ["tsx", "/ABSOLUTE/PATH/TO/Vitality/mcp/src/index.ts"],
+      "_note": "No build step. Reads env from mcp/.env automatically. Slower cold start."
+    }
+  }
+}

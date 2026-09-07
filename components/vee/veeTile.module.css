@@ -1,0 +1,269 @@
+/* components/vee/veeTile.module.css
+ * Self-contained timing tokens (--vt-spring / --vt-ease) so the springy feel
+ * matches the kit exactly regardless of where the card renders. Color + font
+ * tokens (--iris, --iris-hi, --ink, --ink-dim, --mint, --rule-strong,
+ * --font-*) are inherited from the host page (the mentor .page defines them)
+ * and globals.css. */
+.tile{--vt-spring:cubic-bezier(.34,1.56,.64,1); --vt-ease:cubic-bezier(.16,1,.3,1); --vt-glide:cubic-bezier(.22,.61,.36,1);
+  border:1px solid rgba(167,139,250,.26); border-radius:16px; overflow:hidden;
+  background:linear-gradient(180deg,rgba(167,139,250,.07),rgba(255,255,255,.003)); animation:cozyPop .55s var(--vt-spring) both}
+/* randomized slow card entrances (AskCard passes one of these) */
+.tile.ePop{animation:cozyPop .8s var(--vt-spring) both}
+.tile.eDrift{animation:eDrift 1s var(--vt-ease) both}
+.tile.eBloom{animation:eBloom .9s var(--vt-spring) both}
+.tile.eGlide{animation:eGlide .95s var(--vt-ease) both}
+.tile.eSettle{animation:eSettle .95s var(--vt-spring) both}
+.tile.eFade{animation:eFade 1.05s var(--vt-ease) both}
+.tile.eUnfold{animation:eUnfold .9s var(--vt-spring) both}
+.tile.eTilt{animation:eTilt .95s var(--vt-spring) both}
+@keyframes eDrift{0%{opacity:0;transform:translateY(30px)}100%{opacity:1;transform:none}}
+@keyframes eBloom{0%{opacity:0;transform:scale(.9);filter:blur(7px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:none}}
+@keyframes eGlide{0%{opacity:0;transform:translateX(-38px);filter:blur(5px)}60%{filter:blur(0)}100%{opacity:1;transform:none}}
+@keyframes eSettle{0%{opacity:0;transform:translateY(-26px)}55%{opacity:1}78%{transform:translateY(5px)}100%{transform:none}}
+@keyframes eFade{0%{opacity:0;filter:blur(9px)}100%{opacity:1;filter:blur(0)}}
+@keyframes eUnfold{0%{opacity:0;transform:perspective(700px) rotateX(-14deg) translateY(12px)}100%{opacity:1;transform:perspective(700px) rotateX(0) translateY(0)}}
+@keyframes eTilt{0%{opacity:0;transform:rotate(-2.5deg) translateY(22px) scale(.97)}100%{opacity:1;transform:none}}
+/* After the entrance finishes, flatten the tile so it leaves its GPU layer.
+   The entrance keyframes hold a transform/filter via fill-mode (eFade ends on
+   filter:blur, eUnfold on perspective); a later re-render re-rasterizes that
+   layer = the "card blanks and comes back" flash. This targets ONLY the tile
+   div (never descendants), so child reveal animations keep running and the key
+   word stays visible. Applied via JS once the tile's own animationend fires. */
+.tileSettled{animation:none!important; transform:none!important; filter:none!important; will-change:auto!important}
+.top{display:flex; align-items:center; gap:9px; padding:12px 14px 0}
+.echo{width:22px; height:22px; flex:none; display:grid; place-items:center; border-radius:7px;
+  border:1px solid rgba(167,139,250,.4); background:rgba(167,139,250,.12); color:var(--iris-hi);
+  animation:qIcoPop .6s var(--vt-spring) both; animation-delay:.12s}
+.echo svg{width:13px; height:13px}
+.tag{font-family:var(--font-mono); font-size:.55rem; font-weight:600; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--iris-hi); animation:cozyTagPop .5s var(--vt-spring) both; animation-delay:.18s}
+.body{padding:11px 14px 15px}
+.lead{font-family:var(--font-serif); font-style:italic; font-size:1.22rem; line-height:1.25}
+.lead b{font-style:normal; color:var(--iris-hi)}
+.sub{color:var(--ink-dim); font-size:.82rem; line-height:1.45; margin-top:6px;
+  animation:qDeal .5s var(--vt-ease) both; animation-delay:.3s}
+.choices{display:flex; gap:9px; flex-wrap:wrap; align-items:center; margin-top:15px}
+.btn{font-family:var(--font-hanken); font-size:.86rem; font-weight:500; border-radius:12px; padding:10px 15px;
+  cursor:pointer; transition:.16s var(--vt-ease); display:inline-flex; align-items:center; gap:8px;
+  white-space:nowrap; animation:qDeal .5s var(--vt-spring) both}
+.btn:nth-child(1){animation-delay:.30s}.btn:nth-child(2){animation-delay:.38s}
+.btn:nth-child(3){animation-delay:.46s}.btn:nth-child(4){animation-delay:.54s}.btn:nth-child(5){animation-delay:.62s}
+.btn:active{animation:choicePop .3s var(--vt-ease)}
+.btn svg{width:16px; height:16px; flex:none}
+.btn svg path,.btn svg circle,.btn svg line{stroke-dasharray:48; stroke-dashoffset:48; animation:qIcoDraw .7s var(--vt-ease) forwards}
+/* split-day glyphs (pick chips) render solid — no partial draw-in */
+.pick svg path,.pick svg circle,.pick svg line,.pick svg polyline{stroke-dasharray:none; stroke-dashoffset:0; animation:none}
+.pri{color:#160d2e; background:var(--iris); border:1px solid var(--iris)}
+.pri:hover{background:var(--iris-hi); transform:translateY(-1px)}
+.sec{color:var(--iris-hi); background:rgba(167,139,250,.08); border:1px solid rgba(167,139,250,.32)}
+.sec:hover{background:rgba(167,139,250,.16); transform:translateY(-1px)}
+.pick{color:var(--ink); background:rgba(255,255,255,.025); border:1px solid var(--rule-strong)}
+.pick:hover{border-color:rgba(167,139,250,.5); color:var(--iris-hi); background:rgba(167,139,250,.07); transform:translateY(-1px)}
+.done{display:flex; align-items:center; gap:11px; padding:3px 2px; animation:cozyPop .5s var(--vt-spring) both}
+.doneGlyph{width:32px; height:32px; flex:none; border-radius:50%; display:grid; place-items:center;
+  border:1px solid rgba(110,231,183,.4); background:rgba(110,231,183,.1); color:var(--mint); animation:qIcoPop .55s var(--vt-spring) both}
+.doneGlyph svg{width:16px; height:16px}
+.doneText{font-family:var(--font-serif); font-style:italic; font-size:1.12rem}
+
+@keyframes cozyPop{0%{opacity:0;transform:translateY(12px) scale(.96)}60%{transform:translateY(-3px) scale(1.012)}100%{opacity:1;transform:none}}
+@keyframes cozyTagPop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes qDeal{0%{opacity:0;transform:translateY(16px) scale(.95)}100%{opacity:1;transform:none}}
+@keyframes qIcoPop{0%{opacity:0;transform:scale(.3) rotate(-12deg)}70%{opacity:1;transform:scale(1.18) rotate(4deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes qIcoDraw{to{stroke-dashoffset:0}}
+@keyframes choicePop{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * AskCard additions (Vee ask cards). Purely additive — new classes only, so
+ * the v1 kit (ConfirmTile / ChoiceTile / TrainingDayCard) is untouched.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/* lead reveal: words blur-pop in, then the key word ignites with the highlight */
+.askLead{font-family:var(--font-serif); font-style:italic; font-size:1.22rem; line-height:1.28}
+.askWord{display:inline-block; animation:qWordPop .55s var(--vt-ease) both}
+
+/* the key-word highlight — matches the v1 tile-kit look: just the word in iris,
+ * upright + bold (no pill box). It reveals last, after the sentence assembles. */
+.askKey{display:inline-block; font-style:italic; font-weight:600; color:var(--iris-hi); opacity:0;
+  animation:keyText .5s var(--vt-ease) var(--kd,.6s) forwards}
+
+/* option chips — neutral, with drawn-in icons (all shapes, scoped to .opt) */
+.opt{color:var(--ink); background:rgba(255,255,255,.025); border:1px solid var(--rule-strong)}
+.opt:hover{border-color:rgba(167,139,250,.5); color:var(--iris-hi); background:rgba(167,139,250,.07); transform:translateY(-1px)}
+.opt:disabled{cursor:default}
+.opt svg path,.opt svg circle,.opt svg line,.opt svg polyline,.opt svg rect{stroke-dasharray:64; stroke-dashoffset:64; animation:qIcoDraw .75s var(--vt-ease) forwards}
+.optChosen{border-color:rgba(110,231,183,.5); color:#a7f3d0; background:rgba(110,231,183,.08)}
+.optChosen:hover,.optFaded:hover{transform:none}
+.optChosen svg path,.optChosen svg circle,.optChosen svg line,.optChosen svg polyline,.optChosen svg rect{stroke-dashoffset:0; animation:none}
+.optFaded{opacity:.38; filter:saturate(.5)}
+
+/* "say it in my own words" — quiet dashed free-text escape, set apart */
+.say{align-self:flex-start; margin-top:11px; display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-hanken); font-size:.8rem; color:var(--ink-dim);
+  background:transparent; border:1px dashed rgba(167,139,250,.34); border-radius:999px; padding:7px 14px;
+  cursor:pointer; transition:.18s var(--vt-ease); animation:qDeal .5s var(--vt-ease) both; animation-delay:.66s}
+.say:hover{color:var(--iris-hi); border-color:rgba(167,139,250,.6); background:rgba(167,139,250,.05)}
+.say svg{width:15px; height:15px; flex:none; color:var(--iris)}
+.say svg path{stroke-dasharray:none; stroke-dashoffset:0; animation:none}
+
+@keyframes qWordPop{0%{opacity:0;transform:translateY(11px) scale(.94);filter:blur(4px)}60%{opacity:1;transform:translateY(0) scale(1.02);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes keyText{from{opacity:0;transform:translateY(6px);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+
+/* lead reveal variants */
+.askWordRise{display:inline-block; animation:wRise .7s var(--vt-ease) both}
+.askWordFade{display:inline-block; animation:wFade .65s var(--vt-ease) both}
+.lineReveal{animation:wFade .85s var(--vt-ease) both}
+@keyframes wRise{0%{opacity:0;transform:translateY(15px)}100%{opacity:1;transform:none}}
+@keyframes wFade{0%{opacity:0;filter:blur(4px)}100%{opacity:1;filter:blur(0)}}
+
+/* ════ dealt cards ════ */
+.deck{display:flex; gap:10px; margin-top:18px}
+.dcard{flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:11px; padding:18px 8px 15px; color:var(--ink); border-radius:15px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)); border:1px solid var(--rule-strong); transition:.22s var(--vt-spring); transform-origin:bottom center; animation:dealIn .75s var(--vt-spring) both}
+.dcardIco{color:var(--iris-hi); transition:.22s; display:grid; place-items:center}
+.dcardIco svg{width:30px; height:30px}
+.dcardL{font-size:.84rem; font-weight:500; text-align:center; line-height:1.2}
+.dcard:hover{transform:translateY(-7px) rotate(-1deg); border-color:rgba(167,139,250,.5)}
+.dcard:hover .dcardIco{transform:scale(1.12)}
+.dcardSel{transform:translateY(-6px); border-color:rgba(110,231,183,.55); background:linear-gradient(180deg,rgba(110,231,183,.12),rgba(255,255,255,.012))}
+.dcardSel .dcardIco{color:#a7f3d0}
+.deck .dcard:nth-child(1){animation-delay:.36s}.deck .dcard:nth-child(2){animation-delay:.48s}.deck .dcard:nth-child(3){animation-delay:.6s}.deck .dcard:nth-child(4){animation-delay:.72s}
+@keyframes dealIn{0%{opacity:0;transform:translateY(34px) scale(.84)}60%{opacity:1}100%{opacity:1;transform:none}}
+
+/* ════ tiles (2x2) ════ */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:16px}
+.gtile{display:flex; align-items:center; gap:11px; padding:15px 14px; border-radius:14px; border:1px solid var(--rule-strong); background:rgba(255,255,255,.025); color:var(--ink); transition:.2s var(--vt-ease); animation:dealIn .6s var(--vt-spring) both}
+.gtile svg{width:22px; height:22px; flex:none; color:var(--iris-hi)}
+.gtileL{font-size:.9rem; font-weight:500}
+.gtile:hover{border-color:rgba(167,139,250,.5); background:rgba(167,139,250,.07); transform:translateY(-2px)}
+.gtileSel{border-color:rgba(110,231,183,.55); background:rgba(110,231,183,.08); color:#fff}
+.gtileSel svg{color:#a7f3d0}
+.grid2 .gtile:nth-child(1){animation-delay:.34s}.grid2 .gtile:nth-child(2){animation-delay:.42s}.grid2 .gtile:nth-child(3){animation-delay:.5s}.grid2 .gtile:nth-child(4){animation-delay:.58s}
+
+/* ════ spotlight ════ */
+.spots{display:flex; gap:9px; margin-top:16px}
+.spot{flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; gap:9px; padding:17px 8px; border-radius:14px; border:1px solid var(--rule-strong); background:rgba(255,255,255,.02); color:var(--ink-dim); transition:flex-grow .42s var(--vt-spring), opacity .25s var(--vt-ease), background .25s, border-color .25s; animation:dealIn .65s var(--vt-spring) both}
+.spot svg{width:24px; height:24px}
+.spotL{font-size:.82rem; font-weight:500; white-space:nowrap}
+.spotsEngaged .spot{opacity:.4}
+.spotSel{opacity:1 !important; flex-grow:2.4; border-color:rgba(110,231,183,.55); background:rgba(110,231,183,.08); color:#fff}
+.spotSel svg{color:#a7f3d0}
+.spots .spot:nth-child(1){animation-delay:.34s}.spots .spot:nth-child(2){animation-delay:.44s}.spots .spot:nth-child(3){animation-delay:.54s}.spots .spot:nth-child(4){animation-delay:.64s}
+
+/* ════ fill pills ════ */
+.fills{display:flex; gap:9px; flex-wrap:wrap; margin-top:16px}
+.fpill{position:relative; overflow:hidden; border-radius:12px; padding:11px 16px; border:1px solid var(--rule-strong); background:rgba(255,255,255,.025); color:var(--ink); display:inline-flex; align-items:center; gap:8px; transition:.2s var(--vt-ease); animation:fpillIn .6s var(--vt-spring) both}
+.fpill svg{width:16px; height:16px; position:relative; z-index:1; color:var(--iris-hi)}
+.fpillFl{position:relative; z-index:1}
+.fpill::before{content:''; position:absolute; inset:0; z-index:0; background:linear-gradient(90deg,rgba(110,231,183,.28),rgba(167,139,250,.22)); transform:scaleX(0); transform-origin:left; transition:transform .45s var(--vt-spring)}
+.fpill:hover{border-color:rgba(167,139,250,.5)}
+.fpillSel{border-color:rgba(110,231,183,.5); color:#fff}
+.fpillSel::before{transform:scaleX(1)}
+.fills .fpill:nth-child(1){animation-delay:.34s}.fills .fpill:nth-child(2){animation-delay:.44s}.fills .fpill:nth-child(3){animation-delay:.54s}.fills .fpill:nth-child(4){animation-delay:.64s}
+@keyframes fpillIn{0%{opacity:0;transform:translateY(16px) scale(.88)}60%{opacity:1;transform:translateY(0) scale(1.03)}100%{opacity:1;transform:none}}
+
+/* ════ trail ════ */
+.trail{position:relative; margin-top:18px; padding-left:6px}
+.trail::before{content:''; position:absolute; left:23px; top:25px; bottom:25px; width:2px; border-radius:2px; background:rgba(167,139,250,.45); transform:scaleY(0); transform-origin:top; animation:lineGrow .7s var(--vt-glide) .34s forwards}
+.step{display:flex; align-items:center; gap:14px; width:100%; padding:7px 0; background:none; border:none; text-align:left; color:var(--ink); animation:stepIn .55s var(--vt-spring) both}
+.stepDot{position:relative; z-index:1; width:36px; height:36px; flex:none; border-radius:11px; display:grid; place-items:center; border:1px solid rgba(167,139,250,.3); background:#0a0a13; color:var(--iris-hi); transition:.22s var(--vt-spring)}
+.stepDot svg{width:17px; height:17px}
+.stepLabel{flex:1; font-size:.95rem; font-weight:500; color:var(--ink); transition:.2s}
+.step:hover .stepDot{border-color:rgba(167,139,250,.6); transform:scale(1.06)}
+.step:hover .stepLabel{color:var(--iris-hi)}
+.stepSel .stepDot{border-color:rgba(110,231,183,.6); background:rgba(110,231,183,.12); color:#a7f3d0; box-shadow:0 0 0 3px rgba(110,231,183,.16)}
+.stepSel .stepLabel{color:#a7f3d0}
+.trail .step:nth-child(1){animation-delay:.42s}.trail .step:nth-child(2){animation-delay:.54s}.trail .step:nth-child(3){animation-delay:.66s}.trail .step:nth-child(4){animation-delay:.78s}
+@keyframes lineGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes stepIn{0%{opacity:0;transform:translateX(-16px)}100%{opacity:1;transform:none}}
+
+/* ════ segmented ════ */
+.seg{position:relative; display:flex; margin-top:18px; border:1px solid var(--rule-strong); border-radius:13px; overflow:hidden; background:rgba(255,255,255,.02); animation:qDeal .5s var(--vt-ease) .3s both}
+.segHi{position:absolute; top:3px; bottom:3px; left:3px; width:calc((100% - 6px) / var(--n,4)); border-radius:10px; background:rgba(167,139,250,.2); border:1px solid rgba(167,139,250,.45); box-shadow:0 0 16px -6px var(--iris); opacity:0; transform:scale(.86); transition:left .4s var(--vt-spring), opacity .25s var(--vt-ease), transform .3s var(--vt-spring); z-index:0; pointer-events:none}
+.segHiOn{opacity:1; transform:scale(1)}
+.segBtn{position:relative; z-index:1; flex:1; min-width:0; padding:13px 6px; display:flex; flex-direction:column; align-items:center; gap:7px; color:var(--ink-dim); border:none; border-right:1px solid rgba(233,239,233,.12); background:transparent; transition:color .2s var(--vt-ease); animation:segIn .5s var(--vt-spring) both}
+.segBtn:last-child{border-right:none}
+.segBtn svg{width:19px; height:19px}
+.segLabel{font-size:.8rem; font-weight:500}
+.segBtn:hover{color:var(--iris-hi)}
+.segBtnSel{color:#fff}
+.segBtnSel svg{color:var(--iris-hi)}
+.seg .segBtn:nth-of-type(1){animation-delay:.36s}.seg .segBtn:nth-of-type(2){animation-delay:.46s}.seg .segBtn:nth-of-type(3){animation-delay:.56s}.seg .segBtn:nth-of-type(4){animation-delay:.66s}
+@keyframes segIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
+
+/* ════ split ════ */
+.split{display:flex; align-items:stretch; gap:8px; margin-top:18px}
+.half{flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:13px; padding:26px 12px; color:var(--ink); border-radius:16px; background:linear-gradient(180deg,rgba(167,139,250,.08),rgba(255,255,255,.01)); border:1px solid rgba(167,139,250,.22); transition:.24s var(--vt-spring)}
+.split .half:first-of-type{animation:slideL .7s var(--vt-spring) .36s both}
+.split .half:last-of-type{animation:slideR .7s var(--vt-spring) .36s both}
+.halfIco{color:var(--iris-hi); transition:.24s; display:grid; place-items:center}
+.halfIco svg{width:32px; height:32px}
+.halfLabel{font-family:var(--font-serif); font-style:italic; font-size:1.04rem; text-align:center; line-height:1.15}
+.half:hover{border-color:rgba(167,139,250,.6); background:linear-gradient(180deg,rgba(167,139,250,.16),rgba(255,255,255,.01)); transform:translateY(-3px)}
+.half:hover .halfIco{transform:scale(1.14)}
+.halfSel{border-color:rgba(110,231,183,.55); background:linear-gradient(180deg,rgba(110,231,183,.14),rgba(255,255,255,.01))}
+.halfSel .halfIco{color:#a7f3d0}
+.orMid{flex:none; align-self:center; display:grid; place-items:center}
+.orChip{font-family:var(--font-serif); font-style:italic; font-size:.86rem; color:var(--iris-hi); width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:rgba(167,139,250,.1); border:1px solid rgba(167,139,250,.36); animation:orIn .5s var(--vt-spring) .7s both}
+@keyframes slideL{0%{opacity:0;transform:translateX(-40px) scale(.95)}100%{opacity:1;transform:none}}
+@keyframes slideR{0%{opacity:0;transform:translateX(40px) scale(.95)}100%{opacity:1;transform:none}}
+@keyframes orIn{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:scale(1)}}
+
+/* ════ dial ════ */
+.dial{margin-top:24px; padding:0 6px}
+.dialRail{position:relative; height:8px; border-radius:99px; background:rgba(255,255,255,.05); transform:scaleX(0); transform-origin:left; animation:trackGrow .6s var(--vt-glide) .34s forwards}
+.dialFill{position:absolute; inset:0 auto 0 0; height:100%; border-radius:99px; width:10px; background:linear-gradient(90deg,#7c4dff,var(--iris),#a7f3d0); transition:width .5s var(--vt-glide); box-shadow:0 0 14px -2px var(--iris-hi)}
+.dialThumb{position:absolute; top:50%; left:10px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 0 0 4px rgba(167,139,250,.25), 0 4px 10px rgba(0,0,0,.4); transform:translate(-50%,-50%) scale(0); transition:left .5s var(--vt-glide), transform .32s var(--vt-spring); opacity:0}
+.dialThumbOn{opacity:1; transform:translate(-50%,-50%) scale(1)}
+.stops{display:flex; justify-content:space-between; margin-top:13px}
+.stop{flex:1; display:flex; flex-direction:column; align-items:center; gap:7px; background:none; border:none; padding:4px 2px; transition:.2s; color:var(--ink)}
+.stopDot{width:9px; height:9px; border-radius:50%; background:rgba(233,239,233,.25); transition:.25s var(--vt-spring); animation:stopPop .5s var(--vt-spring) both}
+.stopText{font-size:.74rem; color:rgba(233,239,233,.34); transition:.25s; text-align:center}
+.stop:hover .stopText{color:var(--iris-hi)}
+.stopSel .stopDot{background:var(--iris-hi); transform:scale(1.5); box-shadow:0 0 12px var(--iris)}
+.stopSel .stopText{color:#fff; font-weight:600}
+.stops .stop:nth-child(1) .stopDot{animation-delay:.5s}.stops .stop:nth-child(2) .stopDot{animation-delay:.6s}.stops .stop:nth-child(3) .stopDot{animation-delay:.7s}.stops .stop:nth-child(4) .stopDot{animation-delay:.8s}
+@keyframes trackGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes stopPop{0%{opacity:0;transform:scale(0)}70%{transform:scale(1.3)}100%{opacity:1;transform:scale(1)}}
+
+/* ════ level meter ════ */
+.meter{margin-top:18px}
+.bars{display:flex; gap:7px; align-items:flex-end; height:68px}
+.bar{flex:1; position:relative; overflow:hidden; border-radius:8px 8px 5px 5px; background:rgba(255,255,255,.05); border:1px solid rgba(233,239,233,.12); cursor:pointer; transform-origin:bottom; transition:border-color .2s; animation:barRise .5s var(--vt-spring) both}
+.bar::before{content:''; position:absolute; inset:0; background:linear-gradient(180deg,#a7f3d0,var(--iris)); opacity:0; transition:opacity .3s var(--vt-ease)}
+.bars .bar:nth-child(1){height:42%; animation-delay:.34s}.bars .bar:nth-child(2){height:62%; animation-delay:.42s}.bars .bar:nth-child(3){height:80%; animation-delay:.5s}.bars .bar:nth-child(4){height:100%; animation-delay:.58s}
+.bar:hover{border-color:rgba(167,139,250,.5)}
+.barFill::before{opacity:.92}
+.barLabels{display:flex; gap:7px; margin-top:10px}
+.barLabels span{flex:1; text-align:center; font-size:.74rem; color:rgba(233,239,233,.34); transition:.2s}
+.barLabelOn{color:#fff !important; font-weight:600}
+@keyframes barRise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* ════ satisfying select feedback (ring pulse + icon pop) ════ */
+.opt,.dcard,.gtile,.spot,.half,.segBtn{position:relative}
+.opt::after,.dcard::after,.gtile::after,.spot::after,.half::after,.segBtn::after{content:''; position:absolute; inset:-1px; border-radius:inherit; border:1.5px solid #a7f3d0; opacity:0; pointer-events:none}
+.segBtn::after{border-radius:9px}
+.optChosen::after,.dcardSel::after,.gtileSel::after,.spotSel::after,.halfSel::after,.segBtnSel::after{animation:selRing .5s var(--vt-ease)}
+.optChosen svg,.dcardSel svg,.gtileSel svg,.spotSel svg,.halfSel svg,.segBtnSel svg,.stepSel svg,.fpillSel svg{animation:icoPop .5s var(--vt-spring)}
+@keyframes selRing{0%{opacity:.55; transform:scale(.95)}100%{opacity:0; transform:scale(1.16)}}
+@keyframes icoPop{0%{transform:scale(1)}38%{transform:scale(1.34) rotate(-7deg)}100%{transform:scale(1) rotate(0)}}
+
+/* ════ desktop hover light-up ════
+   Brings the layouts that lacked (or barely had) a hover state up to the same
+   iris lift as chips/dealt/tiles/split. Gated to real pointers so a tap on
+   mobile never leaves an option stuck in the hover look. */
+@media (hover:hover) and (pointer:fine){
+  /* spotlight — had no hover at all */
+  .spot{transition:flex-grow .42s var(--vt-spring), opacity .25s var(--vt-ease), background .25s, border-color .25s, transform .25s var(--vt-spring), color .2s}
+  .spot svg{transition:transform .25s var(--vt-spring), color .2s}
+  .spot:not(.spotSel):hover{border-color:rgba(167,139,250,.5); background:rgba(167,139,250,.07); color:#fff; transform:translateY(-3px)}
+  .spot:not(.spotSel):hover svg{color:var(--iris-hi); transform:scale(1.1)}
+  /* fill pills — only had a border tint */
+  .fpill:not(.fpillSel):hover{background:rgba(167,139,250,.08); transform:translateY(-2px)}
+  /* dial stops — only the label changed */
+  .stop:not(.stopSel):hover .stopDot{background:var(--iris-hi); transform:scale(1.3)}
+  /* level meter — only had a border tint */
+  .bar:not(.barFill):hover{border-color:rgba(167,139,250,.5)}
+  .bar:not(.barFill):hover::before{opacity:.3}
+}
+
+@media (prefers-reduced-motion:reduce){.tile,.tile *{animation:none!important; transition:none!important}
+  .askKey{opacity:1} .dialThumb{opacity:1} .dialRail,.trail::before{transform:none}}

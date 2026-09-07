@@ -1,0 +1,74 @@
+/*
+ * HeroParticles — pure CSS snow/dust effect for the landing hero.
+ * Particles fall slowly with subtle horizontal drift. Looping is automatic
+ * because CSS keyframe animations are seamless by definition.
+ *
+ * Z-index sits between the mountains (2) and the mist (4), so particles
+ * appear in front of the silhouettes but get softened by the mist band
+ * at the bottom — adds depth without dominating.
+ */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(220, 255, 240, 0.95) 40%,
+    rgba(110, 231, 183, 0.5) 75%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 6px rgba(255, 255, 255, 0.7),
+    0 0 12px rgba(110, 231, 183, 0.4);
+  /* Two animations composed: vertical fall (linear) + horizontal drift
+     (sinusoidal sway). Durations + delays are set per-particle inline. */
+  animation-name: heroFall, heroDrift;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-direction: normal, alternate;
+  will-change: transform;
+}
+
+@keyframes heroFall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    /* Travel well past the bottom edge so particles disappear naturally
+       before the loop restart. Combined with negative top offsets this
+       gives the visual of a continuous flurry. */
+    transform: translateY(120vh);
+  }
+}
+
+@keyframes heroDrift {
+  0% {
+    margin-left: -20px;
+  }
+  100% {
+    margin-left: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    display: none;
+  }
+}
+
+@media (max-width: 519px) {
+  /* Fewer / smaller particles on mobile — too many tiny dots can read
+     as noise on a small screen. Hide every other one via nth-child. */
+  .particle:nth-child(even) {
+    display: none;
+  }
+}

@@ -1,0 +1,130 @@
+/*
+ * Weight import sheet ("Bring your history"). Bottom sheet matching the Fuel
+ * DNA — mono eyebrows, Instrument-Serif headline, mint as the only bright.
+ */
+
+.scrim {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(0, 0, 0, 0.62); backdrop-filter: blur(3px);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: wiScrim 0.3s var(--ease) both;
+}
+@keyframes wiScrim { from { opacity: 0; } to { opacity: 1; } }
+
+.sheet {
+  position: relative; width: 100%; max-width: 600px;
+  border: 1px solid var(--border-strong); border-bottom: 0; border-radius: 24px 24px 0 0;
+  background: linear-gradient(180deg, rgba(20, 26, 32, 0.97), rgba(7, 10, 14, 0.99));
+  padding: 10px 18px calc(22px + env(safe-area-inset-bottom));
+  max-height: 92vh; overflow-y: auto;
+  box-shadow: 0 -30px 80px -20px rgba(0, 0, 0, 0.9);
+  animation: wiUp 0.42s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+@keyframes wiUp { from { transform: translateY(100%); } to { transform: none; } }
+
+.grab { width: 38px; height: 4px; border-radius: 999px; background: var(--border-strong); margin: 4px auto 14px; }
+.x {
+  position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.03); color: var(--muted-strong);
+  display: grid; place-items: center; cursor: pointer; transition: all 0.2s var(--ease);
+}
+.x:hover { color: var(--fg); border-color: var(--mint); }
+.x svg { width: 14px; height: 14px; }
+
+.h1 { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-weight: 400; font-size: 1.9rem; line-height: 1; letter-spacing: -0.01em; padding-right: 36px; }
+.sub { color: var(--muted); font-size: 0.84rem; margin: 8px 0 16px; max-width: 48ch; line-height: 1.5; }
+
+.tabs { display: flex; gap: 6px; border: 1px solid var(--border); border-radius: 13px; padding: 4px; background: rgba(255, 255, 255, 0.02); margin-bottom: 16px; }
+.tab {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--font-hanken, var(--font-inter, sans-serif)); font-size: 0.82rem; color: var(--muted);
+  background: none; border: 0; border-radius: 10px; padding: 10px 4px; cursor: pointer; transition: 0.2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.tab svg { width: 15px; height: 15px; flex: 0 0 auto; }
+.tab.on { background: rgba(110, 231, 183, 0.1); color: var(--mint); }
+
+.pane { animation: wiFade 0.3s var(--ease) both; }
+@keyframes wiFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.ta {
+  width: 100%; min-height: 124px; resize: vertical;
+  background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); border-radius: 14px;
+  color: var(--fg); font-family: var(--font-mono, monospace); font-size: 0.82rem; line-height: 1.7; padding: 14px; outline: none;
+  caret-color: var(--mint); transition: border-color 0.3s var(--ease);
+}
+.ta:focus { border-color: rgba(110, 231, 183, 0.4); }
+.ta::placeholder { color: var(--muted); }
+/* labelled "any of these formats" rows — makes it obvious you can paste
+   different styles, not one rigid layout. Tap to append an example. */
+.fmtsLbl { font-family: var(--font-mono, monospace); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 11px 2px 7px; }
+.fmts { display: flex; flex-direction: column; gap: 6px; }
+.fmtRow { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: rgba(255, 255, 255, 0.015); border: 1px solid var(--border); border-radius: 10px; padding: 7px 10px; cursor: pointer; font-family: inherit; transition: border-color 0.2s var(--ease), background 0.2s var(--ease); -webkit-tap-highlight-color: transparent; }
+.fmtRow:hover { border-color: rgba(110, 231, 183, 0.4); background: rgba(110, 231, 183, 0.04); }
+.fmtTag { flex: 0 0 auto; font-family: var(--font-mono, monospace); font-size: 0.56rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--mint); background: rgba(110, 231, 183, 0.1); border-radius: 999px; padding: 4px 9px; min-width: 102px; text-align: center; }
+.fmtEg { flex: 1; min-width: 0; font-family: var(--font-mono, monospace); font-size: 0.78rem; color: var(--muted-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fmtPlus { flex: 0 0 auto; color: var(--muted); font-size: 1rem; line-height: 1; opacity: 0; transition: opacity 0.2s var(--ease), color 0.2s var(--ease); }
+.fmtRow:hover .fmtPlus { opacity: 1; color: var(--mint); }
+
+.drop {
+  width: 100%; display: flex; flex-direction: column; align-items: center; gap: 11px;
+  border: 1.5px dashed var(--border-strong); border-radius: 16px; padding: 32px 20px; text-align: center;
+  background: none; color: var(--muted); cursor: pointer; transition: 0.25s var(--ease); font-family: inherit;
+}
+.drop:hover { border-color: rgba(110, 231, 183, 0.45); background: rgba(110, 231, 183, 0.03); }
+.drop:disabled { opacity: 0.6; cursor: default; }
+.drop svg { width: 30px; height: 30px; color: var(--mint); opacity: 0.85; }
+.dropT { font-size: 0.9rem; color: var(--muted-strong); }
+.dropS { font-family: var(--font-mono, monospace); font-size: 0.64rem; color: var(--muted); letter-spacing: 0.04em; }
+
+.aiTag {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 13px;
+  font-family: var(--font-mono, monospace); font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--iris, #a78bfa); border: 1px solid rgba(167, 139, 250, 0.3); background: rgba(167, 139, 250, 0.06);
+  border-radius: 999px; padding: 6px 11px;
+}
+.aiTag svg { width: 12px; height: 12px; }
+
+.unitRow { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 0.8rem; color: var(--muted); }
+.uTog { display: flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+.uTog button { font-family: var(--font-mono, monospace); font-size: 0.72rem; color: var(--muted); background: none; border: 0; padding: 5px 13px; cursor: pointer; transition: 0.2s var(--ease); }
+.uOn { background: var(--mint) !important; color: #06281d !important; }
+
+.cta, .add {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--mint); color: #06281d; font-family: var(--font-hanken, var(--font-inter, sans-serif));
+  font-weight: 700; font-size: 0.92rem; border: 0; border-radius: 13px; padding: 14px; cursor: pointer;
+  margin-top: 14px; transition: background 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.25s var(--ease);
+}
+.cta:hover, .add:hover { background: var(--mint-hover, #5dd6a6); transform: translateY(-1px); box-shadow: 0 12px 28px -16px var(--mint-glow); }
+.cta:disabled, .add:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+.cta svg, .add svg { width: 16px; height: 16px; }
+
+.err { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; color: var(--amber); font-size: 0.82rem; line-height: 1.5; }
+.aiLink { color: var(--mint); background: none; border: 0; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; padding: 0; }
+.aiLink:hover { text-decoration: underline; }
+.aiLink:disabled { opacity: 0.5; }
+
+/* parsed preview */
+.result { margin-top: 18px; animation: wiFade 0.35s var(--ease) both; }
+.rHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; }
+.rCount { font-family: var(--font-serif, Georgia, serif); font-style: italic; font-size: 1.15rem; }
+.rCount b { font-style: normal; font-family: var(--font-hanken, sans-serif); font-weight: 700; color: var(--mint); }
+.rNote { display: flex; align-items: center; gap: 7px; font-family: var(--font-mono, monospace); font-size: 0.66rem; letter-spacing: 0.04em; color: var(--muted); }
+.rNote svg { width: 13px; height: 13px; color: var(--mint); }
+
+.rows { max-height: 210px; overflow-y: auto; border: 1px solid var(--border); border-radius: 14px; background: rgba(255, 255, 255, 0.015); }
+.rrow { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.rrow:last-child { border-bottom: 0; }
+.dt { font-family: var(--font-mono, monospace); font-size: 0.74rem; color: var(--muted-strong); min-width: 70px; }
+.wt { flex: 1; font-family: var(--font-serif, Georgia, serif); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.wt small { font-family: var(--font-hanken, sans-serif); font-size: 0.7rem; color: var(--muted); margin-left: 3px; }
+.rm { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 2px 6px; transition: color 0.2s var(--ease); }
+.rm:hover { color: var(--amber); }
+
+.skip { display: flex; align-items: center; gap: 7px; margin-top: 10px; font-family: var(--font-mono, monospace); font-size: 0.68rem; color: var(--muted); }
+.skip svg { width: 13px; height: 13px; color: var(--amber); opacity: 0.85; flex: 0 0 auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim, .sheet, .pane, .result { animation: none; }
+}

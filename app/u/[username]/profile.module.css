@@ -1,0 +1,393 @@
+/*
+ * Public maker profile - the Arts District identity page (Pillar 3, v2).
+ * Visual spec: public/maker-profile.html (approved 2026-06-30). Calm,
+ * editorial, Savee-quality. Inter is the workhorse; Instrument Serif only for
+ * the one big number / quote moments; mint sparingly. A restrained mint
+ * horizon glow is the atmosphere (NOT Peak's mountains - that's Peak's).
+ */
+
+.page {
+  --serif: var(--font-serif), Georgia, serif;
+  --sans: var(--font-inter), 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+}
+
+/* faint mint horizon glow behind the header */
+.glow {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(60% 50% at 50% -8%, rgba(110, 231, 183, 0.1), transparent 70%);
+}
+
+/* slim top bar */
+.bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+}
+.mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.32);
+  color: var(--mint);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-decoration: none;
+}
+.barSpacer { flex: 1; }
+.barCta {
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--muted-strong);
+  text-decoration: none;
+  padding: 8px 15px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease);
+}
+.barCta:hover { border-color: var(--mint); color: var(--mint); }
+
+/* centered profile */
+.prof {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 54px 24px 30px;
+  max-width: 760px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: up 0.7s var(--ease) 0.05s forwards;
+}
+.avwrap { position: relative; width: 118px; height: 118px; margin: 0 auto 22px; }
+.av {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: var(--mint);
+  background: radial-gradient(120% 120% at 35% 25%, rgba(110, 231, 183, 0.14), rgba(110, 231, 183, 0.03));
+  border: 1px solid rgba(110, 231, 183, 0.26);
+  /* Understated, modern - a whisper of mint, not a lamp (Savee-clean). */
+  box-shadow: 0 0 40px -20px var(--mint-glow);
+}
+.avImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.avwrap::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 231, 183, 0.08);
+}
+.name {
+  font-size: 1.95rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.vf {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  color: var(--mint-ink);
+  flex: none;
+}
+.vf svg { width: 13px; height: 13px; stroke-width: 2.8; }
+.meta { margin-top: 9px; font-size: 0.92rem; color: var(--muted); }
+.meta b { color: var(--muted-strong); font-weight: 500; }
+.bio {
+  margin: 16px auto 0;
+  max-width: 500px;
+  font-size: 1.01rem;
+  line-height: 1.58;
+  color: var(--muted-strong);
+  letter-spacing: -0.006em;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 11px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.lk {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 11px 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+}
+.lk svg { width: 16px; height: 16px; }
+.primary { background: var(--mint); color: var(--mint-ink); }
+.primary:hover { background: var(--mint-hover); }
+.ghost { border: 1px solid var(--border-strong); color: var(--muted-strong); background: transparent; }
+.ghost:hover { border-color: var(--mint); color: var(--mint); }
+
+/* stats row - real numbers only (Instagram-clean, centered) */
+.stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  max-width: 760px;
+  margin: 32px auto 0;
+  padding: 0 24px;
+}
+.st { font-size: 0.92rem; color: var(--muted); }
+.st b { color: #fff; font-weight: 600; }
+.stOn b { color: var(--mint); }
+
+/* the gallery - a wider poster wall (Savee-quality), each tile addable */
+.gallery {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 26px auto 0;
+  padding: 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* "Share this maker" sits above the wall, right-aligned and quiet */
+.shareRow {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 22px;
+}
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--muted-strong);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.shareBtn svg { width: 16px; height: 16px; }
+.shareBtn:hover { border-color: var(--mint); color: var(--mint); background: rgba(110, 231, 183, 0.05); }
+
+/* calm empty state - honest, never a crash (no published tiles yet) */
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 520px;
+  margin: 0 auto;
+  border: 1px dashed var(--border-strong);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.emptyLine {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--mint-cool, #A7F3D0);
+  line-height: 1.4;
+}
+.emptySub { margin-top: 8px; font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+/* funnel footer - every shared profile is a doorway into Vitality */
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 30px 24px 70px;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+.footer a { color: var(--muted-strong); text-decoration: none; font-weight: 500; }
+.footer a:hover { color: var(--mint); }
+
+/* masonry of the maker's published tile posters (recolorable design SVG) */
+.masonry {
+  column-count: 4;
+  column-gap: 16px;
+}
+@media (max-width: 980px) { .masonry { column-count: 3; } }
+@media (max-width: 680px) { .masonry { column-count: 2; column-gap: 12px; } }
+
+.galTile {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+/* the poster is a button: one tap Adds the tile (funnel reused from the shop) */
+.galCover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--mint);
+  background: radial-gradient(130% 110% at 60% 20%, rgba(14, 34, 27, 0.5), rgba(6, 10, 9, 0.45));
+  font-family: var(--sans);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.galCover:disabled { cursor: default; }
+.galTile:hover .galCover:not(:disabled) {
+  border-color: rgba(110, 231, 183, 0.24);
+  transform: translateY(-3px);
+}
+.galCover:focus-visible {
+  outline: none;
+  border-color: var(--mint);
+  box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.35);
+}
+.galArt {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0.9;
+}
+.galArt svg { width: 86px; height: 86px; }
+.galArtFallback {
+  display: grid;
+  place-items: center;
+  opacity: 0.5;
+}
+.galArtFallback svg { width: 54px; height: 54px; }
+
+/* Add pill - hidden until hover/focus, so the art carries the card at rest */
+.addPill {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translate(-50%, 8px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--mint-ink);
+  background: var(--mint);
+  border-radius: 999px;
+  padding: 7px 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
+}
+.addPill svg { width: 14px; height: 14px; }
+.galTile:hover .galCover:not(:disabled) .addPill,
+.galCover:focus-visible .addPill {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.addPillDone {
+  color: var(--mint);
+  background: rgba(110, 231, 183, 0.14);
+  border: 1px solid rgba(110, 231, 183, 0.34);
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* caption sits BELOW the cover, Savee-clean */
+.galMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 4px 0;
+}
+.galName {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--muted-strong);
+  letter-spacing: -0.01em;
+}
+.reviewBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--amber, #F59E0B);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+
+/* toast - mirrors the Arts District confirm chip */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 14px);
+  z-index: 20;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--fg);
+  background: rgba(12, 16, 14, 0.94);
+  border: 1px solid rgba(110, 231, 183, 0.34);
+  border-radius: 999px;
+  padding: 11px 20px;
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s var(--ease), transform 0.24s var(--ease);
+}
+.toastShow {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes up { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .prof { animation: none; opacity: 1; transform: none; }
+  .galCover, .addPill, .toast { transition: none; }
+}

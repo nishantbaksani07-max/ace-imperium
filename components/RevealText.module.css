@@ -1,0 +1,56 @@
+/* RevealText — the cozy "word bloom" reveal. Each word rises and fades in on a
+   gentle stagger; the key phrase blooms in mint and gets a marker swipe. Used
+   for the Echo coach's answers and score reason so text unfolds warmly instead
+   of appearing all at once. Reduced-motion safe (text just shows). */
+
+.reveal { display: block; }
+
+.word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(7px);
+  animation: rtWordIn 0.42s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) var(--wd, 0ms) both;
+  will-change: opacity, transform;
+}
+
+/* Clean highlighter: a soft, full-height mint band that sits BEHIND crisp text
+   and swipes in left to right. No glow, no slicing through the glyphs. */
+.hl {
+  color: #f2fbf7;
+  font-weight: 600;
+  background-image: linear-gradient(rgba(110, 231, 183, 0.2), rgba(110, 231, 183, 0.2));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 1.25em;
+  border-radius: 5px;
+  padding: 0.04em 0.28em;
+  margin: 0 -0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  animation:
+    rtWordIn 0.42s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) var(--wd, 0ms) both,
+    rtSwipe 0.55s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) var(--mk, 400ms) forwards;
+}
+
+/* Glow emphasis — the phrase blooms in mint with a soft halo and a gentle
+   ongoing pulse, so a brand/key word stands out in a hero title. No band. */
+.hlGlow {
+  color: var(--mint, #6ee7b7);
+  font-weight: 600;
+  text-shadow: 0 0 16px rgba(110, 231, 183, 0.55), 0 0 4px rgba(110, 231, 183, 0.4);
+  animation:
+    rtWordIn 0.42s var(--ease-premium, cubic-bezier(0.16, 1, 0.3, 1)) var(--wd, 0ms) both,
+    rtGlowPulse 3.2s ease-in-out var(--mk, 600ms) infinite;
+}
+
+@keyframes rtWordIn { to { opacity: 1; transform: translateY(0); } }
+@keyframes rtSwipe { to { background-size: 100% 1.25em; } }
+@keyframes rtGlowPulse {
+  0%, 100% { text-shadow: 0 0 14px rgba(110, 231, 183, 0.45), 0 0 4px rgba(110, 231, 183, 0.35); }
+  50%      { text-shadow: 0 0 26px rgba(110, 231, 183, 0.7),  0 0 8px rgba(110, 231, 183, 0.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word, .hl, .hlGlow { opacity: 1; transform: none; animation: none; }
+  .hl { background-size: 100% 1.25em; }
+}
