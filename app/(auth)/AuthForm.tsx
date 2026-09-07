@@ -141,7 +141,7 @@ export default function AuthForm({ initialMode }: { initialMode: Mode }) {
       </div>
 
       <h1 className={styles.heading}>
-        {isSignin ? 'Sign in to Vitality' : 'Create your account'}
+        {isSignin ? 'Sign in to Imperium' : 'Create your account'}
       </h1>
       <p className={styles.subhead}>
         <em>{isSignin ? 'Welcome back.' : 'One member, one ledger.'}</em>

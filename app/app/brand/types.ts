@@ -199,7 +199,7 @@ export interface BrandAccount {
 }
 
 /**
- * A labeled URL pointing somewhere outside Vitality — a Google Sheet,
+ * A labeled URL pointing somewhere outside Imperium — a Google Sheet,
  * a Stripe dashboard, a Calendly link, a project folder. Lets
  * non-creator brands keep their daily-driver tools one tap away.
  */

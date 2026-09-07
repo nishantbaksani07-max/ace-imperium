@@ -174,7 +174,7 @@ export default function GoalGuide({ items }: { items: GuideItem[] }) {
 
   return (
     <div className={styles.guide}>
-      <div className={styles.guideHd}>{VMARK} to move this, in Vitality</div>
+      <div className={styles.guideHd}>{VMARK} to move this, in Imperium</div>
       <div className={styles.giList}>
         {items.map((it) => (
           <div key={it.module} className={`${styles.gi} ${it.using ? styles.giUse : styles.giNew}`}>

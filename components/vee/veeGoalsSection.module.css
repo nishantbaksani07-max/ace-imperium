@@ -1,4 +1,4 @@
-/* VeeGoalsSection - the fused "your goals" board on the new Vee page, wearing
+/* VeeGoalsSection - the fused "your goals" board on the new Imperium page, wearing
    the vee-notice-preview signature (ticker rows + the WHY panel). The row and
    panel chrome reuse app/app/goals/veeNoticed.module.css (ts.board, ts.grow,
    ts.gdCard, ts.life) and the create sheet reuses goalsVee.module.css; both of

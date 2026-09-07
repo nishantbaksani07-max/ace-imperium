@@ -179,7 +179,7 @@ export interface NwHistoryPoint {
 /**
  * Single-object persistence shape. Replaces the standalone's seven separate
  * localStorage keys with one namespaced blob — easier to clear, easier to
- * migrate to Supabase later, less collision risk with other Vitality modules.
+ * migrate to Supabase later, less collision risk with other Imperium modules.
  */
 export interface FinanceState {
   /** Persistence schema version. Currently always 1 — no migration branches on

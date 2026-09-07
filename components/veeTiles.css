@@ -1,4 +1,4 @@
-/* ── Vee dashboard tiles ──
+/* ── Imperium dashboard tiles ──
    Ported 1:1 from public/vee-dashboard.html (the approved mockup). EVERY rule is
    scoped under .veeTiles so it cannot touch the rest of the app, and the animation
    JS (components/VeeTiles.tsx) selects within that root. Fonts map to the app's
@@ -18,7 +18,7 @@
 }
 
 /* One flexible grid. Tiles size by span (s 1x1, m 2x1, lw full-width, lt 2x2)
-   and flow with `dense` packing; Vee is pinned to the centre 2x2 block. The
+   and flow with `dense` packing; Imperium is pinned to the centre 2x2 block. The
    default order (DEFAULT_HOME_ORDER in lib/tiles/coreTiles) reproduces the
    approved customize mockup arrangement, but every tile can now be dragged,
    resized, removed, and re-added — core tiles and the user's own tiles alike. */
@@ -36,8 +36,8 @@
   transition:height .3s cubic-bezier(.25,1,.3,1);
 }
 /* size presets resolve to spans. s = 1x1 (default, no rule). The seeded default
-   (Train hero, Fuel/Brand/Peak tall, Vee big, Finance m, Create band) + dense
-   flow reproduces the loved old composition exactly. Vee is NOT pinned anymore. */
+   (Train hero, Fuel/Brand/Peak tall, Imperium big, Finance m, Create band) + dense
+   flow reproduces the loved old composition exactly. Imperium is NOT pinned anymore. */
 /* Every in-grid tile (and the Add button) is absolutely placed at the cell the
    pure packer computed for it, from four inline vars (--x/--y/--w/--h). The cell
    is applied as a TRANSLATE (via --cellpx above), not left/top, so every glide -
@@ -85,7 +85,7 @@
 .veeTiles .art{position:absolute;inset:0;width:100%;height:100%;z-index:2}
 /* Legibility scrim: a soft bottom fade so a tile's art (graphs, orbs, waves)
    never visually clashes with the serif label / stat / arrow, at ANY tile size.
-   Sits above the art (z2) and below the text chrome (z6). Vee has its own scrim. */
+   Sits above the art (z2) and below the text chrome (z6). Imperium has its own scrim. */
 .veeTiles .tile:not(.vee)::after{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;
   background:linear-gradient(to top, rgba(4,7,6,.6) 0%, rgba(4,7,6,.16) 22%, transparent 44%)}
 /* A tile showing a chosen DESIGN is a poster whose art IS the point, so the
@@ -149,7 +149,7 @@
 @keyframes vbConf  {0%{transform:scale(.3) rotate(0);opacity:1}100%{transform:scale(1.45) rotate(50deg);opacity:0}}
 @keyframes vbPonder{0%{transform:translateY(0) scale(.5);opacity:0}40%{opacity:1}100%{transform:translateY(-12px) scale(1);opacity:0}}
 
-/* ── Vee centre ── (grid placement handled by .veeTiles .grid .vee above) */
+/* ── Imperium centre ── (grid placement handled by .veeTiles .grid .vee above) */
 .veeTiles .vee{align-items:center;justify-content:center;text-align:center}
 .veeTiles .vee .disc{position:absolute;left:50%;top:45%;width:320px;height:320px;transform:translate(-50%,-50%);z-index:1;pointer-events:none;
   background:radial-gradient(circle,rgba(110,231,183,.11) 0%,rgba(110,231,183,.05) 42%,transparent 66%);
@@ -342,7 +342,7 @@
 /* ── drag "pickup" ── while a tile is lifted the whole board calms down: the
    wiggle stops, neighbours dim + desaturate, their heavy resting shadows switch
    OFF (no expensive paint riding along under a live drag), and their inner art
-   loops (comet runs, dot pulses, orb glows, the Vee disc) PAUSE so the only
+   loops (comet runs, dot pulses, orb glows, the Imperium disc) PAUSE so the only
    motion on the board is the glide itself. The state transition here MUST
    re-list translate - it replaces the base transition, and dropping translate
    from the list is exactly what made neighbours SNAP instead of glide before.
@@ -442,7 +442,7 @@
 @keyframes openFade{from{opacity:0}to{opacity:1}}
 @keyframes openRise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
 
-/* No-routine state: a gentle prompt replaces the score number on the Vee tile. */
+/* No-routine state: a gentle prompt replaces the score number on the Imperium tile. */
 .veeTiles .tile.vee .vee-setup-prompt {
   position: absolute;
   left: 50%;
@@ -463,7 +463,7 @@
    ghost-mint open glyph. Every selector below is gated under .tile.is-studio (set
    in DashboardGrid's HomeTileFace ONLY when a user tile's chosen design is
    'studio-spark'), so this can never touch the generic .index/.cap/.arrow/.stat
-   rules any other tile (core, Vee, Library, or any other user tile) relies on.
+   rules any other tile (core, Imperium, Library, or any other user tile) relies on.
    The studio-spark design art (lib/tiles/designs.ts) already paints the spark
    bars in the background layer (z2); this overlay does not repaint them. Purely
    decorative: the real tap target stays the existing full-cover .hit (z7); this

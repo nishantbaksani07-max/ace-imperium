@@ -105,7 +105,7 @@ interface HeroCrystalProps {
    *  check mark on top of the bare crystal. */
   hideGlyph?: boolean
   /** Which glyph the face-cycling plane paints. Accepts any canonical
-   *  Vitality glyph (see GlyphKey in lib/quizzes/glyphs.tsx). Defaults
+   *  Imperium glyph (see GlyphKey in lib/quizzes/glyphs.tsx). Defaults
    *  to 'v' so the landing/hero gem is unchanged. Ignored when
    *  hideGlyph is true. */
   glyph?: GlyphKey
@@ -138,14 +138,14 @@ interface HeroCrystalProps {
   onLoadingBeat?: (phase: 'beat' | 'resolve') => void
   /** Ambient repertoire — the pool of gentle moves a character-mode gem plays
    *  on its own when idle (every ~11-19s). This is the shared "life" of every
-   *  Vitality gem: add a move to AMBIENT_DEFAULT and every gem app-wide inherits
+   *  Imperium gem: add a move to AMBIENT_DEFAULT and every gem app-wide inherits
    *  it instantly. Pass a custom list to flavor a gem (e.g. a coach), or `null`
    *  to disable autonomous moves (host drives everything). Character mode only. */
   ambient?: string[] | null
 }
 
 /**
- * The shared "life" of every Vitality gem. A character-mode gem idly plays a
+ * The shared "life" of every Imperium gem. A character-mode gem idly plays a
  * random move from this pool every ~11-19s. Keep these GENTLE (no big
  * celebrations — those fire on real events). Add a move here and every gem in
  * the app inherits it the next time the engine loads — no per-page wiring.
@@ -296,7 +296,7 @@ export default function HeroCrystal({
     mesh.add(wire)
 
     /* ── Per-face flickering V engraving ─────────────────────────
-       The Vitality V appears on whichever face is currently dead-on
+       The Imperium V appears on whichever face is currently dead-on
        facing the camera. Cycle per face:
 
          1. A face rotates into peak alignment (its world-space normal
@@ -385,7 +385,7 @@ export default function HeroCrystal({
        placed at a face center, it sits dead-center on the face.
 
        The path coords are pulled from lib/quizzes/glyphs.tsx so the
-       face-painted check matches the canonical Vitality glyph library
+       face-painted check matches the canonical Imperium glyph library
        exactly — no drift between the celebration screen's flickering
        face mark and the same glyph rendered elsewhere as SVG. */
     // Trace any canonical glyph path on the given canvas context. The

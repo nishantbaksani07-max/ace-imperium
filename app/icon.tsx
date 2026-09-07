@@ -3,13 +3,13 @@ import { ImageResponse } from 'next/og'
 /**
  * App icon — generated at build time via next/og (no sharp / ImageMagick, no
  * committed binary). Next auto-injects this as the favicon + `<link rel=icon>`
- * and the manifest references it. The mark is the Vitality gem: a mint faceted
+ * and the manifest references it. The mark is the Imperium gem: a mint faceted
  * hexagon with the V, on the brand-dark background.
  */
 export const size = { width: 512, height: 512 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — the "D · Brilliant" flat-faceted gem (7 facets radiating
+// Imperium gem mark — the "D · Brilliant" flat-faceted gem (7 facets radiating
 // to the culet), solid fills on near-black. viewBox is tight around the gem so
 // it fills the icon. Satori renders it via an <img> data-uri.
 const GEM = `

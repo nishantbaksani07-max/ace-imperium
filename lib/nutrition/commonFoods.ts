@@ -1,4 +1,4 @@
-// Common-foods canon for the Vitality Macros manual-picker.
+// Common-foods canon for the Imperium Macros manual-picker.
 //
 // When a user searches a plain whole food, the USDA candidate set contains the
 // right answer but it often ranks too low (dishes, processed forms, obscure

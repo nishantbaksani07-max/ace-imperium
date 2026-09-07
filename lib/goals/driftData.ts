@@ -3,7 +3,7 @@
  * recent behaviour from the real module tables (workouts / nutrition_meals /
  * wearable_data) + the goal_nudges cooldown ledger, then hands a pure snapshot
  * to detectDrift. RLS-scoped, never throws — a read failure just means "no
- * nudge" (Vee stays quiet rather than crashing the Vee tab).
+ * nudge" (Imperium stays quiet rather than crashing the Imperium tab).
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { detectDrift, type DriftInput, type DriftGoalRef, type DriftKind, type DriftNudge, type DriftResolution, type StreamDriftItem } from './drift'
@@ -56,7 +56,7 @@ export async function gatherDrift(
       // (a recovery dip must be vs the user's RECENT self, never a month ago).
       supabase.from('wearable_data').select('recovery, date').eq('user_id', userId).not('recovery', 'is', null).gte('date', keyMinus(today, 21)).order('date', { ascending: false }).limit(12),
       supabase.from('goal_nudges').select('kind, last_nudged_at, resolution').eq('user_id', userId).order('last_nudged_at', { ascending: false }),
-      // active, non-silent goals — so Vee can reach out about the SPECIFIC goal
+      // active, non-silent goals — so Imperium can reach out about the SPECIFIC goal
       // whose domain has gone quiet, at the cadence its push level asks for.
       supabase.from('vitality_goals').select('id, title, clean_title, category, push_level, target_date').eq('user_id', userId).eq('status', 'active').neq('push_level', 'silent'),
       // user-built tile streams (report contract) — the generic drift domain
@@ -130,7 +130,7 @@ export async function gatherDrift(
       if (!domain) continue
       // Only personalise with the AI-tidied title. Until it lands (categorize is
       // async after save), fall through to generic drift copy rather than drop a
-      // raw, possibly-lowercase user sentence into Vee's outreach.
+      // raw, possibly-lowercase user sentence into Imperium's outreach.
       const cleanTitle = ((row.clean_title ?? '') as string).trim()
       if (!cleanTitle) continue
       const pl = row.push_level as string

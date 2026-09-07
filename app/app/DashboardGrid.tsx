@@ -115,9 +115,9 @@ interface DashboardGridProps {
   onChromeChange?: (patch: Partial<DashboardChrome>) => void
 }
 
-/** The Vee centre art — wire feeds, ring pulse, the serif score. Animated by the
+/** The Imperium centre art — wire feeds, ring pulse, the serif score. Animated by the
  *  .vee selectors in veeTilesAnim. Rendered inside an ordinary sortable tile now,
- *  so Vee drags, resizes, and can be removed like any other tile. */
+ *  so Imperium drags, resizes, and can be removed like any other tile. */
 function VeeArt() {
   return (
     <>
@@ -188,7 +188,7 @@ type SortableBits = {
 
 /** The Studio tile's live "shipped" hero number for its bespoke dashboard poster
  *  (Task 7b), read straight from the SAME tile_streams / tile_reports rows every
- *  sealed tile writes through Vitality.report({ key: 'videos_published' }); see
+ *  sealed tile writes through Imperium.report({ key: 'videos_published' }); see
  *  lib/studio/report.ts + lib/tiles/reportWrites.ts. Scoped to the signed-in user
  *  via auth.getUser() (never trusted from props), matching every other client
  *  read in this file (tileSync.ts, tileDataSync.ts). Returns null while loading
@@ -265,7 +265,7 @@ export function HomeTileFace(
 
   // A custom widget design replaces a tile's own art. Core tiles default to their
   // bespoke animated orb art (and keep the living orb); user tiles to a
-  // transparent iframe; Vee to its wire-feed centre.
+  // transparent iframe; Imperium to its wire-feed centre.
   const isVee = props.kind === 'vee'
   const isLibrary = props.kind === 'library'
   const isCreate = props.kind === 'create'
@@ -337,7 +337,7 @@ export function HomeTileFace(
       <div className="aurora" />
 
       {/* A user tile is a poster: its design-art is its face (its live app opens full
-          on tap). Core/Library/Vee keep their bespoke art. */}
+          on tap). Core/Library/Imperium keep their bespoke art. */}
       {props.kind === 'user' ? (
         userArt && <DesignArt dkey={userArt.key} svg={userArt.svg} color={skin.color} livingDots={skin.livingDots} />
       ) : design ? (
@@ -409,7 +409,7 @@ export function HomeTileFace(
         </div>
       )}
 
-      {/* Click layer: navigate (core + Vee) when NOT editing. The locked Library
+      {/* Click layer: navigate (core + Imperium) when NOT editing. The locked Library
           tile opens the app-manager overlay instead of navigating. A user tile
           gets a tap target that opens it full (the locked "small on the grid,
           opens full" model), so long as NOT editing (so drag / resize / remove
@@ -968,7 +968,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
     const m = new Map<string, string>()
     for (const f of FEATURED_TILES) {
       const d = f.envelope.design
-      if (f.author === 'Vitality' && d && f.envelope.html) m.set(d, f.envelope.html)
+      if (f.author === 'Imperium' && d && f.envelope.html) m.set(d, f.envelope.html)
     }
     return m
   }, [])
@@ -1110,7 +1110,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
 
   // Return the write's promise so the host gates the report activity on the
   // ACTUAL result (and posts report:error back to the tile when it fails) —
-  // a failed Vitality.report() must never be counted as a success.
+  // a failed Imperium.report() must never be counted as a success.
   const { register, unregister } = useTileHost(userId, undefined, (stream, tileId) =>
     reportStream(tileId, stream),
   )
@@ -1128,7 +1128,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
   const byId = useMemo(() => new Map(tiles.map((t) => [t.id, t])), [tiles])
 
   // Resolve the order into renderable items, dropping any user tile whose source
-  // was deleted. Vee is an ordinary item now (kind 'vee'), no longer pinned.
+  // was deleted. Imperium is an ordinary item now (kind 'vee'), no longer pinned.
   type HomeItem =
     | { id: string; kind: 'core' }
     | { id: string; kind: 'vee' }
@@ -1153,7 +1153,7 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
   const skinFor = useCallback(
     (id: string): Skin => {
       const stored = tileSkin.get(userId, id)
-      // A core tile (incl. Vee + Library) that has never been customized falls
+      // A core tile (incl. Imperium + Library) that has never been customized falls
       // back to its registry default size, so a fresh dashboard matches the
       // seeded layout.
       if ((isCoreId(id) || isLibraryId(id) || isCreateId(id) || isForgeId(id)) && tileSkin.all(userId)[id] === undefined) {
@@ -1164,14 +1164,14 @@ export default function DashboardGrid({ userId, score, scoreState, tileStats, ch
     [userId, skinV], // eslint-disable-line react-hooks/exhaustive-deps
   )
 
-  // Re-run the orb / Vee animation whenever the rendered layout changes (tiles
+  // Re-run the orb / Imperium animation whenever the rendered layout changes (tiles
   // added, removed, reordered, resized, designed, or edit toggled) so every
   // tile's living orb is re-bound to its fresh DOM node. The animation reads
   // path geometry in viewBox space, so it survives any tile size.
   const layoutSig = `${sortableIds.join(',')}|${sortableIds.map((id) => skinFor(id).size + (skinFor(id).design || '')).join(',')}|${editing}`
   useEffect(() => {
     if (!ref.current || !mounted) return
-    // The Vitality score number was removed from the Vee tile, so never run the
+    // The Imperium score number was removed from the Imperium tile, so never run the
     // count-up. The wire-feed + ring pulse (the mentor animation) still play.
     return initVeeTiles(ref.current, { score: null, showNumber: false })
   }, [mounted, layoutSig])

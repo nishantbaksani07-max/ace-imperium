@@ -44,7 +44,7 @@ export default function MoodCheck({ history }: { history: MoodPoint[] }) {
 
       <div className={styles.moodCard}>
         <p className={styles.moodQ}>How are you, really?</p>
-        <p className={styles.moodSub}>One tap. No typing. So Vee can see how you feel over time.</p>
+        <p className={styles.moodSub}>One tap. No typing. So Imperium can see how you feel over time.</p>
 
         <div className={styles.moodPick}>
           {MOOD_LEVELS.map(lvl => (

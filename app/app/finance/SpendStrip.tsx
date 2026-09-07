@@ -9,11 +9,11 @@ import ImportReceipt from './ImportReceipt'
 /**
  * The spend strip — the lean discretionary-spend logger under the subscription
  * radar (launch, 2026-07-12). Every entry lands in finance_orders (direction
- * 'out'), the same store Vee reads for the spending x sleep seam, so a night out
+ * 'out'), the same store Imperium reads for the spending x sleep seam, so a night out
  * logged here is what lets "you spend more in the weeks you sleep less" ever
  * fire. Two ways in: a one-line quick log, or snap a receipt and let the AI read
  * the total. Kept compact on purpose — the radar is the star; this is the feed
- * that gives Vee real daily spend.
+ * that gives Imperium real daily spend.
  */
 export default function SpendStrip({
   state,
@@ -48,7 +48,7 @@ export default function SpendStrip({
     <section className={styles.section}>
       <div className={styles.sectionEyebrow}>
         <span>Spending</span>
-        <span className={styles.sectionCount}>feeds Vee</span>
+        <span className={styles.sectionCount}>feeds Imperium</span>
       </div>
 
       <div className={styles.addCard}>

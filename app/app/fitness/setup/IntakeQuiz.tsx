@@ -23,7 +23,7 @@ import {
 import type { GoalPreferences } from '@/lib/preferences'
 
 /**
- * Vitality's tailored intake — 13 questions, one at a time.
+ * Imperium's tailored intake — 13 questions, one at a time.
  *
  * v2 (2026-05-29): added formConfidence, movementPreference,
  * failureTolerance. Sharpened experience (returning split into
@@ -43,7 +43,7 @@ interface IntakeQuizProps {
   onComplete: (answers: IntakeAnswers, rec: IntakeRecommendation) => void
   onCancel: () => void
   initialAnswers?: IntakeAnswers | null
-  /** Vitality Goal preferences, when the user has completed that quiz.
+  /** Imperium Goal preferences, when the user has completed that quiz.
    *  Feeds into recommendIntake() as a strategic overlay — Goal owns
    *  intent (cut/bulk/longevity), intake owns capacity. Null/undefined
    *  means Goal hasn't been set, recommendation behaves as it did

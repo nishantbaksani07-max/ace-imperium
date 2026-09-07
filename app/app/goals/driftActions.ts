@@ -4,7 +4,7 @@
  * Drift-watch server actions (BUILD42 flagship). Both write to goal_nudges
  * (RLS-scoped, auth.uid() = user_id) and never throw to the client:
  *   - logDriftShown: record that a nudge of this kind was surfaced, so the
- *     cooldown keeps Vee present-not-naggy (won't re-show for a couple days).
+ *     cooldown keeps Imperium present-not-naggy (won't re-show for a couple days).
  *   - resolveDrift: record how the user responded (graced / shrunk / talk),
  *     which rests the nudge longer and honours their choice.
  */

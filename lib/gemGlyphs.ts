@@ -1,5 +1,5 @@
 /**
- * Gem glyphs — section marks engraved into the Vitality crystal.
+ * Gem glyphs — section marks engraved into the Imperium crystal.
  *
  * Each glyph is a draw function that paints a single architectural stroke
  * (open or simple closed) into a 512² canvas centered at (256, 256). The

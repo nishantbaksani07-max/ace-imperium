@@ -467,7 +467,7 @@ export default function PeakModule({ initialWhoop, initialSchedule, initialDayIn
       )}
       <div className={dashboardStyles.shell}>
         <Link href="/app" className={styles.piBackPill} style={{ alignSelf: 'flex-start', marginBottom: 20 }}>
-          <span style={{ fontSize: 14, lineHeight: 1 }}>←</span> Vitality
+          <span style={{ fontSize: 14, lineHeight: 1 }}>←</span> Imperium
         </Link>
 
         {/* top bar: gem + serif title + date, with today's vitals on the right */}

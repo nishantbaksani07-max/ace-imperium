@@ -2,7 +2,7 @@ import VitalsPreview from './VitalsPreview'
 
 export const dynamic = 'force-static'
 
-export const metadata = { title: 'Vitals preview · Vitality' }
+export const metadata = { title: 'Vitals preview · Imperium' }
 
 export default function Page() {
   return <VitalsPreview />

@@ -1,9 +1,9 @@
 /**
- * The per-goal "how Vitality gets you there" guide, the recommendation set that
+ * The per-goal "how Imperium gets you there" guide, the recommendation set that
  * fills a goal's dropdown (Layer B of the goal surface).
  *
  * The locked safety rule mirrors the ticker: every recommendation points to a
- * REAL, shipped Vitality feature from a fixed whitelist. The brain may pick and
+ * REAL, shipped Imperium feature from a fixed whitelist. The brain may pick and
  * order from that list per goal, but can NEVER invent a feature. So across any
  * goal from any user, the worst case is a real-but-imperfect suggestion, never
  * vaporware, never a dead link.
@@ -16,7 +16,7 @@
  * goal gets a hyper-personal call-out computed from the user's real data: a
  * train-led goal whose lifts have gone flat reads "your bench has not moved in a
  * month, push harder" instead of the generic "beat last time". The strike is rare
- * and earned (a 3+ week stall) so it lands like the golden-URL "Vitality noticed"
+ * and earned (a 3+ week stall) so it lands like the golden-URL "Imperium noticed"
  * moment. Rules over data, instant and free, the deep AI version stays on the
  * golden URL. Reuses the canonical `liftStall` + `matchGoalToLift` (no second
  * source of truth). More holes (macros, weigh-in timing, missed days) plug in here.
@@ -52,7 +52,7 @@ export interface GuideItem {
   why: string
   /** The phrase inside `why` to highlight + turn into the demo trigger. */
   key: string
-  /** A real, shipped Vitality route. */
+  /** A real, shipped Imperium route. */
   href: string
   /** Already logging this domain → a compact quick-link; else → a demo tile. */
   using: boolean
@@ -113,10 +113,10 @@ const FEATURES: Record<GuideModule, { label: string; href: string; preview: Guid
     active: { why: 'You track net worth. Read the trend to catch the months money leaks.', key: 'the months money leaks' },
   },
   // The honest floor lever (TRAIN 4): when no module can measure a goal, notes
-  // can. One line a day is real data Vee reads, so NO goal is ever leverless -
+  // can. One line a day is real data Imperium reads, so NO goal is ever leverless -
   // and it never over-promises (a note is a pulse, not a graph).
   notes: {
-    label: 'Write a note in Vee', href: '/app/mentor', preview: 'wave',
+    label: 'Write a note in Imperium', href: '/app/mentor', preview: 'wave',
     fresh: { why: 'Write a note each day and I measure your good days.', key: 'I measure your good days' },
     active: { why: 'Keep the daily notes coming. Each one is a real datapoint I read for this goal.', key: 'a real datapoint I read' },
   },
@@ -138,7 +138,7 @@ export const MODULE_FEED_ME: Record<GuideModule, string> = {
   supplements: 'tick your stack in Fuel and I start watching the streak.',
   brand: 'save a follower snapshot in Brand and I start reading your growth.',
   finance: 'update your net worth in Finance and I start watching where your money is heading.',
-  notes: 'write a note in Vee each day and I will start measuring your good days.',
+  notes: 'write a note in Imperium each day and I will start measuring your good days.',
 }
 
 /**
@@ -1246,7 +1246,7 @@ export function guideGroundedWhy(items: GuideItem[] | undefined, module: GuideMo
 }
 
 /**
- * THE STRONGEST BINDING (TRAIN 4): for a goal, name the ONE metric Vitality can
+ * THE STRONGEST BINDING (TRAIN 4): for a goal, name the ONE metric Imperium can
  * draw best, preferring a module the user already feeds (their data is the
  * strongest signal), else the guide's top-ranked module (the highest-value
  * thing to START logging). Pure and deterministic: it reuses buildGoalGuide's
@@ -1306,7 +1306,7 @@ export function strongestBinding(
  * Deterministic, no guessing: body-shaped categories get the body metrics,
  * money gets net worth, audience gets followers, and every category can always
  * fall back to notes (the honest floor lever). The picker appends the user's
- * OWN tile streams and "let Vee decide" after these.
+ * OWN tile streams and "let Imperium decide" after these.
  */
 export function coreBindingOptions(category: string | null): GuideModule[] {
   // TRAIN 5: the option list is sourced from THE METRIC REGISTRY, so the

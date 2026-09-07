@@ -44,7 +44,7 @@ function pickGreeting(): { text: string; punct: string } {
  * The editorial greeting + date. Prop-driven so a user can personalise it
  * (lib/tiles/dashboardChrome): keep the randomized auto line or write their own,
  * show / accent their name, scale it, and pick the date format (or hide it). The
- * FONT stays Instrument Serif italic (the unified Vitality voice) — only wording,
+ * FONT stays Instrument Serif italic (the unified Imperium voice) — only wording,
  * name, accent, and scale are exposed. The line is picked client-side in an
  * effect (server renders it empty, exactly as before) so SSR never mismatches.
  */

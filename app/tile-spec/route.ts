@@ -1,7 +1,7 @@
 import { TILE_SPEC } from '@/lib/tiles/tileSpec'
 
 /**
- * GET /tile-spec - the PUBLIC, fetchable build rules for a Vitality tile.
+ * GET /tile-spec - the PUBLIC, fetchable build rules for a Imperium tile.
  *
  * The same text ships inside the Forge brief's clipboard copy
  * (lib/tiles/forgePrompt.ts), so an AI with no web access never needs this

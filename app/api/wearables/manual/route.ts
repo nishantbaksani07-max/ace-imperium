@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
  * the numbers Claude pulled from their screenshot, the client POSTs them here
  * and we upsert one row into wearable_data with provider 'manual'. Peak's
  * load.ts reads 'manual' alongside the real bands (PROVIDER_PRIORITY), so the
- * reading feeds the Vitality score + dashboard like any other source.
+ * reading feeds the Imperium score + dashboard like any other source.
  *
  * RLS scopes the write to the signed-in user; unique(user_id, date, provider)
  * means re-importing the same day overwrites rather than duplicates.

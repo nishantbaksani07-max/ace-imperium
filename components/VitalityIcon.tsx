@@ -1,5 +1,5 @@
 /**
- * Vitality line-art icon library — the modern icon vocabulary used across the
+ * Imperium line-art icon library — the modern icon vocabulary used across the
  * app (Fuel, Peak, hubs). Same convention as SubstanceIcon and the logger/setup
  * icons: viewBox 0 0 24 24, no fill, mint `currentColor` stroke at 1.7, round
  * caps/joins. Colour by setting `color` on a wrapper (mint by default).
@@ -10,7 +10,7 @@
  */
 
 export type IconName =
-  // nutrition / fuel — macros + tracking (Claude-design "Vitality Icons" set)
+  // nutrition / fuel — macros + tracking (Claude-design "Imperium Icons" set)
   | 'flame' | 'kcal' | 'protein' | 'carbs' | 'carb' | 'fat'
   | 'eaten' | 'goal' | 'foodAte' | 'plate' | 'snack'
   | 'breakfast' | 'lunch' | 'dinner'

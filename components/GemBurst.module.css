@@ -1,5 +1,5 @@
 /*
- * GemBurst — reusable pulse-burst overlay for any Vitality gem. CSS lifted from
+ * GemBurst — reusable pulse-burst overlay for any Imperium gem. CSS lifted from
  * app/app/dashboardHeaderGem.module.css (rings / particles / sparkles) so bursts
  * read identically to the lab + dashboard, plus a confetti burst for big wins.
  * Drop <GemBurst burst={burst} /> inside a position:relative gem stage.

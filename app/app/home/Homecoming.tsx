@@ -13,7 +13,7 @@ import HomeActGym from './acts/HomeActGym'
 import styles from './homecoming.module.css'
 
 /**
- * "Vitality, I'm home" - the daily ritual stage machine.
+ * "Imperium, I'm home" - the daily ritual stage machine.
  *
  * Tap the dashboard gem: the world fades to the signature backdrop, the gem
  * (DashboardHeaderGem, the proven wrapper that sizes HeroCrystal correctly)
@@ -273,7 +273,7 @@ export default function Homecoming({
     saveImHome(uidRef.current, { trackFuel: v, lastRun: pull?.today ?? getLocalDateKey() })
   }
   // ANTICIPATE, NEVER ASK: when the data already shows both streams in use,
-  // Vee does not ask whether you track them - Q1 answers itself from presence
+  // Imperium does not ask whether you track them - Q1 answers itself from presence
   // and only Q2 renders (verify MED-5).
   const q1Known = !!(presence?.usesFuel && presence?.usesWater)
   useEffect(() => {
@@ -322,7 +322,7 @@ export default function Homecoming({
   })()
 
   return (
-    <div className={styles.stage} role="dialog" aria-modal="true" aria-label="Vitality, I'm home">
+    <div className={styles.stage} role="dialog" aria-modal="true" aria-label="Imperium, I'm home">
       <WelcomeBackdrop />
       <div className={styles.scrim} />
       {settling && <div className={styles.settleFlash} aria-hidden />}

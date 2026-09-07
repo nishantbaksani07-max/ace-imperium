@@ -35,7 +35,7 @@ const HeroTrendLightning = dynamic(
 )
 
 export const metadata = {
-  title: 'Pricing · Vitality',
+  title: 'Pricing · Imperium',
   description:
     '$15 a month. One price. Cancel anytime. The same dashboard we open every morning, now in your pocket.',
 }
@@ -92,7 +92,7 @@ export default async function PricingPage() {
         {/* Top chrome — wordmark + back link */}
         <nav className={styles.chrome}>
           <Link className={styles.wordmark} href="/">
-            Vitality
+            Imperium
           </Link>
           <div className={styles.nav}>
             <Link href="/">landing</Link>
@@ -130,7 +130,7 @@ export default async function PricingPage() {
         {/* Pricing card — the visual anchor */}
         <div className={styles.priceCard}>
           <div className={styles.priceTopRow}>
-            <span className={styles.priceTopLabel}>Vitality membership</span>
+            <span className={styles.priceTopLabel}>Imperium membership</span>
             <span className={styles.priceTopMark}>·01</span>
           </div>
 
@@ -182,22 +182,22 @@ export default async function PricingPage() {
             A Claude connector
           </div>
           <h2 id="claude-heading" className={styles.sectionHeadline}>
-            Claude forgets you. <em>Vitality remembers.</em>
+            Claude forgets you. <em>Imperium remembers.</em>
           </h2>
           <p className={styles.sectionSub}>
-            Vitality is your input device. Connect it once and Claude knows your
+            Imperium is your input device. Connect it once and Claude knows your
             sleep, your training, your money — all of it. Then just ask, the way
-            Tony asks Vee.
+            Tony asks Imperium.
           </p>
         </header>
 
-        {/* IT'S A CONNECTOR — Vitality shown live in Claude's connector list. */}
+        {/* IT'S A CONNECTOR — Imperium shown live in Claude's connector list. */}
         <ConnectorPanel />
 
         {/* WHAT GOES IN — the modules, each clickable to preview in the app. */}
         <InputSources />
 
-        {/* THE PROOF — your app (laptop, the Vee notice) beside Claude (phone,
+        {/* THE PROOF — your app (laptop, the Imperium notice) beside Claude (phone,
             connected), so you see input and brain side by side. */}
         <div className={styles.deviceScene}>
           <VeeNotice />
@@ -211,10 +211,10 @@ export default async function PricingPage() {
         <div className={styles.connect}>
           <ol className={styles.connectSteps}>
             <li>
-              <span className={styles.stepNum}>01</span> Subscribe to Vitality
+              <span className={styles.stepNum}>01</span> Subscribe to Imperium
             </li>
             <li>
-              <span className={styles.stepNum}>02</span> Add Vitality in
+              <span className={styles.stepNum}>02</span> Add Imperium in
               Claude&apos;s connectors
             </li>
             <li>

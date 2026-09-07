@@ -86,7 +86,7 @@ export async function completeOnboarding(): Promise<void> {
       .eq('user_id', user.id),
   ])
 
-  // First-time experience: hand the new user to the Vitality gem
+  // First-time experience: hand the new user to the Imperium gem
   // welcome screen instead of the bare dashboard. The /welcome route
   // greets them by name, then drops them at /app on the CTA.
   redirect('/welcome')

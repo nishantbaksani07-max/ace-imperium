@@ -197,7 +197,7 @@ function IntroInner({ onReveal }: IntroProps) {
           <div className={styles.vGlow} />
           <div className={`${styles.streak} ${styles.s1}`} />
           <div className={`${styles.streak} ${styles.s2}`} />
-          <svg className={styles.vSvg} viewBox="0 0 100 100" aria-label="Vitality mark">
+          <svg className={styles.vSvg} viewBox="0 0 100 100" aria-label="Imperium mark">
             <defs>
               <linearGradient id="vitality-intro-vg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stopColor="#9be7b8" />

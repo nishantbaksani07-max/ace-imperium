@@ -133,9 +133,7 @@ export default function TileDetail({ tile, svg }: TileDetailProps) {
 
       <div className={styles.shell}>
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
-            V
-          </Link>
+          <Link href="/" className={styles.mark} aria-label="Imperium">I</Link>
           <Link href="/district" className={styles.crumb}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="m15 18-6-6 6-6" />
@@ -205,7 +203,7 @@ export default function TileDetail({ tile, svg }: TileDetailProps) {
           </span>
           <div className={styles.circleBody}>
             <p>
-              Make a Vitality and this tile lands on <b>your dashboard</b>, alongside every other one you pick.
+              Make a Imperium and this tile lands on <b>your dashboard</b>, alongside every other one you pick.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

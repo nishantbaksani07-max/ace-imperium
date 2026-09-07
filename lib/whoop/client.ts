@@ -57,7 +57,7 @@ export function whoopRedirectUri(): string {
 
 // WHOOP is bring-your-own-credentials: each user supplies the client_id /
 // client_secret of their own WHOOP developer app (we never get prod approval
-// for one shared app). The redirect_uri is still ours - the same Vitality
+// for one shared app). The redirect_uri is still ours - the same Imperium
 // callback for every user, which they register in their own WHOOP app.
 export function buildAuthUrl(state: string, clientId: string): string {
   const params = new URLSearchParams({
@@ -132,7 +132,7 @@ export interface WhoopCredentials { clientId: string; clientSecret: string }
  * The WHOOP developer-app credentials this user brought, if any. Used by the
  * connect route to build the authorize URL.
  *
- * CENTRAL-APP DEFAULT (Alex, 2026-07-12): every user rides the ONE Vitality
+ * CENTRAL-APP DEFAULT (Alex, 2026-07-12): every user rides the ONE Imperium
  * WHOOP app in env (WHOOP_CLIENT_ID / WHOOP_CLIENT_SECRET), so a normal user
  * just taps Connect -> Allow, no developer account, no keys. A user's own
  * saved keys still win if present (the old bring-your-own path, now optional
@@ -185,7 +185,7 @@ export async function getValidAccessToken(
   }
 
   // Refresh needs the app credentials the token was minted against: the user's
-  // own saved keys if present, else the central Vitality app in env (the
+  // own saved keys if present, else the central Imperium app in env (the
   // default path since 2026-07-12). Only bail when neither exists.
   const refreshToken = openSecret(conn.encrypted_refresh_token)
   if (!refreshToken) return null

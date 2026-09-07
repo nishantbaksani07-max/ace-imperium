@@ -28,7 +28,7 @@ const BACKFILLERS: Record<string, (sb: SupabaseClient, userId: string) => Promis
 }
 
 /**
- * GET /api/home/pull - the one composite read behind "Vitality, I'm home".
+ * GET /api/home/pull - the one composite read behind "Imperium, I'm home".
  *
  * When the user taps the gem, the ritual opens on a single RLS-scoped pull of
  * everything the acts need, so the "pulling your whole day" beat is honest:

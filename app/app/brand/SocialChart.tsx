@@ -9,7 +9,7 @@ import type { BrandUpload } from './types'
  * SocialChart — the big "see everything" graph for the Social Command Center.
  *
  * Mirrors the Vitals ScoreHistory chart (range toggle, scrub tag, trend / best
- * / logged, area+line) so the social view feels like the rest of Vitality, but
+ * / logged, area+line) so the social view feels like the rest of Imperium, but
  * driven by saved social_snapshots. Pick any platform and any metric; every
  * data point a snapshot holds is plottable. Auto-renders from whatever the
  * parent loaded on open (the Command Center re-fetches snapshots on mount).

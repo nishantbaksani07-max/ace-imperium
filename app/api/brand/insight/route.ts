@@ -20,7 +20,7 @@ export const maxDuration = 60
  * SDK dependency), ANTHROPIC_API_KEY server-side only, auth required.
  */
 
-// Dogfood flag. Flip true to gate to pro (CLAUDE.md rule 5). The mentor (Vee)
+// Dogfood flag. Flip true to gate to pro (CLAUDE.md rule 5). The mentor (Imperium)
 // ships ungated today so the team can dogfood AI before enforcing tier; this
 // sibling feature follows the same stance. When enabled, a non-pro user gets a
 // 402 and the client shows the upsell.
@@ -51,7 +51,7 @@ interface AnthropicResponse {
   error?: { message?: string }
 }
 
-const SYSTEM_PROMPT = `You are the business mentor inside Vitality's Brand module. The user runs a small venture: a creator channel, a shop, a service, an indie product, or a local business. You have their tracked metrics and goals, and you can read the public web pages they have linked.
+const SYSTEM_PROMPT = `You are the business mentor inside Imperium's Brand module. The user runs a small venture: a creator channel, a shop, a service, an indie product, or a local business. You have their tracked metrics and goals, and you can read the public web pages they have linked.
 
 Your job: give one sharp, useful read of how the business is doing and the single best next move. Practical and specific, never generic startup advice.
 

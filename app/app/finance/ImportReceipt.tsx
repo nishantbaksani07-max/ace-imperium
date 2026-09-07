@@ -142,7 +142,7 @@ export default function ImportReceipt({ open, onClose, state, actions, currentCu
         {stage === 'upload' && (
           <>
             <p className={styles.importDesc}>
-              Snap a paper receipt, email confirmation, or order screenshot. Vitality reads it and creates an order, already deducted from the account you pick.
+              Snap a paper receipt, email confirmation, or order screenshot. Imperium reads it and creates an order, already deducted from the account you pick.
             </p>
             <label
               className={`${styles.dropZone} ${dragging ? styles.dropZoneActive : ''}`}

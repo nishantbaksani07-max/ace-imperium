@@ -51,7 +51,7 @@ interface SetupWizardProps {
    *  a SessionMenu day tile). 0-based index into the saved rotation, or null
    *  for the normal full wizard. */
   focusDayIdx?: number | null
-  /** Vitality Goal preferences, when the user has completed the Goal
+  /** Imperium Goal preferences, when the user has completed the Goal
    *  quiz. Threaded into recommendIntake() + recommendExercises() as a
    *  strategic overlay (Goal = intent, intake = capacity). Null when
    *  Goal hasn't been set — both functions degrade to their pre-Goal
@@ -269,7 +269,7 @@ export default function SetupWizard({
     })
     // Settings-edit celebration: if the user came in via ?intake=open
     // with an already-completed intake (i.e. they tapped "edit" on the
-    // training row of Settings → Your Vitality setup), show the
+    // training row of Settings → Your Imperium setup), show the
     // thank-you screen instead of dropping them silently on Step 1.
     // Disarm immediately so a subsequent in-wizard "retake the quiz"
     // doesn't re-trigger the celebration.
@@ -532,7 +532,7 @@ export default function SetupWizard({
 
   // Settings-edit intake celebration — fires once when a returning user
   // finishes the 11-question intake after arriving via ?intake=open
-  // (from Settings → "Your Vitality setup" → Build your training edit).
+  // (from Settings → "Your Imperium setup" → Build your training edit).
   // Without this they get no thank-you for completing 11 questions and
   // the moment feels broken.
   if (editIntakeDone) {

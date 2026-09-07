@@ -250,10 +250,10 @@ export default function TickerBar({ d }: { d: TickerDataLike }) {
   const rolled = [...items, ...items]
 
   return (
-    <div className={styles.ticker} role="status" aria-label="Vitality live insights">
+    <div className={styles.ticker} role="status" aria-label="Imperium live insights">
       <div className={styles.tickerEyebrow}>
         <span className={styles.tickerPulse} aria-hidden />
-        Vitality · Live
+        Imperium · Live
       </div>
       <div className={styles.tickerScroll}>
         <div className={styles.tickerTrack}>

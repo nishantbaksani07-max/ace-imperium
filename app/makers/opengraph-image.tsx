@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og'
 /**
  * Open Graph card for the Makers directory (/makers).
  *
- * Rendered by next/og (Satori) — fully self-contained: the Vitality gem is an
+ * Rendered by next/og (Satori) — fully self-contained: the Imperium gem is an
  * inline base64 SVG data-URI, the background is the pure-black brand canvas with
  * a mint glow, and type uses a safe system sans stack (our next/font vars are
  * not available in this context, so they are never referenced). No remote asset
@@ -13,11 +13,11 @@ import { ImageResponse } from 'next/og'
  * description or social post.
  */
 export const runtime = 'nodejs'
-export const alt = 'Vitality Makers — the people building tiles'
+export const alt = 'Imperium Makers — the people building tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
+// Imperium gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
   <path d="M392 372 L632 372 L724 470 L512 744 L300 470 Z" fill="#1f4d3d"/>
@@ -76,7 +76,7 @@ export default function MakersOgImage() {
               textTransform: 'uppercase',
             }}
           >
-            Vitality
+            Imperium
           </div>
         </div>
         {/* title block */}
@@ -102,7 +102,7 @@ export default function MakersOgImage() {
               color: 'rgba(255,255,255,0.62)',
             }}
           >
-            The people building tiles for the Vitality dashboard.
+            The people building tiles for the Imperium dashboard.
           </div>
         </div>
         {/* footer accent line */}

@@ -1,5 +1,5 @@
 /**
- * Pure goal-ticker derivation for the "Vitality noticed" surface.
+ * Pure goal-ticker derivation for the "Imperium noticed" surface.
  *
  * Turns a user's goals + real module data into honest per-goal trend rows. The
  * locked rule: a measured number ONLY when a real metric backs it (weight rate
@@ -35,7 +35,7 @@ export interface TickerInput {
   goals: {
     id: string; title: string; cleanTitle: string | null; category: string | null
     /** "What steers this" (TRAIN 4): the user's own pick wins over auto-binding.
-     *  A guide module name or 'stream:<canonical_key>'; null/absent = Vee decides. */
+     *  A guide module name or 'stream:<canonical_key>'; null/absent = Imperium decides. */
     bindingOverride?: string | null
   }[]
   /** A window of weigh-ins, any order. */

@@ -519,7 +519,7 @@
   padding: 0 2px;
 }
 
-/* Vee's markdown, scoped to the bubble */
+/* Imperium's markdown, scoped to the bubble */
 .mdPara { margin: 0 0 8px; }
 .mdPara:last-child { margin: 0; }
 .mdList { margin: 6px 0 8px 18px; display: flex; flex-direction: column; gap: 4px; }

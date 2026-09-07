@@ -6,7 +6,7 @@ import { COZY_SETS, type CozySet } from '@/lib/cozy'
 import styles from './cozyLibrary.module.css'
 
 /**
- * Cozy Loader Library — the design lab for Vitality's "cozy wait" card.
+ * Cozy Loader Library — the design lab for Imperium's "cozy wait" card.
  *
  * Mirrors /gem-library: a public route that mounts the REAL CozyLoader (no
  * re-port, no drift) and drives it from the canonical lib/cozy content sets.
@@ -35,10 +35,10 @@ export default function CozyLibrary() {
 
       <div className={styles.shell}>
         <header className={styles.head}>
-          <div className={styles.eyebrow}>Vitality · Components</div>
+          <div className={styles.eyebrow}>Imperium · Components</div>
           <h1 className={styles.title}>Cozy Loader Library</h1>
           <p className={styles.sub}>
-            The warm cozy-wait card, now a recurring Vitality theme. One component, one content
+            The warm cozy-wait card, now a recurring Imperium theme. One component, one content
             library. A playful tag bounces in, the line springs up with a key phrase color
             emphasized, and the whole card tints to the line&apos;s tone, cross-fading every few
             seconds. Below is every section&apos;s set running live. {COZY_SETS.length} loaders,{' '}

@@ -73,7 +73,7 @@
 @keyframes choicePop{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
 
 /* ─────────────────────────────────────────────────────────────────────────
- * AskCard additions (Vee ask cards). Purely additive — new classes only, so
+ * AskCard additions (Imperium ask cards). Purely additive — new classes only, so
  * the v1 kit (ConfirmTile / ChoiceTile / TrainingDayCard) is untouched.
  * ───────────────────────────────────────────────────────────────────────── */
 

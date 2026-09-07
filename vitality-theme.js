@@ -1,16 +1,16 @@
 /* ============================================================================
- * vitality-theme.js  —  the entire "Vitality" look in ONE drop-in file.
+ * vitality-theme.js  —  the entire "Imperium" look in ONE drop-in file.
  *
  *   <script src="vitality-theme.js"></script>
  *
  * Adding that one line to any static HTML page injects:
  *   1. Google Fonts (Inter · Newsreader serif · JetBrains Mono)
- *   2. A <style> with the Vitality design tokens + base look + glass cards +
+ *   2. A <style> with the Imperium design tokens + base look + glass cards +
  *      mint buttons/inputs + grain/aurora/mountains/particles CSS
  *   3. The backdrop DOM (#vt-backdrop — aurora · mountains · mist · particles)
  *      behind your content, plus the tiny JS that spawns drifting particles.
  *
- * Design sourced from this repo's canonical Vitality files:
+ * Design sourced from this repo's canonical Imperium files:
  *   tokens / grain ............ app/globals.css
  *   aurora · mountains · mist · particles ... background/mountains-background.html
  *
@@ -86,7 +86,7 @@
     "--vt-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;",
     'color-scheme:dark;}',
 
-    /* ----- global atmosphere (normal specificity; the Vitality "feel") ----- */
+    /* ----- global atmosphere (normal specificity; the Imperium "feel") ----- */
     'html{background:var(--bg);}',
     'body{background:transparent;color:var(--fg);font-family:var(--vt-sans);',
     'font-size:var(--text-base);line-height:1.5;-webkit-font-smoothing:antialiased;',

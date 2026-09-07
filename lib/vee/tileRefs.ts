@@ -1,12 +1,12 @@
 /**
  * tileRefs — turn an insight's honest "watched" label into the SEAM: the sources
- * Vee cross-referenced to find it, so the Noticed card can show "Vitals x Train x
+ * Imperium cross-referenced to find it, so the Noticed card can show "Vitals x Train x
  * Peak" using each source's CURRENT name (respecting a core-tile rename, e.g.
  * Train -> "Workout Page"). Pure + total: unknown tokens simply match nothing.
  *
  * Seam sources are the core tiles (Train, Fuel, Vitals, Finance) PLUS two personal
  * inputs — Mood and Notes — so a user's mood taps and notes-to-self earn
- * accountability in the same gamified system: feed Vee more, and it has more
+ * accountability in the same gamified system: feed Imperium more, and it has more
  * corners of your life to connect. The seam LENGTH is the story — more sources
  * connected = a rarer find.
  *
@@ -32,7 +32,7 @@ const SOURCE_KEYWORDS: Array<[SeamSource, string[]]> = [
   ['vitals', ['recovery', 'sleep', 'hrv', 'resting', 'rhr', 'readiness', 'strain', 'wearable', 'oura', 'whoop', 'fitbit', 'heart', 'steps', 'rest', 'vitals']],
   ['train', ['training', 'train', 'workout', 'lift', 'lifts', 'bench', 'squat', 'deadlift', 'press', 'ohp', 'row', 'curl', 'volume', 'session', 'sessions', 'gym', 'split', 'deload', 'reps', 'sets', 'strength', 'hypertrophy', 'pr', '1rm']],
   ['fuel', ['protein', 'macro', 'macros', 'calorie', 'calories', 'kcal', 'carb', 'carbs', 'water', 'hydration', 'hydrate', 'supplement', 'supplements', 'creatine', 'meal', 'meals', 'food', 'diet', 'weight', 'weigh', 'bodyweight', 'cut', 'bulk', 'maintenance', 'fuel']],
-  // Finance is a core tile (works, fully feeds Vee), so it is a seam source.
+  // Finance is a core tile (works, fully feeds Imperium), so it is a seam source.
   ['finance', ['finance', 'money', 'spend', 'spending', 'networth', 'subscription', 'subscriptions', 'order', 'orders', 'income', 'revenue', 'budget', 'savings', 'wishlist']],
   // Peak and Brand are de-cored side projects that do not work yet: NOT seam
   // sources, so their tokens (caffeine, followers...) intentionally match nothing.

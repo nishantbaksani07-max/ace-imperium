@@ -3,7 +3,7 @@ import type { StudioVideo, StudioLink } from '@/lib/studio/types'
 /**
  * The sealed tile saves cards WITHOUT createdAt/updatedAt (the DB mints those),
  * so the envelope's video shape is StudioVideo minus those two server-owned
- * fields. This is the exact JSON the tile persists via Vitality.save.
+ * fields. This is the exact JSON the tile persists via Imperium.save.
  *
  * Not wired into useTileHost yet (Task 6 found no injectable save/load seam
  * there; save/load are hard-wired to tileStore). This module is the pure

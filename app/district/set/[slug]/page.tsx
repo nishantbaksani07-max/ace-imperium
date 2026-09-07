@@ -56,23 +56,23 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = collectionBySlug(params.slug)
-  if (!c) return { title: 'Set not found | Vitality' }
+  if (!c) return { title: 'Set not found | Imperium' }
   const n = tilesForCollection(c.id).length
-  const title = `${c.title} | Vitality Arts District`
+  const title = `${c.title} | Imperium Arts District`
   const description = `${c.blurb} ${n} tiles, one tap.`
   return {
     title,
     description,
     openGraph: {
-      title: `${c.title} | Vitality`,
+      title: `${c.title} | Imperium`,
       description: `${c.blurb} ${n} tiles, one tap.`,
       url: `/district/set/${c.id}`,
-      siteName: 'Vitality',
+      siteName: 'Imperium',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${c.title} | Vitality`,
+      title: `${c.title} | Imperium`,
       description: `${c.blurb} ${n} tiles, one tap.`,
     },
   }

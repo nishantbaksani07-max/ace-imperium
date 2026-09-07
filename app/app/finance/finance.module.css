@@ -1,5 +1,5 @@
 /* ============================================================
- * Finance module — Vitality theme.
+ * Finance module — Imperium theme.
  *
  * Reuses .card, .label, .input, .btn-primary, .stack, .grain-overlay
  * from app/globals.css. This file owns layout primitives specific to
@@ -2848,7 +2848,7 @@
 /* =====================================================================
    Stocks tab — market brief + live holdings (StocksView.tsx)
    ---------------------------------------------------------------------
-   The second mounted tab beside the subscription radar. Same Vitality
+   The second mounted tab beside the subscription radar. Same Imperium
    surface as the rest of the module: black bg, mint accents, serif-italic
    group headings, mint/amber/soft-red signal pills. CSS-only; reuses
    .tickerPill, .deleteBtn, .holdingChange/.up/.down, .quickAdd*, .addCard,

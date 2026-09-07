@@ -14,7 +14,7 @@ import type { Snap } from './SocialChart'
  * personalized 7-section content playbook via /api/brand/playbook (server-side
  * Claude). The generated playbook is saved back on the brand so it persists.
  *
- * Secondary path: hand the same job to Claude cowork (Desktop) via the Vitality
+ * Secondary path: hand the same job to Claude cowork (Desktop) via the Imperium
  * connector, for users who want the agentic version.
  */
 
@@ -67,7 +67,7 @@ const PACK_LABEL: Record<string, string> = {
  *  so Claude cowork can build the playbook straight from it (no connector needed). */
 function coworkPrompt(brand: Brand, snapshots: Snap[], platform: string): string {
   const lines: string[] = []
-  lines.push(`You are a content strategist. Below is all of my ${platform} data from Vitality. Build me a content playbook in 7 simple, easy-to-read sections: 1) What's working, 2) The ONE metric driving my reach on ${platform}, 3) My bottleneck, 4) Hook formulas from my best posts, 5) Best cadence and times, 6) Content backlog from my comments, 7) Action plan: 5 post ideas, title and thumbnail concepts, one full script, and a weekly goal. Cite my real numbers. No generic advice. Keep it simple to read.`)
+  lines.push(`You are a content strategist. Below is all of my ${platform} data from Imperium. Build me a content playbook in 7 simple, easy-to-read sections: 1) What's working, 2) The ONE metric driving my reach on ${platform}, 3) My bottleneck, 4) Hook formulas from my best posts, 5) Best cadence and times, 6) Content backlog from my comments, 7) Action plan: 5 post ideas, title and thumbnail concepts, one full script, and a weekly goal. Cite my real numbers. No generic advice. Keep it simple to read.`)
 
   const mine = snapshots.filter((s) => s.platform === platform)
   if (mine.length) {
@@ -142,7 +142,7 @@ export default function PlaybookCard({
 
       <div className={styles.playbookMentor}>
         <span className={styles.playbookMark} aria-hidden>✦</span>
-        <span className={styles.playbookWho}>Vitality mentor</span>
+        <span className={styles.playbookWho}>Imperium mentor</span>
       </div>
 
       <p className={styles.playbookQuote}>
@@ -161,11 +161,11 @@ export default function PlaybookCard({
           {!copied && <span className={styles.playbookArrow} aria-hidden>→</span>}
         </button>
         <button type="button" className={styles.playbookSecondary} onClick={generate} disabled={loading}>
-          {loading ? 'Writing your playbook…' : 'Or build it here (uses Vitality AI credits)'}
+          {loading ? 'Writing your playbook…' : 'Or build it here (uses Imperium AI credits)'}
         </button>
       </div>
       <p className={styles.playbookHint}>
-        Cowork builds it in your own Claude — no Vitality AI credits used.
+        Cowork builds it in your own Claude — no Imperium AI credits used.
       </p>
 
       {error && (

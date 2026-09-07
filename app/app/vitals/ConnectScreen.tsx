@@ -162,7 +162,7 @@ export default function ConnectScreen({
         <header className={styles.head}>
           <a className={styles.back} href={backHref}>
             <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg>
-            {manage ? 'readings' : 'Vitality'}
+            {manage ? 'readings' : 'Imperium'}
           </a>
           <span className={styles.headTitle}>Vitals</span>
           <span />

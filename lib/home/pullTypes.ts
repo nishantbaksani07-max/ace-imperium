@@ -1,5 +1,5 @@
 /**
- * Shared contract for the "Vitality, I'm home" ritual.
+ * Shared contract for the "Imperium, I'm home" ritual.
  *
  * /api/home/pull returns exactly one HomePull; the shell (Homecoming.tsx)
  * fetches it once and hands the same object to every act. Acts derive every

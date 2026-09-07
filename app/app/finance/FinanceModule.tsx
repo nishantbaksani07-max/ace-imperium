@@ -16,7 +16,7 @@ import { useFinanceState } from './state'
 
 /**
  * Root of the Finance module. THE RADAR (launch, 2026-07-12): Finance is a
- * core tile pared down to what feeds Vee — the subscription radar — now with a
+ * core tile pared down to what feeds Imperium — the subscription radar — now with a
  * second mounted tab, stocks (market brief + live holdings). Net worth / orders
  * / wishlist / coach stay PARKED (their views + state slices stay on disk, just
  * not mounted here) so the launch Finance is base, simple, and honest. Holds

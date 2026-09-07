@@ -132,7 +132,7 @@ export default function ImportStatement({ open, onClose, actions, currentCurrenc
         {stage === 'upload' && (
           <>
             <p className={styles.importDesc}>
-              Drop a bank statement, portfolio screenshot, or any finance dashboard. Vitality reads the balances and stages them for review.
+              Drop a bank statement, portfolio screenshot, or any finance dashboard. Imperium reads the balances and stages them for review.
             </p>
             <label
               className={`${styles.dropZone} ${dragging ? styles.dropZoneActive : ''}`}

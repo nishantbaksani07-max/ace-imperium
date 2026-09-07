@@ -59,7 +59,7 @@
   gap: var(--space-3);
 }
 
-/* Vitality Score badge — primary; mirrors Peak's visual treatment */
+/* Imperium Score badge — primary; mirrors Peak's visual treatment */
 .scoreCard {
   display: inline-flex;
   align-items: center;

@@ -15,7 +15,7 @@ import WelcomeToPro from './WelcomeToPro'
  * route via Checkout just paid. Re-running the route after the
  * webhook fires shows the same celebration, which is harmless.
  *
- * Reads first_name so Vitality (the character — see memory:
+ * Reads first_name so Imperium (the character — see memory:
  * vitality-as-character) can greet the user by name.
  */
 export default async function WelcomeToProRoute() {

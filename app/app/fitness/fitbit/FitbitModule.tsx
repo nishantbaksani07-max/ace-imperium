@@ -110,7 +110,7 @@ export default function FitbitModule({ view }: Props) {
   }
 
   const onDisconnect = async () => {
-    if (!confirm('Disconnect your Fitbit account? Vitality will stop pulling new data.')) return
+    if (!confirm('Disconnect your Fitbit account? Imperium will stop pulling new data.')) return
     await fetch('/api/fitbit/disconnect', { method: 'POST' })
     router.refresh()
   }
@@ -157,7 +157,7 @@ function ConnectPanel() {
   return (
     <section className={styles.connectPanel}>
       <p className={styles.connectIntro}>
-        Bring your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> into Vitality.
+        Bring your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> into Imperium.
         One tap. Sign in with Fitbit, allow access, you&rsquo;re back here.
       </p>
       <p className={styles.connectSub}>We never see your Fitbit password. You can disconnect anytime.</p>
@@ -195,10 +195,10 @@ function NoDataPanel({
 
 function VitalityScoreBadge({ score, tier }: { score: number; tier: string }) {
   return (
-    <aside className={styles.scoreBadge} aria-label="Vitality Score">
+    <aside className={styles.scoreBadge} aria-label="Imperium Score">
       <div className={styles.scoreNumber}>{score}</div>
       <div className={styles.scoreCol}>
-        <div className={styles.scoreLabel}>Vitality Score</div>
+        <div className={styles.scoreLabel}>Imperium Score</div>
         <div className={styles.scoreTier}>{tier}</div>
       </div>
     </aside>

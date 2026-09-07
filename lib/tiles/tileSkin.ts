@@ -20,7 +20,7 @@
  *   m    2x1  standard band
  *   tall 1x2  vertical accent (old Fuel / Peak / Brand)
  *   hero 3x1  the hero (old Train)
- *   big  2x2  centrepiece (old Vee)
+ *   big  2x2  centrepiece (old Imperium)
  *   band 4x1  full-width (old Finance / Create)
  *   l    4x2  showcase — a user tile can outdo the hero
  */

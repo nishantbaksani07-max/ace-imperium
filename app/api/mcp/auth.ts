@@ -111,7 +111,7 @@ async function resolveCredential(bearer: string, env: McpEnv): Promise<Resolved 
 }
 
 /** Build the per-request RLS-scoped client: the minted JWT rides as the Bearer
- *  to Vitality's own Supabase (and nowhere else), so auth.uid() = userId. The
+ *  to Imperium's own Supabase (and nowhere else), so auth.uid() = userId. The
  *  granted scopes travel on the client so write tools can refuse a read-only
  *  credential — RLS already confines rows; scope confines capability. */
 function buildVitalityDb(userId: string, scope: string, env: McpEnv): VitalityDb {

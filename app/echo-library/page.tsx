@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import EchoLibrary from './EchoLibrary'
 
 export const metadata: Metadata = {
-  title: 'Echo · coach lab · Vitality',
+  title: 'Echo · coach lab · Imperium',
   description: 'The lab for Echo, the macro AI recommender coach — build its coaching greetings, moods, and pulses.',
 }
 

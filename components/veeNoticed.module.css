@@ -1,5 +1,5 @@
-/* Vee - the launch surface, stripped to its two things: the Echo gem (Vee's face)
-   and the one "Vitality Noticed" card. Backdrop + glass are the real Vitality
+/* Imperium - the launch surface, stripped to its two things: the Echo gem (Imperium's face)
+   and the one "Imperium Noticed" card. Backdrop + glass are the real Imperium
    standard, harvested 1:1 from the mentor surface (aurora, mountains, drifting
    particles, grain, mint-bordered glass). Iris is Echo's own gem tint; the surface
    chrome stays mint per the app standard. No walls, no stacked sections. */
@@ -110,7 +110,7 @@
 .back:hover { border-color: var(--line); color: var(--tx); transform: translateX(-2px); }
 .back svg { width: 11px; height: 11px; fill: none; stroke: var(--mint); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------------------------------------------------- 1 · the Echo gem hero (Vee's face) */
+/* ---------------------------------------------------- 1 · the Echo gem hero (Imperium's face) */
 .hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; animation: riseIn 0.9s var(--ease) 0.12s both; }
 .gemStage { position: relative; width: min(300px, 74vw); aspect-ratio: 1; display: grid; place-items: center; }
 .gemStage::after {
@@ -126,7 +126,7 @@
 .status { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--tx-faint); }
 .status .sd { width: 5px; height: 5px; border-radius: 50%; background: var(--iris); box-shadow: 0 0 8px var(--iris); animation: pulseDot 2.8s ease-in-out infinite; }
 
-/* ---------------------------------------------------- 2 · the one "Vitality Noticed" card */
+/* ---------------------------------------------------- 2 · the one "Imperium Noticed" card */
 .noticed {
   position: relative; overflow: hidden;
   border: 1px solid rgba(110, 231, 183, 0.5); border-radius: 20px;
@@ -237,7 +237,7 @@
 
 /* ---------------------------------------------------- cold start */
 /* ONE cozy card: the same frame language as .noticed (glass, mint border, rounded,
-   the top edge glow), holding the untouched RarityClimb. Iris --rc = Vee's accent
+   the top edge glow), holding the untouched RarityClimb. Iris --rc = Imperium's accent
    on the edge. Springy entrance reuses panelIn; the rungs inside keep their own
    staggered cascade. Reduced motion: the .root * override renders it instantly. */
 .coldCard {
@@ -289,7 +289,7 @@
 /* the mono eyebrow (cold-start card + the first-ever-click intro overlay) */
 .introEyebrow { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--iris-hi); }
 
-/* "how Vee works" info pill (persistent, replays the climb) */
+/* "how Imperium works" info pill (persistent, replays the climb) */
 .infoBtn {
   display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--tx-faint); border: 1px solid var(--hair); border-radius: 999px; padding: 7px 13px;

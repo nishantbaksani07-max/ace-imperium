@@ -40,7 +40,7 @@ const COZY: CozyItem[] = [
 
 /**
  * Schedule editor — the card page behind "When to take them". Toggle time
- * blocks, set each supplement's block, and follow Vitality's recommended intake
+ * blocks, set each supplement's block, and follow Imperium's recommended intake
  * conditions. On open it plays a brief cozy "reading your stack" moment, then
  * each supplement shows the recommended tag(s) it knows (from DB_CONDITION_HINTS)
  * with a one-tap "Use these"; "Edit" opens the full colour-coded label library.
@@ -142,7 +142,7 @@ export default function ScheduleEditor({
                       </div>
                     </div>
 
-                    {/* Vitality recommendation */}
+                    {/* Imperium recommendation */}
                     <div className={styles.recRow}>
                       <span className={styles.recLbl}>
                         <VitalityIcon name="sparkles" size={12} /> We suggest

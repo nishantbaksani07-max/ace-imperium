@@ -1,7 +1,7 @@
 /**
- * Tile context — the compact "their tiles" block for Vee's chat brain. Turns a
+ * Tile context — the compact "their tiles" block for Imperium's chat brain. Turns a
  * user's reported streams into a handful of dense, factual lines the mentor
- * route can drop into its context block, so Vee can talk about the tiles the
+ * route can drop into its context block, so Imperium can talk about the tiles the
  * user BUILT (the beer tracker, the reading timer) as naturally as it talks
  * about workouts and water.
  *
@@ -36,7 +36,7 @@ function lineFor(d: StreamDigest, keys7: string[], keys28: string[]): string {
   const days7 = week.length
 
   // The parenthetical: the canonical family when it adds signal (beer ->
-  // alcohol), plus the stated goal so Vee reads the number the right way.
+  // alcohol), plus the stated goal so Imperium reads the number the right way.
   const parts: string[] = []
   if (def.canonicalKey && def.canonicalKey !== def.key.trim().toLowerCase()) {
     parts.push(def.canonicalKey)

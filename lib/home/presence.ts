@@ -1,6 +1,6 @@
 /**
  * lib/home/presence.ts - pure presence + anticipation derivations for the
- * "Vitality, I'm home" ritual.
+ * "Imperium, I'm home" ritual.
  *
  * THE LAW of the ritual:
  *   1. ZERO-INPUT - the ritual never asks for what the account can tell it.

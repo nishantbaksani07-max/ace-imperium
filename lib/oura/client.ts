@@ -39,7 +39,7 @@ export function ouraRedirectUri(): string {
 // Oura is bring-your-own-credentials: each user supplies the client_id /
 // client_secret of their own free Oura developer app (the shared app is capped
 // while it waits on Oura's approval). The redirect_uri is still ours - the same
-// Vitality callback for every user, which they register in their own Oura app.
+// Imperium callback for every user, which they register in their own Oura app.
 export function buildAuthUrl(state: string, clientId: string): string {
   const params = new URLSearchParams({
     response_type: 'code',

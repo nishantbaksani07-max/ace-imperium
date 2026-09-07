@@ -22,9 +22,9 @@ import styles from './privacy.module.css'
  */
 
 export const metadata = {
-  title: 'Privacy · Vitality',
+  title: 'Privacy · Imperium',
   description:
-    'What Vitality collects, where it lives, and the promises we make about your health data. Plain English, no legalese.',
+    'What Imperium collects, where it lives, and the promises we make about your health data. Plain English, no legalese.',
 }
 
 const EFFECTIVE = '2026-07-10'
@@ -108,10 +108,10 @@ export default function PrivacyPage() {
       <div className={styles.inner}>
         <nav className={styles.chrome}>
           <a className={styles.wordmark} href="/">
-            Vitality
+            Imperium
           </a>
           <a className={styles.chromeLink} href="/">
-            Back to Vitality
+            Back to Imperium
           </a>
         </nav>
 
@@ -124,7 +124,7 @@ export default function PrivacyPage() {
             Your data is <em>yours</em>. Here is exactly how we treat it.
           </h1>
           <p className={styles.lede}>
-            Vitality is a personal dashboard. You log your life into it, and
+            Imperium is a personal dashboard. You log your life into it, and
             the whole product is rendering that life back to you. That only
             works if you can trust where the data goes, so this page says it
             plainly: <b>what we collect, where it lives, and what we will
@@ -197,7 +197,7 @@ export default function PrivacyPage() {
             <span className={styles.rule} />
           </div>
           <p className={styles.body}>
-            Vitality members log <b>personal health and fitness data</b>:
+            Imperium members log <b>personal health and fitness data</b>:
             workouts, body weight, nutrition, hydration, supplements, mood,
             and wearable metrics like sleep and recovery. This deserves the
             strongest promises on the page:
@@ -265,14 +265,14 @@ export default function PrivacyPage() {
           </div>
           <div className={styles.claude}>
             <p className={styles.body}>
-              You can connect Vitality to Claude as a{' '}
+              You can connect Imperium to Claude as a{' '}
               <a href="/connect">custom connector</a>. When you do, the
               connection is authorized by <b>you, for you</b>: every tool
               reads and writes <b>only your rows</b>, through your own
               authorization, under the same row-level security as the app.
               Connecting does not open your data to other users, and it does
               not open other users&apos; data to you. <b>Your conversation
-              with Claude is never collected</b> by Vitality: tools receive
+              with Claude is never collected</b> by Imperium: tools receive
               only the specific request they need to answer, and you can
               disconnect at any time from your Claude settings.
             </p>
@@ -286,7 +286,7 @@ export default function PrivacyPage() {
             <span className={styles.rule} />
           </div>
           <p className={styles.body}>
-            Vitality is built by two people, so privacy questions get read by
+            Imperium is built by two people, so privacy questions get read by
             a human who can actually change things. Write to us:
           </p>
           <a className={styles.contact} href={`mailto:${CONTACT}`}>
@@ -298,7 +298,7 @@ export default function PrivacyPage() {
         <footer className={styles.foot}>
           <span>
             <span className={styles.footDot} />
-            Vitality Studio
+            Imperium Studio
           </span>
           <span>
             Effective {EFFECTIVE} &nbsp;·&nbsp;{' '}

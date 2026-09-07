@@ -2,13 +2,13 @@
 
 /**
  * The Vitals Signal hero — today's fused, personal read (·01 on the readings
- * page). WHOOP knows your recovery; only Vitality also knows your training load,
- * your fuel, your goal, and what you told Vee. This card shows that one fused
+ * page). WHOOP knows your recovery; only Imperium also knows your training load,
+ * your fuel, your goal, and what you told Imperium. This card shows that one fused
  * call (push / steady / recover) with the transparent signals that fed it.
  *
  * Renders the azure signalCard from public/vitals-signals-kit.html via a CSS
  * module, inside the shared numbered-section eyebrow from the page's vitals
- * module so it slots in as the first section. The "talk about this with Vee"
+ * module so it slots in as the first section. The "talk about this with Imperium"
  * pill bridges through the existing mentorSeed pattern (stash + route to the
  * mentor), exactly like VitalsDashboard.openMentor. Renders nothing if there is
  * no signal.
@@ -96,7 +96,7 @@ export default function SignalCard({ signal, sectionNum = '·01' }: { signal: Si
         )}
 
         <button type="button" className={styles.talkPill} onClick={(e) => { e.stopPropagation(); openMentor() }}>
-          ◇ talk about this with Vee
+          ◇ talk about this with Imperium
         </button>
       </div>
 

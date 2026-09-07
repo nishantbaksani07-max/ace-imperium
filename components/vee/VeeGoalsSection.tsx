@@ -17,7 +17,7 @@ import type { CoreGraph, CoreGroup } from '@/lib/insights/coreRoom'
 import type { LifeChip } from '@/lib/insights/lifeChips'
 
 /**
- * VeeGoalsSection - the FULL goals engine fused into the new Vee page, wearing
+ * VeeGoalsSection - the FULL goals engine fused into the new Imperium page, wearing
  * the vee-notice-preview board signature:
  *
  *   - board: "YOUR GOALS, LIVE · N DAYS OF DATA · TAP ONE" mono head, one row
@@ -68,9 +68,9 @@ const PUSH_OPTS: { key: Push; title: string; desc: string }[] = [
   { key: 'push', title: 'Push me to show up', desc: 'I check in often and keep you honest.' },
   { key: 'silent', title: 'Keep it silent', desc: 'I will not say a word. This one is just for you.' },
 ]
-const PUSH_CHIP: Record<Push, string> = { silent: 'Vee · silent', gentle: 'Vee · gentle', balanced: 'Vee · nudges', push: 'Vee · pushes' }
+const PUSH_CHIP: Record<Push, string> = { silent: 'Imperium · silent', gentle: 'Imperium · gentle', balanced: 'Imperium · nudges', push: 'Imperium · pushes' }
 const PUSH_SHORT: Record<Push, string> = { silent: 'Silent', gentle: 'Gentle', balanced: 'Nudges', push: 'Pushes' }
-/** Bars per level: how loud Vee gets, 1 (silent) to 4 (pushes). */
+/** Bars per level: how loud Imperium gets, 1 (silent) to 4 (pushes). */
 const PUSH_LEVEL: Record<Push, number> = { silent: 1, gentle: 2, balanced: 3, push: 4 }
 /** The REAL drift cadence, verified against lib/goals/drift.ts: shownWindow
  *  gives push=1 day, gentle=4 days, default (balanced)=COOLDOWN_DAYS.shown=2;
@@ -81,7 +81,7 @@ const PUSH_MEANING: Record<Push, string> = {
   gentle: 'I speak up after 4 quiet days.',
   silent: 'I never reach out first. This one is just for you.',
 }
-/** The 1-4 bars meter: filled bars = how loud Vee gets about this goal. */
+/** The 1-4 bars meter: filled bars = how loud Imperium gets about this goal. */
 const PushBars = ({ level }: { level: number }) => (
   <svg width="13" height="11" viewBox="0 0 26 22" aria-hidden>
     {[0, 1, 2, 3].map(i => (
@@ -110,7 +110,7 @@ const GLYPH: Record<string, ReactNode> = {
   default: <><circle cx="0" cy="0" r="7" /><path d="M-3 0 L-1 3 L4 -4" /></>,
 }
 
-/* Honest, deterministic cold-start line per goal category: what to feed Vee to
+/* Honest, deterministic cold-start line per goal category: what to feed Imperium to
    bring this goal to life. Each line promises ONLY what the engine actually does
    with that data (the ticker draws weight/lift/training graphs; net worth and
    followers feed the guide's grounded reads, not a graph). No AI, no invented
@@ -120,11 +120,11 @@ const FEED_ME: Record<GoalCategory, string> = {
   health: 'log a weigh-in and I will start drawing this.',
   money: 'update your net worth in Finance and I start watching where your money is heading.',
   audience: 'save a follower snapshot in Brand and I start reading your growth.',
-  career: 'jot a note in Vee when something moves and I will keep the thread.',
-  craft: 'jot a note in Vee when you finish a piece and I will keep the thread.',
-  people: 'write a note in Vee after time well spent and I will start counting the good days.',
-  mind: 'write a note in Vee each day and I will start measuring your good days.',
-  general: 'write a note in Vee each day and I will start measuring your good days.',
+  career: 'jot a note in Imperium when something moves and I will keep the thread.',
+  craft: 'jot a note in Imperium when you finish a piece and I will keep the thread.',
+  people: 'write a note in Imperium after time well spent and I will start counting the good days.',
+  mind: 'write a note in Imperium each day and I will start measuring your good days.',
+  general: 'write a note in Imperium each day and I will start measuring your good days.',
 }
 function feedMeLine(category: GoalCategory | null, title: string, leverModule?: GuideModule): string {
   // An injury/rehab goal never earns the "log a session" push: the guide
@@ -178,7 +178,7 @@ function sourceLabel(source: HabitGoal['source']): string {
     case 'fitness': return 'from your workouts'
     case 'supplements': return 'from supplements'
     case 'finance': return 'from finance'
-    case 'mentor': return 'from a note to Vee'
+    case 'mentor': return 'from a note to Imperium'
     default: return 'you tap when done'
   }
 }
@@ -523,7 +523,7 @@ const CORE_GROUP_HREF: Record<CoreGroup, string> = {
 }
 
 function claudeHref(title: string): string {
-  const q = `My Vitality goal: "${title}". Vee is steering it with my real data. Help me plan this week to move it.`
+  const q = `My Imperium goal: "${title}". Imperium is steering it with my real data. Help me plan this week to move it.`
   return `https://claude.ai/new?q=${encodeURIComponent(q)}`
 }
 
@@ -732,7 +732,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
     }
   }
 
-  // Change how much Vee shows up about a goal. Optimistic; revert if the write
+  // Change how much Imperium shows up about a goal. Optimistic; revert if the write
   // fails. Sequenced per goal so a slow older response can never overwrite a
   // newer choice (tap Pushes then Silent = two racing fetches).
   async function changePush(g: BigGoal, push: Push) {
@@ -775,7 +775,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
     setLibGoalId(cur => (cur === goalId ? null : goalId))
   }
 
-  // "What steers this": persist the user's pick (or null = let Vee decide).
+  // "What steers this": persist the user's pick (or null = let Imperium decide).
   // Optimistic; revert on failure; sequenced per goal like changePush.
   async function changeBinding(g: BigGoal, binding: string | null) {
     setLibGoalId(null)
@@ -873,7 +873,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
           </div>
         </div>
         <div className={gs.field}>
-          <span className={gs.fieldLabel}>How much should Vee push you?</span>
+          <span className={gs.fieldLabel}>How much should Imperium push you?</span>
           <div className={gs.pushRow}>
             {PUSH_OPTS.map(o => (
               <button type="button" key={o.key} className={`${gs.pushOpt} ${draftPush === o.key ? gs.pushOptOn : ''}`} onClick={() => setDraftPush(o.key)}>
@@ -1139,12 +1139,12 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
                           onClick={() => { setLibGoalId(null); setEditPushId(cur => (cur === g.id ? null : g.id)) }}
                           aria-expanded={editPushId === g.id}
                           aria-controls={`push-edit-${g.id}`}
-                          aria-label={`change how much Vee shows up about ${title}`}
+                          aria-label={`change how much Imperium shows up about ${title}`}
                         ><VMark size={11} />{PUSH_CHIP[g.push]}</button>
                         <button className={gs.miniDelete} onClick={() => removeBigGoal(g.id)} aria-label={`remove ${title}`}>remove</button>
                       </div>
                       {editPushId === g.id && (
-                        <div className={gs.pushEdit} id={`push-edit-${g.id}`} role="group" aria-label="How much should Vee show up">
+                        <div className={gs.pushEdit} id={`push-edit-${g.id}`} role="group" aria-label="How much should Imperium show up">
                           {PUSH_OPTS.map(o => (
                             <button
                               type="button"
@@ -1159,7 +1159,7 @@ export default function VeeGoalsSection({ goals: initialGoals, habits: initialHa
                         </div>
                       )}
 {/* The inline chip strip is retired (2026-07-12): "what steers
-                          this" is THE GRAPH LIBRARY modal now - Vee's module
+                          this" is THE GRAPH LIBRARY modal now - Imperium's module
                           picks + every core graph, opened from the steered-by
                           chip or the Choose-the-graph button. */}
                     </div>

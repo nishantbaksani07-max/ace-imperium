@@ -83,19 +83,19 @@ export default function ContextNotes({ initialFacts }: { initialFacts: ContextFa
 
   if (closed) {
     return (
-      <section className={styles.contextSec} aria-label="what Vee should know">
+      <section className={styles.contextSec} aria-label="what Imperium should know">
         <div className={styles.secHead}>
           <span className={styles.secEyebrow}>context</span>
-          <span className={styles.secTitle}>What Vee should know</span>
+          <span className={styles.secTitle}>What Imperium should know</span>
           <span className={styles.secRule} aria-hidden />
         </div>
-        <p className={styles.ctxClosed}>That is plenty for now. Vee can take it from here.</p>
+        <p className={styles.ctxClosed}>That is plenty for now. Imperium can take it from here.</p>
       </section>
     )
   }
 
   return (
-    <section className={styles.contextSec} aria-label="what Vee should know">
+    <section className={styles.contextSec} aria-label="what Imperium should know">
       {/* shared glyph gradient */}
       <svg width={0} height={0} style={{ position: 'absolute' }} aria-hidden>
         <defs>
@@ -108,7 +108,7 @@ export default function ContextNotes({ initialFacts }: { initialFacts: ContextFa
 
       <div className={styles.secHead}>
         <span className={styles.secEyebrow}>context</span>
-        <span className={styles.secTitle}>What Vee should know</span>
+        <span className={styles.secTitle}>What Imperium should know</span>
         <span className={styles.secRule} aria-hidden />
       </div>
 
@@ -209,7 +209,7 @@ export default function ContextNotes({ initialFacts }: { initialFacts: ContextFa
           />
         </div>
       ) : (
-        <button className={styles.freeLink} type="button" onClick={() => setShowFree(true)}>or tell Vee something in your own words</button>
+        <button className={styles.freeLink} type="button" onClick={() => setShowFree(true)}>or tell Imperium something in your own words</button>
       )}
     </section>
   )

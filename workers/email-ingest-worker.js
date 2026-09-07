@@ -1,8 +1,8 @@
 /**
- * Vitality inbound-email Worker  (BUILD71)
+ * Imperium inbound-email Worker  (BUILD71)
  * =========================================
  * Cloudflare Email Routing delivers any message sent to  *@in.<yourdomain>  to
- * this Worker. It parses the MIME, then POSTs the parts to Vitality's
+ * this Worker. It parses the MIME, then POSTs the parts to Imperium's
  * /api/wearables/email, which reverses the u-<handle>@ address back to a user,
  * runs the Claude extractor on the text, and saves the reading.
  *

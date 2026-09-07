@@ -1,7 +1,7 @@
 'use server'
 
 /**
- * "Vitality noticed" cooldown write (step 3 of the cross-domain engine). Mirrors
+ * "Imperium noticed" cooldown write (step 3 of the cross-domain engine). Mirrors
  * the drift logDriftShown action: RLS-scoped, never throws to the client. When a
  * fusion seam is surfaced on the §01 card, the client logs the show so that
  * pattern rests on its cooldown (see lib/insights/noticedLedger.ts) and the next

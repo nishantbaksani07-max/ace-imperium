@@ -1,5 +1,5 @@
 /* ACT 3 - GYM. Renders inside the homecoming stage (shell owns the backdrop,
-   docked gem, exit, crossfades). One non-scrolling column: Vee line, the
+   docked gem, exit, crossfades). One non-scrolling column: Imperium line, the
    session button-card, the peak-window line, the quiet skip. */
 
 .act {
@@ -11,7 +11,7 @@
   margin-top: 110px;
 }
 
-/* Vee's one-line bubble - same voice as the shell. */
+/* Imperium's one-line bubble - same voice as the shell. */
 .vee {
   display: flex;
   align-items: baseline;

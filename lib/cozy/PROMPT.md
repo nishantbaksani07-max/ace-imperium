@@ -13,7 +13,7 @@ count line for more lines per section.
 
 ---
 
-You are writing micro-copy for Vitality, a warm life-organization app (workouts, food, money, goals, wearables). Vitality is a made-up character who genuinely loves the user and wants to help them get their life in order. These lines appear on a small "cozy loader" card during short waits (while something analyzes, thinks, or loads) and in empty states. Each line is a tiny gift for the wait: friendly, true, and a little delightful. They are flavor, never instructions the user acts on or logs against.
+You are writing micro-copy for Imperium, a warm life-organization app (workouts, food, money, goals, wearables). Imperium is a made-up character who genuinely loves the user and wants to help them get their life in order. These lines appear on a small "cozy loader" card during short waits (while something analyzes, thinks, or loads) and in empty states. Each line is a tiny gift for the wait: friendly, true, and a little delightful. They are flavor, never instructions the user acts on or logs against.
 
 Generate fun, lovely one-line entries for the cozy loader, for every section listed below.
 
@@ -38,7 +38,7 @@ Each entry object has exactly three fields:
 HARD RULES:
 - No em dashes or en dashes anywhere. Use periods, commas, or the word "and". (This reads as AI writing otherwise.)
 - No emojis. No exclamation spam. No jargon. No medical, financial, or training advice phrased as a command. These are warm flavor, not coaching.
-- Keep Vitality's voice: confident, cozy, kind, a friend who is glad you showed up. Never corny, never guilt, never salesy.
+- Keep Imperium's voice: confident, cozy, kind, a friend who is glad you showed up. Never corny, never guilt, never salesy.
 - Vary sentence openings and length across each set. No two entries start the same way. No duplicate ideas.
 - Every highlight must be a real substring of its own text. Check each one.
 - Produce 30 entries per section.
@@ -49,7 +49,7 @@ SECTIONS (id - the moment it shows - voice - allowed tones with when to use each
    { "text": "Most meals get better with a handful of something green.", "highlight": "something green", "tone": "mint" }
    { "text": "A little fat helps you actually absorb the good stuff.", "highlight": "absorb the good stuff", "tone": "amber" }
 
-1) mentor - shown while the AI mentor is thinking about a reply - warm, gentle, affirming, like Vitality speaking softly to a friend - tones: violet (calm, reflective), rose (tender, kind on a hard day), mint (affirming, hopeful)
+1) mentor - shown while the AI mentor is thinking about a reply - warm, gentle, affirming, like Imperium speaking softly to a friend - tones: violet (calm, reflective), rose (tender, kind on a hard day), mint (affirming, hopeful)
    { "text": "You showed up today, and that is the whole game.", "highlight": "showed up today", "tone": "mint" }
    { "text": "Rest is part of the plan, not a break from it.", "highlight": "part of the plan", "tone": "violet" }
 

@@ -33,7 +33,7 @@ export interface DetailTile {
   id: string
   name: string
   tagline: string
-  /** Byline: 'Vitality' for first-party, '@handle' (or a fallback) for community. */
+  /** Byline: 'Imperium' for first-party, '@handle' (or a fallback) for community. */
   byline: string
   category: string
   /** Card accent hex (mint by default). Recolors the design SVG. */
@@ -97,8 +97,8 @@ async function publishedById(id: string): Promise<DetailTile | null> {
       source: 'published',
       id: row.id as string,
       name: row.name as string,
-      tagline: 'A tile from the Vitality community, free to add.',
-      byline: handle ? `@${handle}` : 'a Vitality maker',
+      tagline: 'A tile from the Imperium community, free to add.',
+      byline: handle ? `@${handle}` : 'a Imperium maker',
       category: envelope.category ?? 'Tile',
       accent: envelope.color || undefined,
       design: envelope.design,
@@ -125,23 +125,23 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tile = await resolveTile(params.id)
-  if (!tile) return { title: 'Tile not found | Vitality' }
+  if (!tile) return { title: 'Tile not found | Imperium' }
 
-  const title = `${tile.name} | Vitality Arts District`
-  const description = `${tile.tagline} Add ${tile.name} to your Vitality dashboard in one tap. By ${tile.byline}.`
+  const title = `${tile.name} | Imperium Arts District`
+  const description = `${tile.tagline} Add ${tile.name} to your Imperium dashboard in one tap. By ${tile.byline}.`
   return {
     title,
     description,
     openGraph: {
-      title: `${tile.name} | Vitality`,
+      title: `${tile.name} | Imperium`,
       description: tile.tagline,
       url: `/district/${tile.id}`,
-      siteName: 'Vitality',
+      siteName: 'Imperium',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${tile.name} | Vitality`,
+      title: `${tile.name} | Imperium`,
       description: tile.tagline,
     },
   }

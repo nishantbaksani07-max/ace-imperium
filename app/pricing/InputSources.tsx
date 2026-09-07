@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import styles from './pricing.module.css'
 
 /**
- * InputSources — the Vitality AI avatar (the gem) watching a live screen
+ * InputSources — the Imperium AI avatar (the gem) watching a live screen
  * that auto-cycles through the real app modules: workout logger, water,
  * fuel, sleep, weight, supplements, subscriptions, holdings, goals,
  * business. It shows, animated, that the gem reads your whole life — the
@@ -21,7 +21,7 @@ const HeroCrystal = dynamic(() => import('@/components/HeroCrystal'), {
 
 type Row = { l: string; v: string; tone?: 'mint' | 'amber' | 'iris' }
 // `img` is an optional real screenshot (path under /public). When set, the
-// avatar shows the real Vitality screen instead of the mock. Drop a file in
+// avatar shows the real Imperium screen instead of the mock. Drop a file in
 // public/pricing-shots/ and point img at it — e.g. '/pricing-shots/water.png'.
 type Screen = { title: string; tag: string; rows: Row[]; note: string; img?: string }
 type Module = { key: string; name: string; screen: Screen }

@@ -9,11 +9,11 @@ import type { Note } from '@/app/app/mentor/types'
 import type { MoodPoint } from '@/app/app/mentor/moodData'
 import { buildHandoffContext } from '@/lib/vee/claudeHandoff'
 
-export const metadata = { title: 'Vee · preview' }
+export const metadata = { title: 'Imperium · preview' }
 
 /**
- * /vee-live-preview - a public, no-auth look at the launch Vee (Echo gem, the
- * run-stats strip, the showcase-design Vitality Noticed card incl. a
+ * /vee-live-preview - a public, no-auth look at the launch Imperium (Echo gem, the
+ * run-stats strip, the showcase-design Imperium Noticed card incl. a
  * deterministic one-tap action, the notice-preview goals board, life chips,
  * and the kept bottom strip) with representative mock data, so the visual can
  * be reviewed without logging in.
@@ -173,7 +173,7 @@ const GUIDES: Record<string, GuideItem[]> = {
   // the lightbulb is the note-a-day lever and the create-tile door joins it.
   g5: [
     {
-      module: 'notes', label: 'Write a note in Vee', href: '/app/mentor', using: false, preview: 'wave',
+      module: 'notes', label: 'Write a note in Imperium', href: '/app/mentor', using: false, preview: 'wave',
       why: 'Write a note each day and I measure your good days.',
       key: 'I measure your good days',
     },

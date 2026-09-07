@@ -1,4 +1,4 @@
-/* The Vitality "info button" (the /i_info pattern, as a React component): a
+/* The Imperium "info button" (the /i_info pattern, as a React component): a
    small circled-i that sits to the right of the "Today's fuel" title and opens
    a spring-pop popup explaining the whole Fuel section. The theme (Step 1 of
    /i_info) is already global via app/globals.css, so this only needs the button

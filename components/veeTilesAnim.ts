@@ -1,8 +1,8 @@
 // @ts-nocheck
 /* eslint-disable */
-/* ── Vee dashboard tile animations ──
+/* ── Imperium dashboard tile animations ──
    Ported 1:1 from public/vee-dashboard.html (the approved mockup). Two effects:
-   (1) the Vee centre — wire lights → ring colour pulse, V idle flicker, periodic
+   (1) the Imperium centre — wire lights → ring colour pulse, V idle flicker, periodic
    score reveal; (2) the living orbs + rare mini pulse-bursts on every tile.
    All DOM queries are scoped to `root` (the .veeTiles element) and every timer /
    rAF is tracked so initVeeTiles can be fully torn down on unmount. */
@@ -11,10 +11,10 @@ export function initVeeTiles(
   root: HTMLElement,
   opts?: { score?: number | null; showNumber?: boolean },
 ): () => void {
-  // The real Vitality Score drives the reveal. When there's no number to show
+  // The real Imperium Score drives the reveal. When there's no number to show
   // (no-routine), the score reveal loop is skipped entirely so the animation
   // never paints a stale digit over the "Set up your routine" prompt. It also
-  // requires the .vnum node: the number was removed from the home-grid Vee tile
+  // requires the .vnum node: the number was removed from the home-grid Imperium tile
   // markup, and the whole reveal path dereferences it (revealNumber, runScore).
   const showNumber = opts?.showNumber !== false && opts?.score != null && !!root.querySelector('.vnum')
   // Score shows out of 10 with one decimal (67 -> "6.7"). fmt10 is the single
@@ -35,8 +35,8 @@ export function initVeeTiles(
   }
   const cancelAnimationFrame = (id: number) => { window.cancelAnimationFrame(id); rafs.delete(id) }
 
-  /* ── Vee tile ── */
-  // The Vee-centre animation (wire feeds, ring pulse, score reveal) is decorative
+  /* ── Imperium tile ── */
+  // The Imperium-centre animation (wire feeds, ring pulse, score reveal) is decorative
   // and INDEPENDENT of the living orbs below. Isolate it in try/catch: if a tile
   // variant is missing a node this loop dereferences, that error must never abort
   // initVeeTiles before the orb-placement pass runs — an unplaced orb strands at
@@ -60,7 +60,7 @@ export function initVeeTiles(
     const vpaths=[...vgrp.querySelectorAll('path')];
     let tintAnims=[];
     function ringPulse(color){
-      // The Vee tile ships in variants: the score number (.vnum) was removed from
+      // The Imperium tile ships in variants: the score number (.vnum) was removed from
       // the home-grid tile, and a variant may drop the ring group too. Guard each
       // optional node so the pulse skips a missing embellishment instead of
       // throwing "null .animate" on every wire cycle (the console-spam bug).

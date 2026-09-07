@@ -1,4 +1,4 @@
-// Pure mood helpers. Mood is stored as a user_facts row (no new table) so Vee
+// Pure mood helpers. Mood is stored as a user_facts row (no new table) so Imperium
 // reads it everywhere. body is human-readable AND parseable for the 7-day strip.
 
 export const MOOD_SOURCE = 'mental_health'

@@ -7,11 +7,11 @@
  * box. They type their question (their words lead), the live session is
  * attached automatically as context, and "Open in Claude" opens a fresh Claude
  * chat pre-filled with both via claude.ai/new?q= — the same zero-cost-to-us
- * pattern Finance uses. If they have the Vitality MCP connector set up, Claude
+ * pattern Finance uses. If they have the Imperium MCP connector set up, Claude
  * can also pull their history, sleep, and readiness live. No new API route, no
  * Anthropic spend on our side.
  *
- * Look is mint (logger-native); it mirrors the Vee "open in Claude" doorway.
+ * Look is mint (logger-native); it mirrors the Imperium "open in Claude" doorway.
  */
 
 import { useEffect, useRef, useState } from 'react'

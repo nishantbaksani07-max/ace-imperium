@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Canonical Vitality glyphs — flat SVG ports of the crystal-library
+ * Canonical Imperium glyphs — flat SVG ports of the crystal-library
  * canvas paths (design-iterations/crystal-library/index.html). Used as
  * the per-quiz icon that overlays the V crystal on the celebration
  * screen: the quiz's own mark flickers out and the CHECK glyph

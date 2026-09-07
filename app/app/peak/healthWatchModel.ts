@@ -7,7 +7,7 @@
  * standalone's demo state. No fabricated values: a signal only fires when the
  * data that triggers it is really present.
  *
- * Scope note: Vitality currently logs `caffeine`, `depressant` (alcohol),
+ * Scope note: Imperium currently logs `caffeine`, `depressant` (alcohol),
  * `hydration`, `supplement` and `workout`. The standalone additionally tracked
  * ADHD meds, nicotine and antidepressants — those signals are intentionally
  * absent here until those categories become loggable, rather than faked.

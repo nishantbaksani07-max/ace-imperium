@@ -74,7 +74,7 @@ interface CoachSectionProps {
 
 // The day score, shown simply: a big number out of ten in the display font,
 // mint when good / amber when it needs work. No ring (Alex, 2026-07-11: "revert
-// back to one score, just the two Vitality colors and the font, no stupid rings").
+// back to one score, just the two Imperium colors and the font, no stupid rings").
 // Keeps the count-up so a fresh score still animates in.
 function ScoreNumber({ score }: { score: number }) {
   const tone = score >= 7 ? 'good' : 'watch'
@@ -286,7 +286,7 @@ export default function CoachSection({ proteinTarget, kcalTarget, foodStoryDone 
     if (proteinTarget > 0 && totals.protein >= proteinTarget) celebrate('protein')
     else if (shownScore >= 9 && frac >= 0.5) celebrate('score')
 
-    // Feed today's read into the shared memory so Vee + the connection web can
+    // Feed today's read into the shared memory so Imperium + the connection web can
     // speak to the user's fuel. Fire-and-forget, never blocks the UI.
     void syncCoachFact(foodDayKey, `Fuel today is ${shownScore} out of 10, tuned for ${goalLabel(goalMode)}. ${ds.headline}`)
   // eslint-disable-next-line react-hooks/exhaustive-deps -- restrictions read via stable restrictionsKey

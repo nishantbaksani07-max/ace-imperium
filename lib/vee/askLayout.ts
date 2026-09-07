@@ -1,11 +1,11 @@
 /*
- * Vee ask-card layout picker.
+ * Imperium ask-card layout picker.
  *
- * Vee asks every clarifying question as a cozy card, but a paid app should never
+ * Imperium asks every clarifying question as a cozy card, but a paid app should never
  * feel repetitive, so each card wears one of a family of layouts and one of a
  * pool of slow entrance + lead-reveal animations, chosen to fit the question and
  * rotated so the same shape never shows twice in a row. The visual designs live
- * in public/mentor-ask-layouts.html (the kit library, Page 3 of the Vee kit).
+ * in public/mentor-ask-layouts.html (the kit library, Page 3 of the Imperium kit).
  *
  * Pure + deterministic given its inputs (the randomness is injected by the
  * caller once per message, then frozen on the message so re-renders are stable).

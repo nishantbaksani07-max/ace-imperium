@@ -72,7 +72,7 @@ function consentPage(opts: {
   const host = esc(opts.redirectHost)
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Connect to Vitality</title>
+<title>Connect to Imperium</title>
 <style>
   :root { --bg:#04060a; --mint:#6ee7b7; --ink:#e9efe9; --dim:rgba(233,239,233,.62); --line:rgba(110,231,183,.25); }
   * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink);
@@ -88,8 +88,8 @@ function consentPage(opts: {
   .allow { background:var(--mint); color:#04060a; border:none; } .deny { background:transparent; color:var(--ink); }
 </style></head><body>
 <div class="card">
-  <h1>Connect to Vitality</h1>
-  <p><span class="who">${name}</span> wants <strong>read &amp; write</strong> access to your Vitality data and will receive it at <span class="host">${host}</span>.</p>
+  <h1>Connect to Imperium</h1>
+  <p><span class="who">${name}</span> wants <strong>read &amp; write</strong> access to your Imperium data and will receive it at <span class="host">${host}</span>.</p>
   <ul><li>It can read your workouts, sleep, weight, nutrition and more.</li>
   <li>It can add entries on your behalf — e.g. log a weigh-in or save a note.</li>
   <li>It cannot delete anything, and you can revoke access anytime in your account.</li></ul>

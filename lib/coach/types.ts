@@ -1,7 +1,7 @@
 // Food Coach — shared types.
 //
 // The coach is macro/nutrition in its job but omniscient in its context: it
-// reads every questionnaire the user took across Vitality plus their live data,
+// reads every questionnaire the user took across Imperium plus their live data,
 // then scores the day's food or answers a question as *their* coach.
 
 export type CoachMode = 'score' | 'chat'

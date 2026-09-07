@@ -212,7 +212,7 @@ export default function ArtsDistrict({ onAdd, onAddPublished, onClose, showFound
                       {t.handle ? (
                         <Link href={`/u/${t.handle}`} className={styles.byline}>by @{t.handle}</Link>
                       ) : (
-                        <span className={styles.byline}>a Vitality maker</span>
+                        <span className={styles.byline}>a Imperium maker</span>
                       )}
                       <div className={styles.row}>
                         <span className={styles.cat}>{t.envelope.category}</span>

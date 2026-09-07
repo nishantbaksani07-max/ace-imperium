@@ -16,7 +16,7 @@ import styles from './homeActGym.module.css'
  * ritual. The shell only mounts this when the account trains (presence).
  * The day comes from inferTodayTrainingDay (lib/home/presence.ts): a locked
  * training_day row stays locked; otherwise the rotation math anticipates it
- * and Vee SAYS so ("Yesterday was Push. Today reads as Pull."). No rotation
+ * and Imperium SAYS so ("Yesterday was Push. Today reads as Pull."). No rotation
  * and nothing locked = no fabricated day name - the card goes open-session.
  * The peak-window line only appears when peak_state exists (bestHourToday
  * over the real curve). No writes in v1 - "Lock it in" is a spoken

@@ -24,7 +24,7 @@ interface Props {
 
 /**
  * Floating bottom-bar tab switcher. Mirrors the standalone's behavior but
- * with Vitality voice (lowercase labels, no emoji, mint active pill).
+ * with Imperium voice (lowercase labels, no emoji, mint active pill).
  */
 export default function TabBar({ active, onChange, tabs = TAB_KEYS }: Props) {
   return (

@@ -8,7 +8,7 @@ import type { GlyphName } from '@/lib/gemGlyphs'
 import styles from './celebrationScreen.module.css'
 
 /**
- * CelebrationScreen — the one shared "you did it" layout for Vitality.
+ * CelebrationScreen — the one shared "you did it" layout for Imperium.
  *
  * Every congrats / milestone moment (wearable paired, quiz complete, first
  * workout logged, streak hit, …) renders through this so they all feel like

@@ -7,7 +7,7 @@ import { normalizeUsername } from '@/lib/profiles/username'
  *
  * The handle is resolved from creator_profiles by the route param, using the
  * same anon server client + normalization as app/u/[username]/page.tsx. Any DB
- * error or missing profile falls back to a generic "A Vitality maker" card, so
+ * error or missing profile falls back to a generic "A Imperium maker" card, so
  * a stale or mistyped link still previews on-brand and this route never throws.
  *
  * Rendered by next/og (Satori) — fully self-contained: the gem is an inline
@@ -16,11 +16,11 @@ import { normalizeUsername } from '@/lib/profiles/username'
  * exactly like the two /district OG routes.
  */
 export const runtime = 'nodejs'
-export const alt = 'A Vitality maker — tiles for your dashboard'
+export const alt = 'A Imperium maker — tiles for your dashboard'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
+// Imperium gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
   <path d="M392 372 L632 372 L724 470 L512 744 L300 470 Z" fill="#1f4d3d"/>
@@ -66,7 +66,7 @@ export default async function MakerOgImage({
   params: { username: string }
 }) {
   const handle = await resolveHandle(params.username)
-  const title = handle ? `@${handle}` : 'A Vitality maker'
+  const title = handle ? `@${handle}` : 'A Imperium maker'
   const gemUri = `data:image/svg+xml;base64,${Buffer.from(GEM).toString('base64')}`
 
   return new ImageResponse(
@@ -117,7 +117,7 @@ export default async function MakerOgImage({
                 textTransform: 'uppercase',
               }}
             >
-              Vitality
+              Imperium
             </div>
           </div>
           <div
@@ -173,7 +173,7 @@ export default async function MakerOgImage({
               maxWidth: 900,
             }}
           >
-            Tiles for your Vitality dashboard.
+            Tiles for your Imperium dashboard.
           </div>
         </div>
         {/* footer accent line */}

@@ -35,7 +35,7 @@ export interface RepRx {
 //
 // Mirrors splitData.ts's defaultSetsReps() but lives here so we can
 // modulate per goal without touching splitData (which is shared with
-// the Vitality standalone — see CLAUDE.md).
+// the Imperium standalone — see CLAUDE.md).
 
 // Baseline sets/reps before RIR stamping. RIR is added in prescribeRepRx
 // based on (tier, failureTolerance).

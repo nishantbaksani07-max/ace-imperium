@@ -35,14 +35,14 @@ const jetBrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Vitality',
+  title: 'Imperium',
   description: 'A personal dashboard built around your goals.',
-  applicationName: 'Vitality',
+  applicationName: 'Imperium',
   // Installable PWA: opens fullscreen from the home screen, no Safari chrome.
   // (manifest.ts + app/icon.tsx + app/apple-icon.tsx are auto-linked by Next.)
   appleWebApp: {
     capable: true,
-    title: 'Vitality',
+    title: 'Imperium',
     statusBarStyle: 'black-translucent',
   },
   // Modern equivalent of the (deprecated) apple-mobile-web-app-capable meta that

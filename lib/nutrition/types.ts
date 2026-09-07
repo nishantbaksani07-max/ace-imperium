@@ -1,7 +1,7 @@
 // Nutrition (Fuel · Macros) shared types.
 //
-// Ported from ~/Desktop/Vitality/calories-standalone. The standalone kept these
-// shapes implicit in plain JS objects; Vitality makes them explicit so the
+// Ported from ~/Desktop/Imperium/calories-standalone. The standalone kept these
+// shapes implicit in plain JS objects; Imperium makes them explicit so the
 // Supabase rows, API routes, and React state all agree.
 
 export interface Macros {

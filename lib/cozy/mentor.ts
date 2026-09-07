@@ -6,8 +6,8 @@ import type { CozySet } from './types'
 export const MENTOR_SET: CozySet = {
   id: 'mentor',
   label: 'Mentor',
-  title: 'Vitality is thinking…',
-  tags: ['From Vitality', 'A reminder', 'Just so you know', 'Gently', 'Truth'],
+  title: 'Imperium is thinking…',
+  tags: ['From Imperium', 'A reminder', 'Just so you know', 'Gently', 'Truth'],
   tones: ['violet', 'rose', 'mint'],
   items: [
     { text: 'You are allowed to be proud of small, ordinary progress.', highlight: 'small, ordinary progress', tone: 'mint' },

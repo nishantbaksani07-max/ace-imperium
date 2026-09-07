@@ -521,7 +521,7 @@ export interface RecommendationResult {
  * Application order matters: restrictions first (hard "do not"), then
  * equipment (hard "cannot"), then priorities (additive bias).
  *
- * `goal` (Vitality Goal preferences) is optional and acts as a
+ * `goal` (Imperium Goal preferences) is optional and acts as a
  * strategic overlay: if the user said injury is the thing in the way
  * (but didn't pin a specific lift in intake.restrictions), we apply a
  * "general caution" swap-set. If outcome is longevity, we prefer

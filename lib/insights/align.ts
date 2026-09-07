@@ -1,5 +1,5 @@
 /**
- * Alignment — Stage 2 of the cross-domain "Vitality noticed" engine. The one
+ * Alignment — Stage 2 of the cross-domain "Imperium noticed" engine. The one
  * primitive that takes two date-keyed daily series and returns the aligned numeric
  * pairs `correlate()` needs. Every cross-domain seam (sleep x training, caffeine x
  * recovery, spend x training, ...) buckets through here, so the bucketing math

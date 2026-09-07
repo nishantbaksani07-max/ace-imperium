@@ -19,7 +19,7 @@ import { getLocalDateKey } from '@/lib/dates'
 import styles from './homeActVitals.module.css'
 
 /*
- * ACT 1 - VITALS. The first act of "Vitality, I'm home".
+ * ACT 1 - VITALS. The first act of "Imperium, I'm home".
  *
  * ZERO-INPUT by law. The shell only mounts this act when the account has a
  * vitals stream at all (presence.usesVitals). Inside:

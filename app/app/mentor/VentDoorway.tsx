@@ -3,7 +3,7 @@
 import styles from './mentor.module.css'
 import type { VentTeaser } from './ventTeaser'
 
-// Bold the one emphasis phrase inside Vee's reply (if present), so any dynamic
+// Bold the one emphasis phrase inside Imperium's reply (if present), so any dynamic
 // number reads like the styled example without hand-bolding each variant.
 function renderVee(text: string, emphasis?: string) {
   if (!emphasis || !text.includes(emphasis)) return text
@@ -17,14 +17,14 @@ function renderVee(text: string, emphasis?: string) {
   )
 }
 
-// The "Vent" hero. Preferred path: open Claude with full Vitality context over
+// The "Vent" hero. Preferred path: open Claude with full Imperium context over
 // the MCP (zero API cost to us). In-app chat is the fallback (onVentHere focuses
 // the chat box just below). The connect UI lives at /account. The teaser bubble
 // is built from the user's REAL recent data (or an honest sample for new users)
-// — never a hardcoded claim that "Vee read your data" when it didn't.
+// — never a hardcoded claim that "Imperium read your data" when it didn't.
 export default function VentDoorway({ teaser, onVentHere }: { teaser: VentTeaser; onVentHere: () => void }) {
   return (
-    <section className={styles.contextSec} aria-label="vent with Vee">
+    <section className={styles.contextSec} aria-label="vent with Imperium">
       <div className={styles.secHead}>
         <span className={styles.secEyebrow}>vent</span>
         <span className={styles.secTitle}>Talk it out</span>
@@ -32,7 +32,7 @@ export default function VentDoorway({ teaser, onVentHere }: { teaser: VentTeaser
       </div>
 
       <div className={styles.door}>
-        <div className={styles.doorHead}>Vent with Vee in Claude</div>
+        <div className={styles.doorHead}>Vent with Imperium in Claude</div>
         <p className={styles.doorBody}>
           Open a private conversation in Claude that already sees your sleep, food, training, and spending. It listens first, then says the one true thing that helps.
         </p>
@@ -42,15 +42,15 @@ export default function VentDoorway({ teaser, onVentHere }: { teaser: VentTeaser
           <div className={styles.bubVee}>{renderVee(teaser.vee, teaser.emphasis)}</div>
           <div className={styles.doorTag}>
             {teaser.real
-              ? 'Real. Vee read your actual data.'
-              : 'A sample. This becomes yours once Vee has a few days of your data.'}
+              ? 'Real. Imperium read your actual data.'
+              : 'A sample. This becomes yours once Imperium has a few days of your data.'}
           </div>
         </div>
 
         <div className={styles.doorActions}>
           <a className={styles.doorBtnPrimary} href="/account">
             <svg viewBox="0 0 24 24" fill="none" stroke="#160d2e" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            Set up Vee in Claude
+            Set up Imperium in Claude
           </a>
           <button className={styles.doorBtnGhost} type="button" onClick={onVentHere}>Or vent right here</button>
         </div>

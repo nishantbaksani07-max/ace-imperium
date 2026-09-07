@@ -1,9 +1,9 @@
 /**
- * "Vee notices you slipping" — the deterministic drift engine (BUILD42 flagship).
+ * "Imperium notices you slipping" — the deterministic drift engine (BUILD42 flagship).
  *
  * Pure + IO-free (unit-tested). Given a snapshot of the user's recent behaviour
  * + the nudge cooldown ledger, it returns AT MOST ONE warm nudge, or null. The
- * whole point: Vitality notices you fading before you do, and reaches out first
+ * whole point: Imperium notices you fading before you do, and reaches out first
  * warmly. So the rules are deliberately conservative:
  *   - Only nudge someone who WAS active (you can't "slip" from a thing you never
  *     did) — never guilt a non-lifter for not lifting.
@@ -31,7 +31,7 @@ export interface StreamDriftItem {
 }
 
 /** An active, non-silent goal that feeds a drift domain (best one per kind).
- *  Lets Vee reach out about the specific goal, and lets its push level set the
+ *  Lets Imperium reach out about the specific goal, and lets its push level set the
  *  cadence. 'silent' goals are excluded upstream, so push is never 'silent'. */
 export interface DriftGoalRef {
   id: string
@@ -111,7 +111,7 @@ export function daysBetween(fromKey: string, toKey: string): number {
 }
 
 /** How long an unresolved nudge rests, tuned by the goal's push level: a goal
- *  you asked Vee to push on speaks up sooner; a gentle one rests longer. No
+ *  you asked Imperium to push on speaks up sooner; a gentle one rests longer. No
  *  goal (or 'balanced') uses the default. Resolved nudges ignore this. */
 function shownWindow(push?: Push): number {
   if (push === 'push') return 1

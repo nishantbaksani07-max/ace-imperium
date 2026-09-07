@@ -1,6 +1,6 @@
 /**
  * Server-side gather for the Vitals Signal. Reads every source the engine fuses
- * (WHOOP readings, training load, fuel, the goal, and what the user told Vee),
+ * (WHOOP readings, training load, fuel, the goal, and what the user told Imperium),
  * shapes them into a SignalInput, and runs the pure engine. Mirrors the existing
  * data-gather patterns: goalActions.gatherContextInputs (profile + readings +
  * HealthContext), contributors/train (hard days + weekly target), contributors/
@@ -151,7 +151,7 @@ export async function gatherSignal(
       fuel = { kcal, kcalTarget, protein, proteinTarget: Number(fuelGoal?.protein_target ?? 0) }
     }
 
-    // ── Vee: short injury / constraint facts the user told the mentor ───
+    // ── Imperium: short injury / constraint facts the user told the mentor ───
     const constraints = selectRelevantFacts(facts, {
       now: new Date().toISOString(), kinds: ['constraint'], minSalience: 0.3, limit: 2,
     })

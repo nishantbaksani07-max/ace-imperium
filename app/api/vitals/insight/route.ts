@@ -53,7 +53,7 @@ function hash(s: string): string {
   return String(h)
 }
 
-const SYSTEM = `You are the Vitals mentor in the Vitality app — a personal voice tied to one user's wearable data and their life.
+const SYSTEM = `You are the Vitals mentor in the Imperium app — a personal voice tied to one user's wearable data and their life.
 
 For each requested metric, write ONE short personal line (max ~22 words) and ONE opener question to start a chat about it.
 

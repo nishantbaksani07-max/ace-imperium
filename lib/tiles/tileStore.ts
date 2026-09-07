@@ -15,7 +15,7 @@ import { tileDataSync } from './tileDataSync'
  *
  * Keys:
  *   vitality:<userId>:tiles            -> Tile[]  (the index, source order)
- *   vitality:<userId>:tile:<id>:data   -> whatever Vitality.save() persisted
+ *   vitality:<userId>:tile:<id>:data   -> whatever Imperium.save() persisted
  */
 
 const indexKey = (userId: string) => `vitality:${userId}:tiles`

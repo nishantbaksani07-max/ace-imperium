@@ -254,7 +254,7 @@ export const ARCHETYPE_DEFAULTS: Record<Archetype, ArchetypeTemplate> = {
 /**
  * "Brand Spectrum" — each archetype gets its own accent hue so the
  * brand grid reads as a living roster of distinct identities instead
- * of a uniform mint wall. Creator keeps the Vitality house mint (it's
+ * of a uniform mint wall. Creator keeps the Imperium house mint (it's
  * the highest-volume user); the rest each get a hue that's bright
  * enough to clear ~4.5:1 contrast on pure black.
  *
@@ -305,7 +305,7 @@ export function isSocialFirst(a: Archetype): boolean {
 
 /**
  * Display order for the template grid in the intake flow. Creator
- * goes first (the highest-volume Vitality user); Other goes last
+ * goes first (the highest-volume Imperium user); Other goes last
  * (the AI-fallback option).
  */
 /**

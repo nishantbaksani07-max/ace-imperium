@@ -12,7 +12,7 @@ import styles from './veeBottomStrip.module.css'
  * The kept bottom strip from the live mentor remodel, split (v1.2) into two
  * named sections the page mounts under its own numbered heads:
  *
- *   VeeAsk  - ·03, refocused entirely on CLAUDE: the mint-sparkle "Ask Vee
+ *   VeeAsk  - ·03, refocused entirely on CLAUDE: the mint-sparkle "Ask Imperium
  *             anything about your week..." composer front and center, the
  *             OPEN IN CLAUDE affordance beside it, and the quick questions
  *             demoted to small chips underneath. One section, one destination.
@@ -69,7 +69,7 @@ export function VeeAsk({ claudeContext = null }: VeeAskProps) {
   const [askDraft, setAskDraft] = useState('')
   const suggestions = quickQuestions(claudeContext?.activeModules)
 
-  // Ask Vee: the composer hands the question to Claude (the real Vee brain),
+  // Ask Imperium: the composer hands the question to Claude (the real Imperium brain),
   // context block attached so Claude already knows the user's real state.
   function handleAsk(e: FormEvent) {
     e.preventDefault()
@@ -85,8 +85,8 @@ export function VeeAsk({ claudeContext = null }: VeeAskProps) {
         <svg className={styles.composerSpark} viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" /></svg>
         <input
           type="text"
-          placeholder="Ask Vee anything about your week..."
-          aria-label="Ask Vee"
+          placeholder="Ask Imperium anything about your week..."
+          aria-label="Ask Imperium"
           value={askDraft}
           onChange={e => setAskDraft(e.target.value)}
           maxLength={600}
@@ -112,7 +112,7 @@ export function VeeAsk({ claudeContext = null }: VeeAskProps) {
             {sug.title}
           </a>
         ))}
-        <Link className={styles.claudeCorner} href="/connect" aria-label="Open Vee in Claude">
+        <Link className={styles.claudeCorner} href="/connect" aria-label="Open Imperium in Claude">
           <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" /></svg>
           OPEN IN CLAUDE
         </Link>

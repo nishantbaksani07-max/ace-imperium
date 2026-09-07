@@ -12,7 +12,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
 // ── Slice types ─────────────────────────────────────────────────────
 
-// Goal — the dedicated "Set your Vitality goal" quiz was retired (the training
+// Goal — the dedicated "Set your Imperium goal" quiz was retired (the training
 // intake + Fuel quizzes already capture the headline goal). The quiz, its
 // route, checklist row, and coach/mentor wiring are gone, but this type + the
 // `goal?` slice below are kept: the training program generator still accepts an

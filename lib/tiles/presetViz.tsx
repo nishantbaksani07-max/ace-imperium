@@ -2,7 +2,7 @@
  * presetViz - one bespoke micro-visual per library piece (BUILD81).
  *
  * Every preset in lib/tiles/quickLibrary.ts gets its OWN tiny scene: a pure
- * inline SVG (168x64) drawn in the Vitality palette, different in structure,
+ * inline SVG (168x64) drawn in the Imperium palette, different in structure,
  * not just in color - footprints walk, glasses fill, the mood needle leans,
  * the cigarette is broken, the bed is made. Personality lives here.
  *

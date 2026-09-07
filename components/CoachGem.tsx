@@ -6,7 +6,7 @@ import type { GemTint } from '@/components/HeroCrystal'
 import styles from './coachGem.module.css'
 
 /**
- * CoachGem — a reusable Vitality coach gem, built 1:1 on the real gem-library
+ * CoachGem — a reusable Imperium coach gem, built 1:1 on the real gem-library
  * gem (character-mode HeroCrystal). Each coach is a preset of shape + colorway
  * + signature personality. Drop one next to an AI surface and it plays its
  * signature move on a loop so the coach feels alive.

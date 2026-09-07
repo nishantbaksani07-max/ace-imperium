@@ -445,7 +445,7 @@ function ProfileStep({
   return (
     <>
       <p className={styles.stepIntro}>
-        Synced with your Vitality profile. Changes here update everywhere.
+        Synced with your Imperium profile. Changes here update everywhere.
       </p>
 
       <div className={styles.fieldRow}>

@@ -3,7 +3,7 @@
  * Each seam (caffeine x recovery, sleep x training, ...) produces a FusionCandidate
  * carrying its card copy, an honest "watched" label, and a ScoredInsight. This runs
  * them all through the correlation engine's ranking (deepest TRUE insight first, then
- * strongest) and returns the ONE Vee should show. As more seams land, the engine
+ * strongest) and returns the ONE Imperium should show. As more seams land, the engine
  * keeps choosing the best automatically, exactly as the spec describes.
  *
  * Pure + IO-free + unit-tested (see __tests__/fusionSelect.test.ts).
@@ -16,7 +16,7 @@ import type { FusionCandidate } from './fusion'
 export { relContrast } from './correlationEngine'
 export type { FusionCandidate } from './fusion'
 
-/** The single fusion notice Vee surfaces, or null when no seam fired. */
+/** The single fusion notice Imperium surfaces, or null when no seam fired. */
 export function selectFusion(
   candidates: ReadonlyArray<FusionCandidate | null | undefined>,
 ): FusionCandidate | null {

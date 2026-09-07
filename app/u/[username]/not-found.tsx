@@ -12,7 +12,7 @@ export default function MakerNotFound() {
       <div className={styles.glow} aria-hidden />
 
       <div className={styles.bar}>
-        <Link href="/" className={styles.mark} aria-label="Vitality">V</Link>
+        <Link href="/" className={styles.mark} aria-label="Imperium">I</Link>
         <span className={styles.barSpacer} />
         <Link href="/" className={styles.barCta}>Make your own</Link>
       </div>
@@ -34,7 +34,7 @@ export default function MakerNotFound() {
       </div>
 
       <div className={styles.footer}>
-        Made with <Link href="/">Vitality</Link>. Build your own dashboard.
+        Made with <Link href="/">Imperium</Link>. Build your own dashboard.
       </div>
     </div>
   )

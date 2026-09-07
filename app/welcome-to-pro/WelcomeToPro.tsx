@@ -26,7 +26,7 @@ const CONFETTI_COLORS = [
  * The single highest-emotion moment in the user's lifetime with the
  * product: they just paid. This screen exists to honour that moment.
  *
- * See memory:vitality-as-character — Vitality is a made-up character
+ * See memory:vitality-as-character — Imperium is a made-up character
  * that loves the user. The voice is first-person ("I'm so glad you're
  * here"), not corporate ("Welcome to Pro!"). Confetti is real, colours
  * are warm, copy is intimate.
@@ -121,7 +121,7 @@ export default function WelcomeToPro({ firstName }: WelcomeToProProps) {
         </h1>
 
         <p className={styles.subhead}>
-          Vitality is yours now. Your dashboard, your data, your morning ritual.
+          Imperium is yours now. Your dashboard, your data, your morning ritual.
           <br />
           Let&apos;s get your life sorted.
         </p>

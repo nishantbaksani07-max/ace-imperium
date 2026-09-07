@@ -17,7 +17,7 @@ export interface OuraView {
   // The user has saved their own Oura app's client_id + client_secret, but
   // may not have completed the OAuth authorize step yet.
   hasCredentials: boolean
-  // Vitality's callback URL — the user registers this in their own Oura app.
+  // Imperium's callback URL — the user registers this in their own Oura app.
   redirectUri: string
   data: OuraData | null
 }
@@ -137,7 +137,7 @@ export default function OuraModule({ view }: Props) {
   }
 
   const onDisconnect = async () => {
-    if (!confirm('Disconnect your Oura account? Vitality will stop pulling new data.')) return
+    if (!confirm('Disconnect your Oura account? Imperium will stop pulling new data.')) return
     await fetch('/api/oura/disconnect', { method: 'POST' })
     router.refresh()
   }
@@ -277,7 +277,7 @@ function CredentialsForm({ redirectUri, connectHref }: { redirectUri: string; co
     <section className={styles.connectPanel}>
       <p className={styles.connectIntro}>
         Connect Oura with <em>your own</em> developer keys. It takes about two minutes,
-        and your <em>readiness</em>, <em>sleep</em>, and <em>HRV</em> flow into Vitality from then on.
+        and your <em>readiness</em>, <em>sleep</em>, and <em>HRV</em> flow into Imperium from then on.
       </p>
 
       <ol className={styles.credSteps}>
@@ -365,10 +365,10 @@ function NoDataPanel({
 
 function VitalityScoreBadge({ score, tier }: { score: number; tier: string }) {
   return (
-    <aside className={styles.scoreBadge} aria-label="Vitality Score">
+    <aside className={styles.scoreBadge} aria-label="Imperium Score">
       <div className={styles.scoreNumber}>{score}</div>
       <div className={styles.scoreCol}>
-        <div className={styles.scoreLabel}>Vitality Score</div>
+        <div className={styles.scoreLabel}>Imperium Score</div>
         <div className={styles.scoreTier}>{tier}</div>
       </div>
     </aside>

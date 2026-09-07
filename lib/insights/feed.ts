@@ -1,5 +1,5 @@
 /**
- * The §01 "Vitality noticed" cycling feed: the unified, flippable list behind
+ * The §01 "Imperium noticed" cycling feed: the unified, flippable list behind
  * "show me another".
  *
  * It blends the synthesis's sources into one honest, ranked list:
@@ -17,7 +17,7 @@ import type { Rarity } from './rarity'
 
 export interface FeedNotice {
   source: 'oracle' | 'fusion' | 'drift' | 'momentum' | 'first' | 'starter'
-  /** What Vee watched to find this: the source tag on the card. */
+  /** What Imperium watched to find this: the source tag on the card. */
   watched: string
   /** The warm hook (short: the full version opens in Claude). */
   lead: string
@@ -45,7 +45,7 @@ export interface FeedNotice {
   lever?: string
   /** The drift engine's kind ('train' / 'fuel' / 'recovery' / 'stream:*'), set
    *  only on drift notices so the card can log the goal_nudges shown-cooldown
-   *  (the Vee surface never rendered DriftCard, so without this a drift notice
+   *  (the Imperium surface never rendered DriftCard, so without this a drift notice
    *  repeated on every load). */
   driftKind?: string
 }

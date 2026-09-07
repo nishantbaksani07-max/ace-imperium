@@ -1,7 +1,7 @@
 /*
  * TrainerDoorway — the "Ask Claude, mid-set" bottom sheet.
  *
- * Mint accent (logger-native). Structure mirrors the Vee "open in Claude"
+ * Mint accent (logger-native). Structure mirrors the Imperium "open in Claude"
  * doorway (app/app/mentor/mentor.module.css .door). Tokens are declared locally
  * on .wrap so the sheet renders correctly regardless of which page mounts it.
  */

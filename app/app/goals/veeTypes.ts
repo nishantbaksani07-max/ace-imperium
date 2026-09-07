@@ -1,12 +1,12 @@
 /**
- * Vee Goals — domain types for the authoritative Supabase model
+ * Imperium Goals — domain types for the authoritative Supabase model
  * (migration 20260618000001). Mirrors the demo vocabulary so the ported UI
  * maps straight onto these. Pure types only; row<->domain mappers live in
  * lib/goals/repo.ts.
  */
 import type { GoalCategory } from '@/lib/goals/categories'
 
-/** Per-goal accountability: how much Vee shows up about this goal. */
+/** Per-goal accountability: how much Imperium shows up about this goal. */
 export type Push = 'silent' | 'gentle' | 'balanced' | 'push'
 /** 1 = Low, 2 = Medium, 3 = High. */
 export type Prio = 1 | 2 | 3
@@ -32,7 +32,7 @@ export interface BigGoal {
   identityTag: string | null
   /** User-picked steering metric ("what steers this"): a guide module name
    *  ('weight', 'train', ...) or 'stream:<canonical_key>' for one of the user's
-   *  own tile streams. null/absent = let Vee decide (auto-binding). Optional so
+   *  own tile streams. null/absent = let Imperium decide (auto-binding). Optional so
    *  pre-override fixtures and rows keep working unchanged. */
   bindingOverride?: string | null
   status: BigGoalStatus
@@ -61,7 +61,7 @@ export interface HabitTracking {
   hours?: number
 }
 
-/** A small "THIS WEEK with Vitality" goal — auto-tracked or manually tapped. */
+/** A small "THIS WEEK with Imperium" goal — auto-tracked or manually tapped. */
 export interface HabitGoal {
   id: string
   parentGoalId: string | null

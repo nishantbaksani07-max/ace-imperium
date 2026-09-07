@@ -1,7 +1,7 @@
 /*
- * Vee ask-card glyph registry.
+ * Imperium ask-card glyph registry.
  *
- * The whitelist of line icons Vee may attach to an answer chip. Each value is
+ * The whitelist of line icons Imperium may attach to an answer chip. Each value is
  * the INNER markup of a 24x24 line SVG (the renderer wraps it with the shared
  * stroke styling, so paths here carry no stroke/fill of their own). This single
  * file is what keeps the ask-card system "automatic": the chat route validates

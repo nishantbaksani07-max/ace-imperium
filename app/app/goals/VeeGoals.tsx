@@ -11,20 +11,20 @@ import CategoryIcon from './CategoryIcon'
 import { CATEGORY_WORD } from '@/lib/goals/categories'
 
 /**
- * Vee Goals — the real, auth'd Goals surface (Phase 1).
+ * Imperium Goals — the real, auth'd Goals surface (Phase 1).
  *
  * Ported from the approved vee-goals-demo. Two tiers, a mix of both:
  *   1. YOUR GOALS — big personal aspirations you author ("hit 1,000 subs"),
- *      each with a deadline, a priority, and a per-goal choice of how hard Vee
+ *      each with a deadline, a priority, and a per-goal choice of how hard Imperium
  *      pushes. Authoring one is the flagship loop and persists to Supabase.
- *   2. THIS WEEK — the small Vitality goals. Manual ones you tap; auto ones name
+ *   2. THIS WEEK — the small Imperium goals. Manual ones you tap; auto ones name
  *      what they'll track (live counts arrive in Phase 5). Add from suggestions.
  *
- * The Vee gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
+ * The Imperium gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
  * controlRef: 'curious' on a blank slate, 'happyHello' when you have goals,
  * 'proud' when you set one, 'nod' when you tick a habit.
  *
- * Drift ("Vee notices you slipping"), the streak/identity meter, and live auto
+ * Drift ("Imperium notices you slipping"), the streak/identity meter, and live auto
  * counts are deferred to their own phases; this surface never shows fake data.
  */
 const CoachGem = dynamic(() => import('@/components/CoachGem'), {
@@ -58,7 +58,7 @@ const PUSH_OPTS: { key: Push; title: string; desc: string }[] = [
   { key: 'push', title: 'Push me to show up', desc: 'I check in often and keep you honest.' },
   { key: 'silent', title: 'Keep it silent', desc: 'I won’t say a word. This one is just for you.' },
 ]
-const PUSH_CHIP: Record<Push, string> = { silent: 'Vee · silent', gentle: 'Vee · gentle', balanced: 'Vee · nudges', push: 'Vee · pushes' }
+const PUSH_CHIP: Record<Push, string> = { silent: 'Imperium · silent', gentle: 'Imperium · gentle', balanced: 'Imperium · nudges', push: 'Imperium · pushes' }
 const PUSH_SHORT: Record<Push, string> = { silent: 'Silent', gentle: 'Gentle', balanced: 'Nudges', push: 'Pushes' }
 const PRIO_LBL = ['Low', 'Medium', 'High'] as const
 
@@ -113,7 +113,7 @@ function sourceLabel(source: HabitGoal['source']): string {
     case 'fitness': return 'from your workouts'
     case 'supplements': return 'from supplements'
     case 'finance': return 'from finance'
-    case 'mentor': return 'from a note to Vee'
+    case 'mentor': return 'from a note to Imperium'
     default: return 'you tap when done'
   }
 }
@@ -219,7 +219,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
     setSaving(false)
     if (!res.ok) { setSaveError(friendlyError(res.error)); return }
     // Note: big goals are NOT mirrored to the legacy localStorage store (they
-    // have no legacy Goal shape and would pollute it). Vee learns about them
+    // have no legacy Goal shape and would pollute it). Imperium learns about them
     // through user_facts, written server-side in createBigGoal. Habits, which
     // DO map to the legacy shape, still dual-write below in addSuggestion.
     setBigGoals(g => [res.goal, ...g])
@@ -265,7 +265,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
     if (!res.ok) setBigGoals(prev)
   }
 
-  // Change how much Vee shows up about a goal (and, server-side, keep its memory
+  // Change how much Imperium shows up about a goal (and, server-side, keep its memory
   // in sync). Optimistic — revert if the write fails.
   async function changePush(g: BigGoal, push: Push) {
     setEditPushId(null)
@@ -362,7 +362,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
           </div>
         </div>
         <div className={styles.field}>
-          <span className={styles.fieldLabel}>How much should Vee push you?</span>
+          <span className={styles.fieldLabel}>How much should Imperium push you?</span>
           <div className={styles.pushRow}>
             {PUSH_OPTS.map(o => (
               <button type="button" key={o.key} className={`${styles.pushOpt} ${draftPush === o.key ? styles.pushOptOn : ''}`} onClick={() => setDraftPush(o.key)}>
@@ -400,10 +400,10 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
         {mode === 'main' ? (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>Imperium · Imperium</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
-                <span className={styles.watchPill}><span className={styles.dot} />Vee&rsquo;s with you</span>
+                <span className={styles.watchPill}><span className={styles.dot} />Imperium&rsquo;s with you</span>
               </div>
             </header>
 
@@ -466,12 +466,12 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
                       onClick={() => setEditPushId(cur => (cur === g.id ? null : g.id))}
                       aria-expanded={editPushId === g.id}
                       aria-controls={`push-edit-${g.id}`}
-                      aria-label={`change how much Vee shows up about ${g.cleanTitle ?? g.title}`}
+                      aria-label={`change how much Imperium shows up about ${g.cleanTitle ?? g.title}`}
                     ><VMark size={11} />{PUSH_CHIP[g.push]}</button>
                     <button className={styles.miniDelete} onClick={() => removeBigGoal(g.id)} aria-label={`remove ${g.cleanTitle ?? g.title}`}>remove</button>
                   </div>
                   {editPushId === g.id && (
-                    <div className={styles.pushEdit} id={`push-edit-${g.id}`} role="group" aria-label="How much should Vee show up">
+                    <div className={styles.pushEdit} id={`push-edit-${g.id}`} role="group" aria-label="How much should Imperium show up">
                       {PUSH_OPTS.map(o => (
                         <button
                           type="button"
@@ -487,7 +487,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
             })}
             {CreateBlock}
 
-            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Vitality</span><span className={styles.eyebrowRule} /></div>
+            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Imperium</span><span className={styles.eyebrowRule} /></div>
             <p className={styles.tierIntro}>The small wins that keep you moving. I track what I can see. You tap the rest.</p>
 
             <div className={styles.habits}>
@@ -521,12 +521,12 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
               {openSuggestions.map(({ s, i }) => <SuggestionRow key={s.title} s={s} i={i} />)}
             </div>
 
-            <Link href="/app/mentor" className={styles.talkPill}><VMark size={16} />Talk to Vee about your goals</Link>
+            <Link href="/app/mentor" className={styles.talkPill}><VMark size={16} />Talk to Imperium about your goals</Link>
           </div>
         ) : (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>Imperium · Imperium</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
               </div>
@@ -546,7 +546,7 @@ export default function VeeGoals({ initial, suggestionEvidence }: {
             {evidencedSuggestions.length > 0 && (
               <>
                 <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·01</span><span className={styles.eyebrowLbl}>Already in motion</span><span className={styles.eyebrowRule} /></div>
-                <p className={styles.tierIntro}>The small Vitality wins I can keep an eye on for you. Tap one and I&rsquo;ll start tracking it.</p>
+                <p className={styles.tierIntro}>The small Imperium wins I can keep an eye on for you. Tap one and I&rsquo;ll start tracking it.</p>
 
                 <div className={styles.habits}>
                   {openSuggestions.length > 0

@@ -1,5 +1,5 @@
 /**
- * Train contributor for the Vitality Score. Training splits are usage-advanced
+ * Train contributor for the Imperium Score. Training splits are usage-advanced
  * ROTATIONS ("lift three, rest one, on a loop — no calendar week"), so there is
  * no reliable map from a calendar date to "was today a planned rest day".
  * Instead Train is scored as a weekly-frequency consistency rate: how many

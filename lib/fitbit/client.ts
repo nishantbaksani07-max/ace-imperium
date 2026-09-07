@@ -183,7 +183,7 @@ interface RhrResponse {
 /**
  * Pull the last 24h of sleep + HRV + RHR and upsert one normalized row
  * into wearable_data. Fitbit doesn't expose a unified "recovery score" —
- * we leave that null and let the Vitality Score formula fall back to
+ * we leave that null and let the Imperium Score formula fall back to
  * its HRV/RHR/sleep components.
  */
 export async function syncLatest(

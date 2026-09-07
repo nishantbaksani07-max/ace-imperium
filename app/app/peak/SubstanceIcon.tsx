@@ -1,7 +1,7 @@
 import type { SubstanceCategory } from './types'
 
 /**
- * Vitality line-art icons for substance categories — replaces the emoji
+ * Imperium line-art icons for substance categories — replaces the emoji
  * glyphs (☕ 💧 🌙 💊 🏋) that used to render in the Peak substance surfaces.
  * Style matches the app icon vocabulary: viewBox 0 0 24 24, no fill, mint
  * `currentColor` stroke at 1.7, round caps/joins. Colour the icon by setting

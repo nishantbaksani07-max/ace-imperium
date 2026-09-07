@@ -19,7 +19,7 @@ export default function FinanceHeader({ currency, onCurrencyChange }: Props) {
     <header className={styles.header}>
       <div className={styles.headerLeft}>
         <Link href="/app" className={styles.back}>
-          <span className={styles.backArrow}>←</span> Vitality
+          <span className={styles.backArrow}>←</span> Imperium
         </Link>
         <h1 className={styles.title}>Finance</h1>
         <p className={styles.subtitle}>Net worth · subs · orders · wishlist</p>

@@ -1,5 +1,5 @@
 /**
- * Goal unit fidelity — the foundation that keeps every Vee insight TRUE.
+ * Goal unit fidelity — the foundation that keeps every Imperium insight TRUE.
  *
  * Alex's rule: "measure a goal in ONE thing only, never switch." A "225-Pound
  * Bench Press" goal is measured in pounds for its whole life, even on a kg

@@ -11,7 +11,7 @@ import { GLYPHS, ANIMATED_GLYPHS, ANIM_LOOP, DEFAULT_LOOP, type GlyphDraw, type 
  * `TALLY` for the workout logger) and the brand `V` every 3s, with a
  * 0.55s eased cross-fade (dims to invisible, swaps the texture at the
  * trough, eases back up — no strobe, so it never cuts).
- * Reads as "you're in this section, and it's part of Vitality."
+ * Reads as "you're in this section, and it's part of Imperium."
  *
  * Completion behavior: when the `complete` prop flips truthy, the gem
  * glitches hard to `CHECK`, scales up to 1.08 + spikes mint emission,

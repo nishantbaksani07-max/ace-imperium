@@ -1,6 +1,6 @@
 /* The customizable board, ported from public/dashboard-customize-demo.html +
    public/widget-design-library.html. Pure black, mint accent, Instrument Serif
-   titles. A user's own tiles, hosted on Vitality, that they place, size, recolor,
+   titles. A user's own tiles, hosted on Imperium, that they place, size, recolor,
    restyle, rename, drag, and delete. */
 
 .wrap {
@@ -352,7 +352,7 @@
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
 }
-/* Origin-grade card (Alex's ask): a premium gradient in Vitality's palette
+/* Origin-grade card (Alex's ask): a premium gradient in Imperium's palette
    (a mint/teal wash, not purple), a top highlight, and real depth — so the
    pop-up sheets read as a finished product surface, not a plain modal. */
 .wallPanel {

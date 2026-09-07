@@ -1,6 +1,6 @@
 /**
- * The correlation engine — Stage 4 of the "Vitality noticed" feature. This is the
- * part that turns a pile of true cross-domain findings into the SINGLE insight Vee
+ * The correlation engine — Stage 4 of the "Imperium noticed" feature. This is the
+ * part that turns a pile of true cross-domain findings into the SINGLE insight Imperium
  * shows. It grows over time (a registry of domain pairings, receipt derivation,
  * goal-linking); this first piece is the selection brain.
  *
@@ -44,8 +44,8 @@ export function rankInsights<T extends ScoredInsight>(items: T[]): T[] {
   return [...items].sort((a, b) => depth(b) - depth(a) || strength(b) - strength(a))
 }
 
-/** The single insight Vee surfaces, or null when there is nothing true to say
- *  (Vee stays quiet rather than reaching for a weak or invented link). */
+/** The single insight Imperium surfaces, or null when there is nothing true to say
+ *  (Imperium stays quiet rather than reaching for a weak or invented link). */
 export function selectStrongest<T extends ScoredInsight>(items: T[]): T | null {
   return rankInsights(items)[0] ?? null
 }

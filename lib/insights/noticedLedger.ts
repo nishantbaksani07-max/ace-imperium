@@ -1,5 +1,5 @@
 /**
- * The "Vitality noticed" cooldown ledger — gating the §01 cross-domain card so a
+ * The "Imperium noticed" cooldown ledger — gating the §01 cross-domain card so a
  * found insight lands like a gift, never a feed of repeats.
  *
  * Modeled 1:1 on the drift cooldown (lib/goals/drift.ts): a pure read-side that,
@@ -21,7 +21,7 @@ export interface NoticedCooldown {
 }
 
 // How long a pattern stays quiet. Launch cadence (Alex, 2026-07-11): a plain
-// show rests ~5 days, not two weeks - Vee should feel PRESENT, and a pattern
+// show rests ~5 days, not two weeks - Imperium should feel PRESENT, and a pattern
 // the user merely scrolled past may return within the week. Rarity itself
 // keeps the deep finds rare (rarityOf is depth-based: an epic needs 3+
 // domains converging, which no cooldown can manufacture; the cold-start
@@ -53,7 +53,7 @@ export function patternKeyOf(domains: readonly string[]): string {
     .join('+')
 }
 
-/** True if this pattern is still resting, so Vee keeps it back this open. */
+/** True if this pattern is still resting, so Imperium keeps it back this open. */
 export function onNoticeCooldown(today: string, cd: NoticedCooldown | undefined): boolean {
   if (!cd || !cd.lastShownAt) return false
   const since = daysBetween(cd.lastShownAt, today)

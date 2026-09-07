@@ -32,7 +32,7 @@ export default function FitnessDashboard() {
       <div className={dashboardStyles.shell}>
         <div className={styles.header}>
           <Link href="/app" className={styles.back}>
-            <span className={styles.backArrow}>←</span> Vitality
+            <span className={styles.backArrow}>←</span> Imperium
           </Link>
           <h1 className={styles.title}>Fitness</h1>
           <p className={styles.subtitle}>Training · recovery · physical baseline</p>

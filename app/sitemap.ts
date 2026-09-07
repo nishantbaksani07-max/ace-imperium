@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PUBLIC_FEATURED_TILES } from '@/lib/tiles/featured'
 
 /**
- * sitemap.xml for Vitality, served by Next.js at /sitemap.xml.
+ * sitemap.xml for Imperium, served by Next.js at /sitemap.xml.
  *
  * Lists the public, indexable surfaces so shared Pillar-3 links (Arts District
  * drops and maker profiles) get discovered and ranked. Two kinds of entries:

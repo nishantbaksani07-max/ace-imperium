@@ -192,7 +192,7 @@
 
 /* ── right: talk deeper in Claude (iris doorway trigger) ──
    A spark action: flat iris text+icon that lights up on hover/tap, no idle glow.
-   Iris (not mint) because this is Echo/Vee's voice and the doorway sheet is iris. */
+   Iris (not mint) because this is Echo/Imperium's voice and the doorway sheet is iris. */
 .askCol { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; margin-top: auto; }
 .claudePill {
   align-self: flex-start;
@@ -266,7 +266,7 @@
 .ring[data-tone='watch'] .ringN { color: var(--amber); }
 .ringOf { font-size: 0.78rem; color: var(--muted); }
 
-/* The simple day score: one big number out of ten, serif, in the two Vitality
+/* The simple day score: one big number out of ten, serif, in the two Imperium
    colors (mint good / amber watch). No ring. */
 .dayScore { display: inline-flex; align-items: baseline; gap: 5px; font-family: var(--font-serif, Georgia, serif); line-height: 0.85; }
 .dayScoreN { font-size: 5.4rem; font-variant-numeric: tabular-nums; line-height: 0.85; }

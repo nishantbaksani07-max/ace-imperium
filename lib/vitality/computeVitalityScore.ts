@@ -1,5 +1,5 @@
 /**
- * computeVitalityScore — the server entrypoint for the Vitality Score. Creates
+ * computeVitalityScore — the server entrypoint for the Imperium Score. Creates
  * the RLS-scoped server Supabase client and runs the registered contributors
  * through the safety-netted orchestration in lib/vitality/score.ts. Lives in its
  * own file (not score.ts) so the server-only `next/headers` dependency pulled in

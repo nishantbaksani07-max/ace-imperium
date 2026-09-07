@@ -7,7 +7,7 @@ import { PLATFORM_LABELS } from './types'
 import type { Snap } from './SocialChart'
 
 /**
- * Cowork — open the account you're on in Claude cowork with EVERYTHING Vitality
+ * Cowork — open the account you're on in Claude cowork with EVERYTHING Imperium
  * has pulled for it as standing context: numbers, follower history, pasted
  * analytics, every saved data read (comments, audience, best times, top/flop,
  * retention, niche…), recent posts and links. You type a question; it copies the
@@ -41,7 +41,7 @@ function buildPrompt(brand: Brand, account: BrandAccount, snapshots: Snap[], que
   const lines: string[] = []
   lines.push(
     `You are my content and growth strategist for my ${plat} account ${account.handle || ''}. ` +
-    `Everything below is the data Vitality has pulled for this account. Treat it as the standing context ` +
+    `Everything below is the data Imperium has pulled for this account. Treat it as the standing context ` +
     `for this whole project: remember it and use it for every question I ask, not just the first.`,
   )
 

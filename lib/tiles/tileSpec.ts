@@ -1,5 +1,5 @@
 /**
- * TILE_SPEC - the ONE public rulebook for hand-authoring a Vitality tile.
+ * TILE_SPEC - the ONE public rulebook for hand-authoring a Imperium tile.
  *
  * Served verbatim at GET /tile-spec (app/tile-spec/route.ts) AND appended to
  * the Forge build brief's clipboard copy, so an AI with no web access still
@@ -9,7 +9,7 @@
  * change this in the same commit.
  *
  * It also carries the DESIGN DNA (tokens, type recipe, signature layout) so
- * a tile built from it looks like Vitality, not generic AI output.
+ * a tile built from it looks like Imperium, not generic AI output.
  */
 
 export const TILE_SPEC = `VITALITY TILE SPEC v2
@@ -17,9 +17,9 @@ export const TILE_SPEC = `VITALITY TILE SPEC v2
 
 WHAT YOU ARE BUILDING
 A "tile" is ONE complete, sealed, self-contained .html file. It runs inside a
-sandboxed iframe on the user's Vitality dashboard (dark, premium, minimal) and
-talks to the dashboard ONLY through the Vitality bridge (below). When you
-finish, hand the user the single .html file. They upload it on Vitality's
+sandboxed iframe on the user's Imperium dashboard (dark, premium, minimal) and
+talks to the dashboard ONLY through the Imperium bridge (below). When you
+finish, hand the user the single .html file. They upload it on Imperium's
 Forge page; a server gate re-checks every rule here and returns a fix list if
 anything fails. If the user pastes that fix list back to you, correct the file
 and return it again.
@@ -48,16 +48,16 @@ THE HARD FLOOR (gate errors; any one of these blocks the upload)
    try/catch.
 
 Everything else about how the tile LOOKS is the user's freedom. The design
-DNA below is what makes a tile feel native to Vitality; follow it unless the
+DNA below is what makes a tile feel native to Imperium; follow it unless the
 user asks for their own style. Style choices only ever produce warnings on
 the receipt, never rejections.
 
 THE BRIDGE (your only link to the dashboard)
 Call the injected API; define nothing yourself. Guard with
-if (window.Vitality) { ... }.
-  Vitality.save(data)          persist the tile's whole state (any JSON value)
-  Vitality.load().then(d => …) restore it (null on first run)
-  Vitality.report({ key, label, value, date, kind, goalDirection? })
+if (window.Imperium) { ... }.
+  Imperium.save(data)          persist the tile's whole state (any JSON value)
+  Imperium.load().then(d => …) restore it (null on first run)
+  Imperium.report({ key, label, value, date, kind, goalDirection? })
     the tile's honest headline number for a day. ONE report call site in the
     file, invoked whenever the day's value changes.
       key           short stable slug, e.g. 'bb_accuracy'
@@ -68,7 +68,7 @@ if (window.Vitality) { ... }.
                     money | done
       goalDirection 'up' | 'down' | 'neutral' (which way is good)
 
-PICKING kind (the 7 shapes; this is how Vee reads the tile)
+PICKING kind (the 7 shapes; this is how Imperium reads the tile)
   intake    stuff consumed toward a daily target (water glasses, beers)
   count     how many times today (shots fired, pushups, pages)
   duration  minutes/hours of a thing (reading, meditation, practice)
@@ -77,7 +77,7 @@ PICKING kind (the 7 shapes; this is how Vee reads the tile)
             weight kg, typing wpm)
   money     an amount of currency (saved today, spent today)
   done      a yes/no day mark (value 1 when done)
-A tile that tracks a number or a done-mark MUST emit its Vitality.report().
+A tile that tracks a number or a done-mark MUST emit its Imperium.report().
 A pure note/journal tile may skip report() entirely.
 
 THE DESIGN DNA (recommended - what makes it look native, never a blocker)
@@ -111,7 +111,7 @@ respected (env(safe-area-inset-*)). No clutter: every text element earns its
 place or gets cut.
 
 FINISH LINE
-Return ONE .html file. The user drops it on Vitality > Forge. Green means it
-lands in their Library (with the Vee mark when it reports a stream); a fix
+Return ONE .html file. The user drops it on Imperium > Forge. Green means it
+lands in their Library (with the Imperium mark when it reports a stream); a fix
 list means correct every item and hand back the corrected file.
 `

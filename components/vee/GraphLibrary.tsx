@@ -9,11 +9,11 @@ import s from './graphLibrary.module.css'
  * A Library-grade centered card holding EVERY graphable core series for this
  * user, real points included: every vital from their band, every lift they
  * ever logged, every fuel line, the scale. Tap one and the goal drinks from
- * that exact line ('core:<id>' binding). Vee's module picks ride on top as
- * quick pills, "let Vee decide" hands the wheel back, and needs-new-data
+ * that exact line ('core:<id>' binding). Imperium's module picks ride on top as
+ * quick pills, "let Imperium decide" hands the wheel back, and needs-new-data
  * entries render dim and honest (sugar/fiber/sodium/food score until Fuel
  * records them). Data arrives lazily from /api/core-graphs the first time
- * any goal opens this - the Vee tab pays nothing until then.
+ * any goal opens this - the Imperium tab pays nothing until then.
  */
 
 export interface QuickPick {
@@ -76,7 +76,7 @@ export default function GraphLibrary({
   goalTitle: string
   /** The goal's current bindingOverride (module, 'stream:x', 'core:x', or null). */
   currentBinding: string | null
-  /** Vee's module picks for this goal's category (label word + binding key). */
+  /** Imperium's module picks for this goal's category (label word + binding key). */
   quickPicks: QuickPick[]
   /** The core catalog (null = still loading). The PARENT owns the one fetch,
    *  shared with the goal cards' own line drawing - one read, no disagreement. */
@@ -124,8 +124,8 @@ export default function GraphLibrary({
             Pick what draws <b>{goalTitle}</b>. Your real numbers, nothing invented.
           </div>
 
-          {/* Vee's picks: the module lanes (analysed trends, tips, levers). */}
-          <div className={s.quick} role="group" aria-label="Vee's picks">
+          {/* Imperium's picks: the module lanes (analysed trends, tips, levers). */}
+          <div className={s.quick} role="group" aria-label="Imperium's picks">
             {quickPicks.map((p) => (
               <button
                 type="button"
@@ -146,7 +146,7 @@ export default function GraphLibrary({
               <svg viewBox="0 0 24 24" aria-hidden>
                 <path d="M5 5l7 14 7-14" />
               </svg>
-              let Vee decide
+              let Imperium decide
             </button>
           </div>
 

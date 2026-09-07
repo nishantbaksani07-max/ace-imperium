@@ -17,7 +17,7 @@ const STEPS = [
     title: 'It learns you',
     body: (
       <>
-        Vitality finds your <b>true calories</b> from the results, and sharpens every day.
+        Imperium finds your <b>true calories</b> from the results, and sharpens every day.
       </>
     ),
   },

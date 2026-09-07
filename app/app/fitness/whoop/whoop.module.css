@@ -2,7 +2,7 @@
  * WHOOP module — approval-ready layout.
  *
  * Composition:
- *   · title row carries the Vitality Score badge (the punchline)
+ *   · title row carries the Imperium Score badge (the punchline)
  *   · recovery hero pairs the ring with a 7-day mint sparkline
  *   · 4-stat grid with delta chips (Sleep / Strain / HRV / RHR)
  *   · sleep-debt card with a 7-night bar viz (surplus mint, deficit muted-red)
@@ -223,7 +223,7 @@
 
 @keyframes bannerFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 
-/* ───────── Title row + Vitality Score badge ───────── */
+/* ───────── Title row + Imperium Score badge ───────── */
 
 .titleRow {
   display: flex;
