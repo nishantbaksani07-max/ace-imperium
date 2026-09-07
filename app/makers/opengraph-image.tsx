@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 
+export const runtime = 'nodejs'
 /**
  * Open Graph card for the Makers directory (/makers).
  *
@@ -12,7 +13,6 @@ import { ImageResponse } from 'next/og'
  * This is the branded preview when a /makers link is shared in a video
  * description or social post.
  */
-export const runtime = 'nodejs'
 export const alt = 'Imperium Makers — the people building tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'

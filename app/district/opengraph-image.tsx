@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 
+export const runtime = 'nodejs'
 /**
  * Open Graph card for the Arts District gallery (/district).
  *
@@ -12,7 +13,6 @@ import { ImageResponse } from 'next/og'
  * When a /district link is pasted into a YouTube description or a social post,
  * this is the branded preview that shows.
  */
-export const runtime = 'nodejs'
 export const alt = 'Imperium Arts District — a gallery of ready-made tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'

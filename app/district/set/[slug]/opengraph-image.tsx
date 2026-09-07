@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import { FEATURED_COLLECTIONS, tilesForCollection } from '@/lib/tiles/featured'
 import { designByKey } from '@/lib/tiles/designs'
 
+export const runtime = 'nodejs'
 /**
  * Open Graph card for a curated set (/district/set/[slug]). Same chrome as the
  * single-tile card (app/district/[id]/opengraph-image.tsx): black, mint glow,
@@ -14,7 +15,6 @@ import { designByKey } from '@/lib/tiles/designs'
  * asset or font is fetched, type uses a safe system sans stack. An unknown slug
  * falls back to a generic on-brand card so a stale link still previews fine.
  */
-export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
