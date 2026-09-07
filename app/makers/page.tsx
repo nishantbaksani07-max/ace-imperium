@@ -7,9 +7,9 @@ import styles from './makers.module.css'
 // pre-render at build time (the tables may not exist in every environment).
 export const dynamic = 'force-dynamic'
 
-const TITLE = 'Makers · Vitality'
+const TITLE = 'Makers · Imperium'
 const DESCRIPTION =
-  'The people building tiles for Vitality. Each maker has a page and a link, and every tile they publish is free to add to your own dashboard.'
+  'The people building tiles for Imperium. Each maker has a page and a link, and every tile they publish is free to add to your own dashboard.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -119,7 +119,7 @@ export default async function MakersPage() {
       <div className={styles.glow} aria-hidden />
 
       <div className={styles.bar}>
-        <Link href="/" className={styles.mark} aria-label="Vitality">V</Link>
+        <Link href="/" className={styles.mark} aria-label="Imperium">I</Link>
         <span className={styles.barSpacer} />
         <Link href="/" className={styles.barCta}>Make your own</Link>
       </div>
@@ -128,7 +128,7 @@ export default async function MakersPage() {
         <div className={styles.kicker}>Arts District</div>
         <h1 className={styles.title}>Makers</h1>
         <p className={styles.lede}>
-          The people building tiles for Vitality. Every tile they publish is free to add to your own dashboard.
+          The people building tiles for Imperium. Every tile they publish is free to add to your own dashboard.
         </p>
       </header>
 
@@ -163,7 +163,7 @@ export default async function MakersPage() {
       </main>
 
       <div className={styles.footer}>
-        Made with <Link href="/">Vitality</Link>. Build your own dashboard.
+        Made with <Link href="/">Imperium</Link>. Build your own dashboard.
       </div>
     </div>
   )

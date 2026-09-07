@@ -3,7 +3,7 @@
  * drop zone and the Library Upload). One verdict for every door:
  *
  *   pass -> the install envelope for tileStore.importTile (kind/key/label read
- *           from the tile's OWN Vitality.report(), so the stored row matches
+ *           from the tile's OWN Imperium.report(), so the stored row matches
  *           what the tile will actually report at runtime)
  *   fail -> a fix brief written FOR the builder AI, not the human. The user's
  *           whole job is copy, paste it back to their Claude, drop the
@@ -53,12 +53,12 @@ function errorLines(message: string): string[] {
 
 function buildFixBrief(name: string, errors: string[]): string {
   return [
-    `You built a Vitality dashboard tile ("${name}") and it failed Vitality's upload gate. Fix every item below, keep it ONE sealed self-contained .html file, and return the corrected file for me to upload again.`,
+    `You built a Imperium dashboard tile ("${name}") and it failed Imperium's upload gate. Fix every item below, keep it ONE sealed self-contained .html file, and return the corrected file for me to upload again.`,
     '',
     'What failed:',
     ...errors.map((e) => `  ${e}`),
     '',
-    'Rules recap (the blocking floor): sealed (no external scripts, fonts, or network calls), one complete document, animate transform and opacity only, local YYYY-MM-DD date keys, no color-scheme declaration. If the tile tracks a number or a done-mark it must call Vitality.report({key,label,value,date,kind}) once with literal values and kind one of: intake, count, duration, rating, measure, money, done. Style is free and only ever warns.',
+    'Rules recap (the blocking floor): sealed (no external scripts, fonts, or network calls), one complete document, animate transform and opacity only, local YYYY-MM-DD date keys, no color-scheme declaration. If the tile tracks a number or a done-mark it must call Imperium.report({key,label,value,date,kind}) once with literal values and kind one of: intake, count, duration, rating, measure, money, done. Style is free and only ever warns.',
     `Full spec: ${TILE_SPEC_URL}`,
   ].join('\n')
 }
@@ -92,17 +92,17 @@ export function gateTile(rawHtml: string, rawName?: string): GateVerdict {
     const idErrors: string[] = []
     if (!kind) {
       idErrors.push(
-        "- report-unclassified: the Vitality.report() kind is not a plain literal from the locked 7 (intake, count, duration, rating, measure, money, done) -> write it as a quoted string, e.g. kind: 'count', never a variable",
+        "- report-unclassified: the Imperium.report() kind is not a plain literal from the locked 7 (intake, count, duration, rating, measure, money, done) -> write it as a quoted string, e.g. kind: 'count', never a variable",
       )
     }
     if (!identity.key) {
       idErrors.push(
-        "- report-key-unreadable: the Vitality.report() key is not a plain string literal -> write it as a short quoted slug, e.g. key: 'bb_accuracy', never a variable",
+        "- report-key-unreadable: the Imperium.report() key is not a plain string literal -> write it as a short quoted slug, e.g. key: 'bb_accuracy', never a variable",
       )
     }
     if (!identity.label) {
       idErrors.push(
-        "- report-label-unreadable: the Vitality.report() label is not a plain string literal -> write it as a short quoted name, e.g. label: 'Bb Accuracy', never a variable",
+        "- report-label-unreadable: the Imperium.report() label is not a plain string literal -> write it as a short quoted name, e.g. label: 'Bb Accuracy', never a variable",
       )
     }
     if (idErrors.length > 0) {

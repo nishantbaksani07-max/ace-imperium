@@ -68,7 +68,7 @@ export default function WeightImportSheet({
     setUnit(res.unit)
     setSkipped(res.skipped)
     if (res.rows.length === 0) {
-      setError("Couldn't find weigh-ins in that. Check the format, or let Vee read it.")
+      setError("Couldn't find weigh-ins in that. Check the format, or let Imperium read it.")
       return
     }
     setRows(res.rows)
@@ -107,7 +107,7 @@ export default function WeightImportSheet({
     const u: WeightUnit = data.unit === 'lb' ? 'lb' : 'kg'
     const got: RawWeighIn[] = (data.weighIns || []).map((w) => ({ dayKey: w.date, value: w.value }))
     setUnit(u)
-    if (got.length === 0) { setError("Vee couldn't find any weigh-ins in that."); return }
+    if (got.length === 0) { setError("Imperium couldn't find any weigh-ins in that."); return }
     setRows(got)
   }
 
@@ -199,12 +199,12 @@ export default function WeightImportSheet({
             <input ref={imgRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) readImage(f) }} />
             <button className={styles.drop} onClick={() => imgRef.current?.click()} disabled={busy}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M3 7h4l2-3h6l2 3h4v13H3z" /><circle cx="12" cy="13" r="3.5" /></svg>
-              <span className={styles.dropT}>{busy ? 'Vee is reading…' : 'Tap to choose a screenshot'}</span>
+              <span className={styles.dropT}>{busy ? 'Imperium is reading…' : 'Tap to choose a screenshot'}</span>
               <span className={styles.dropS}>WHOOP · Apple Health · Withings · Renpho · any scale app</span>
             </button>
             <div className={styles.aiTag}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z" /></svg>
-              Vee reads the image and pulls out every date + weight
+              Imperium reads the image and pulls out every date + weight
             </div>
           </div>
         )}
@@ -232,7 +232,7 @@ export default function WeightImportSheet({
           <div className={styles.err}>
             {error}
             {tab === 'paste' && text.trim() && (
-              <button className={styles.aiLink} onClick={readPasteWithAI} disabled={busy}>Ask Vee to read it →</button>
+              <button className={styles.aiLink} onClick={readPasteWithAI} disabled={busy}>Ask Imperium to read it →</button>
             )}
           </div>
         )}

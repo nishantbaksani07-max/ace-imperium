@@ -1,8 +1,8 @@
 /**
- * Tiles contributor for the Vitality Score — the piece that makes every
+ * Tiles contributor for the Imperium Score — the piece that makes every
  * user-built tile feed the ONE daily orb number, with zero per-tile code.
  *
- * A tile reports one numeric life-stream via Vitality.report() (the report
+ * A tile reports one numeric life-stream via Imperium.report() (the report
  * contract, lib/tiles/reportContract.ts). This contributor turns ALL of a
  * user's streams into ONE score slice ("Tiles"), so tiles together weigh
  * exactly as much as Train and exactly as much as Fuel — a user with fifteen

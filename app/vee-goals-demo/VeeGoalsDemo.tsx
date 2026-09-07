@@ -5,16 +5,16 @@ import dynamic from 'next/dynamic'
 import styles from './veeGoalsDemo.module.css'
 
 /**
- * Vee Goals — public no-auth preview of the Vee-housed Goals experience.
+ * Imperium Goals — public no-auth preview of the Imperium-housed Goals experience.
  *
  * Two tiers, a mix of both:
  *   1. YOUR GOALS — big personal aspirations you author ("hit 1,000 subs"),
- *      each with a deadline, a priority, and a per-goal choice of how hard Vee
+ *      each with a deadline, a priority, and a per-goal choice of how hard Imperium
  *      pushes you. Setting one is the flagship loop: it must feel effortless
  *      and rewarding so a user happily returns whenever they have a new goal.
- *   2. THIS WEEK — the cozy auto-tracked Vitality goals under your identity.
+ *   2. THIS WEEK — the cozy auto-tracked Imperium goals under your identity.
  *
- * The Vee gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
+ * The Imperium gem is the REAL CoachGem 'echo' (iris dodecahedron + V), driven via
  * controlRef: 'concern' when noticing you slip, 'proud' when you set a goal.
  */
 const CoachGem = dynamic(() => import('@/components/CoachGem'), {
@@ -52,7 +52,7 @@ const PUSH_OPTS: { key: Push; title: string; desc: string }[] = [
   { key: 'push', title: 'Push me to show up', desc: 'I check in often and keep you honest.' },
   { key: 'silent', title: 'Keep it silent', desc: 'I won’t say a word. This one is just for you.' },
 ]
-const PUSH_CHIP: Record<Push, string> = { silent: 'Vee · silent', gentle: 'Vee · gentle', balanced: 'Vee · nudges', push: 'Vee · pushes' }
+const PUSH_CHIP: Record<Push, string> = { silent: 'Imperium · silent', gentle: 'Imperium · gentle', balanced: 'Imperium · nudges', push: 'Imperium · pushes' }
 const PRIO_LBL = ['Low', 'Medium', 'High'] as const
 
 function addDays(n: number) { const d = new Date(); d.setDate(d.getDate() + n); return d }
@@ -205,7 +205,7 @@ export default function VeeGoalsDemo() {
           </div>
         </div>
         <div className={styles.field}>
-          <span className={styles.fieldLabel}>How much should Vee push you?</span>
+          <span className={styles.fieldLabel}>How much should Imperium push you?</span>
           <div className={styles.pushRow}>
             {PUSH_OPTS.map(o => (
               <button type="button" key={o.key} className={`${styles.pushOpt} ${draftPush === o.key ? styles.pushOptOn : ''}`} onClick={() => setDraftPush(o.key)}>
@@ -235,7 +235,7 @@ export default function VeeGoalsDemo() {
       <div className={styles.shell}>
 
         <div className={styles.demoBar}>
-          <div className={styles.demoNote}>Preview · real Vee gem · set a goal, tap a Vee action</div>
+          <div className={styles.demoNote}>Preview · real Imperium gem · set a goal, tap a Imperium action</div>
           <div className={styles.toggle}>
             <button className={`${styles.toggleBtn} ${view === 'weeks' ? styles.toggleOn : ''}`} onClick={() => setView('weeks')}>A few weeks in</button>
             <button className={`${styles.toggleBtn} ${view === 'day1' ? styles.toggleOn : ''}`} onClick={() => setView('day1')}>Day one</button>
@@ -245,10 +245,10 @@ export default function VeeGoalsDemo() {
         {view === 'weeks' ? (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>Imperium · Imperium</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
-                <span className={styles.watchPill}><span className={styles.dot} />Vee&rsquo;s with you</span>
+                <span className={styles.watchPill}><span className={styles.dot} />Imperium&rsquo;s with you</span>
               </div>
             </header>
 
@@ -258,9 +258,9 @@ export default function VeeGoalsDemo() {
               </div>
             </div>
 
-            {/* FLAGSHIP: Vee notices you slipping */}
+            {/* FLAGSHIP: Imperium notices you slipping */}
             <div className={`${styles.nudge} ${resolved ? styles.nudgeResolved : ''}`}>
-              <span className={styles.nudgeWho}>{resolved ? 'Vee' : 'Vee noticed'}</span>
+              <span className={styles.nudgeWho}>{resolved ? 'Imperium' : 'Imperium noticed'}</span>
               {resolved ? (
                 <>
                   <p className={styles.nudgeLine}>{RESOLVE_COPY[resolved][0]}</p>
@@ -316,7 +316,7 @@ export default function VeeGoalsDemo() {
             ))}
             {CreateBlock}
 
-            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Vitality</span><span className={styles.eyebrowRule} /></div>
+            <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·02</span><span className={styles.eyebrowLbl}>This week with Imperium</span><span className={styles.eyebrowRule} /></div>
 
             <div className={styles.identity}>
               <span className={styles.idVee}><VMark size={18} /></span>
@@ -388,12 +388,12 @@ export default function VeeGoalsDemo() {
               12 more votes and we celebrate together
             </div>
 
-            <button className={styles.talkPill}><VMark size={16} />Talk to Vee about your goals</button>
+            <button className={styles.talkPill}><VMark size={16} />Talk to Imperium about your goals</button>
           </div>
         ) : (
           <div className={styles.view}>
             <header className={styles.header}>
-              <div className={styles.eyebrowTop}>Vitality · Vee</div>
+              <div className={styles.eyebrowTop}>Imperium · Imperium</div>
               <div className={styles.titleRow}>
                 <h1 className={styles.title}>Your <span className={styles.accent}>goals</span></h1>
               </div>
@@ -409,7 +409,7 @@ export default function VeeGoalsDemo() {
             {CreateBlock}
 
             <div className={styles.eyebrow}><span className={styles.eyebrowNum}>·01</span><span className={styles.eyebrowLbl}>Already in motion</span><span className={styles.eyebrowRule} /></div>
-            <p className={styles.tierIntro}>The small Vitality wins I can already see in your week. Tap one and I&rsquo;ll keep tracking it for you.</p>
+            <p className={styles.tierIntro}>The small Imperium wins I can already see in your week. Tap one and I&rsquo;ll keep tracking it for you.</p>
 
             <div className={styles.habits}>
               {[

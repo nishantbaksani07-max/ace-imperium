@@ -9,10 +9,10 @@
  * (their words lead), today's nutrition is attached automatically as context,
  * and "Open in Claude" opens a fresh Claude chat pre-filled with both via
  * claude.ai/new?q= — zero cost to us, nothing to abuse. If they have the
- * Vitality MCP connector set up, Claude can also pull their meals, weight trend,
+ * Imperium MCP connector set up, Claude can also pull their meals, weight trend,
  * training, and goals live.
  *
- * Look is iris (Echo / Vee native); it mirrors the mint TrainerDoorway.
+ * Look is iris (Echo / Imperium native); it mirrors the mint TrainerDoorway.
  */
 
 import { useEffect, useRef, useState } from 'react'
@@ -82,7 +82,7 @@ export default function CoachDoorway({
           </div>
           <div className={styles.doorHead}>Talk it through in Claude</div>
           <p className={styles.doorBody}>
-            Ask anything about your food. Today is attached, and Claude can pull the rest of your Vitality data live.
+            Ask anything about your food. Today is attached, and Claude can pull the rest of your Imperium data live.
           </p>
 
           <textarea

@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic'
  * ?mode=advanced: CreateTile, the paste-your-own-HTML editor - the quiet power-user
  * path (hand-written or MCP-scaffolded tiles). Same sealed iframe host + the same
  * tileStore.importTile socket underneath, so both paths land a tile on the dashboard
- * identically and speak the Vitality bridge (save / load / report into Vee).
+ * identically and speak the Imperium bridge (save / load / report into Imperium).
  */
 export default async function CreatePage({
   searchParams,
@@ -30,7 +30,7 @@ export default async function CreatePage({
   if (!user) redirect('/login')
 
   if (searchParams?.mode === 'advanced') return <CreateTile userId={user.id} />
-  // ?idea=<text> prefills the finder bar (the Vee goals panel's
+  // ?idea=<text> prefills the finder bar (the Imperium goals panel's
   // "Create a tile for this" door lands here with the goal title).
   const idea = (searchParams?.idea ?? '').slice(0, 200)
   return <TileBuilder userId={user.id} initialIdea={idea} />

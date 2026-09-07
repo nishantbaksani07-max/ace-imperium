@@ -51,7 +51,7 @@ function writeDismissed(userId: string, set: Set<TaskId>): void {
 }
 
 /**
- * Vitality gem's voice greets the user above the checklist. Short, warm,
+ * Imperium gem's voice greets the user above the checklist. Short, warm,
  * game-flavored — never a "set up your account" form vibe. Picks a copy
  * line based on how much of the checklist is left so it feels reactive
  * rather than canned.

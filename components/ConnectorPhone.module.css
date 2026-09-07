@@ -1,6 +1,6 @@
 /*
  * ConnectorPhone — phone frame (HeroPhone language) showing Claude + the
- * Vitality connector pushing proactive nudges that stagger in like real
+ * Imperium connector pushing proactive nudges that stagger in like real
  * notifications. Tokens are the global ones from app/globals.css.
  */
 
@@ -70,7 +70,7 @@
   animation: cp-pulse 2s ease-in-out infinite;
 }
 
-/* Notification cards — pushed by Claude using Vitality's data. */
+/* Notification cards — pushed by Claude using Imperium's data. */
 .notif {
   background: var(--card-elevated);
   border: 1px solid var(--border);

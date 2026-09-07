@@ -4,7 +4,7 @@ import { ImageResponse } from 'next/og'
  * Open Graph card for the Arts District gallery (/district).
  *
  * Rendered at build/request time by next/og (Satori) — no committed binary, no
- * remote fetch. Everything is inline: the Vitality gem is an SVG embedded as a
+ * remote fetch. Everything is inline: the Imperium gem is an SVG embedded as a
  * base64 data-URI, the background is a pure-black brand canvas with a mint glow,
  * and the type uses a safe system sans stack (Satori cannot resolve our
  * next/font CSS vars in this context, so we never reference them here).
@@ -13,11 +13,11 @@ import { ImageResponse } from 'next/og'
  * this is the branded preview that shows.
  */
 export const runtime = 'nodejs'
-export const alt = 'Vitality Arts District — a gallery of ready-made tiles'
+export const alt = 'Imperium Arts District — a gallery of ready-made tiles'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — the flat-faceted "V" gem, solid fills on near-black.
+// Imperium gem mark — the flat-faceted "V" gem, solid fills on near-black.
 // Same geometry as app/icon.tsx so the brand mark stays consistent.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
@@ -77,7 +77,7 @@ export default function DistrictOgImage() {
               textTransform: 'uppercase',
             }}
           >
-            Vitality
+            Imperium
           </div>
         </div>
         {/* title block */}

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import CozyLibrary from './CozyLibrary'
 
 export const metadata: Metadata = {
-  title: 'Cozy Loader Library · Vitality',
+  title: 'Cozy Loader Library · Imperium',
   description: 'Internal design lab for the cozy loader, the warm cozy-wait card and its per-section content sets.',
 }
 

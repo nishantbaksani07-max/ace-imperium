@@ -33,7 +33,7 @@ export const maxDuration = 30
  * dogfood it.
  */
 
-const SYSTEM_PROMPT_PREAMBLE = `You are Vee, the Vitality mentor. One mind that has read every part of this user's life in the app: training, fuel, vitals, goals, money, how they feel (their mood), what is going on in their life, and the thoughts they throw into the void. You are always in their corner.
+const SYSTEM_PROMPT_PREAMBLE = `You are Imperium, the Imperium mentor. One mind that has read every part of this user's life in the app: training, fuel, vitals, goals, money, how they feel (their mood), what is going on in their life, and the thoughts they throw into the void. You are always in their corner.
 
 Your job is to be useful, not chatty. Help the user think clearly about their health, habits, finances, and life. Reference their actual data when it's relevant. When the user has dumped notes into their inbox (the void), treat those as standing reminders or goals they want you to hold for them. Your signature move is connecting two areas of their life that they treat as separate.
 
@@ -55,7 +55,7 @@ RESPONSE FORMAT (strict — the UI renders this as designed cards, NOT a documen
 - End with the answer. Only add a question if it truly unblocks them, and prefer an ask card for that (see ASK CARDS).`
 
 /*
- * Shared-brain write path. Vee appends durable facts after a marker the UI
+ * Shared-brain write path. Imperium appends durable facts after a marker the UI
  * never sees; we strip the block, validate, and persist via user_facts.
  * Single Claude call — no second "extract facts" round trip, no extra latency.
  */
@@ -76,7 +76,7 @@ const FACT_KINDS = new Set(['preference', 'goal', 'constraint', 'identity', 'eve
 
 /*
  * Ask cards. When a clarifying question with a few discrete answers is the most
- * useful reply, Vee appends a hidden ===ASK=== block (parallel to ===MEMORY===)
+ * useful reply, Imperium appends a hidden ===ASK=== block (parallel to ===MEMORY===)
  * and the UI renders it as a cozy tappable card instead of a prose question.
  */
 const ASK_MARKER = '===ASK==='
@@ -167,7 +167,7 @@ function parseAsk(block: string | null): VeeAsk | null {
   }
 }
 
-/** Split Vee's raw output into the visible reply + an optional ask card + facts.
+/** Split Imperium's raw output into the visible reply + an optional ask card + facts.
  *  (Not exported — Next route files may only export route handlers.) */
 function parseVeeOutput(raw: string): { reply: string; ask: VeeAsk | null; facts: ExtractedFact[] } {
   let firstIdx = raw.length
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
     supabase.from('wearable_data').select('date, recovery, sleep_hours, sleep_perf, hrv, rhr, strain').eq('user_id', user.id).gte('date', since).order('date', { ascending: false }),
     getUserPreferences(supabase, user.id),
     readFacts(supabase, user.id),
-    // the user's OWN built tiles (report contract) — so Vee can talk about the
+    // the user's OWN built tiles (report contract) — so Imperium can talk about the
     // beer tracker or reading timer they made as naturally as workouts. 56d so
     // the same rows also feed the deterministic connections scan below.
     supabase.from('tile_streams').select('id, tile_id, key, canonical_key, label, kind, goal_direction').eq('user_id', user.id),
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
     supabase.from('workouts').select('date').eq('user_id', user.id).not('submitted_at', 'is', null).gte('date', daysAgoKey(56)),
   ])
 
-  // The same fused daily read the Vitals page shows, so Vee references today's
+  // The same fused daily read the Vitals page shows, so Imperium references today's
   // signal and stays consistent with the page. Runs after the batch so it can
   // reuse allFacts (no duplicate user_facts query). Best-effort, never throws.
   const signal = await gatherSignal(supabase, user.id, todayKey(), { facts: allFacts ?? [] }).catch(() => null)
@@ -319,9 +319,9 @@ export async function POST(request: NextRequest) {
     contextLines.push('Wearable (last 7d): not connected.')
   }
 
-  // Their OWN tiles (Phase 2 of Vee-as-the-middle). One dense line per stream,
+  // Their OWN tiles (Phase 2 of Imperium-as-the-middle). One dense line per stream,
   // capped at 8, built by the tested formatter — the user BUILT these trackers,
-  // so Vee referencing them by name is the "it knows my whole board" moment.
+  // so Imperium referencing them by name is the "it knows my whole board" moment.
   const tileStreams: TileStreamRow[] = (tileStreamsRes.data ?? []).map(r => ({
     id: String(r.id),
     tileId: (r.tile_id ?? '') as string,
@@ -342,8 +342,8 @@ export async function POST(request: NextRequest) {
     contextLines.push(`Tiles they built themselves (their own trackers):\n${tileLines.map(l => `- ${l}`).join('\n')}`)
   }
 
-  // "Vee connects" — deterministic cross-stream links (tile x recovery/sleep/
-  // training), verified by the gated scan, so Vee can CITE a real pattern
+  // "Imperium connects" — deterministic cross-stream links (tile x recovery/sleep/
+  // training), verified by the gated scan, so Imperium can CITE a real pattern
   // instead of inventing one. At most two lines; silent when nothing is true.
   if (tileStreams.length > 0) {
     const outcomes: OutcomeDef[] = [
@@ -382,7 +382,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Mood — the user's own daily read. The "how you feel" half of every connection
-  // Vee makes (feelings x sleep/training/spending). Sits next to the wearable data
+  // Imperium makes (feelings x sleep/training/spending). Sits next to the wearable data
   // on purpose so the model can tie them together.
   const moodStrip = buildMoodStrip(
     allFacts.filter(f => f.kind === MOOD_KIND).map(f => ({ body: f.body, createdAt: f.createdAt })),
@@ -398,11 +398,11 @@ export async function POST(request: NextRequest) {
     contextLines.push('Mood (last 7d): not logged yet.')
   }
 
-  // Today's fused signal — the same read the Vitals page shows. Keeps Vee
+  // Today's fused signal — the same read the Vitals page shows. Keeps Imperium
   // consistent with what the user just saw on their signal card.
   if (signal) {
     contextLines.push(
-      `\nTODAY'S SIGNAL (Vitality's fused read): ${signal.badge}, ${signal.verdict} Why: ${signal.why}${signal.goalLine ? ' Goal: ' + signal.goalLine : ''}`
+      `\nTODAY'S SIGNAL (Imperium's fused read): ${signal.badge}, ${signal.verdict} Why: ${signal.why}${signal.goalLine ? ' Goal: ' + signal.goalLine : ''}`
     )
   }
 
@@ -413,7 +413,7 @@ export async function POST(request: NextRequest) {
     contextLines.push('\nUser notes: empty.')
   }
 
-  // The shared brain. Every module writes user_facts; Vee reads the most
+  // The shared brain. Every module writes user_facts; Imperium reads the most
   // salient slice here and grows it via the MEMORY marker after each reply.
   // mental_health facts (life context + mood) are surfaced separately below, so
   // exclude them here to avoid raw "Mood today: 4/5" lines cluttering the list.
@@ -425,7 +425,7 @@ export async function POST(request: NextRequest) {
     contextLines.push('\nWHAT YOU REMEMBER: nothing yet. You are still getting to know them.')
   }
 
-  // Life context the user told Vee directly (the "Folded Notes"). Backstory Vee
+  // Life context the user told Imperium directly (the "Folded Notes"). Backstory Imperium
   // cannot infer from metrics. Use it to respond like someone who actually knows them.
   const lifeFacts = allFacts.filter(f => f.source === 'mental_health' && isContextKind(f.kind))
   if (lifeFacts.length > 0) {
@@ -477,7 +477,7 @@ export async function POST(request: NextRequest) {
 
     const text = data?.content?.[0]?.text
     if (typeof text !== 'string') {
-      return NextResponse.json({ error: 'Empty response from Vee' }, { status: 502 })
+      return NextResponse.json({ error: 'Empty response from Imperium' }, { status: 502 })
     }
 
     const parsed = parseVeeOutput(text)
@@ -508,7 +508,7 @@ export async function POST(request: NextRequest) {
     // A card-only reply is valid (the question lives in the card), so only the
     // both-empty case is a real failure.
     if (!reply && !ask) {
-      return NextResponse.json({ error: 'Empty response from Vee' }, { status: 502 })
+      return NextResponse.json({ error: 'Empty response from Imperium' }, { status: 502 })
     }
     return NextResponse.json({ reply, ask })
   } catch (e) {

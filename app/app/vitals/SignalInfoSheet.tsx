@@ -7,7 +7,7 @@ import styles from './signalInfoSheet.module.css'
 
 /**
  * Explains Today's Signal: a recover ↔ steady ↔ push spectrum with the user's
- * lean marked, the three states in one line each, and the "Vee reads the same
+ * lean marked, the three states in one line each, and the "Imperium reads the same
  * signal" trust line. Deliberately light — the inputs that fed today's call
  * already live on the signal card itself. Renders inside the .page scope so the
  * azure tokens inherit. Colorblind-safe: glyph (▲■◆) + word + position carry it.
@@ -82,7 +82,7 @@ export default function SignalInfoSheet({ signal, onClose }: { signal: Signal; o
           })}
         </div>
 
-        <p className={styles.trust}><b>Vee reads the same signal,</b> so your mentor and your numbers always agree.</p>
+        <p className={styles.trust}><b>Imperium reads the same signal,</b> so your mentor and your numbers always agree.</p>
       </div>
     </div>
   )

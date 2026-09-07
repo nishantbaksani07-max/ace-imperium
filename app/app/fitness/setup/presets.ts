@@ -742,7 +742,7 @@ export interface RecommendationFactor {
  *  2. Pick a base split from (effective days × experience).
  *  3. Goal nudges the split at edges (strength keeps it on U/L over PPL).
  *  4. Goal-preferences correction layer — when the user has set their
- *     Vitality Goal (`outcome` + `window` + `constraint`), apply
+ *     Imperium Goal (`outcome` + `window` + `constraint`), apply
  *     strategic overrides on top of the tactical intake decisions. Goal
  *     is the north star; intake is the logistics. See applyGoalCorrection.
  *  5. Build diagnostic + reasoning from the full answer set (including
@@ -863,7 +863,7 @@ export function recommendIntake(
   }
 
   // ── Goal correction layer ────────────────────────────────────────
-  // The user's Vitality Goal is the north star; the intake handles the
+  // The user's Imperium Goal is the north star; the intake handles the
   // tactical "how does this fit my life" details. When Goal disagrees
   // with the intake's choice on intent (cut vs bulk, longevity vs peak
   // volume), Goal wins and we collect a reasoning bullet so the user

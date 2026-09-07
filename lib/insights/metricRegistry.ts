@@ -1,15 +1,15 @@
 /**
  * THE METRIC REGISTRY (TRAIN 5) - the one typed source of truth for every
- * drawable series a Vitality user owns.
+ * drawable series a Imperium user owns.
  *
- * The law: adding a metric to Vitality is ONE entry in METRIC_REGISTRY. The
+ * The law: adding a metric to Imperium is ONE entry in METRIC_REGISTRY. The
  * Room (/app/room) is generated from this array at render, the binding picker
  * lists it, strongestBinding words come from it, and docs/VEE-LIBRARY.md is
  * its narrative twin. Nothing here is guessed: every entry is transcribed from
  * the real code paths named in its `loader` and deep-linked to a real /app
  * route (unit-tested in __tests__/metricRegistry.test.ts).
  *
- * Encodes the 34 native metrics of the Vee Library:
+ * Encodes the 34 native metrics of the Imperium Library:
  *   fitness 5 + health 11 (fuel 5, vitals 6 per-source triaged) + mind 4 +
  *   money 4 + audience 3 + the 7 tile report kinds (the open end) = 34.
  * Two entries are DYNAMIC FAMILIES (one entry, unbounded series): per-lift
@@ -424,8 +424,8 @@ export const METRIC_REGISTRY: MetricEntry[] = [
 
   // --------------------------------- CUSTOM TILE STREAMS (7, the open end)
   // One dynamic family per report kind (lib/tiles/reportContract.ts
-  // REPORT_KINDS). Any life-stream Vitality does not natively track - career,
-  // craft, people included - becomes readable here through Vitality.report().
+  // REPORT_KINDS). Any life-stream Imperium does not natively track - career,
+  // craft, people included - becomes readable here through Imperium.report().
   {
     id: 'tile_intake',
     category: 'general',
@@ -548,7 +548,7 @@ export const MODULE_PRIMARY: Record<GuideModule, { entryId: string; metric: stri
  * guessing: body-shaped categories get the body modules, money gets net worth,
  * audience gets followers, and every category always includes notes (the
  * honest floor lever). The picker appends the user's OWN tile streams and
- * "let Vee decide" after these. Sourced here (the registry) so the option
+ * "let Imperium decide" after these. Sourced here (the registry) so the option
  * list and the Room can never disagree.
  */
 export function bindingOptionsForCategory(category: string | null): GuideModule[] {

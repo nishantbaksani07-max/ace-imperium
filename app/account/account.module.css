@@ -532,7 +532,7 @@
 .handleField:focus-within { border-bottom-color: var(--mint); }
 
 /* Live validation state on the handle field. Valid = mint underline + tick.
-   Invalid = amber underline (caution, never red, per Vitality color law). Both
+   Invalid = amber underline (caution, never red, per Imperium color law). Both
    only apply once the field has been touched, so an empty field stays calm. */
 .handleFieldOk { border-bottom-color: var(--mint); }
 .handleFieldWarn { border-bottom-color: var(--amber); }

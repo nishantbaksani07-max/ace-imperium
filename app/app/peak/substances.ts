@@ -3,7 +3,7 @@
  *
  * Each entry's pharmacokinetics (onset / peak / halfLife / amp) are direct
  * ports from peak-tracker.html so the math stays consistent for users who
- * cross over between the standalone and Vitality. When adding new entries,
+ * cross over between the standalone and Imperium. When adding new entries,
  * mirror the same shape and keep amp scaled to "focus score points at peak,
  * assuming standard dose at tolerance 5 / 75kg bodyweight".
  */

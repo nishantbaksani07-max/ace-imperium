@@ -380,7 +380,7 @@ export default function DistrictDetailModal({ tile, added, onAdd, onClose }: Dis
 
           <div className={styles.pitch}>
             <div className={`${styles.pEyebrow} ${styles.rev}`} style={{ transitionDelay: '0.15s' }}>
-              {kind} &middot; reports to Vee
+              {kind} &middot; reports to Imperium
             </div>
             <h2 id="district-detail-name" className={`${styles.pName} ${styles.rev}`} style={{ transitionDelay: '0.28s' }}>
               {tile.envelope.name}

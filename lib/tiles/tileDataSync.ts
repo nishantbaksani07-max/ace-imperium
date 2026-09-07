@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/client'
 
 /**
- * tile_data sync: the RUNTIME data half of a tile (whatever its Vitality.save()
+ * tile_data sync: the RUNTIME data half of a tile (whatever its Imperium.save()
  * persists) mirrored to Supabase so it backs up and crosses devices, instead of
  * living only in this browser's localStorage.
  *

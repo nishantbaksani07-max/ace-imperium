@@ -1,6 +1,6 @@
 // Pure, read-only: reads the user's recent Train workouts and judges today's
 // session as strong / steady / lighter (or deload), to steer Peak's guidance.
-// No writes, no LLM, no Date.now() (today is passed in). Peak feeds Vee, never
+// No writes, no LLM, no Date.now() (today is passed in). Peak feeds Imperium, never
 // edits it. Robust to a forgotten or partial log: it reads the real sets.
 import { getLocalDateKey } from '@/lib/dates'
 

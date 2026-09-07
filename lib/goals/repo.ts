@@ -1,5 +1,5 @@
 /**
- * Vee Goals repo — pure row<->domain mappers + thin RLS-scoped read helpers.
+ * Imperium Goals repo — pure row<->domain mappers + thin RLS-scoped read helpers.
  * Mappers are IO-free (unit-tested in __tests__/veeGoalsRepo.test.ts); the
  * Supabase writes live in app/app/goals/goalActions.ts. Mirrors the style of
  * lib/vitals/goalsRepo.ts (numerics arrive from PostgREST as strings).

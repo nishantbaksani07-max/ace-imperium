@@ -144,7 +144,7 @@ export async function setActiveGoalMetric(metric: VitalsGoalMetric): Promise<Goa
 /**
  * Goal picker (replaces the vitals quiz). The user explicitly chose a goal, so
  * we (1) save a minimal preferences slice — this stamps `completed_at`, which is
- * what unlocks the hard-walled metrics page — carrying only the safety flags Vee
+ * what unlocks the hard-walled metrics page — carrying only the safety flags Imperium
  * needs, then (2) derive + save the active goal for the chosen metric. The old
  * quiz-only fields get sensible defaults so existing readers keep type-checking;
  * the real goal comes from the explicit metric, not `biggestLimiter`.

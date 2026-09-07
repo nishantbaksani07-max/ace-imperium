@@ -6,7 +6,7 @@
  * When a sentence clearly asks for something beyond that - live platform
  * numbers, AI, anything that must fetch - building a manual lookalike reads as
  * a dumb fake (Alex: never label it limitless; scan first, and when we cannot
- * truly build it, Vee hands off to the Vitality MCP in Claude Code).
+ * truly build it, Imperium hands off to the Imperium MCP in Claude Code).
  *
  * CONSERVATIVE by design: only a CLEAR external signal hands off. Anything
  * ambiguous stays buildable - a good manual tracker beats a false refusal.
@@ -17,9 +17,9 @@ export interface CapabilityVerdict {
   verdict: 'buildable' | 'handoff' | 'module'
   /** Set on handoff: which connector family matched, when one did. */
   provider?: 'youtube' | 'instagram' | 'tiktok' | 'x' | 'twitch' | 'shopify' | 'stripe' | 'spotify'
-  /** Set on a module verdict: the Vitality module that already IS this ask. */
+  /** Set on a module verdict: the Imperium module that already IS this ask. */
   module?: 'train' | 'fuel' | 'water' | 'weight' | 'mentor'
-  /** One warm plain-words reason Vee can speak. Set on handoff/module. */
+  /** One warm plain-words reason Imperium can speak. Set on handoff/module. */
   why?: string
 }
 
@@ -70,7 +70,7 @@ const LIVE_RE =
 
 /** Rich-APP asks the quick-tile engine must never flatten into a dumb tally.
  *  When the ask names a whole application (a logger, a journal, a planner) and a
- *  Vitality module already IS that application, Vee points at the real thing -
+ *  Imperium module already IS that application, Imperium points at the real thing -
  *  the failure becomes a wow. Order matters: specific domains before the bare
  *  journal/diary rule so "food diary" lands on Fuel, not Mentor. Bare
  *  journal/diary needs an article/possessive ("a journal", "my diary") so the

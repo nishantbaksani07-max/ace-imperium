@@ -17,7 +17,7 @@ export default function BrandHeader({ totalBrands, onNew }: Props) {
     <header className={styles.header}>
       <div className={styles.headerLeft}>
         <Link href="/app" className={styles.back}>
-          <span className={styles.backArrow}>←</span> Vitality
+          <span className={styles.backArrow}>←</span> Imperium
         </Link>
         <span className={styles.countPill}>
           {totalBrands === 0

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 /**
- * robots.txt for Vitality, served by Next.js at /robots.txt.
+ * robots.txt for Imperium, served by Next.js at /robots.txt.
  *
  * Allows every crawler on the public marketing + Pillar-3 surfaces (the home
  * page, the Arts District, the makers gallery, pricing, and the public maker

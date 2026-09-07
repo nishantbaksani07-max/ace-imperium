@@ -90,7 +90,7 @@ export default async function AdminRoute() {
       <div className={styles.glow} aria-hidden />
 
       <div className={styles.bar}>
-        <Link href="/app" className={styles.mark} aria-label="Vitality">V</Link>
+        <Link href="/app" className={styles.mark} aria-label="Imperium">I</Link>
         <span className={styles.barSpacer} />
         <Link href="/app" className={styles.barCta}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

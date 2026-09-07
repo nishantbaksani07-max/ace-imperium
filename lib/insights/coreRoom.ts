@@ -4,7 +4,7 @@
  * 2026-07-11: "a user can access every data session graph ever recorded on
  * any core tile"). Train / Fuel / Body / Vitals only - Peak, Finance, and
  * Brand are deliberately out (de-cored at launch), and custom tiles feed
- * Vitality Noticed, not this room.
+ * Imperium Noticed, not this room.
  *
  * PURE + IO-free: the page loader hands in raw rows, these builders hand back
  * plotted series. Nothing here writes anything anywhere - the room is a

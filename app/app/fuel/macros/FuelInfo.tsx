@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 
 import styles from './fuelInfo.module.css'
 
-// The Vitality "info button" — the /i_info pattern adapted to React. A small
+// The Imperium "info button" — the /i_info pattern adapted to React. A small
 // circled-i to the RIGHT of the "Today's fuel" title that opens a popup
-// explaining the whole Fuel section. The Vitality look (Step 1 of /i_info) is
+// explaining the whole Fuel section. The Imperium look (Step 1 of /i_info) is
 // already global via app/globals.css, so this is just the button + popup.
 //
 // Content is a plain object, so the same component drops next to any title with

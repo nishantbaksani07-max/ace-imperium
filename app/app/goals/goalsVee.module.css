@@ -1,5 +1,5 @@
-/* Vee Goals — the real, auth'd Goals surface (ported from the approved
-   vee-goals-demo). Vee wears IRIS (#a78bfa), sibling to Vitals' azure. Editorial
+/* Imperium Goals — the real, auth'd Goals surface (ported from the approved
+   vee-goals-demo). Imperium wears IRIS (#a78bfa), sibling to Vitals' azure. Editorial
    language: Instrument Serif italic heads, Inter body, JetBrains Mono eyebrows.
    Colour LAW: iris = good/progress, amber = gentle easing/concern. Never red.
    Meaning rides on word + shape + position (colourblind-safe).
@@ -39,7 +39,7 @@
 .dot{width:6px;height:6px;border-radius:50%;background:var(--iris);animation:breathe 3.6s var(--ease) infinite}
 @keyframes breathe{0%,100%{opacity:.55;box-shadow:0 0 6px var(--iris-glow)}50%{opacity:1;box-shadow:0 0 12px var(--iris-glow)}}
 
-/* the real Vee gem hero */
+/* the real Imperium gem hero */
 .gemHero{display:flex;flex-direction:column;align-items:center;gap:8px;padding:var(--s4) 0 var(--s5)}
 .gemWrap{width:216px;height:216px;flex:0 0 auto}
 .gemWrapSmall{width:172px;height:172px}
@@ -59,7 +59,7 @@
 .eyebrowRule{flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent)}
 .tierIntro{font-size:.84rem;color:var(--muted-strong);line-height:1.55;margin:-4px 0 0;max-width:52ch}
 
-/* Vee nudge card — intimate, not a banner (dialed below the user's goal) */
+/* Imperium nudge card — intimate, not a banner (dialed below the user's goal) */
 .nudge{position:relative;overflow:hidden;border-radius:18px;padding:var(--s6);border:1px solid rgba(245,158,11,.26);background:radial-gradient(130% 90% at 0% 0%, rgba(245,158,11,.07), transparent 56%), var(--card-elevated);box-shadow:0 0 60px -34px var(--amber-glow);display:flex;flex-direction:column;gap:var(--s4)}
 .nudgeResolved{border-color:rgba(167,139,250,.26);background:radial-gradient(130% 90% at 0% 0%, rgba(167,139,250,.07), transparent 56%), var(--card-elevated);box-shadow:0 0 60px -34px var(--iris-glow)}
 .nudgeWho{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
@@ -142,7 +142,7 @@
 /* smooth land on create (no spring overshoot = no "chop") */
 .bigGoalJustSet{animation:goalLand .6s var(--ease) both}
 @keyframes goalLand{0%{opacity:0;transform:translateY(16px) scale(.98)}100%{opacity:1;transform:none}}
-/* the reward beat: a one-time glow when Vee finishes tagging the new goal */
+/* the reward beat: a one-time glow when Imperium finishes tagging the new goal */
 .bigGoalCelebrate{animation:goalGlow 1.6s var(--ease)}
 @keyframes goalGlow{
   0%,100%{box-shadow:0 0 0 1px rgba(167,139,250,.06), 0 0 60px -28px var(--iris-glow)}
@@ -176,7 +176,7 @@
 .pushChipSilent{color:var(--muted-strong);border-color:var(--border-strong);background:transparent}
 .pushChipBtn{cursor:pointer;font-family:var(--mono);transition:border-color .18s var(--ease),background .18s var(--ease)}
 .pushChipBtn:hover{border-color:rgba(167,139,250,.6)}
-/* inline "change how much Vee shows up" picker, revealed under a goal card */
+/* inline "change how much Imperium shows up" picker, revealed under a goal card */
 .pushEdit{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;animation:pushEditIn .26s var(--spring)}
 @keyframes pushEditIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .pushEditOpt{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-strong);border:1px solid var(--border-strong);border-radius:var(--pill);padding:7px 11px;min-height:38px;background:transparent;cursor:pointer;transition:all .16s var(--ease)}

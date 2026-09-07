@@ -1,4 +1,4 @@
-/* Vee's read on your life — the feed-first Vee surface (Vitality Noticed).
+/* Imperium's read on your life — the feed-first Imperium surface (Imperium Noticed).
    Ported 1:1 from public/vee-showcase.html. Iris/purple + mint + amber,
    Instrument Serif italic headlines, Inter body, JetBrains Mono micro-labels.
    All classes camelCased and referenced via styles.x; body-level state
@@ -12,7 +12,7 @@
   --muted:rgba(233,239,233,0.52); --muted-strong:rgba(233,239,233,0.72);
   --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.16);
   --card:rgba(255,255,255,0.02);
-  /* OG Fortnite rarity spectrum, tuned to live beside Vitality's palette */
+  /* OG Fortnite rarity spectrum, tuned to live beside Imperium's palette */
   --r-common:#aeb6c2; --r-uncommon:#56e08a; --r-rare:#43a6ff; --r-epic:#b98cff; --r-legendary:#ffae3a; --r-mythic:#fdf3d6;
   --serif:'Instrument Serif', Georgia, serif; --mono:'JetBrains Mono', ui-monospace, monospace; --body:'Inter', -apple-system, system-ui, sans-serif;
   --ease:cubic-bezier(0.22,1,0.36,1); --spring:cubic-bezier(0.34,1.56,0.64,1);
@@ -68,7 +68,7 @@
 .sub{margin-top:22px;max-width:52ch;color:var(--muted-strong);font-size:1.02rem;line-height:1.62;opacity:0;animation:rise 1s var(--ease) .9s both}
 .sub b{color:var(--fg);font-weight:600}
 
-/* the run-stats strip: proof Vee has been on it */
+/* the run-stats strip: proof Imperium has been on it */
 .stats{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px;opacity:0;animation:rise 1s var(--ease) 1.15s both}
 .stat{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted-strong);border:1px solid var(--border);background:rgba(255,255,255,0.02);border-radius:10px;padding:8px 11px}
 .stat b{color:var(--iris-hi);font-weight:600}

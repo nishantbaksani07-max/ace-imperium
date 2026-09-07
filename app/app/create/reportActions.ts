@@ -1,9 +1,9 @@
 'use server'
 
 /**
- * Vitality.report() server write. The thin authed wrapper around
+ * Imperium.report() server write. The thin authed wrapper around
  * lib/tiles/reportWrites: resolves the user from the SESSION (never the iframe),
- * then upserts the stream + datapoint under RLS. The tile-to-Vee waist in code.
+ * then upserts the stream + datapoint under RLS. The tile-to-Imperium waist in code.
  *
  * Never throws to the client; the tile fires this and does not block on it.
  */

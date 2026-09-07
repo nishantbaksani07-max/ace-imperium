@@ -17,7 +17,7 @@ import s from './room.module.css'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata = { title: 'The Room · Vitality' }
+export const metadata = { title: 'The Room · Imperium' }
 
 /** Every table the registry names, counted once (RLS-scoped, head-only). */
 function loaderTables(): MetricLoader[] {
@@ -90,7 +90,7 @@ export default async function RoomPage() {
   return (
     <main className={s.page}>
       <div className={s.kicker}>the electrical room</div>
-      <h1 className={s.title}>Every number Vitality can draw</h1>
+      <h1 className={s.title}>Every number Imperium can draw</h1>
       {/* The user-facing twin: this page is the wiring diagram (the registry),
           THE CORE ROOM is the user's own lines drawn from their real logs. */}
       <p className={s.law}>
@@ -99,8 +99,8 @@ export default async function RoomPage() {
       <p className={s.law}>
         This page is generated from <code>lib/insights/metricRegistry.ts</code> at
         render, never hand-synced. That file is the one source of truth for every
-        drawable series: adding a metric to Vitality is one registry entry, and it
-        appears here, in the goal binding picker, and in Vee&apos;s triage the same
+        drawable series: adding a metric to Imperium is one registry entry, and it
+        appears here, in the goal binding picker, and in Imperium&apos;s triage the same
         moment.
       </p>
       <div className={s.meta}>

@@ -25,7 +25,7 @@ import type { DashboardTileStats } from '@/lib/vitality/dashboardStats'
  *  in a row never feel identical. */
 const ENTRANCES = ['rise', 'spring', 'blur', 'slide', 'settle', 'drift'] as const
 
-/** "Vitality, I'm home" entry gate. The full ritual (3 acts + questions +
+/** "Imperium, I'm home" entry gate. The full ritual (3 acts + questions +
  *  close) shipped with the 4-lane mega-build; the gem tap is live. */
 const IMHOME_ENABLED = true
 
@@ -45,7 +45,7 @@ interface DashboardProps {
   firstName: string | null
   units: Units
   /** Onboarding tasks + user id passed through to SettingsSheet so the
-   *  "Your Vitality setup" entry can render once the user is fully set up. */
+   *  "Your Imperium setup" entry can render once the user is fully set up. */
   tasks: OnboardingTask[]
   userId: string
   /** The user's maker handle (Arts District). Drives the top-bar profile
@@ -62,7 +62,7 @@ interface DashboardProps {
 }
 
 /**
- * Consolidated dashboard. The Vitality character lives in ONE place in the
+ * Consolidated dashboard. The Imperium character lives in ONE place in the
  * header: the <DashboardHeaderGem> next to the greeting. Below it sits
  * <VeeTiles> - the animated-orb tile grid ported 1:1 from the approved mockup
  * (public/vee-dashboard.html), each tile a Link to its real module route.
@@ -88,7 +88,7 @@ export default function Dashboard({
   const profileHref = creatorHandle ? `/u/${creatorHandle}` : '/account'
   const [units, setUnits] = useState<Units>(initialUnits)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  // "Vitality, I'm home" - tapping the header gem opens the daily ritual.
+  // "Imperium, I'm home" - tapping the header gem opens the daily ritual.
   const [homeOpen, setHomeOpen] = useState(false)
   const [, startTransition] = useTransition()
   // The chrome the user themed (wallpaper + greeting + date + gem). Undefined
@@ -186,8 +186,8 @@ export default function Dashboard({
 
       <div className={styles.shell}>
         <div className={styles.headerRow}>
-          {/* The gem is the ritual's front door: tap it and Vee pulls your day
-              ("Vitality, I'm home"). DEV-GATED until the full ritual ships:
+          {/* The gem is the ritual's front door: tap it and Imperium pulls your day
+              ("Imperium, I'm home"). DEV-GATED until the full ritual ships:
               the spine went out half-built and buggy (gem sizing), and the
               locked method is build-it-ALL, then test once at the end. Flip
               IMHOME_ENABLED when the finished ritual merges. */}
@@ -196,7 +196,7 @@ export default function Dashboard({
               type="button"
               className={styles.gemBtn}
               onClick={() => setHomeOpen(true)}
-              aria-label="Vitality, I'm home"
+              aria-label="Imperium, I'm home"
               title="I'm home"
             >
               <DashboardHeaderGem className={styles.headerGem} />
@@ -239,7 +239,7 @@ export default function Dashboard({
 
         {/* The fused dashboard: ONE customizable grid. The animated-orb core
             tiles (Train, Fuel, Vitals, Peak, Brand, Finance), the locked Library
-            app-folder, the optional Vee tile, and the user's own built tiles all
+            app-folder, the optional Imperium tile, and the user's own built tiles all
             live together. Tap Customize to drag, resize, recolor, restyle,
             rename, add, and remove any of them (only Library is locked on). */}
         <DashboardGrid
@@ -264,7 +264,7 @@ export default function Dashboard({
       )}
       </main>
 
-      {/* "Vitality, I'm home" - the full-screen daily ritual. Sibling of <main>
+      {/* "Imperium, I'm home" - the full-screen daily ritual. Sibling of <main>
           (like the intro splash) so no page stacking context can trap it. */}
       {homeOpen && (
         <Homecoming

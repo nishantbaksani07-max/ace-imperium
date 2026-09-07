@@ -1,6 +1,6 @@
 /*
  * Public makers directory: the Arts District index (Pillar 3, the social /
- * creator layer). A calm, editorial grid of every Vitality tile maker, each
+ * creator layer). A calm, editorial grid of every Imperium tile maker, each
  * card a doorway into their public /u/<username> page. Matches the maker
  * profile look: pure-black, faint mint horizon glow, Inter as the workhorse,
  * Instrument Serif italic only for the handle moment, mint used sparingly.
@@ -207,7 +207,7 @@
 }
 .emptySub { margin-top: 8px; font-size: 0.88rem; color: var(--muted); }
 
-/* funnel footer: every maker page is a doorway into Vitality */
+/* funnel footer: every maker page is a doorway into Imperium */
 .footer {
   position: relative;
   z-index: 1;

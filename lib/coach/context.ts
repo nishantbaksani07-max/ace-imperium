@@ -1,6 +1,6 @@
 // Food Coach — context assembler.
 //
-// Gathers everything Vitality knows about the user (every questionnaire + live
+// Gathers everything Imperium knows about the user (every questionnaire + live
 // data) in parallel, then composes a tight context block by running each
 // collector. This is what makes the coach feel like it "read your file."
 

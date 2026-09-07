@@ -1,4 +1,4 @@
-/* "Vitality noticed" — the full §01 surface (lede + goal-ticker graphs + life
+/* "Imperium noticed" — the full §01 surface (lede + goal-ticker graphs + life
    chips + the cycling notice card + footer). Ported from the loved
    public/vee-notice-preview.html. Palette scoped to .noticed so the look is
    exact. iris = the AI layer, mint = your data/wins, amber = heads-up. Never red. */
@@ -57,7 +57,7 @@
 .gdRead { font-size: 0.92rem; line-height: 1.5; color: var(--n-fg); margin-bottom: 13px; }
 .gdActs { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 13px; }
 
-/* Layer B — the per-goal "how Vitality gets you there" guide inside the drop */
+/* Layer B — the per-goal "how Imperium gets you there" guide inside the drop */
 .guide { margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--n-border); }
 .guideHd { display: flex; align-items: center; gap: 7px; font-family: var(--n-mono); font-size: 0.5rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--n-muted); margin: 0 2px 10px; }
 .guideHd svg { width: 11px; height: 11px; color: var(--iris-hi); }
@@ -154,7 +154,7 @@
 .eyebrow .rule { flex: 1; height: 1px; background: linear-gradient(90deg,var(--n-border-strong),transparent); }
 .blurb { color: var(--n-muted); max-width: 62ch; margin: 0 0 16px; font-size: 0.9rem; }
 
-/* the cycling Vee card */
+/* the cycling Imperium card */
 .vc { position: relative; border: 1px solid rgba(167,139,250,0.32); border-radius: 18px; overflow: hidden;
   background: radial-gradient(130% 95% at 0% 0%, rgba(167,139,250,0.09), transparent 55%), linear-gradient(180deg, rgba(167,139,250,0.045), rgba(255,255,255,0.004));
   box-shadow: 0 0 60px -34px var(--iris-glow); display: flex; flex-direction: column;
@@ -212,7 +212,7 @@
 .clB:hover { color: var(--iris-ink); background: var(--iris); border-color: var(--iris); transform: translateY(-2px); box-shadow: 0 12px 28px -15px var(--iris-glow); }
 .clB:hover svg { transform: rotate(90deg); }
 
-/* the graph-fullscreen opener: mint = your data (the iris button stays Vee's) */
+/* the graph-fullscreen opener: mint = your data (the iris button stays Imperium's) */
 .gxB { display: inline-flex; align-items: center; gap: 9px; font: 500 0.86rem inherit; color: var(--mint-hi); background: transparent;
   border: 1px solid rgba(110,231,183,0.34); border-radius: 12px; padding: 11px 16px; cursor: pointer; transition: .26s var(--n-ease); }
 .gxB svg { width: 15px; height: 15px; transition: .4s var(--n-spring); }

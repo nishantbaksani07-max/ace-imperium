@@ -97,7 +97,7 @@ export async function confirmTrainingDay(
 }
 
 // ── Mental-health context store ("Folded Notes") ──
-// Each finished sentence is one durable user_facts row Vee reads everywhere
+// Each finished sentence is one durable user_facts row Imperium reads everywhere
 // (in-app chat + MCP vitality_user_facts). source='mental_health', kind=<area>.
 const CONTEXT_SOURCE = 'mental_health'
 
@@ -142,7 +142,7 @@ export async function deleteContextFact(id: string): Promise<{ ok: true } | { ok
   return { ok: true }
 }
 
-// One-tap daily mood. Stored as a user_facts row (no new table) so Vee reads it.
+// One-tap daily mood. Stored as a user_facts row (no new table) so Imperium reads it.
 // Upserts the day: deletes today's prior mood rows, then inserts the new score.
 // `client` carries the USER'S day: their local day key + tz offset (from
 // Date#getTimezoneOffset), so "today" is the user's today, not the UTC server's.

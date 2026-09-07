@@ -5,7 +5,7 @@
  * Claude via `claude.ai/new?q=`. The logger maps its in-progress React state
  * into a TrainerSnapshot (resolving exercise names + converting kg to the
  * user's display unit) and calls this; the string is what the user sees
- * pre-filled in a fresh Claude chat. If they also have the Vitality MCP
+ * pre-filled in a fresh Claude chat. If they also have the Imperium MCP
  * connector set up, Claude can pull the rest (history, sleep, readiness) live —
  * which is why the closing line invites it. No IO here; display-unit in,
  * string out. See app/app/fitness/log/TrainerDoorway.tsx for the caller.
@@ -85,7 +85,7 @@ export function buildTrainerPrompt(snap: TrainerSnapshot, userMessage?: string):
   const unit = snap.unitLabel || 'lb'
   const lines = snap.exercises.map((ex) => fmtExercise(ex, unit))
   const body = lines.length ? lines.join('\n') : '(no exercises loaded yet)'
-  const closing = `Keep it short and specific, like a coach on the gym floor. You can also pull my recent training, sleep, and readiness from my Vitality data if it helps.`
+  const closing = `Keep it short and specific, like a coach on the gym floor. You can also pull my recent training, sleep, and readiness from my Imperium data if it helps.`
   const msg = (userMessage ?? '').trim()
 
   if (msg) {

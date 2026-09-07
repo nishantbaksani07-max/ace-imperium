@@ -3,7 +3,7 @@ import { type ReactNode } from 'react'
 import styles from './connect.module.css'
 
 /**
- * Connect - the public docs page for the Vitality Claude connector.
+ * Connect - the public docs page for the Imperium Claude connector.
  * No auth. This is the "Documentation URL" we hand to the Anthropic
  * directory submission, and the page the privacy policy links to.
  *
@@ -16,14 +16,14 @@ import styles from './connect.module.css'
  */
 
 export const metadata = {
-  title: 'Connect Claude · Vitality',
+  title: 'Connect Claude · Imperium',
   description:
-    'Add the Vitality connector to Claude in one click. Setup, example prompts, and troubleshooting.',
+    'Add the Imperium connector to Claude in one click. Setup, example prompts, and troubleshooting.',
 }
 
 const MCP_URL = 'http://localhost:3000/api/mcp/mcp'
 const DEEP_LINK =
-  'https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Vitality&connectorUrl=https%3A%2F%2Flocalhost:3000%2Fapi%2Fmcp%2Fmcp'
+  'https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Imperium&connectorUrl=https%3A%2F%2Flocalhost:3000%2Fapi%2Fmcp%2Fmcp'
 const SUPPORT = 'founder@example.com'
 
 function SparkIcon() {
@@ -105,7 +105,7 @@ const STEPS: Array<{ n: string; text: ReactNode }> = [
     n: '4',
     text: (
       <>
-        Hit <b>Add</b>, then <b>Connect</b>. Log into Vitality when asked and
+        Hit <b>Add</b>, then <b>Connect</b>. Log into Imperium when asked and
         press <b>Allow</b>.
       </>
     ),
@@ -152,10 +152,10 @@ const TROUBLE: Array<{ tag: string; text: ReactNode }> = [
     tag: 'Auth failed',
     text: (
       <>
-        Log into Vitality first at{' '}
+        Log into Imperium first at{' '}
         <a href="http://localhost:3000">localhost:3000</a>
         , then press <b>Connect</b> again in Claude. The authorization needs a
-        signed-in Vitality session.
+        signed-in Imperium session.
       </>
     ),
   },
@@ -167,10 +167,10 @@ export default function ConnectPage() {
       <div className={styles.inner}>
         <nav className={styles.chrome}>
           <a className={styles.wordmark} href="/">
-            Vitality
+            Imperium
           </a>
           <a className={styles.chromeLink} href="/">
-            Back to Vitality
+            Back to Imperium
           </a>
         </nav>
 
@@ -183,7 +183,7 @@ export default function ConnectPage() {
             Your dashboard, <em>inside</em> Claude.
           </h1>
           <p className={styles.lede}>
-            The Vitality connector links Claude to your Vitality dashboard.
+            The Imperium connector links Claude to your Imperium dashboard.
             Once connected, Claude can read the life you log there (training,
             nutrition, water, weight, wearables, goals, notes) and write back
             to it, including <b>building whole new tiles</b> onto your
@@ -202,12 +202,12 @@ export default function ConnectPage() {
           </div>
           <p className={styles.body}>
             The fast way. This opens Claude with the connector already filled
-            in; you review the values, add it, then log into Vitality and
+            in; you review the values, add it, then log into Imperium and
             allow the connection.
           </p>
           <a className={styles.cta} href={DEEP_LINK}>
             <SparkIcon />
-            Add Vitality to Claude
+            Add Imperium to Claude
           </a>
           <span className={styles.ctaNote}>
             Opens claude.ai with the connector prefilled. Signed out? Claude
@@ -279,7 +279,7 @@ export default function ConnectPage() {
             <span className={styles.rule} />
           </div>
           <p className={styles.body}>
-            Something else in the way? Email us. Vitality is built by two
+            Something else in the way? Email us. Imperium is built by two
             people, so your message is read by a human who can actually fix
             it.
           </p>
@@ -292,7 +292,7 @@ export default function ConnectPage() {
         <footer className={styles.foot}>
           <span>
             <span className={styles.footDot} />
-            Vitality Studio
+            Imperium Studio
           </span>
           <span>
             <a href="/privacy">Privacy policy</a>

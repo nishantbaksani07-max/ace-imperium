@@ -1,5 +1,5 @@
 /**
- * Peak seams — Phase 1 of the "Vitality noticed" engine. The first cross-domain
+ * Peak seams — Phase 1 of the "Imperium noticed" engine. The first cross-domain
  * insights the general engine produces, built entirely on the shared primitives
  * (series -> align -> detectSeam), proving the path the sleep<->training seam
  * pioneered now generalizes. Output is a FusionNotice, so it drops straight into

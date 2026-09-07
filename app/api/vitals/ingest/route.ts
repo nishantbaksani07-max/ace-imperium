@@ -35,7 +35,7 @@ function page(ok: boolean): Response {
   const body = `<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">
 <body style="margin:0;background:#04060a;color:#e9efe9;font-family:-apple-system,system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;text-align:center;padding:24px">
 <div><div style="font-size:46px;color:${ok ? '#6ee7b7' : '#f59e0b'}">${ok ? '✓' : '!'}</div>
-<h1 style="font-weight:600;font-size:20px;margin:14px 0 6px">${ok ? 'Your Vitality link works' : 'This link isn’t recognized'}</h1>
+<h1 style="font-weight:600;font-size:20px;margin:14px 0 6px">${ok ? 'Your Imperium link works' : 'This link isn’t recognized'}</h1>
 <p style="color:#9aa39a;font-size:14px;line-height:1.55;max-width:300px;margin:0 auto">${
     ok
       ? 'Your iPhone Shortcut can post sleep and heart rate here each morning. Nothing to do on this page.'

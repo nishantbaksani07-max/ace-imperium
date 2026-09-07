@@ -450,7 +450,7 @@ export default function HistoryModal({
             <h3 className={styles.confirmTitle}>Remove this session?</h3>
             <p className={styles.confirmMsg}>
               This erases your {formatDay(rowsDesc[confirmIdx].date)} session and its logged
-              weight from Vitality for good. There&apos;s no undo.
+              weight from Imperium for good. There&apos;s no undo.
             </p>
             {rowError && <p className={styles.confirmError}>{rowError}</p>}
             <div className={styles.confirmBtns}>

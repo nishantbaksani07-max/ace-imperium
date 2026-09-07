@@ -14,7 +14,7 @@ import { isFounderEmail } from '@/lib/founders'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Main Dashboard · Vitality',
+  title: 'Main Dashboard · Imperium',
 }
 
 export default async function DashboardPage() {

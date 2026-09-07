@@ -18,7 +18,7 @@ import styles from './myMacrosSheet.module.css'
 
 /**
  * My Macros — the unified add-to-today sheet (replaces the old Search/Custom
- * modal). A centered, animated Vitality surface with five lanes that all reuse
+ * modal). A centered, animated Imperium surface with five lanes that all reuse
  * data the app already holds:
  *   · My Foods   — recent single foods (one-tap re-log)
  *   · My Meals   — whole past meals, re-logged in one tap

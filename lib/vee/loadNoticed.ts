@@ -1,7 +1,7 @@
 /**
- * loadNoticed - the server-side loader for the new Vee surface (/app/mentor-next).
+ * loadNoticed - the server-side loader for the new Imperium surface (/app/mentor-next).
  * It gathers the SAME real, deterministic insight data the live mentor page builds,
- * and now carries the FULL fused goals engine too: the "Vitality noticed" feed,
+ * and now carries the FULL fused goals engine too: the "Imperium noticed" feed,
  * the per-goal steering rows (buildTicker), the per-goal guides (buildGoalGuide),
  * the life chips, the rarity collection, the run-stats proof strip, and the raw
  * goals/habits/streak for the authoring section.
@@ -64,7 +64,7 @@ export interface NoticedData {
   feed: FeedNotice[]
   /** Per-goal steering rows (honest sparkline + trend state), goal id keyed by row.id. */
   rows: TickerRow[]
-  /** Per-goal "how Vitality gets you there" guide items, keyed by goal id. */
+  /** Per-goal "how Imperium gets you there" guide items, keyed by goal id. */
   guides: Record<string, GuideItem[]>
   lifeChips: LifeChip[]
   /** The six-tier rarity collection tally of this load's graded finds. */
@@ -298,7 +298,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
     }
 
     // The user's own tile streams + reports, mapped once here: the ticker draws
-    // override-bound goals from them, and "Vee connects" scans them below.
+    // override-bound goals from them, and "Imperium connects" scans them below.
     const tileStreams: TileStreamRow[] = (tileStreamsRes.data ?? []).map(r => ({
       id: String(r.id),
       tileId: (r.tile_id ?? '') as string,
@@ -329,7 +329,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
       })),
     })
 
-    // The per-goal "how Vitality gets you there" guide. A module the user already
+    // The per-goal "how Imperium gets you there" guide. A module the user already
     // logs becomes a quick-link; one they don't shows a demo tile.
     const weight = weightRes.data
     const wearable = wearableRes.data
@@ -494,7 +494,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
     )
     const caffeineCandidate = caffeineRecoveryCandidate(caffeineSeries.points, recoverySeries.points)
 
-    // "Vee connects": the user's own tile streams scanned against the core outcomes.
+    // "Imperium connects": the user's own tile streams scanned against the core outcomes.
     const outcomes: OutcomeDef[] = [
       { name: 'recovery', label: 'recovery', points: recoverySeries.points },
       {
@@ -569,7 +569,7 @@ export async function loadNoticed(supabase: Db, userId: string): Promise<Noticed
       first,
     })
 
-    // The rarity collection + run stats: honest proof Vee has been on it.
+    // The rarity collection + run stats: honest proof Imperium has been on it.
     const graded = feed.filter(n => n.source !== 'starter')
     const collection = buildCollection(graded.map(n => rarityForNotice(n)))
     const rarestTier = [...collection].reverse().find(t => t.count > 0)?.rarity ?? null

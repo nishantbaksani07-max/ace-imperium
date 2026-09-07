@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { tileStore } from './tileStore'
 
 /**
- * useTileHost is the host side of the Vitality bridge, fixed for MANY tiles.
+ * useTileHost is the host side of the Imperium bridge, fixed for MANY tiles.
  *
  * The bug it fixes: the BUILD71 host closed a single storage key over one
  * message listener, so ANY tile's save overwrote whatever the host last
@@ -27,8 +27,8 @@ export function useTileHost(
   userId: string,
   onActivity?: (info: { tileId: string; type: 'save' | 'load' | 'report'; count: number }) => void,
   /**
-   * Injected handler for a tile's Vitality.report() stream (one numeric life-stream
-   * into Vee). Passed in (not imported) so this hook stays decoupled from the
+   * Injected handler for a tile's Imperium.report() stream (one numeric life-stream
+   * into Imperium). Passed in (not imported) so this hook stays decoupled from the
    * server action; the create page wires reportStream here. The host only routes
    * and forwards; the server action validates + RLS-writes.
    */
@@ -108,11 +108,11 @@ export function useTileHost(
       }
 
       if (msg.type === 'report') {
-        // One numeric life-stream into Vee. The host only forwards the raw stream
+        // One numeric life-stream into Imperium. The host only forwards the raw stream
         // plus the SENDER's tileId (from our own registry, never the iframe's
         // claim) so the stream's per-tile identity is trustworthy; the injected
         // handler (the server action) validates it and RLS-writes it under the
-        // session user. The tile itself never blocks on Vee, but the HOST waits
+        // session user. The tile itself never blocks on Imperium, but the HOST waits
         // for the write result before claiming success: the report activity only
         // fires when the datapoint actually landed, and a failed write posts
         // report:error back to the tile (mirroring save:error) so a dropped

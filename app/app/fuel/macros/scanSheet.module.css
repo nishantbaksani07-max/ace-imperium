@@ -140,7 +140,7 @@
   transform: rotate(45deg) scale(0.9);
   transition: opacity 0.3s var(--ease), transform 0.32s var(--spring), box-shadow 0.3s var(--ease);
 }
-/* a hairline that trails off to the right — editorial Vitality touch */
+/* a hairline that trails off to the right — editorial Imperium touch */
 .section::after {
   content: '';
   flex: 1;

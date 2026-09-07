@@ -1,5 +1,5 @@
 /* ============================================================
-   Vitality — muscle group glyph library
+   Imperium — muscle group glyph library
    viewBox 0 0 100 100 · stroke #6EE7B7 ~3 · round caps/joins
    .ms = muscle silhouette (mint fill)   .ln = divider (no fill)
    Each glyph is anatomy cropped tight to the muscle belly —

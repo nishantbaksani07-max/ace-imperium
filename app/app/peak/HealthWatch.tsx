@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Health Watch card — the real-data load & vitals monitor (Vitality port of the
+ * Health Watch card — the real-data load & vitals monitor (Imperium port of the
  * standalone's health watch). Every value is computed from the user's actual
  * logged substances + live WHOOP/manual vitals by `buildHealthWatch`; this file
  * is pure presentation over that result.

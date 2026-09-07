@@ -335,7 +335,7 @@
     font-size: 22px;
     bottom: 38px;
   }
-  /* Vee kicker + name line up at the phone 16px edge; name sits just under
+  /* Imperium kicker + name line up at the phone 16px edge; name sits just under
      the kicker (overrides the generic phone .tileLabel bottom). */
   .tileKicker {
     left: 16px;
@@ -533,7 +533,7 @@
   background-size: 22px 22px;
 }
 
-/* Vee - black placeholder with a soft mint presence rising from the lower
+/* Imperium - black placeholder with a soft mint presence rising from the lower
    left, so the tile reads as alive (not dead-black) before its real cozy
    tile-art is built. */
 .artVoid {
@@ -542,8 +542,8 @@
     #07090a;
 }
 
-/* Vee role kicker - uppercase mono mint line sitting just above the name.
-   Tells the user this tile IS Vitality's AI mentor at a glance. Mirrors the
+/* Imperium role kicker - uppercase mono mint line sitting just above the name.
+   Tells the user this tile IS Imperium's AI mentor at a glance. Mirrors the
    .tileLabel left edge (22px) and the phone block tightens it to 16px. */
 .tileKicker {
   position: absolute;
@@ -559,7 +559,7 @@
   opacity: 0.85;
 }
 
-/* Vee's name drops to sit directly under its kicker (the generic .tileLabel
+/* Imperium's name drops to sit directly under its kicker (the generic .tileLabel
    bottom of 46px is tuned for the name-over-summary tiles). */
 .areaVee .tileLabel {
   bottom: 34px;
@@ -570,7 +570,7 @@
    these by data-crystal-slot and uses getBoundingClientRect to size
    each gem's WebGL viewport. The slot itself draws nothing. */
 /* Header row: gem on the left, greeting + date on the right. The gem
-   anchors the "Vitality character" presence on the dashboard without
+   anchors the "Imperium character" presence on the dashboard without
    cluttering the tiles. */
 .headerRow {
   display: flex;
@@ -578,7 +578,7 @@
   gap: var(--space-6);
 }
 
-/* The gem's tap target ("Vitality, I'm home"). Invisible chrome: the button
+/* The gem's tap target ("Imperium, I'm home"). Invisible chrome: the button
    contributes no box of its own, the .headerGem inside keeps owning the size
    (and its media-query shrink); the cursor + a gentle lift are the affordance. */
 .gemBtn {

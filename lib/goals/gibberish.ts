@@ -13,7 +13,7 @@
  * The bar is deliberately LOW: this guard only has to stop keyboard mash, never
  * judge a real goal. Any title containing at least one plausible word ("gym",
  * "run 5k", "save 10k", a name, a verb) passes. False rejects are worse than
- * false passes here: Vee asks the user to say it plainly, so a wrongly blocked
+ * false passes here: Imperium asks the user to say it plainly, so a wrongly blocked
  * real goal would be insulting. A goal in ANY non-Latin script (Cyrillic, CJK,
  * Greek, Arabic, ...) always passes; the mash heuristics only know ASCII.
  *

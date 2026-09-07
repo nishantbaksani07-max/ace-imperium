@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'invalid_signature' }, { status: 401 })
   }
 
-  // WHOOP publishes workout/deletion events too. Vitality's current projection
+  // WHOOP publishes workout/deletion events too. Imperium's current projection
   // is recovery/sleep/cycle, so acknowledge unrelated events without API work.
   if (!WHOOP_SYNC_EVENT_TYPES.has(event.type)) {
     return NextResponse.json({ accepted: true, synced: 0 })

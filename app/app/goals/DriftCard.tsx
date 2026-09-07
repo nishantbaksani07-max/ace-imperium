@@ -6,7 +6,7 @@ import { logDriftShown, resolveDrift } from './driftActions'
 import type { DriftKind, DriftResolution } from '@/lib/goals/drift'
 
 /**
- * DriftCard — Vee's warm outreach when it notices you slipping (BUILD42 flagship).
+ * DriftCard — Imperium's warm outreach when it notices you slipping (BUILD42 flagship).
  * Reaches out FIRST, before the user does. On mount it logs that it was shown
  * (cooldown). The three responses (grace / ease / talk) all rest the nudge and
  * are always honest. "Talk to me" hands off to the chat right below.
@@ -32,7 +32,7 @@ export default function DriftCard({
   const [resolved, setResolved] = useState<DriftResolution | null>(null)
   const logged = useRef(false)
 
-  // Record that this nudge was surfaced (cooldown keeps Vee present, not naggy).
+  // Record that this nudge was surfaced (cooldown keeps Imperium present, not naggy).
   useEffect(() => {
     if (logged.current) return
     logged.current = true
@@ -46,8 +46,8 @@ export default function DriftCard({
   }
 
   return (
-    <section className={`${styles.nudge} ${resolved ? styles.nudgeResolved : ''}`} aria-label="a note from Vee">
-      <span className={styles.who}>{resolved ? 'Vee' : 'Vee noticed'}</span>
+    <section className={`${styles.nudge} ${resolved ? styles.nudgeResolved : ''}`} aria-label="a note from Imperium">
+      <span className={styles.who}>{resolved ? 'Imperium' : 'Imperium noticed'}</span>
       {resolved ? (
         <>
           <p className={styles.line}>{RESOLVE_COPY[resolved][0]}</p>

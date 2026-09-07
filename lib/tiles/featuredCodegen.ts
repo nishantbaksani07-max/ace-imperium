@@ -21,7 +21,7 @@ import type { BuildRecipe } from './featured'
  *     win over inference so the tile never depends on goal-text parsing.
  *   - scaleMax + the report `key` are pinned post-infer (infer singularizes keys, e.g.
  *     "steps"->"step", "focus"->"focu"; we keep the shipped key BYTE-IDENTICAL so no
- *     user's Vee stream re-keys).
+ *     user's Imperium stream re-keys).
  *   - lintTile must be 0 errors / 0 warnings and assertTileExportable must pass, so a
  *     tile that would not clear the hard floor throws here instead of shipping thin.
  */

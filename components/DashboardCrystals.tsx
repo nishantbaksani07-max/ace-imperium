@@ -17,7 +17,7 @@ import { GLYPHS, type GlyphName } from '@/lib/gemGlyphs'
  * the canvas across all its gems — this component is the React port of
  * that same pattern.
  *
- * Behavior parity with SectionGem (the canonical Vitality gem language):
+ * Behavior parity with SectionGem (the canonical Imperium gem language):
  *   - Procedural PMREM environment painted from mint + warm radial gradients
  *   - MeshPhysicalMaterial glass (transmission, IOR, clearcoat, attenuation)
  *   - Cool-mint wireframe overlay on edges

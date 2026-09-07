@@ -80,7 +80,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
   const chatInputRef = useRef<HTMLTextAreaElement | null>(null)
 
   // Both "talk deeper" affordances land the user in the chat composer, the real
-  // in-app Vee. (The "OPEN IN CLAUDE" pill routes to /account, the MCP setup.)
+  // in-app Imperium. (The "OPEN IN CLAUDE" pill routes to /account, the MCP setup.)
   const toChat = () => {
     chatInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     chatInputRef.current?.focus({ preventScroll: true })
@@ -128,7 +128,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
     if (!result.ok) setNotes(prev)
   }
 
-  // One chat turn: optimistically show `next`, post it, append Vee's reply
+  // One chat turn: optimistically show `next`, post it, append Imperium's reply
   // (which may carry an `ask` card). Shared by free-text sends and card answers.
   async function runTurn(next: ChatMessage[]) {
     setMessages(next)
@@ -144,7 +144,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
       const data = await res.json().catch(() => null) as { reply?: string; ask?: VeeAsk | null; error?: string } | null
       // A card-only reply (empty text) is valid — the question lives in the card.
       if (!res.ok || (!data?.reply && !data?.ask)) {
-        setChatError(data?.error ?? 'Vee failed to reply')
+        setChatError(data?.error ?? 'Imperium failed to reply')
         setChatSending(false)
         return
       }
@@ -247,18 +247,18 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
                 {greeting}{firstName ? `, ${firstName}` : ''}.
               </span>
             </div>
-            <div className={styles.mark} aria-hidden>V</div>
+            <div className={styles.mark} aria-hidden>I</div>
           </div>
         </header>
 
-        {/* 2 · the one "Vitality noticed" card */}
+        {/* 2 · the one "Imperium noticed" card */}
         <NoticedCard feed={veeNoticed.feed} onDeeper={toChat} />
 
         {/* 3 · chat, the visual center */}
-        <section className={styles.chat} aria-label="Ask Vee">
+        <section className={styles.chat} aria-label="Ask Imperium">
           <div className={styles.chatHead}>
             <h2 className={styles.chatIntro}>What do you want to work through?</h2>
-            <Link className={styles.claudeCorner} href="/account" aria-label="Open Vee in Claude">
+            <Link className={styles.claudeCorner} href="/account" aria-label="Open Imperium in Claude">
               <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" /></svg>
               OPEN IN CLAUDE
             </Link>
@@ -307,7 +307,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
               {chatSending && (
                 <div className={styles.bubThink}>
                   <span className={styles.dots}><i /><i /><i /></span>
-                  <span className={styles.thinkLabel}>Vee is thinking</span>
+                  <span className={styles.thinkLabel}>Imperium is thinking</span>
                 </div>
               )}
               <div ref={chatEndRef} />
@@ -320,8 +320,8 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
             <svg className={styles.composerSpark} viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z" /></svg>
             <textarea
               ref={chatInputRef}
-              placeholder="Ask Vee anything about your week..."
-              aria-label="Ask Vee"
+              placeholder="Ask Imperium anything about your week..."
+              aria-label="Ask Imperium"
               value={chatDraft}
               onChange={e => setChatDraft(e.target.value)}
               onKeyDown={handleChatKeyDown}
@@ -398,7 +398,7 @@ export default function MentorModule({ firstName, initialNotes, moodHistory, vee
 interface Particle { left: number; top: number; size: number; dur: number; delay: number; dx: number; dy: number }
 
 /* ================================================================
-   The "Vitality noticed" card — feed[0] with a "show me another" cycle,
+   The "Imperium noticed" card — feed[0] with a "show me another" cycle,
    the one-shot mint bloom, and the whisper-rarity marker.
    ================================================================ */
 function NoticedCard({ feed, onDeeper }: { feed: FeedNotice[]; onDeeper: () => void }) {
@@ -417,7 +417,7 @@ function NoticedCard({ feed, onDeeper }: { feed: FeedNotice[]; onDeeper: () => v
   const dotTone = notice.impact === 'dn' ? styles.warn : styles.good
 
   return (
-    <section className={styles.noticed} aria-label="Vitality noticed">
+    <section className={styles.noticed} aria-label="Imperium noticed">
       {/* absolutely-positioned + clipped by overflow:hidden so it never inflates the card */}
       <div className={styles.bloom} key={`bloom-${idx}`} aria-hidden />
 
@@ -580,7 +580,7 @@ function FollowLink() {
 }
 
 /**
- * Tiny markdown renderer scoped to what Vee produces: paragraphs, blank-line
+ * Tiny markdown renderer scoped to what Imperium produces: paragraphs, blank-line
  * separators, "- "/"* " bullets, "1. " numbers, **bold** inline. No HTML — every
  * node is a real React element, so no dangerouslySetInnerHTML risk.
  */

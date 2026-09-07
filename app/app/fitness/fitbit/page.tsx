@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
  *   · 7-day recovery trend
  *   · personal HRV / RHR / sleep-efficiency baselines (last 14 valid days)
  *   · 7-night sleep debt vs 8h target
- *   · Vitality Score using the SKILL.md formula
+ *   · Imperium Score using the SKILL.md formula
  *
  * Everything below this server boundary is real user data — no SAMPLE
  * constants, no fake numbers. When the user has zero rows we render
@@ -22,7 +22,7 @@ export const dynamic = 'force-dynamic'
 
 const SLEEP_TARGET = 8
 
-// ─── Vitality Score components (per SKILL.md) ─────────────────────────
+// ─── Imperium Score components (per SKILL.md) ─────────────────────────
 
 function hrvComponent(hrv: number | null, baseline: number | null): number {
   if (hrv == null || baseline == null || baseline <= 0) return 50

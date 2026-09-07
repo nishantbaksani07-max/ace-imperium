@@ -16,7 +16,7 @@ export interface FeaturedTile {
   id: string
   /** One-line pitch shown on the card. */
   tagline: string
-  /** Who made it. 'Vitality' for first-party drops. */
+  /** Who made it. 'Imperium' for first-party drops. */
   author: string
   /** Card accent hex. Mint by default; gold / iris give a tile its own character. */
   accent: string
@@ -122,7 +122,7 @@ export interface BuildRecipe {
   /** The daily/session goal a counting tile aims at (draws the progress ring). */
   target?: number
   /** The report stream key, kept BYTE-IDENTICAL to the tile's shipped key so no
-   *  user's Vee stream re-keys when the html is regenerated. (infer() singularizes,
+   *  user's Imperium stream re-keys when the html is regenerated. (infer() singularizes,
    *  e.g. "steps"->"step", "focus"->"focu", so we pin the key explicitly.) */
   key: string
 }
@@ -161,7 +161,7 @@ export const DEFS: Def[] = [
     build: { goal: 'glasses of water a day', kind: 'intake', name: 'Water', unit: 'glasses', goalDirection: 'up', target: 8, key: 'water' },
     preview: {
       summary: 'Tap a glass. It remembers your week.',
-      tags: ['7-day chart', 'streak', 'feeds Vee'],
+      tags: ['7-day chart', 'streak', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 6,
@@ -185,7 +185,7 @@ export const DEFS: Def[] = [
     build: { goal: 'daily habit', kind: 'done', name: 'Habit', key: 'habit' },
     preview: {
       summary: 'One tap a day. A streak you protect.',
-      tags: ['week grid', 'streak', 'feeds Vee'],
+      tags: ['week grid', 'streak', 'feeds Imperium'],
       showcase: { variant: 'week', week: [1, 1, 1, 0, 1, 1, 1], streak: 3, best: 9, kept: '6 of 7' },
     },
   },
@@ -199,7 +199,7 @@ export const DEFS: Def[] = [
     design: 'journal-lines',
     preview: {
       summary: 'One honest line, thirty seconds a day.',
-      tags: ['one line', 'private', 'feeds Vee'],
+      tags: ['one line', 'private', 'feeds Imperium'],
       showcase: {
         variant: 'journal',
         lines: [
@@ -223,7 +223,7 @@ export const DEFS: Def[] = [
     build: { goal: 'rate my mood', kind: 'rating', name: 'Mood', scaleMax: 5, key: 'mood' },
     preview: {
       summary: 'How today felt, in one quiet tap.',
-      tags: ['1 to 5', 'daily check', 'feeds Vee'],
+      tags: ['1 to 5', 'daily check', 'feeds Imperium'],
       showcase: { variant: 'scale', value: 4, outOf: 5, sub: 'of 5 today', streak: 7, best: 16 },
     },
   },
@@ -238,7 +238,7 @@ export const DEFS: Def[] = [
     build: { goal: 'focus minutes', kind: 'duration', name: 'Focus', unit: 'min', goalDirection: 'up', target: 25, key: 'focus' },
     preview: {
       summary: 'Deep work minutes, counted and kept.',
-      tags: ['7-day chart', 'streak', 'feeds Vee'],
+      tags: ['7-day chart', 'streak', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 75,
@@ -262,7 +262,7 @@ export const DEFS: Def[] = [
     build: { goal: 'hours of sleep', kind: 'duration', name: 'Sleep', unit: 'h', target: 8, key: 'sleep' },
     preview: {
       summary: 'Last night, held against eight hours.',
-      tags: ['8h target', '7-day chart', 'feeds Vee'],
+      tags: ['8h target', '7-day chart', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 7.5,
@@ -285,7 +285,7 @@ export const DEFS: Def[] = [
     build: { goal: 'daily steps', kind: 'count', name: 'Steps', unit: 'steps', goalDirection: 'up', target: 10000, key: 'steps' },
     preview: {
       summary: 'Every walk banked toward ten thousand.',
-      tags: ['10k goal', '7-day chart', 'feeds Vee'],
+      tags: ['10k goal', '7-day chart', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 8400,
@@ -308,7 +308,7 @@ export const DEFS: Def[] = [
     build: { goal: 'protein grams', kind: 'intake', name: 'Protein', unit: 'g', goalDirection: 'up', target: 150, key: 'protein' },
     preview: {
       summary: 'Grams in, the daily target closing.',
-      tags: ['180 g target', '7-day chart', 'feeds Vee'],
+      tags: ['180 g target', '7-day chart', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 152,
@@ -331,7 +331,7 @@ export const DEFS: Def[] = [
     build: { goal: 'reading minutes', kind: 'duration', name: 'Reading', unit: 'min', goalDirection: 'up', target: 20, key: 'reading' },
     preview: {
       summary: 'Minutes read, one chapter at a time.',
-      tags: ['30 min goal', 'streak', 'feeds Vee'],
+      tags: ['30 min goal', 'streak', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 22,
@@ -354,7 +354,7 @@ export const DEFS: Def[] = [
     build: { goal: 'pushups a day', kind: 'count', name: 'Pushups', unit: 'pushups', goalDirection: 'up', target: 50, key: 'pushup' },
     preview: {
       summary: 'Sets banked through the day, toward fifty.',
-      tags: ['50 a day', '7-day chart', 'feeds Vee'],
+      tags: ['50 a day', '7-day chart', 'feeds Imperium'],
       showcase: {
         variant: 'ring',
         value: 40,
@@ -377,7 +377,7 @@ export const DEFS: Def[] = [
     build: { goal: 'stretch done', kind: 'done', name: 'Stretch', key: 'stretch' },
     preview: {
       summary: 'One honest tap after you stretch.',
-      tags: ['week grid', 'streak', 'feeds Vee'],
+      tags: ['week grid', 'streak', 'feeds Imperium'],
       showcase: { variant: 'week', week: [1, 0, 1, 1, 1, 1, 1], streak: 5, best: 9, kept: '6 of 7' },
     },
   },
@@ -411,7 +411,7 @@ export const DEFS: Def[] = [
 export const FEATURED_TILES: FeaturedTile[] = DEFS.map((d) => ({
   id: d.id,
   tagline: d.tagline,
-  author: 'Vitality',
+  author: 'Imperium',
   accent: d.accent,
   fresh: d.fresh,
   preview: d.preview,

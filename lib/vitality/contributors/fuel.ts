@@ -1,5 +1,5 @@
 /**
- * Fuel contributor for the Vitality Score. Naturally per-day: completion is the
+ * Fuel contributor for the Imperium Score. Naturally per-day: completion is the
  * fraction of the user's calorie goal logged that day (capped at 1), then
  * today-weighted via the engine's weight vector. v1 grades calories only
  * (kcal_target is the always-present goal field); protein/carb blending is a

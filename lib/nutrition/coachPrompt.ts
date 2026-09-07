@@ -5,7 +5,7 @@
  * Claude via `claude.ai/new?q=` — the same zero-cost-to-us doorway the workout
  * logger uses. The Fuel coach card maps its computed totals + targets into a
  * CoachDaySnapshot and calls this; the string is what the user sees pre-filled
- * in a fresh Claude chat. If they have the Vitality MCP connector set up, Claude
+ * in a fresh Claude chat. If they have the Imperium MCP connector set up, Claude
  * can pull the rest (recent meals, weight trend, training, goals) live — which
  * is why the closing line invites it. No IO here; numbers in, string out.
  * See app/app/fuel/CoachDoorway.tsx for the caller.
@@ -55,7 +55,7 @@ export function coachContextLines(snap: CoachDaySnapshot): string[] {
 export function buildCoachPrompt(snap: CoachDaySnapshot, userMessage?: string): string {
   const body = coachContextLines(snap).join('\n')
   const closing =
-    'Keep it warm and specific, like a coach who actually knows me. You can also pull my recent meals, weight trend, training, and goals from my Vitality data if it helps.'
+    'Keep it warm and specific, like a coach who actually knows me. You can also pull my recent meals, weight trend, training, and goals from my Imperium data if it helps.'
   const msg = (userMessage ?? '').trim()
 
   if (msg) {

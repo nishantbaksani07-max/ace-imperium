@@ -1,6 +1,6 @@
 /**
  * claudeHandoff - the pure prefill composer for every "open in Claude" hop on
- * the Vee page. v1 keeps the destination (claude.ai/new) but Claude arrives
+ * the Imperium page. v1 keeps the destination (claude.ai/new) but Claude arrives
  * already knowing the user: the question is followed by a compact context
  * block assembled SERVER-SIDE from data loadNoticed already fetched (no new
  * DB reads). Everything in the block is a real, logged fact: first name,
@@ -30,7 +30,7 @@ export interface ClaudeHandoffContext {
   noticeLead: string | null
   /** The honest live-stat chips (label + value), e.g. train 3.7x/wk. */
   lifeChips: { label: string; value: string }[]
-  /** Which Vitality modules actually have data (loadNoticed activeModules). */
+  /** Which Imperium modules actually have data (loadNoticed activeModules). */
   activeModules: string[]
 }
 
@@ -95,13 +95,13 @@ export function contextBlock(ctx: ClaudeHandoffContext | null | undefined): stri
       .join('; ')
     lines.push(`Active goals: ${gl}.`)
   }
-  if (ctx.noticeLead) lines.push(`Vee's latest find: "${clip(ctx.noticeLead, MAX_LEAD_CHARS)}"`)
+  if (ctx.noticeLead) lines.push(`Imperium's latest find: "${clip(ctx.noticeLead, MAX_LEAD_CHARS)}"`)
   if (ctx.lifeChips.length > 0) {
     lines.push(`Live stats: ${ctx.lifeChips.map(c => `${c.label} ${c.value}`).join(', ')}.`)
   }
   if (ctx.activeModules.length > 0) lines.push(`I track: ${ctx.activeModules.join(', ')}.`)
   if (lines.length === 0) return ''
-  return `Context from my Vitality dashboard (all real logged data):\n${lines.map(l => `- ${l}`).join('\n')}`
+  return `Context from my Imperium dashboard (all real logged data):\n${lines.map(l => `- ${l}`).join('\n')}`
 }
 
 /** Question + context, ready for the q= prefill. Falls back to the bare question. */

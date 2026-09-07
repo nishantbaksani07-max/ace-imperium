@@ -47,10 +47,10 @@ import { computeSessionVerdict, type SessionVerdict } from '@/lib/workouts/sessi
  * Renders the logging UI for exactly ONE day from the rotation. To switch
  * days, navigate back to the menu.
  *
- * v1 lives at ~/Desktop/Vitality/split-standalone/ and stays as the immutable
+ * v1 lives at ~/Desktop/Imperium/split-standalone/ and stays as the immutable
  * YouTube reference standalone. v2 takes all v1's features (tiered exercises,
  * form tips, rest timer, history dots, PR stars, set classification) and
- * rebuilds them in Vitality's editorial language — Instrument Serif italic
+ * rebuilds them in Imperium's editorial language — Instrument Serif italic
  * for exercise names, tabular numeric inputs, mint shimmer on mark-clean,
  * dark + mint palette throughout.
  *
@@ -569,7 +569,7 @@ export default function SplitLog({
   }, [restTimer?.done])
 
   // ── Continuous saves ─────────────────────────────────────────────
-  // Per Vitality lessons rule #8: persist continuously, never "save at end".
+  // Per Imperium lessons rule #8: persist continuously, never "save at end".
   // Discrete commits (logging/undoing/missing a set, swaps, tune-shape
   // changes) save immediately; only ambient edits debounce. The saver
   // (lib/workouts/saver.ts) guarantees trailing sets survive leaving the
@@ -1434,7 +1434,7 @@ export default function SplitLog({
 
   const pct = total === 0 ? 0 : (logged / total) * 100
 
-  // Heavy/Volume is only meaningful when the user actually runs an H/V
+  // Heavy/Volume is only meaningful when the user actually runs an H/I
   // split (the rotation has at least one VOLUME day). Otherwise the "HEAVY"
   // badge is just noise on every day — hide it. Mirrors the setup wizard's
   // H/V toggle, which is itself derived from "any VOLUME day exists".
@@ -2539,7 +2539,7 @@ export default function SplitLog({
         const exDef = exIdx >= 0 ? activeExercises[exIdx] : undefined
         if (!exDef || exIdx < 0) return null
         // The split's default prescription — used by the modal's "reset" link.
-        // SPLIT is the immutable Vitality 8-day seed; this is the canonical answer
+        // SPLIT is the immutable Imperium 8-day seed; this is the canonical answer
         // to "what was it originally?" before any user override.
         const defaultDay = SPLIT.find(d => d.day === dayNum)
         const defaultEx = defaultDay?.exercises.find(e => e.id === settingsOpenExId)

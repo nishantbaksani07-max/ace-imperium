@@ -101,10 +101,10 @@ export default async function FuelPage() {
     // Training signal for the coach's context questions. One cheap RLS single-row
     // read, null-guarded: a missing table/row simply means "not a training day".
     supabase.from('training_day').select('day_name').eq('user_id', user.id).eq('date', todayKey()).maybeSingle(),
-    // The user's TOP active goal from the goals tab / Vee, so the coach grades by
+    // The user's TOP active goal from the goals tab / Imperium, so the coach grades by
     // the SAME goal ("lose weight" / "get leaner and stronger"). Null-guarded: a
     // missing vitality_goals table degrades to no signal (nutrition goal + rate
-    // band still drive the mode). Read-only; never edits Vee-owned code.
+    // band still drive the mode). Read-only; never edits Imperium-owned code.
     supabase.from('vitality_goals').select('title, clean_title, identity_tag, category').eq('user_id', user.id).eq('status', 'active').order('priority', { ascending: false }).order('created_at', { ascending: false }).limit(1).maybeSingle(),
     // Water read-through: the durable prefs + day-log mirror, so water survives
     // a new phone / cleared cache (read half of water/sync.ts). Null on no rows.

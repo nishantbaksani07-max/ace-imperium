@@ -16,7 +16,7 @@ import styles from './create.module.css'
  * Build a tile (the in-app twin of the approved demo, public/build-lab.html).
  *
  * The tile host (client). Renders a sealed tile in a sandboxed iframe and
- * speaks the Vitality bridge over postMessage:
+ * speaks the Imperium bridge over postMessage:
  *
  *   tile  to host : { source:'vitality-tile', type:'save', data }
  *   tile  to host : { source:'vitality-tile', type:'load', id }
@@ -24,9 +24,9 @@ import styles from './create.module.css'
  *   host  to tile : { source:'vitality-host', type:'load:result', id, data }
  *
  * save/load are the tile's OWN data. report is the one numeric life-stream into
- * Vee (the noticed brain): the host forwards it to the reportStream server
+ * Imperium (the noticed brain): the host forwards it to the reportStream server
  * action, which validates it and RLS-writes it under the session user. This is
- * the quiet magic, a tile auto-connects to Vee just by reporting.
+ * the quiet magic, a tile auto-connects to Imperium just by reporting.
  *
  * The sandbox (allow-scripts, NO allow-same-origin) gives the tile an opaque
  * origin: it can run and postMessage, but it cannot read this app, the user's
@@ -68,21 +68,21 @@ li:hover .del{opacity:1}.del:hover{color:#fff}
 <ul id="list"></ul>
 <script>
 var CHECK='<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.6 9.5 3.4" stroke="#042a1c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-var Vitality={_w:{},_sv:false,save:function(d){Vitality._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Vitality._w[id]){Vitality._w[id]=function(d){if(d!=null&&!Vitality._sv)location.reload()};res(null)}},3000);Vitality._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
+var Imperium={_w:{},_sv:false,save:function(d){Imperium._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Imperium._w[id]){Imperium._w[id]=function(d){if(d!=null&&!Imperium._sv)location.reload()};res(null)}},3000);Imperium._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
 function vNote(t){var n=document.getElementById('v-note');if(!n){n=document.createElement('div');n.id='v-note';n.style.cssText='margin-top:10px;font-size:12px;color:#F59E0B;text-align:center';document.body.appendChild(n)}n.textContent=t}
-window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
+window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Imperium._w[m.id]){Imperium._w[m.id](m.data);delete Imperium._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
 var todos=[];var list=document.getElementById('list');var input=document.getElementById('t');
 function render(){if(!todos.length){list.innerHTML='<div class="empty">Nothing yet. Add your first task.</div>';return}list.innerHTML='';todos.forEach(function(t,i){var li=document.createElement('li');if(t.done)li.className='done';li.innerHTML='<div class="box'+(t.done?' on':'')+'">'+CHECK+'</div><span class="txt"></span><button class="del">&times;</button>';li.querySelector('.txt').textContent=t.text;li.querySelector('.box').onclick=function(){todos[i].done=!todos[i].done;commit()};li.querySelector('.del').onclick=function(){todos.splice(i,1);commit()};list.appendChild(li)})}
-function commit(){render();Vitality.save(todos)}
+function commit(){render();Imperium.save(todos)}
 function add(){var v=input.value.trim();if(!v)return;todos.push({text:v,done:false});input.value='';commit();input.focus()}
 document.getElementById('a').onclick=add;input.addEventListener('keydown',function(e){if(e.key==='Enter')add()});
-Vitality.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drink a glass of water',done:true},{text:'10 minute walk',done:false},{text:'Plan tomorrow',done:false}];render()});
+Imperium.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drink a glass of water',done:true},{text:'10 minute walk',done:false},{text:'Plan tomorrow',done:false}];render()});
 <\/script></body></html>`
 
 /**
  * The build prompt a user pastes into Claude Code (VS Code) or claude.ai to
- * get a tile that plugs straight into Vitality. It teaches the FULL bridge,
- * including Vitality.report(), so a tile built outside auto-connects to Vee:
+ * get a tile that plugs straight into Imperium. It teaches the FULL bridge,
+ * including Imperium.report(), so a tile built outside auto-connects to Imperium:
  * its stream lands in Supabase (tile_streams / tile_reports) and the score,
  * the drift watch, and the cross-life connections pick it up with zero setup.
  * Kept as one copyable constant so the contract can never drift from the UI.
@@ -97,28 +97,28 @@ Vitality.load().then(function(d){todos=Array.isArray(d)&&d.length?d:[{text:'Drin
  * celebrate a write that never landed.
  * Exported for the contract-pinning test (createBridge.test.ts).
  */
-export const BUILD_PROMPT = `Build me a Vitality tile: ONE self-contained HTML file (inline CSS + JS, no external requests, no libraries, no localStorage). It runs sealed in a sandboxed iframe on my dashboard.
+export const BUILD_PROMPT = `Build me a Imperium tile: ONE self-contained HTML file (inline CSS + JS, no external requests, no libraries, no localStorage). It runs sealed in a sandboxed iframe on my dashboard.
 
 Look: transparent background (the dashboard is pure black), white text, mint #6EE7B7 accents, system/Inter font, SVG icons only, no emoji.
 
-Talk to Vitality ONLY through this bridge. Paste it verbatim at the top of the script:
+Talk to Imperium ONLY through this bridge. Paste it verbatim at the top of the script:
 
-var Vitality={_w:{},_sv:false,save:function(d){Vitality._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Vitality._w[id]){Vitality._w[id]=function(d){if(d!=null&&!Vitality._sv)location.reload()};res(null)}},3000);Vitality._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
+var Imperium={_w:{},_sv:false,save:function(d){Imperium._sv=true;parent.postMessage({source:'vitality-tile',type:'save',data:d},'*')},load:function(){return new Promise(function(res){var id=Math.random().toString(36).slice(2);var ask=function(){parent.postMessage({source:'vitality-tile',type:'load',id:id},'*')};var n=0;var t=setInterval(function(){n++;if(n===1){ask();return}clearInterval(t);if(Imperium._w[id]){Imperium._w[id]=function(d){if(d!=null&&!Imperium._sv)location.reload()};res(null)}},3000);Imperium._w[id]=function(d){clearInterval(t);res(d)};ask()})},report:function(s){parent.postMessage({source:'vitality-tile',type:'report',stream:s},'*')}};
 function vNote(t){var n=document.getElementById('v-note');if(!n){n=document.createElement('div');n.id='v-note';n.style.cssText='margin-top:10px;font-size:12px;color:#F59E0B;text-align:center';document.body.appendChild(n)}n.textContent=t}
-window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Vitality._w[m.id]){Vitality._w[m.id](m.data);delete Vitality._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
+window.addEventListener('message',function(e){var m=e.data;if(!m||m.source!=='vitality-host')return;if(m.type==='load:result'&&Imperium._w[m.id]){Imperium._w[m.id](m.data);delete Imperium._w[m.id];return}if(m.type==='save:error'){vNote('That save did not stick. Try again in a moment.')}else if(m.type==='report:error'){vNote('That log did not land, so it does not count yet. Try again in a moment.')}});
 function todayKey(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 
 The rules:
-1. Vitality.save(data) persists this tile's own data (any small JSON). Vitality.load() returns it as a Promise on startup; it resolves null when nothing is saved yet or the dashboard did not answer in time (the bridge retries once, and if the real answer lands late with saved data before you save, it reloads the tile so stored history is never overwritten by an empty boot), so always fall back to your empty state. Save after every change.
-2. Vitality.report(stream) feeds Vee, the dashboard's brain. Report the tile's ONE main number every time the user logs it, right next to the save:
-   Vitality.report({ key:'beer', label:'Beer', value:2, date:todayKey(), kind:'intake', goalDirection:'down' })
+1. Imperium.save(data) persists this tile's own data (any small JSON). Imperium.load() returns it as a Promise on startup; it resolves null when nothing is saved yet or the dashboard did not answer in time (the bridge retries once, and if the real answer lands late with saved data before you save, it reloads the tile so stored history is never overwritten by an empty boot), so always fall back to your empty state. Save after every change.
+2. Imperium.report(stream) feeds Imperium, the dashboard's brain. Report the tile's ONE main number every time the user logs it, right next to the save:
+   Imperium.report({ key:'beer', label:'Beer', value:2, date:todayKey(), kind:'intake', goalDirection:'down' })
    - key: a short id for the stream, like beer, reading, meditate
    - label: the display name
    - value: the number for this log
    - date: local YYYY-MM-DD (use todayKey(), never toISOString)
    - kind: one of intake, count, duration, rating, measure, money, done
    - goalDirection: up, down, or neutral (what good looks like for this number)
-3. One stream per tile. Reporting is what connects the tile to my daily score and lets Vee notice patterns across my life.
+3. One stream per tile. Reporting is what connects the tile to my daily score and lets Imperium notice patterns across my life.
 
 When you are done, give me ONLY the complete HTML file, nothing else.`
 
@@ -241,7 +241,7 @@ export default function CreateTile({
       if (type === 'report') {
         setSavedOn(true)
         setSaving(false)
-        setStatusLabel('Reported to Vee. The noticed brain is watching this stream.')
+        setStatusLabel('Reported to Imperium. The noticed brain is watching this stream.')
       } else if (type === 'save') {
         setSavedOn(true)
         setSaving(false)
@@ -254,7 +254,7 @@ export default function CreateTile({
     // read by the noticed engine as just another domain. The host supplies the
     // sender's tileId (a not-yet-Kept preview reports under its draft id, so
     // nothing is ever dropped). The promise is returned so the host only fires
-    // the "Reported to Vee" activity when the write actually landed; a failure
+    // the "Reported to Imperium" activity when the write actually landed; a failure
     // flips the status line honest instead of celebrating a dropped datapoint.
     (stream, tileId) => {
       // Remember which stream keys THIS session's draft preview reported, so a
@@ -271,17 +271,17 @@ export default function CreateTile({
             setStatusLabel(
               res.error === 'unauthorized'
                 ? 'That report did not land: you are signed out. Sign back in and log it again.'
-                : 'That report did not land, so Vee has not seen it. Log it again in a moment.',
+                : 'That report did not land, so Imperium has not seen it. Log it again in a moment.',
             )
           }
           return res
         })
         // A transport-level rejection (network drop mid-flight) must flip the
-        // status line honest too, not leave an earlier "Reported to Vee" lying.
+        // status line honest too, not leave an earlier "Reported to Imperium" lying.
         .catch(() => {
           setSaving(false)
           setSavedOn(false)
-          setStatusLabel('That report did not land, so Vee has not seen it. Log it again in a moment.')
+          setStatusLabel('That report did not land, so Imperium has not seen it. Log it again in a moment.')
           return { ok: false as const, error: 'network' }
         })
     },
@@ -353,7 +353,7 @@ export default function CreateTile({
       .then(() =>
         setRunMsg({
           kind: 'ok',
-          text: 'Build prompt copied. Paste it into Claude Code in VS Code, or claude.ai, and it will build you a tile that reports to Vee.',
+          text: 'Build prompt copied. Paste it into Claude Code in VS Code, or claude.ai, and it will build you a tile that reports to Imperium.',
         }),
       )
       .catch(() =>

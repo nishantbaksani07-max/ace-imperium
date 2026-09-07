@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 /**
  * BANISHED (Alex, 2026-07-12): this was the bring-your-own-keys WHOOP page
- * (paste your own client_id / client_secret). With the central Vitality WHOOP
+ * (paste your own client_id / client_secret). With the central Imperium WHOOP
  * app now the default (lib/whoop/client getWhoopCredentials falls back to
  * WHOOP_CLIENT_ID/SECRET), no user ever supplies keys again - they just tap
  * Connect -> Allow. The route stays only to redirect any old link to the real

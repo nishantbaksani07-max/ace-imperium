@@ -1,5 +1,5 @@
 /**
- * simplifyLead — the "simple" read for the "Vitality noticed" card (the detailed/simple
+ * simplifyLead — the "simple" read for the "Imperium noticed" card (the detailed/simple
  * toggle Alex loved in public/vee-noticed-rarity-demo.html). Detailed keeps the real
  * numbers (the personal sauce); simple strips them so the insight scans in a second.
  *

@@ -8,9 +8,9 @@ export default function AuthLayout({
   return (
     <main className="center-screen">
       <div className="container-narrow stack stack-6">
-        <Link href="/" className="auth-mark" aria-label="Vitality home">
-          <span className="brand-mark">V</span>
-          <span className="brand-wordmark">Vitality</span>
+        <Link href="/" className="auth-mark" aria-label="Imperium home">
+          <span className="brand-mark">I</span>
+          <span className="brand-wordmark">Imperium</span>
         </Link>
         {children}
       </div>

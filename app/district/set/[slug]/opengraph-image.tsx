@@ -18,7 +18,7 @@ export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Vitality gem mark - flat-faceted "V" gem, same geometry as app/icon.tsx.
+// Imperium gem mark - flat-faceted "V" gem, same geometry as app/icon.tsx.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
   <path d="M392 372 L632 372 L724 470 L512 744 L300 470 Z" fill="#1f4d3d"/>
@@ -48,7 +48,7 @@ export default async function SetOgImage({
 }) {
   const collection = FEATURED_COLLECTIONS.find((c) => c.id === params.slug)
   const tiles = collection ? tilesForCollection(collection.id) : []
-  const title = collection ? collection.title : 'A Vitality set'
+  const title = collection ? collection.title : 'A Imperium set'
   const line = collection
     ? `${tiles.length} tiles · add the whole set in one tap`
     : 'A ready-made set of tiles for your dashboard.'
@@ -108,7 +108,7 @@ export default async function SetOgImage({
                 textTransform: 'uppercase',
               }}
             >
-              Vitality
+              Imperium
             </div>
           </div>
           <div

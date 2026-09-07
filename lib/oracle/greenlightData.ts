@@ -4,7 +4,7 @@
  * Same shape as lib/goals/driftData.ts and lib/vitals/signalData.ts: fetch a
  * compact slice of the user's data, run the pure detectors, return the one
  * thing to surface. NEVER throws — a missing signal yields no notice, never a
- * crash on the Vee surface.
+ * crash on the Imperium surface.
  *
  * It reuses the MCP read layer by wrapping the app's RLS-scoped server client as
  * a VitalityDb (the same {db, userId} contract the MCP tools use), so there is

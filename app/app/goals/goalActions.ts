@@ -1,7 +1,7 @@
 'use server'
 
 /**
- * Vee Goals — server actions (Phase 1 CRUD).
+ * Imperium Goals — server actions (Phase 1 CRUD).
  *
  * Every write is RLS-scoped by user_id (auth.uid() = user_id on the tables) and
  * never throws to the client: each returns a small {ok,...} union so the UI can
@@ -35,7 +35,7 @@ type Err = { ok: false; error: string }
 const GOALS_SOURCE = 'goals'
 
 /**
- * Keep Vee's shared memory in lockstep with a goal's current state. The policy
+ * Keep Imperium's shared memory in lockstep with a goal's current state. The policy
  * (write working-toward / celebrate / retract) lives in lib/goals/goalMemory;
  * here we just apply it — one fact per goal, keyed by ref_id = goal.id. Never
  * throws: a memory hiccup must not fail the write the user actually made.
@@ -126,7 +126,7 @@ export async function createBigGoal(input: CreateBigGoalInput): Promise<Ok<{ goa
   if (error || !data) return { ok: false, error: writeError(error) }
 
   const goal = rowToBigGoal(data as BigGoalRow)
-  // Feed Vee's shared memory so the goal surfaces in chat (the chat route
+  // Feed Imperium's shared memory so the goal surfaces in chat (the chat route
   // injects every user_facts source). 'silent' goals stay private (no fact).
   await syncGoalFact(supabase, user.id, goal)
 
@@ -150,14 +150,14 @@ export async function updateBigGoalProgress(id: string, current: number): Promis
   if (error || !data) return { ok: false, error: writeError(error) }
 
   const goal = rowToBigGoal(data as BigGoalRow)
-  // Progress moved — refresh the memory so Vee knows where they are now.
+  // Progress moved — refresh the memory so Imperium knows where they are now.
   await syncGoalFact(supabase, user.id, goal)
 
   revalidatePath('/app/goals')
   return { ok: true, goal }
 }
 
-/** Change how much Vee shows up about a goal, and sync its memory to match —
+/** Change how much Imperium shows up about a goal, and sync its memory to match —
  *  'silent' retracts it, anything else (re)writes it. Makes the card's
  *  "change how much I show up anytime" promise real. */
 export async function updateBigGoalPush(id: string, push: Push): Promise<Ok<{ goal: BigGoal }> | Err> {
@@ -195,7 +195,7 @@ const CORE_BINDING_RE = /^core:[a-z0-9_.:-]{1,80}$/i
 
 /**
  * "What steers this": persist the user's own choice of steering metric on a
- * goal, or clear it (null = let Vee decide). buildTicker honors the override
+ * goal, or clear it (null = let Imperium decide). buildTicker honors the override
  * first, so the picked metric wins over auto-binding on the next load.
  */
 export async function setGoalBinding(id: string, binding: string | null): Promise<Ok<{ goal: BigGoal }> | Err> {
@@ -242,7 +242,7 @@ export async function setBigGoalStatus(id: string, status: BigGoalStatus): Promi
 
   const goal = rowToBigGoal(data as BigGoalRow)
 
-  // Keep Vee's memory current: achieved -> a celebration fact, paused/abandoned
+  // Keep Imperium's memory current: achieved -> a celebration fact, paused/abandoned
   // -> retract it, reactivated -> the working-toward fact (goalMemory decides).
   // Respects 'silent' throughout.
   await syncGoalFact(supabase, user.id, goal)
@@ -264,7 +264,7 @@ export async function deleteBigGoal(id: string): Promise<Ok<unknown> | Err> {
 
   if (error) return { ok: false, error: writeError(error) }
 
-  // The goal is gone — remove anything Vee remembered about it, so it never
+  // The goal is gone — remove anything Imperium remembered about it, so it never
   // brings up a goal the user deleted.
   await deleteFactsByRef(supabase, user.id, GOALS_SOURCE, id)
 
@@ -313,7 +313,7 @@ export async function categorizeAndCleanGoal(goalId: string): Promise<Ok<{ goal:
   if (error || !data) return { ok: false, error: writeError(error) }
 
   const goal = rowToBigGoal(data as BigGoalRow)
-  // Refresh Vee's memory so it uses the tidy title once we have one.
+  // Refresh Imperium's memory so it uses the tidy title once we have one.
   await syncGoalFact(supabase, user.id, goal)
 
   revalidatePath('/app/goals')

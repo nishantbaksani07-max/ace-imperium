@@ -1,7 +1,7 @@
 /*
  * CoachDoorway — the "talk deeper in Claude" bottom sheet on /app/fuel.
  *
- * Iris accent (Echo / Vee native — matches the coach gem), so the doorway reads
+ * Iris accent (Echo / Imperium native — matches the coach gem), so the doorway reads
  * as "talk to your coach, in Claude". Structure mirrors the mint TrainerDoorway
  * (app/app/fitness/log/trainerDoorway.module.css). Tokens are declared locally
  * on .wrap so the sheet renders correctly regardless of which page mounts it.

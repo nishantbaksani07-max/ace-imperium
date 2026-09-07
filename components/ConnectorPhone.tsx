@@ -2,7 +2,7 @@ import styles from './ConnectorPhone.module.css'
 
 /**
  * ConnectorPhone — a landing-style phone showing the user's own Claude with the
- * Vitality connector live, pushing proactive, data-driven nudges (a stock
+ * Imperium connector live, pushing proactive, data-driven nudges (a stock
  * earnings heads-up, a forgotten subscription about to renew, a recovery flag).
  * Purely presentational + CSS-animated (notifications stagger in like they're
  * arriving). Reuses the HeroPhone frame language. aria-hidden — it's decoration.
@@ -15,7 +15,7 @@ export default function ConnectorPhone() {
       <div className={styles.header}>
         <span className={styles.appName}>Claude</span>
         <span className={styles.connected}>
-          <span className={styles.connectedDot} /> Vitality connected
+          <span className={styles.connectedDot} /> Imperium connected
         </span>
       </div>
 

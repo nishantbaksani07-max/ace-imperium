@@ -263,9 +263,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
         aria-hidden={openTile ? true : undefined}
       >
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
-            V
-          </Link>
+          <Link href="/" className={styles.mark} aria-label="Imperium">I</Link>
           <span className={styles.barSpacer} />
           <Link href={SIGNUP_NEXT} className={styles.barCta}>
             Make your own
@@ -435,7 +433,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
                             by @{t.handle}
                           </Link>
                         ) : (
-                          <span className={styles.byline}>a Vitality maker</span>
+                          <span className={styles.byline}>a Imperium maker</span>
                         )}
                       </div>
                       <button
@@ -473,7 +471,7 @@ export default function DistrictGallery({ featured, categories, community }: Dis
           </span>
           <div className={styles.circleBody}>
             <p>
-              Every tile here is <b>free to add</b>. Make a Vitality and your dashboard fills with the ones you pick.
+              Every tile here is <b>free to add</b>. Make a Imperium and your dashboard fills with the ones you pick.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

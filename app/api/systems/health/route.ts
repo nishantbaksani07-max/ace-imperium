@@ -77,7 +77,7 @@ function buildSystems(): SystemHealth[] {
     },
     {
       key: 'vee-mentor',
-      name: 'Vee mentor',
+      name: 'Imperium mentor',
       detail: 'The chat mentor and daily triage. Runs on Claude.',
       checks: [anthropic()],
     },

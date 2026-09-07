@@ -429,7 +429,7 @@ function LivePill({ tone }: { tone: RecoveryTone }) {
       textTransform: 'uppercase', color: 'rgba(255,255,255,0.88)',
     }}>
       <span style={{ width: 6, height: 6, borderRadius: '50%', background: color, boxShadow: `0 0 8px ${color}` }} />
-      <span>Vitality · live</span>
+      <span>Imperium · live</span>
     </div>
   )
 }

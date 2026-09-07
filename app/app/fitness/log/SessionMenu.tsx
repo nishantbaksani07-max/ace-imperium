@@ -19,7 +19,7 @@ import { createClient } from '@/lib/supabase/client'
 import { deleteWorkout, type DayStatus } from '@/lib/workouts/queries'
 
 interface SessionMenuProps {
-  /** Customized rotation from training_settings. Falls back to default Vitality 8-day. */
+  /** Customized rotation from training_settings. Falls back to default Imperium 8-day. */
   split?: SplitDay[]
   /** Initial unit preference from user_profile. The toggle in the top-right
    *  updates this and persists via the setUnits server action. */
@@ -534,7 +534,7 @@ export default function SessionMenu({ split, units: initialUnits = 'metric', int
         <div className={fitnessStyles.header}>
           <div className={styles.topRow}>
             <Link href="/app" className={fitnessStyles.back}>
-              <span className={fitnessStyles.backArrow}>←</span> Vitality
+              <span className={fitnessStyles.backArrow}>←</span> Imperium
             </Link>
             {/* Right-cluster: wide "Adjust your training" pill paired
                 with the settings gear. Same pill-button vocabulary as

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import styles from './veeFeed.module.css'
 
-/* Vee's read on your life — the feed-first Vee surface (Vitality Noticed).
+/* Imperium's read on your life — the feed-first Imperium surface (Imperium Noticed).
  * Ported 1:1 from public/vee-showcase.html. Iris/purple + mint + amber palette,
  * a rarity collection grid, a rarity-graded insight feed with a detailed/simple
  * toggle, the climb signal graph, and the engine ladder.
@@ -215,7 +215,7 @@ export default function VeeFeed() {
         <div className={styles.bar}>
           <span className={styles.brand}>
             <span className={styles.mark}><Ic name="echo" sw={2.2} /></span>
-            <span className={styles.nm}>Vitality <span>&middot; Vee</span></span>
+            <span className={styles.nm}>Imperium <span>&middot; Imperium</span></span>
           </span>
           <span className={styles.who}>signed in &middot; you</span>
           <span className={styles.barSpacer} />
@@ -242,10 +242,10 @@ export default function VeeFeed() {
           <div className={styles.heroIn}>
             <span className={styles.eyebrow}><span className={styles.dot} />your insight feed &middot; live</span>
             <h1 className={styles.promise}>
-              <span className={styles.ln}>Vee has watched you for <span className={styles.mintword}>eight months</span>.</span>
+              <span className={styles.ln}>Imperium has watched you for <span className={styles.mintword}>eight months</span>.</span>
               <span className={styles.ln}>Here is what she <span className={styles.glow}>figured out</span>.</span>
             </h1>
-            <p className={styles.sub}>Every lift, weigh-in, meal, quiet night and unplanned spend goes in. On its own, noise. Held all at once, patterns start to glow. These are the links Vee found in <b>your</b> life, graded by how rare and how deep they are.</p>
+            <p className={styles.sub}>Every lift, weigh-in, meal, quiet night and unplanned spend goes in. On its own, noise. Held all at once, patterns start to glow. These are the links Imperium found in <b>your</b> life, graded by how rare and how deep they are.</p>
 
             <div className={styles.stats}>
               <span className={styles.stat}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 8v4l3 2" /><circle cx="12" cy="12" r="9" /></svg><b>247</b> days logged</span>
@@ -272,13 +272,13 @@ export default function VeeFeed() {
                 </div>
               ))}
             </div>
-            <p className={styles.rarityNote}>This is the hunt. The <b>mythic</b> insight, the once-in-a-lifetime one, only surfaced after Vee had held your whole record for months. Scroll down and it is the last card, the deepest thing she knows about you.</p>
+            <p className={styles.rarityNote}>This is the hunt. The <b>mythic</b> insight, the once-in-a-lifetime one, only surfaced after Imperium had held your whole record for months. Scroll down and it is the last card, the deepest thing she knows about you.</p>
           </div>
         </section>
 
         {/* ============ 02 · the feed ============ */}
         <section className={styles.section}>
-          <div className={styles.secHead}><span className={styles.num}>&middot;02</span><span className={styles.lbl}>What Vee found</span><span className={styles.rule} /></div>
+          <div className={styles.secHead}><span className={styles.num}>&middot;02</span><span className={styles.lbl}>What Imperium found</span><span className={styles.rule} /></div>
           <p className={styles.secBlurb}>Five real finds, climbing from a small true nudge to the one that changes everything. Flip <i>detailed / simple</i> up top: detailed keeps the real numbers, simple dumbs it down to scan in a second.</p>
           <div className={styles.feed}>
             {CARDS.map((c, i) => (
@@ -287,7 +287,7 @@ export default function VeeFeed() {
                   <div className={styles.rarityEdge} />
                   <div className={styles.vtTop}>
                     <div className={styles.vtEcho}><Ic name="echo" sw={2.2} /></div>
-                    <div className={styles.vtTag}>Vitality noticed</div>
+                    <div className={styles.vtTag}>Imperium noticed</div>
                     <button className={styles.rbadge}><span className={styles.gem} />{c.rarity}</button>
                     <div className={styles.vtSpacer} />
                     <div className={styles.vtWatched}><Ic name="clock" />watched &middot; {c.watched} &middot; {c.timeframe}</div>
@@ -323,7 +323,7 @@ export default function VeeFeed() {
         {/* ============ 03 · the signal behind the legendary ============ */}
         <section className={styles.section}>
           <div className={styles.secHead}><span className={styles.num}>&middot;03</span><span className={styles.lbl}>Under the hood</span><span className={styles.rule} /></div>
-          <p className={styles.secBlurb}>Every card sits on real signals. Here is one of them: the climb Vee has been tracking toward your bench goal. The insights are only as good as what you feed it, so it keeps getting sharper.</p>
+          <p className={styles.secBlurb}>Every card sits on real signals. Here is one of them: the climb Imperium has been tracking toward your bench goal. The insights are only as good as what you feed it, so it keeps getting sharper.</p>
           <div className={styles.climb} ref={climbRef}>
             <div className={styles.climbTop}>
               <span className={styles.ct}>Signal &middot; the climb to your goal</span>
@@ -362,7 +362,7 @@ export default function VeeFeed() {
           </div>
 
           <div className={styles.ladder}>
-            <div className={styles.lh}>how deep Vee goes &middot; you are near the top</div>
+            <div className={styles.lh}>how deep Imperium goes &middot; you are near the top</div>
             <div className={styles.steps}>
               <div className={`${styles.step} ${styles.done}`}><span className={styles.pip}>1</span><span className={styles.st}><b>Building blocks.</b> One true link between two things. Real and useful.</span></div>
               <div className={`${styles.step} ${styles.done}`}><span className={styles.pip}>2</span><span className={styles.st}><b>The spiral.</b> Several parts of your life turn out to be one story. The money + training + mood find.</span></div>
@@ -374,7 +374,7 @@ export default function VeeFeed() {
         {/* ============ closer ============ */}
         <div className={styles.closer}>
           <p className={styles.big}>Your life, held all at once. <span className={styles.glow}>Now it talks back.</span></p>
-          <p className={styles.small}>This is what Vitality is for. The engine is real; the numbers shown are a realistic example, not live data. The hunt never ends, and that is the point.</p>
+          <p className={styles.small}>This is what Imperium is for. The engine is real; the numbers shown are a realistic example, not live data. The hunt never ends, and that is the point.</p>
         </div>
 
       </div>

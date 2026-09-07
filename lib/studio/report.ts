@@ -2,7 +2,7 @@ import type { ReportedStream } from '@/lib/tiles/reportContract'
 import { REPORT_KEY, REPORT_KIND, type StudioVideo } from '@/lib/studio/types'
 
 /**
- * Build the single life-stream the Studio tile reports into Vee: the running
+ * Build the single life-stream the Studio tile reports into Imperium: the running
  * count of the user's published videos. Pure, so the sealed tile's report call
  * and this helper cannot drift, and the shape is guarded against the LOCKED
  * reportContract in tests. See lib/tiles/reportContract.ts (kind must be one of

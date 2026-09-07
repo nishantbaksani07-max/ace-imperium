@@ -8,7 +8,7 @@ import type { SubscriptionStatus, Tier } from '@/lib/supabase/types'
 
 // POST /api/stripe/webhook
 //
-// Stripe → Vitality state sync. The route is unauthenticated (Stripe
+// Stripe → Imperium state sync. The route is unauthenticated (Stripe
 // signs the request; we verify the signature) and writes via the
 // service-role Supabase client because the user has no session here.
 //

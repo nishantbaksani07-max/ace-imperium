@@ -1,8 +1,8 @@
 /**
  * Vitals Signal engine (pure, no IO). The daily fused, personal read.
  *
- * WHOOP knows your recovery. Only Vitality also knows your training load, your
- * fuel, your goal, and what you told Vee. This engine fuses those into ONE call
+ * WHOOP knows your recovery. Only Imperium also knows your training load, your
+ * fuel, your goal, and what you told Imperium. This engine fuses those into ONE call
  * for the day: push, steady, or recover. It is a total function — any input maps
  * to a valid Signal (or null when there is genuinely nothing to read), and it
  * never throws.
@@ -17,7 +17,7 @@ import { recoveryBand, type RecoveryBand } from '@/lib/vitals/advice'
 export type SignalLean = 'push' | 'steady' | 'recover'
 
 export interface SignalChip {
-  source: 'WHOOP' | 'Oura' | 'Train' | 'Fuel' | 'Vee'
+  source: 'WHOOP' | 'Oura' | 'Train' | 'Fuel' | 'Imperium'
   label: string
   qualifier: string
   dir: 'up' | 'flat' | 'down' | 'good' | 'warn'
@@ -247,10 +247,10 @@ function buildChips(
     })
   }
 
-  // Vee (an injury or constraint the user told the mentor about).
+  // Imperium (an injury or constraint the user told the mentor about).
   if (input.injuryFlags.length > 0) {
     chips.push({
-      source: 'Vee',
+      source: 'Imperium',
       label: input.injuryFlags[0],
       qualifier: 'flagged',
       dir: 'warn',

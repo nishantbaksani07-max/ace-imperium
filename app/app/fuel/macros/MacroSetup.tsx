@@ -27,7 +27,7 @@ import { type DietStyle, wantsMacroTargets, DIET_STYLE_LABEL, recommendMicroGoal
 import styles from './macroSetup.module.css'
 
 /**
- * Macro setup — the goal + maintenance quiz. Runs on the shared Vitality Quiz
+ * Macro setup — the goal + maintenance quiz. Runs on the shared Imperium Quiz
  * engine (same canvas, chapter trail, icon cards, mint burst), with branching
  * (blunt goal -> a follow-up tailored to it) and a pace question shown in real
  * numbers. Computes the recommended approach (incl. an explicit lean bulk) +
@@ -173,7 +173,7 @@ export default function MacroSetup({ profile, configured = false }: { profile: M
     setBooted(true)
   }, [])
 
-  // The Vitality gem celebrates when the plan lands. Mostly the dumbbell
+  // The Imperium gem celebrates when the plan lands. Mostly the dumbbell
   // (on-theme for a training plan), with occasional variety from the other
   // best-fitting celebratory moves so it doesn't feel canned on repeat visits.
   const gemCtrl = useRef<((move: string) => void) | null>(null)
@@ -547,7 +547,7 @@ export default function MacroSetup({ profile, configured = false }: { profile: M
         <p className={styles.note}>
           {lightCopy
             ? lightCopy.note
-            : `${cycled ? 'Tap gym or rest day on the tracker. ' : ''}As you log your food and weight, Vitality dials this in to your real numbers.`}
+            : `${cycled ? 'Tap gym or rest day on the tracker. ' : ''}As you log your food and weight, Imperium dials this in to your real numbers.`}
         </p>
         {err && <p className={styles.err}>{err}</p>}
         <button className={styles.save} onClick={save} disabled={saving}>

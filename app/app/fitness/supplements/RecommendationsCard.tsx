@@ -148,7 +148,7 @@ function RecTicker({ items }: { items: TickerItem[] }) {
     <div className={styles.recTicker} role="status" aria-label="Live inputs driving these picks">
       <div className={styles.recTickerEyebrow}>
         <span className={styles.recTickerPulse} aria-hidden />
-        Vitality · live
+        Imperium · live
       </div>
       <div className={styles.recTickerScroll}>
         <div className={styles.recTickerTrack}>
@@ -238,7 +238,7 @@ export default function RecommendationsCard({
       />
 
       <p className={styles.recDisclaimer}>
-        Scores are based on the data you’ve given Vitality. Brand picks are
+        Scores are based on the data you’ve given Imperium. Brand picks are
         well-regarded mid-range options, not endorsements. Check with your
         doctor before starting anything new. Some links are affiliate; we may
         earn a small commission at no cost to you.

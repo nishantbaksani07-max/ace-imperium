@@ -6,7 +6,7 @@ import { getOnboardingTasks, type OnboardingTask, type TaskId } from '@/lib/onbo
  * than inside lib/onboardingTasks.ts — that file has in-flight work in another
  * window (Stripe), so we keep these out of it:
  *
- *   1. The retired "Set your Vitality goal" quiz row is filtered out (PATCH13).
+ *   1. The retired "Set your Imperium goal" quiz row is filtered out (PATCH13).
  *   2. The Macros setup quiz is inserted as a body-focused row, right after
  *      "Build your training". It isn't in onboardingTasks.ts at all — the
  *      Macros quiz lives at /app/fuel/macros/setup and marks itself done via

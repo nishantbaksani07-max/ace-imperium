@@ -3,12 +3,12 @@ import { ImageResponse } from 'next/og'
 /**
  * Apple touch icon (iOS "Add to Home Screen"). 180×180, fully opaque dark
  * background (iOS ignores transparency and adds its own rounding). Same
- * Vitality gem mark as app/icon.tsx, sized for the smaller canvas.
+ * Imperium gem mark as app/icon.tsx, sized for the smaller canvas.
  */
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — the "D · Brilliant" flat-faceted gem (7 facets radiating
+// Imperium gem mark — the "D · Brilliant" flat-faceted gem (7 facets radiating
 // to the culet), solid fills on near-black. viewBox is tight around the gem.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="282 328 460 460">

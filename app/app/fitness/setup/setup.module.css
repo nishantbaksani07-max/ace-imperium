@@ -997,7 +997,7 @@
   color: rgba(110, 231, 183, 0.7);
 }
 
-/* Diagnostic — Vitality italic serif voice (same family as the preset
+/* Diagnostic — Imperium italic serif voice (same family as the preset
    titles and intake quiz prompts). Renders only the recommendation
    conclusion ("We're putting you on Full Body 2-day — swapping in
    leg press…") — the user-answer restatement is dropped since they
@@ -2553,7 +2553,7 @@
 }
 
 /* Locked day-type tag on a heavy+volume PRESET — shows the type, not editable
-   (the split's periodisation is fixed). Styled as a Vitality pill to match the
+   (the split's periodisation is fixed). Styled as a Imperium pill to match the
    level badges on the chooser. Mint heavy / amber volume / muted rest. */
 .dayRowTypeTag {
   display: inline-flex;
@@ -3378,7 +3378,7 @@
 
 /* Per-pattern color tints. Each variant shifts the glyph + label hue
    so push/pull/legs/upper/lower visually distinct, but stays in the
-   mint-leaning family per the Vitality theme. Push runs cooler, pull
+   mint-leaning family per the Imperium theme. Push runs cooler, pull
    warmer, legs deeper, upper/lower cleanest mint. */
 .reasonCategoryBanner-push .reasonCategoryIcon,
 .reasonCategoryBanner-push .reasonCategoryLabel {

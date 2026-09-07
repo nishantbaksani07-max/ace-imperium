@@ -609,12 +609,12 @@
 
 /* ───────── Section: Your Claude, with a memory (zone 1.5) ───────── */
 /* Minimal + visual: one line, a phone playing a scripted Claude exchange
-   (ConnectorDemo) where Vitality's connectors surface the hidden thing,
+   (ConnectorDemo) where Imperium's connectors surface the hidden thing,
    then small chips of what it quietly catches. */
 .claude {
-  /* Iris is the Claude / AI accent (from the Vee card system) — distinct
-     from Vitality's mint. Mint = your data going in; iris = Claude.
-     Amber = a heads-up (used inside the Vee notice). */
+  /* Iris is the Claude / AI accent (from the Imperium card system) — distinct
+     from Imperium's mint. Mint = your data going in; iris = Claude.
+     Amber = a heads-up (used inside the Imperium notice). */
   --iris: #a78bfa;
   --iris-hi: #c4b5fd;
   --iris-ink: #1c1240;
@@ -769,7 +769,7 @@
   gap: clamp(16px, 2.5vh, 24px);
 }
 
-/* The Vitality AI avatar (gem) watching a live, auto-cycling app screen. */
+/* The Imperium AI avatar (gem) watching a live, auto-cycling app screen. */
 .aiShowcase {
   display: flex;
   align-items: center;
@@ -1125,7 +1125,7 @@
   gap: clamp(20px, 3vh, 30px);
 }
 
-/* "Open in Claude" doorway — premium iris portal (Vee treatment C). */
+/* "Open in Claude" doorway — premium iris portal (Imperium treatment C). */
 .doorway {
   display: flex;
   align-items: center;
@@ -1282,7 +1282,7 @@
   border-radius: 33px;
 }
 
-/* Browser-window frame holding the live Vee notice (the app on desktop). */
+/* Browser-window frame holding the live Imperium notice (the app on desktop). */
 .laptop {
   flex: 1 1 auto;
   max-width: 600px;
@@ -1338,7 +1338,7 @@
     #06080c;
 }
 
-/* Vee notice — mirrors public/vee-card-library.html */
+/* Imperium notice — mirrors public/vee-card-library.html */
 .vnEyebrow {
   display: inline-flex;
   align-items: center;
@@ -1511,7 +1511,7 @@
   padding: 6px 9px;
 }
 
-/* "what Vitality noticed" — the iris insight card */
+/* "what Imperium noticed" — the iris insight card */
 .vnNotice {
   border: 1px solid rgba(167, 139, 250, 0.28);
   border-radius: 16px;

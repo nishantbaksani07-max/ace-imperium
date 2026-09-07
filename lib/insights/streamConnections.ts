@@ -1,8 +1,8 @@
 /**
- * Stream connections — "Vee connects": the generic pairwise scan that links a
+ * Stream connections — "Imperium connects": the generic pairwise scan that links a
  * USER-BUILT tile stream (the report contract) to a core life outcome the user
  * never thought to compare it with. The user thinks they built a beer tracker;
- * Vee quietly finds "your heavier beer days show up in the next morning's
+ * Imperium quietly finds "your heavier beer days show up in the next morning's
  * recovery" — with real receipts, or it says nothing at all.
  *
  * Built entirely on the shared, tested primitives (reportsToSeries ->
@@ -218,7 +218,7 @@ export function connectionToCandidate(c: StreamConnection): FusionCandidate {
 }
 
 /**
- * Compact chat-context lines (max 2 by default) so Vee can cite a verified
+ * Compact chat-context lines (max 2 by default) so Imperium can cite a verified
  * connection instead of inventing one. Evidence rides along so the model can
  * hedge honestly ("across 12 paired days").
  */

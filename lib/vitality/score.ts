@@ -1,6 +1,6 @@
 /**
- * Vitality Score engine — the daily 0-100 "did I take care of myself today"
- * number behind the Vee dashboard tile. A consistency/showing-up score graded
+ * Imperium Score engine — the daily 0-100 "did I take care of myself today"
+ * number behind the Imperium dashboard tile. A consistency/showing-up score graded
  * against the user's OWN committed routine (never on a module they didn't set
  * up). Compute-on-read: no new tables. Each module plugs in as one isolated
  * `Contributor`; the engine knows nothing about a module's internals, only the

@@ -1,14 +1,14 @@
 /**
- * Tile -> Vee bridge logic: turns a reported stream (the report contract) into
- * something the existing "Vitality noticed" engine already understands. This is
+ * Tile -> Imperium bridge logic: turns a reported stream (the report contract) into
+ * something the existing "Imperium noticed" engine already understands. This is
  * the piece that makes "the user thinks they built a beer tracker, but they
- * actually handed Vee a categorized life-stream" true, with zero per-tile code.
+ * actually handed Imperium a categorized life-stream" true, with zero per-tile code.
  *
  * `kind` is the whole trick. It decides:
  *   - how same-day datapoints collapse (intake/count/money/duration sum; rating
  *     means the felt score; measure keeps the last reading; done = did-it-at-all),
  *   - the lag against an outcome (an intake today shows up in TOMORROW's recovery),
- *   - and, with goalDirection, the sign Vee should expect (a "down" habit like
+ *   - and, with goalDirection, the sign Imperium should expect (a "down" habit like
  *     alcohol should pull a higher-is-better outcome DOWN, so a positive link is
  *     refused, not phrased).
  *
@@ -55,7 +55,7 @@ export function reportsToSeries(rows: TileReportRow[], kind: ReportKind): Domain
   )
 }
 
-/** The sign Vee should expect between a stream and a higher-is-better outcome
+/** The sign Imperium should expect between a stream and a higher-is-better outcome
  *  (like recovery). A "down" habit hurting the outcome is a negative link. */
 function expectedDir(goalDirection: GoalDirection | null | undefined): SeamDir {
   if (goalDirection === 'down') return 'neg'
@@ -72,7 +72,7 @@ export interface StreamSeam extends ScoredInsight {
 
 /**
  * Test one reported stream against an outcome series (e.g. recovery), returning a
- * gated insight ONLY when the link is real, or null (Vee stays quiet). `outcome`
+ * gated insight ONLY when the link is real, or null (Imperium stays quiet). `outcome`
  * is treated as higher-is-better, so goalDirection sets the expected sign.
  */
 export function seamForStream(
@@ -119,7 +119,7 @@ export function seamForStream(
 }
 
 /* --------------------------------------------------------------------------
- * Per-tile "what Vee noticed": the single deterministic line a tile shows on
+ * Per-tile "what Imperium noticed": the single deterministic line a tile shows on
  * its own, from its OWN report history (no outcome, no cross-domain seam). It
  * reads the same daily series every other read side reads (reportsToSeries), so
  * the number on a tile can never disagree with the number in the score or chat.
@@ -128,7 +128,7 @@ export function seamForStream(
  * getting started" line, never a fabricated trend, and it never divides by an
  * empty window. Every line is grounded in a real number the user can point at.
  *
- * Color LAW (a Vitality hard rule): tone is only ever 'good' (azure-mint),
+ * Color LAW (a Imperium hard rule): tone is only ever 'good' (azure-mint),
  * 'caution' (amber), or 'neutral'. There is no red. A move in the wrong
  * direction is surfaced as a gentle caution, never an alarm, and a bad
  * direction is never dressed up as good.
@@ -216,7 +216,7 @@ export function tileInsight(history: TileHistory): TileInsight {
     return { text: 'Nothing logged yet. Your first entry starts the story.', tone: 'neutral', kind: 'quiet', stat: 0 }
   }
   if (n === 1) {
-    return { text: 'One day in. Log tomorrow and Vee starts spotting your pattern.', tone: 'good', kind: 'starting', stat: 1 }
+    return { text: 'One day in. Log tomorrow and Imperium starts spotting your pattern.', tone: 'good', kind: 'starting', stat: 1 }
   }
   if (n === 2) {
     return { text: 'Two days logged. A few more and the trend shows up here.', tone: 'good', kind: 'starting', stat: 2 }
@@ -318,5 +318,5 @@ export function tileInsight(history: TileHistory): TileInsight {
   }
 
   // --- Enough data, but no headline pattern: a calm, true summary. ---
-  return { text: `${n} days logged and holding. Keep it going and Vee will call the trend.`, tone: 'neutral', kind: 'quiet', stat: n }
+  return { text: `${n} days logged and holding. Keep it going and Imperium will call the trend.`, tone: 'neutral', kind: 'quiet', stat: n }
 }

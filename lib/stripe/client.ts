@@ -27,7 +27,7 @@ export function getStripe(): Stripe {
     apiVersion: '2026-04-22.dahlia',
     typescript: true,
     appInfo: {
-      name: 'Vitality',
+      name: 'Imperium',
       url: 'http://localhost:3000',
     },
   })

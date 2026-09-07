@@ -2,10 +2,10 @@ import { DEFAULT_HOME_ORDER, LIBRARY_TILE, FORGE_TILE } from './coreTiles'
 
 /**
  * homeLayout is the single ordered list of EVERY tile on a user's home
- * dashboard: the pre-installed core tiles, the optional Vee tile, and the user's
+ * dashboard: the pre-installed core tiles, the optional Imperium tile, and the user's
  * own built tiles, all interleaved in one order. The dashboard renders this list
- * into one grid, so core tiles, Vee, and user tiles drag, resize, re-order, and
- * can be removed as equals. Nothing is locked — Vee is just one optional tile now
+ * into one grid, so core tiles, Imperium, and user tiles drag, resize, re-order, and
+ * can be removed as equals. Nothing is locked — Imperium is just one optional tile now
  * (Aikido pivot), re-addable from the Add-tile gallery if removed.
  *
  * A fresh dashboard seeds with DEFAULT_HOME_ORDER (which reproduces the loved old
@@ -87,7 +87,7 @@ function add(userId: string, id: string): string[] {
   return ids
 }
 
-/** Take a tile off the dashboard (incl. Vee — nothing is locked). Returns the order. */
+/** Take a tile off the dashboard (incl. Imperium — nothing is locked). Returns the order. */
 function remove(userId: string, id: string): string[] {
   const ids = getOrder(userId).filter((x) => x !== id)
   write(userId, ids)

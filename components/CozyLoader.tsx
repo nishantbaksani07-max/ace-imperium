@@ -7,7 +7,7 @@ import type { ToneKey, CozyItem } from '@/lib/cozy/types'
 export type { ToneKey, CozyItem } from '@/lib/cozy/types'
 
 /**
- * CozyLoader — Vitality's reusable "Pop / cozy" loading treatment.
+ * CozyLoader — Imperium's reusable "Pop / cozy" loading treatment.
  *
  * Generalized 1:1 from the macro tracker's PendingMealCard (the look Alex loves).
  * Five things make the mechanic, all preserved here:

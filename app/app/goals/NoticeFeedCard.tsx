@@ -32,7 +32,7 @@ const RARITY_MEANING: Record<Rarity, string> = {
 
 /** The cold-start "starter" gets a softer tag; everything else is a real finding. */
 function tagFor(source: FeedNotice['source']): string {
-  return source === 'starter' ? 'Vitality is watching' : 'Vitality noticed'
+  return source === 'starter' ? 'Imperium is watching' : 'Imperium noticed'
 }
 
 /** Bold the goal name inside the lead (when present), matching the preview. */

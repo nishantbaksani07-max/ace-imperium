@@ -1,9 +1,9 @@
 /* ============================================================
- * Supplements module — Vitality theme.
+ * Supplements module — Imperium theme.
  *
  * Same page shell + header treatment as the water module so the two
  * feel like siblings. Mint stays the accent for "taken" / progress;
- * red for missed; amber for "running low" (matches Vitality's amber
+ * red for missed; amber for "running low" (matches Imperium's amber
  * token from the finance side).
  * ============================================================ */
 
@@ -326,7 +326,7 @@
   overflow: hidden;
 }
 
-/* --- Item row (iOS-flavored, Vitality skin) -------------------- */
+/* --- Item row (iOS-flavored, Imperium skin) -------------------- */
 
 .itemRow {
   display: flex;

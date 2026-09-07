@@ -171,7 +171,7 @@ export default function ImportSubscriptions({ open, onClose, actions, currentCur
         {stage === 'upload' && (
           <>
             <p className={styles.importDesc}>
-              Screenshot your Apple / Google Play / Netflix billing page, your bank&rsquo;s recurring charges list, or any subs dashboard. Vitality pulls each one with cost + cycle ready for review.
+              Screenshot your Apple / Google Play / Netflix billing page, your bank&rsquo;s recurring charges list, or any subs dashboard. Imperium pulls each one with cost + cycle ready for review.
             </p>
             <label
               className={`${styles.dropZone} ${dragging ? styles.dropZoneActive : ''}`}

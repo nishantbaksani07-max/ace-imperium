@@ -233,7 +233,7 @@ export function useWaterState(
     }
   }, [state, ready])
 
-  // Mirror to Supabase (durable + cross-device + readable by the Vitality MCP).
+  // Mirror to Supabase (durable + cross-device + readable by the Imperium MCP).
   // Debounced + best-effort; localStorage above stays the primary client store,
   // so a failed mirror never affects the UI. See ./sync.ts.
   useEffect(() => {

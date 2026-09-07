@@ -7,7 +7,7 @@ import { PUBLIC_FEATURED_TILES } from '@/lib/tiles/featured'
  * The tile's display name is resolved from the static FEATURED_TILES catalog by
  * matching the route param against each entry's stable shop id; the name lives
  * on envelope.name (the install envelope handed to tileStore.importTile). If the
- * id is unknown we fall back to a generic "A Vitality tile" card so a stale or
+ * id is unknown we fall back to a generic "A Imperium tile" card so a stale or
  * mistyped link still previews on-brand.
  *
  * Rendered by next/og (Satori) — fully self-contained: the gem is an inline
@@ -18,7 +18,7 @@ export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-// Vitality gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
+// Imperium gem mark — flat-faceted "V" gem, same geometry as app/icon.tsx.
 const GEM = `
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="282 328 460 460">
   <path d="M392 372 L632 372 L724 470 L512 744 L300 470 Z" fill="#1f4d3d"/>
@@ -40,10 +40,10 @@ export default async function TileOgImage({
   params: { id: string }
 }) {
   const tile = PUBLIC_FEATURED_TILES.find((t) => t.id === params.id)
-  const title = tile ? tile.envelope.name : 'A Vitality tile'
+  const title = tile ? tile.envelope.name : 'A Imperium tile'
   const tagline = tile
     ? tile.tagline
-    : 'A ready-made tile for your Vitality dashboard.'
+    : 'A ready-made tile for your Imperium dashboard.'
   const gemUri = `data:image/svg+xml;base64,${Buffer.from(GEM).toString('base64')}`
 
   return new ImageResponse(
@@ -94,7 +94,7 @@ export default async function TileOgImage({
                 textTransform: 'uppercase',
               }}
             >
-              Vitality
+              Imperium
             </div>
           </div>
           <div

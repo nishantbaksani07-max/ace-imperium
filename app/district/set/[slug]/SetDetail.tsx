@@ -265,9 +265,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
 
       <div className={styles.shell}>
         <div className={styles.bar}>
-          <Link href="/" className={styles.mark} aria-label="Vitality">
-            V
-          </Link>
+          <Link href="/" className={styles.mark} aria-label="Imperium">I</Link>
           <Link href="/district" className={styles.crumb}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="m15 18-6-6 6-6" />
@@ -382,7 +380,7 @@ export default function SetDetail({ slug, title, blurb, tiles }: SetDetailProps)
           </span>
           <div className={styles.circleBody}>
             <p>
-              Make a Vitality and this whole set lands on <b>your dashboard</b>, ready on day one.
+              Make a Imperium and this whole set lands on <b>your dashboard</b>, ready on day one.
             </p>
             <span className={styles.circleSmall}>No credit card. Your tiles, your dashboard, always yours.</span>
           </div>

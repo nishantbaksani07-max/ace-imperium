@@ -31,7 +31,7 @@ const mcpHandler = createMcpHandler(
   (server) => {
     registerTools(server, async () => {
       const vdb = vdbStore.getStore()
-      if (!vdb) throw new Error('No Vitality session in request context')
+      if (!vdb) throw new Error('No Imperium session in request context')
       return vdb
     })
     // Ambient tile-engine context (design DNA + domain kits). Identity-free and

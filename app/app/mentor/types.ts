@@ -11,7 +11,7 @@ export interface Note {
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
-  /** Present when Vee asked via a cozy card instead of (or alongside) prose. */
+  /** Present when Imperium asked via a cozy card instead of (or alongside) prose. */
   ask?: VeeAsk
   /** Set once the user has answered an ask card; locks it (chosen value). */
   askAnswered?: string
@@ -19,7 +19,7 @@ export interface ChatMessage {
   cardStyle?: CardStyle
 }
 
-/** One tappable answer on a Vee ask card. */
+/** One tappable answer on a Imperium ask card. */
 export interface VeeAskOption {
   label: string   // short chip text, e.g. 'Sharp'
   value: string   // sent back as the user's answer in natural words
@@ -27,7 +27,7 @@ export interface VeeAskOption {
 }
 
 /**
- * A structured clarifying question Vee renders as a cozy card. Produced by the
+ * A structured clarifying question Imperium renders as a cozy card. Produced by the
  * chat route from a hidden ===ASK=== block. `key` is the single word in `lead`
  * to highlight (the Vitals .hl sweep); optional.
  */
@@ -53,7 +53,7 @@ export interface MentorTickerItem {
 }
 
 /**
- * One row of "What Vee remembers" — a user_facts row trimmed for display.
+ * One row of "What Imperium remembers" — a user_facts row trimmed for display.
  * `source` is the module that wrote the fact (train/fuel/vitals/goals/
  * money/mentor/...); the UI maps it to that tile's chip color.
  */
@@ -66,7 +66,7 @@ export interface MemoryFact {
 
 /**
  * One big goal, trimmed for the in-tab GoalsPeek (BUILD42 Phase 3). Goals are
- * housed in Vee, so the mentor tab shows the user's top active goals; the full
+ * housed in Imperium, so the mentor tab shows the user's top active goals; the full
  * surface lives at /app/goals.
  */
 export interface MentorGoal {

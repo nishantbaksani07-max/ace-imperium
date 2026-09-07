@@ -20,7 +20,7 @@ interface SettingsSheetProps {
    *  the Completed / Not started indicator on the "Tailor my split" row. */
   intakeCompleted?: boolean
   /** Onboarding tasks + user id, threaded through from the dashboard so
-   *  the sheet can show a "Vitality setup" entry that opens the full
+   *  the sheet can show a "Imperium setup" entry that opens the full
    *  checklist sub-screen. Both required to render the entry — without
    *  them the sheet falls back to its pre-existing preferences-only UX.
    *  The entry only appears once `isFullySetUp(tasks)` is true (matches
@@ -35,7 +35,7 @@ interface SettingsSheetProps {
  * top-right AND from the SplitLog day-page header. Backdrop dims + blurs the
  * page, the sheet drops into the center. Kept deliberately lean: units toggle,
  * "Training plan" (split/days/exercises + the tailoring intake, with status),
- * "Your Vitality setup" (the onboarding checklist), Account, and Sign out.
+ * "Your Imperium setup" (the onboarding checklist), Account, and Sign out.
  * (Past-workout logging lives as a board pill; the two old setup rows merged.)
  *
  * Replaces the older anchored popover (which clipped under the day-card
@@ -113,7 +113,7 @@ export default function SettingsSheet({ units, onUnitsChange, intakeCompleted = 
           )}
           <span className={styles.eyebrow}>{view === 'checklist' ? 'YOUR SETUP' : 'SETTINGS'}</span>
           <h2 id="settings-title" className={styles.title}>
-            <em>{view === 'checklist' ? 'Your Vitality setup' : 'Your preferences'}</em>
+            <em>{view === 'checklist' ? 'Your Imperium setup' : 'Your preferences'}</em>
           </h2>
         </div>
 
@@ -182,7 +182,7 @@ export default function SettingsSheet({ units, onUnitsChange, intakeCompleted = 
             style={{ textAlign: 'left', font: 'inherit', width: '100%', cursor: 'pointer' }}
           >
             <div className={styles.actionRowLeft}>
-              <span className={styles.actionRowTitle}><em>Your Vitality setup</em></span>
+              <span className={styles.actionRowTitle}><em>Your Imperium setup</em></span>
               <span className={styles.actionRowDesc}>Goal, mentor, hydration and more — edit any answer.</span>
             </div>
             <span className={styles.actionRowArrow} aria-hidden>→</span>

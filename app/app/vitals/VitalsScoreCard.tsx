@@ -152,7 +152,7 @@ export default function VitalsScoreCard({
 
       <button type="button" className={`${styles.spark} ${styles.talk}`} onClick={onTalk}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M5 5.5h14a2.2 2.2 0 0 1 2.2 2.2v6.4a2.2 2.2 0 0 1-2.2 2.2h-7.2L7 19.5v-3.2H5A2.2 2.2 0 0 1 2.8 14.1V7.7A2.2 2.2 0 0 1 5 5.5Z" /></svg>
-        talk to Vee
+        talk to Imperium
       </button>
     </div>
   )

@@ -13,7 +13,7 @@ import type { Difficulty, Goal } from './types'
  * Goals (·05). Daily + long-term unified, paired with Peak.
  *
  * Layout:
- *   - Header: Vitality Score (from Peak) + secondary streak counter
+ *   - Header: Imperium Score (from Peak) + secondary streak counter
  *   - Energy + schedule strip: today's peak windows + Peak events inline
  *   - Today card: progress bar + difficulty-colored goal rows
  *   - Tomorrow card: planned goals locked until next-day roll
@@ -71,7 +71,7 @@ export default function GoalsModule() {
 }
 
 // -----------------------------------------------------------------------------
-// Header — Vitality Score primary, streak secondary
+// Header — Imperium Score primary, streak secondary
 // -----------------------------------------------------------------------------
 
 function Header({ score, tier, peakReady, streak, freezes }: {
@@ -90,10 +90,10 @@ function Header({ score, tier, peakReady, streak, freezes }: {
         <h1 className={styles.title}>Goals</h1>
         <div className={styles.heroRight}>
           {peakReady ? (
-            <div className={styles.scoreCard} title={`Today's Vitality Score from Peak. ${tier}`}>
+            <div className={styles.scoreCard} title={`Today's Imperium Score from Peak. ${tier}`}>
               <div className={styles.scoreNum}>{Math.round(score)}</div>
               <div className={styles.scoreLabelCol}>
-                <span className={styles.scoreLabel}>Vitality</span>
+                <span className={styles.scoreLabel}>Imperium</span>
                 <span className={styles.scoreTier}>{tier}</span>
               </div>
             </div>

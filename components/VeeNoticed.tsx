@@ -20,9 +20,9 @@ import VeeGoalsSection, { type BindingStream } from './vee/VeeGoalsSection'
 import { VeeAsk, VeeKeep } from './vee/VeeBottomStrip'
 import styles from './veeNoticed.module.css'
 
-/* VeeNoticed - the launch Vee. Three things: the Echo gem (Vee's face), the ONE
- * gamified "Vitality Noticed" card (the WATCHED mono chip carries what Vee
- * connected), and the slim "feed Vee" strip (mood + a note) that gives Vee more
+/* VeeNoticed - the launch Imperium. Three things: the Echo gem (Imperium's face), the ONE
+ * gamified "Imperium Noticed" card (the WATCHED mono chip carries what Imperium
+ * connected), and the slim "feed Imperium" strip (mood + a note) that gives Imperium more
  * of your life to connect. Standard backdrop + glass. Conversation lives in
  * Claude. Rarity = depth; the card explains itself and stays near-empty. */
 
@@ -82,7 +82,7 @@ const RARITY_MEANING: Record<Rarity, string> = {
 }
 
 function claudeHref(notice: FeedNotice): string {
-  const q = `Vee noticed this in my Vitality data: "${notice.lead}" Help me understand what is driving it and what to do next.`
+  const q = `Imperium noticed this in my Imperium data: "${notice.lead}" Help me understand what is driving it and what to do next.`
   return `https://claude.ai/new?q=${encodeURIComponent(q)}`
 }
 
@@ -149,7 +149,7 @@ const ArrowIcon = (
 const TriUp = <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 5l8 13H4z" /></svg>
 const TriDn = <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 19L4 6h16z" /></svg>
 
-/* Vee's chevron badge that opens the card. A small identity mark (the real gem is
+/* Imperium's chevron badge that opens the card. A small identity mark (the real gem is
  * the hero above), not a hand-rolled gem. */
 function VMark() {
   return (
@@ -186,7 +186,7 @@ function NoticedCard({ feed, readOnly = false }: { feed: FeedNotice[]; readOnly?
   }
 
   return (
-    <section className={`${styles.noticed} ${RARITY_CLASS[rarity]}`} aria-label="Vitality noticed" key={`card-${idx}`}>
+    <section className={`${styles.noticed} ${RARITY_CLASS[rarity]}`} aria-label="Imperium noticed" key={`card-${idx}`}>
       <span className={styles.rarityEdge} aria-hidden />
       <div className={styles.bloom} key={`bloom-${idx}`} aria-hidden />
 
@@ -257,7 +257,7 @@ function NoticedCard({ feed, readOnly = false }: { feed: FeedNotice[]; readOnly?
 /* The Rarity Climb - the intro animation. The six tiers stack (mythic at the top,
  * common at the base) and light up from the bottom up, bars filling, mythic
  * flaring last. Explains the whole game in one moment: rarer = deeper. Used both
- * as the zero-data hero and inside the "how Vee works" info overlay. */
+ * as the zero-data hero and inside the "how Imperium works" info overlay. */
 const CLIMB_TIERS = [
   { k: 'common', c: 'var(--r-common)', l: 'Common' },
   { k: 'uncommon', c: 'var(--r-uncommon)', l: 'Uncommon' },
@@ -295,21 +295,21 @@ function RarityClimb({ line }: { line?: ReactNode }) {
   )
 }
 
-const CLIMB_LINE = <>Every tile you log feeds Vee. <b>The more of your life it connects, the rarer the find.</b></>
+const CLIMB_LINE = <>Every tile you log feeds Imperium. <b>The more of your life it connects, the rarer the find.</b></>
 
 /* The one honest cold-start line inside the card: plain words, no promises the
    engine has not earned. Alex tweaks the wording live. */
-const COLD_LINE = 'use Vitality a little each day. your first find comes from what you log.'
+const COLD_LINE = 'use Imperium a little each day. your first find comes from what you log.'
 
 /* The one calm degraded line (loadNoticed.degraded): a failed read must never
    impersonate a cold start, so a daily logger is never told they have not logged. */
 const DEGRADED_LINE = 'some of your data could not be read just now. everything you logged is safe, it will be back on the next open.'
 
-/* The one-sentence explainer that fully tells a confused user what Vee is for.
-   Tops the Climb in the intro overlay and the "how Vee works" tab (Alex tweaks live). */
-const VEE_EXPLAINER = 'Vee reads everything you log across Vitality and shows you the one pattern that is quietly helping or hurting your goals. The rarer the find, the deeper the connection.'
+/* The one-sentence explainer that fully tells a confused user what Imperium is for.
+   Tops the Climb in the intro overlay and the "how Imperium works" tab (Alex tweaks live). */
+const VEE_EXPLAINER = 'Imperium reads everything you log across Imperium and shows you the one pattern that is quietly helping or hurting your goals. The rarer the find, the deeper the connection.'
 
-/* localStorage flag: the Climb intro plays once, on the FIRST-EVER click on Vee. */
+/* localStorage flag: the Climb intro plays once, on the FIRST-EVER click on Imperium. */
 function climbSeenKey(userId: string): string {
   return `vee:climb-intro-seen:${userId}`
 }
@@ -375,7 +375,7 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
   const [introOpen, setIntroOpen] = useState(false)
   const seeded = useRef(false)
 
-  // The Climb intro: every new user's FIRST-EVER click on Vee plays it once
+  // The Climb intro: every new user's FIRST-EVER click on Imperium plays it once
   // (decided after mount so SSR and client never disagree; skippable by tap).
   useEffect(() => {
     if (forceClimbIntro) { setIntroOpen(true); return }
@@ -452,7 +452,7 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
             DASHBOARD
           </Link>
           <span style={{ flex: 1 }} />
-          <button type="button" className={styles.infoBtn} onClick={() => setInfoOpen(true)} aria-label="How Vee works">
+          <button type="button" className={styles.infoBtn} onClick={() => setInfoOpen(true)} aria-label="How Imperium works">
             <InfoIcon />how vee works
           </button>
         </header>
@@ -461,8 +461,8 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
             vertically centered and balanced. Stacks to gem-then-card on mobile.
             Kills the old full-screen empty scroll before the first card. */}
         <div className={styles.heroRow}>
-          {/* the Echo gem - Vee's face */}
-          <section className={styles.hero} aria-label="Vee">
+          {/* the Echo gem - Imperium's face */}
+          <section className={styles.hero} aria-label="Imperium">
             <div className={styles.gemStage}><CoachGem preset="echo" /></div>
             <span className={styles.label}>VITALITY · VEE</span>
             <h1 className={styles.greet} suppressHydrationWarning>
@@ -476,9 +476,9 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
             {degraded && hasFeed && <p className={styles.degradedLine} role="status">{DEGRADED_LINE}</p>}
           </section>
 
-          {/* ·01 the one gamified "Vitality noticed" card, or the calm cold start */}
-          <section className={`${styles.pageSection} ${styles.heroCard}`} aria-label="Vitality noticed">
-            <SecHead num="·01" label="Vitality noticed" />
+          {/* ·01 the one gamified "Imperium noticed" card, or the calm cold start */}
+          <section className={`${styles.pageSection} ${styles.heroCard}`} aria-label="Imperium noticed">
+            <SecHead num="·01" label="Imperium noticed" />
             <p className={styles.secLede}>the rarer the find, the deeper it reached into your life.</p>
             {hasFeed ? (
               <NoticedCard feed={feed} readOnly={readOnly} />
@@ -504,7 +504,7 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
           </section>
         </div>
 
-        {/* ·02 the fused FULL goals engine: author a goal, watch Vee steer it */}
+        {/* ·02 the fused FULL goals engine: author a goal, watch Imperium steer it */}
         <section className={`${styles.pageSection} ${styles.narrow}`} id="vee-goals" aria-label="Your goals">
           <SecHead num="·02" label="Your goals" />
           <p className={styles.secLede}>set a goal. I steer it with your real data.</p>
@@ -512,8 +512,8 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
         </section>
 
         {/* ·03 refocused on CLAUDE: one composer, one destination */}
-        <section className={`${styles.pageSection} ${styles.narrow}`} aria-label="Ask Vee">
-          <SecHead num="·03" label="Ask Vee" />
+        <section className={`${styles.pageSection} ${styles.narrow}`} aria-label="Ask Imperium">
+          <SecHead num="·03" label="Ask Imperium" />
           <p className={styles.secLede}>ask anything. the conversation lives in Claude.</p>
           <VeeAsk claudeContext={claudeContext} />
         </section>
@@ -526,12 +526,12 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
       </main>
 
       {infoOpen && (
-        <div className={styles.infoOverlay} onClick={() => setInfoOpen(false)} role="dialog" aria-modal="true" aria-label="How Vee works">
+        <div className={styles.infoOverlay} onClick={() => setInfoOpen(false)} role="dialog" aria-modal="true" aria-label="How Imperium works">
           <div className={styles.infoPanel} onClick={e => e.stopPropagation()}>
             <button type="button" className={styles.infoClose} onClick={() => setInfoOpen(false)} aria-label="Close">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
-            <span className={styles.infoTitle}>How Vee works</span>
+            <span className={styles.infoTitle}>How Imperium works</span>
             <p className={styles.explainer}>{VEE_EXPLAINER}</p>
             <RarityClimb line={CLIMB_LINE} />
           </div>
@@ -540,7 +540,7 @@ export default function VeeNoticed({ firstName, feed, userId, stats, goals, habi
 
       {/* the first-ever-click Climb intro: the whole game in one moment, tap to skip */}
       {introOpen && (
-        <div className={styles.introOverlay} onClick={dismissIntro} role="dialog" aria-modal="true" aria-label="Meet Vee">
+        <div className={styles.introOverlay} onClick={dismissIntro} role="dialog" aria-modal="true" aria-label="Meet Imperium">
           <div className={styles.introPanel}>
             <span className={styles.introEyebrow}>meet vee</span>
             <p className={styles.explainer}>{VEE_EXPLAINER}</p>

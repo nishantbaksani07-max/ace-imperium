@@ -1,6 +1,6 @@
 /**
  * Vitals Score engine (pure, no IO). A 0-100 daily read of how the body is
- * doing, fused from the WHOOP metrics the way the old Vitality Score did, but
+ * doing, fused from the WHOOP metrics the way the old Imperium Score did, but
  * leveled up: personal HRV/RHR baselines, graceful re-balancing when a reading
  * is missing (a gap never zero-penalises), and a per-day series for the history
  * graph.
@@ -9,7 +9,7 @@
  * genuinely nothing to read). It never throws. Colour/voice rules live in the
  * UI; this file is only numbers.
  *
- * Weights mirror the user's original "Vitality Score":
+ * Weights mirror the user's original "Imperium Score":
  *   recovery .30 · sleep performance .20 · HRV vs baseline .15 ·
  *   RHR vs baseline .15 · sleep hours .10 · strain balance .10  (sum = 1).
  */

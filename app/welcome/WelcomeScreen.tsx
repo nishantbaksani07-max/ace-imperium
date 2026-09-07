@@ -256,7 +256,7 @@ export default function WelcomeScreen({ firstName, tasks, userId }: WelcomeScree
               <span className={styles.muted}>Hi,</span> <em>{firstName}</em>.
             </p>
             <p className={`${styles.line} ${reveal >= 2 ? styles.lineIn : ''}`}>
-              I&apos;m your <em>Vitality</em>.
+              I&apos;m your <em>Imperium</em>.
             </p>
             <p className={`${styles.lineSub} ${reveal >= 3 ? styles.lineIn : ''}`}>
               Two quick things and I&apos;ve got your back. Let&apos;s get you set up.

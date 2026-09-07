@@ -4,7 +4,7 @@ import CoachGem, { type CoachPreset } from '@/components/CoachGem'
 import styles from './gemCoach.module.css'
 
 /**
- * Gem Coach concepts — a visual demo of the Vitality coach gem FAMILY, built
+ * Gem Coach concepts — a visual demo of the Imperium coach gem FAMILY, built
  * 1:1 on the real gem-library v2 gem. Each card mounts the shared CoachGem
  * (the exact reusable component pages drop in), so the demo is the truth.
  * Echo is the macro AI recommender coach.
@@ -23,7 +23,7 @@ const CONCEPTS: Concept[] = [
     preset: 'sage',
     name: 'Sage',
     role: 'Your steady guide',
-    blurb: 'Calm, grounded, always present. The core Vitality voice that keeps you centered.',
+    blurb: 'Calm, grounded, always present. The core Imperium voice that keeps you centered.',
     spec: 'icosahedron · mint · focus',
   },
   {
@@ -51,7 +51,7 @@ export default function GemCoach() {
         <span className={styles.eyebrow}>gem coach · concepts</span>
         <h1 className={styles.title}>Meet the coach gems</h1>
         <p className={styles.sub}>
-          Three concepts for the Vitality coach, all the real gem. Each is its own shape,
+          Three concepts for the Imperium coach, all the real gem. Each is its own shape,
           colorway, and personality, playing its signature move on a loop. Echo is the macro
           AI recommender coach.
         </p>

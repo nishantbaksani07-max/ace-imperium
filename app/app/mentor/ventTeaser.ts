@@ -1,6 +1,6 @@
 /**
  * The Vent doorway teaser bubble. Picks the single most notable TRUE signal from
- * the user's recent data and phrases it the way Vee would — warm, specific, no
+ * the user's recent data and phrases it the way Imperium would — warm, specific, no
  * shame, never red. If nothing clear is there yet (a brand-new user), it returns
  * an honest SAMPLE instead of pretending it read data that doesn't exist.
  *
@@ -22,7 +22,7 @@ export interface VentSignals {
 export interface VentTeaser {
   /** the (illustrative) user vent line */
   user: string
-  /** Vee's reply */
+  /** Imperium's reply */
   vee: string
   /** substring of `vee` to emphasise (bold), if any */
   emphasis?: string

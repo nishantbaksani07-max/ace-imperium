@@ -2,7 +2,7 @@
  * Onboarding checklist source-of-truth.
  *
  * The dashboard's first-mile to-do — a short list of setup items the
- * Vitality gem nudges every new account through. Each task knows:
+ * Imperium gem nudges every new account through. Each task knows:
  *   - whether it's done (computed server-side from Supabase data)
  *   - whether it's been dismissed by the user (client-side, localStorage
  *     for v1 — durable across reloads on the same device, regenerated
@@ -239,7 +239,7 @@ export async function getOnboardingTasks(
  *
  * "Fully set up" is the trigger that:
  *   - hides the dashboard "Finish setup · N left" pill, and
- *   - reveals the "Vitality setup" entry inside the SettingsSheet so the
+ *   - reveals the "Imperium setup" entry inside the SettingsSheet so the
  *     user can still revisit + change any answer when life changes.
  *
  * Coming-soon tasks (supplements, peak) are roadmap previews — they can

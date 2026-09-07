@@ -1788,7 +1788,7 @@ export const CONSISTENCY_IDS = new Set<string>([
   'green-tea-egcg',
 ])
 
-/** The conditions Vitality recommends for a library supplement: consistency
+/** The conditions Imperium recommends for a library supplement: consistency
  *  first (for cumulative ones), then its intake conditions. */
 export function recommendedFor(sourceId: string | null): string[] {
   if (!sourceId) return []

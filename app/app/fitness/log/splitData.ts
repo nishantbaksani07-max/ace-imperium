@@ -1,7 +1,7 @@
 /**
  * Exercise library (EX) + types + the SPLIT seed for the workout logger.
  * Mirrors the canonical IDs from the v1 standalone
- * (~/Desktop/Vitality/split-standalone/index.html) but lives independently; v1
+ * (~/Desktop/Imperium/split-standalone/index.html) but lives independently; v1
  * stays untouched. EX is the real exercise dictionary used everywhere; SPLIT is
  * the seed/default — user-customized rotations load from `training_settings`.
  */
@@ -54,7 +54,7 @@ export interface ExerciseDef {
   perHand?: boolean
 }
 
-// All 8 days of the Vitality split (from standalone DEMO_SPLIT).
+// All 8 days of the Imperium split (from standalone DEMO_SPLIT).
 export const SPLIT: SplitDay[] = [
   {
     day: 1, name: 'Push heavy', type: 'HEAVY', category: 'push',

@@ -20,11 +20,11 @@ export default function ConnectScreen() {
           <SectionGem glyph="PULSE" size={300} position="inline" />
         </div>
         <div className={styles.connectEyebrow}>Vitals · WHOOP</div>
-        <h1 className={styles.connectTitle}>Bring your body into Vitality.</h1>
+        <h1 className={styles.connectTitle}>Bring your body into Imperium.</h1>
         <p className={styles.connectSub}>Connect your WHOOP and I turn your recovery, sleep, and strain into advice built around your goals.</p>
 
         <div className={styles.connectList}>
-          <div className={styles.connectItem}><Check /> A daily Vitality Score you can watch climb</div>
+          <div className={styles.connectItem}><Check /> A daily Imperium Score you can watch climb</div>
           <div className={styles.connectItem}><Check /> Sleep and recovery read against your own baseline</div>
           <div className={styles.connectItem}><Check /> Insights tied to your goals, in plain language</div>
         </div>

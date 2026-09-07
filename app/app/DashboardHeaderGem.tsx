@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import styles from './dashboardHeaderGem.module.css'
 
 /**
- * DashboardHeaderGem — the canonical Vitality V crystal mounted next to
+ * DashboardHeaderGem — the canonical Imperium V crystal mounted next to
  * the dashboard greeting. Uses the REAL HeroCrystal component in
  * character mode so the gem behaves byte-for-byte like the lab at
  * /gem-library and the V crystal on /welcome.

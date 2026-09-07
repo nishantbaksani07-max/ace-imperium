@@ -26,7 +26,7 @@ const FLAG_LABEL: Record<string, string> = {
   medication: 'medication',
   condition: 'a condition',
   cycle: 'a cycle',
-  other: 'a note for Vee',
+  other: 'a note for Imperium',
 }
 
 export default function VitalsSettings({

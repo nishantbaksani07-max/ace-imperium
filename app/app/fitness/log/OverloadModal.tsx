@@ -99,7 +99,7 @@ export default function OverloadModal({
   }
 
   // ── Choices screen actions ──
-  // Keep it simple (the point of Vitality): "add a rep" is one tap, +1 rep,
+  // Keep it simple (the point of Imperium): "add a rep" is one tap, +1 rep,
   // done. "add weight" opens a weight-only stepper. No reps stepper.
   function addARep() {
     const b: OverloadBump = { weightKg: 0, reps: 1 }

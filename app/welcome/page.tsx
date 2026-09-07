@@ -4,7 +4,7 @@ import WelcomeScreen from './WelcomeScreen'
 import { getChecklistTasks } from '@/lib/checklistTasks'
 
 /**
- * /welcome — first-time greeting from the Vitality gem character.
+ * /welcome — first-time greeting from the Imperium gem character.
  *
  * Auto-routed once per account from completeOnboarding(). Greeting
  * gem + name + 3-beat copy lead into a checklist phase (after the

@@ -4,7 +4,7 @@ import CoreRoom from './CoreRoom'
 
 export const dynamic = 'force-dynamic'
 
-export const metadata = { title: 'The Core Room · Vitality' }
+export const metadata = { title: 'The Core Room · Imperium' }
 
 /**
  * /app/core-room - THE CORE ROOM: every graphable series the core tiles have

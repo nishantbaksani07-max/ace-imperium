@@ -3,7 +3,7 @@
  *
  * A Tile is one sealed single-file HTML widget the user built (in Claude Code
  * or anywhere) and Kept. The registry is the index of these; each tile's
- * runtime data (whatever its `Vitality.save()` persists) lives separately so a
+ * runtime data (whatever its `Imperium.save()` persists) lives separately so a
  * growing payload never rewrites the html. See lib/tiles/tileStore.ts.
  */
 export interface Tile {

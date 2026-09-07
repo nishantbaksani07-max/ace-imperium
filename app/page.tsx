@@ -98,7 +98,7 @@ export default function HomePage() {
 
       {/* Top chrome */}
       <nav className={styles.chrome}>
-        <a className={styles.wordmark} href="/">Vitality</a>
+        <a className={styles.wordmark} href="/">Imperium</a>
         <div className={styles.nav}>
           <a href="/pricing">pricing</a>
           <a className={styles.signIn} href="/login">Sign in</a>
@@ -114,7 +114,7 @@ export default function HomePage() {
       </aside>
 
       <aside className={`${styles.caption} ${styles.captionRight}`} aria-label="Studio metadata">
-        <span className={styles.captionNum}>Vitality Studio &nbsp;·&nbsp; MMXXVI</span>
+        <span className={styles.captionNum}>Imperium Studio &nbsp;·&nbsp; MMXXVI</span>
         <div className={styles.captionTitle}>Built by twins</div>
         <div className={styles.captionMeta}>From a YouTube channel.<br />Cancel anytime.</div>
         <div className={styles.captionRule} />

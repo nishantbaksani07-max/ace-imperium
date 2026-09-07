@@ -21,7 +21,7 @@ export interface TileDesign {
 
 export const DESIGN_CATEGORIES = ['all', 'fitness', 'health', 'finance', 'mind', 'data'] as const
 
-/** Accent colors. The first (Mint) is the Vitality default. Matches the library. */
+/** Accent colors. The first (Mint) is the Imperium default. Matches the library. */
 export const DESIGN_COLORS: { name: string; hex: string }[] = [
   { name: 'Mint', hex: '#6EE7B7' },
   { name: 'Azure', hex: '#6EA8FF' },

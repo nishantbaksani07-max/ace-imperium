@@ -1,5 +1,5 @@
 /**
- * The convergence brain behind "Vitality noticed".
+ * The convergence brain behind "Imperium noticed".
  *
  * Pure, no I/O, no clock beyond what the caller passes — the same pure-core
  * shape as lib/goals/drift.ts and mcp/src/insights.ts. The gather
@@ -45,7 +45,7 @@ export interface ActiveGoal {
 }
 
 export interface Convergence {
-  /** Stable id for the dedupe ledger ("Vee already said this"). */
+  /** Stable id for the dedupe ledger ("Imperium already said this"). */
   patternKey: string
   /** Sum of cleared-gate margins — how strongly this fired. */
   confidence: number

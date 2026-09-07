@@ -1,9 +1,9 @@
 /**
- * Cold-start for "Vitality noticed".
+ * Cold-start for "Imperium noticed".
  *
  * The green-light oracle only fires on a real, gated, goal-anchored convergence
  * (greenlight.ts) — which is exactly right, but means a brand-new user (the
- * person Sam's funnel sends) would see NOTHING at the §01 top of Vee until
+ * person Sam's funnel sends) would see NOTHING at the §01 top of Imperium until
  * weeks of data converge. That empty state is the #1 conversion risk.
  *
  * This pure helper fills it with an honest PROMISE instead of a fake finding:
@@ -18,7 +18,7 @@ export interface StarterNotice {
   kind: 'noGoal' | 'watching'
   headline: string
   body: string
-  /** Domain words shown as chips — what Vee is (or will be) watching. */
+  /** Domain words shown as chips — what Imperium is (or will be) watching. */
   watching: string[]
   goalTitle: string | null
 }

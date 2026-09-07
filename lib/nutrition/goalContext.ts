@@ -25,9 +25,9 @@ export interface RowWeights {
   micros: number
 }
 
-/** The user's top goal as set in the goals tab / Vee (lib/goals BigGoal). The
+/** The user's top goal as set in the goals tab / Imperium (lib/goals BigGoal). The
  *  coach grades by the SAME goal, so "lose weight" or "get leaner and stronger"
- *  in Vee drives the Fuel grade. Loose shape so Fuel never imports Vee's types. */
+ *  in Imperium drives the Fuel grade. Loose shape so Fuel never imports Imperium's types. */
 export interface BigGoalSignal {
   title?: string | null
   cleanTitle?: string | null
@@ -38,7 +38,7 @@ export interface BigGoalSignal {
 const BUILD_WORDS = ['stronger', 'strength', 'muscle', 'build muscle', 'bulk', 'gain', 'lifter', 'jacked', 'swole', 'bigger', 'put on size', 'recomp', 'lean and strong', 'leaner and stronger']
 const LOSE_WORDS = ['lose weight', 'weight loss', 'lose fat', 'fat loss', 'cut', 'lean out', 'slim', 'shred', 'drop weight', 'get lean', 'leaner']
 
-/** Read a mode from the Vee goal's words. Build is checked first so "leaner AND
+/** Read a mode from the Imperium goal's words. Build is checked first so "leaner AND
  *  stronger" reads as build (protein focus), per Alex. Category alone is too
  *  coarse to flip a grade, so we only match on title/identity words. */
 function modeFromBigGoal(g?: BigGoalSignal | null): GoalMode | null {
@@ -52,11 +52,11 @@ function modeFromBigGoal(g?: BigGoalSignal | null): GoalMode | null {
 
 /**
  * Map the user's goals to a coach mode. Pure, first match wins, never throws.
- * Precedence: an explicit nutrition outcome wins; otherwise the user's top Vee
+ * Precedence: an explicit nutrition outcome wins; otherwise the user's top Imperium
  * goal (the goals tab) is honored; otherwise the signed rate band; else balanced.
  * `goalOutcome` is nutrition_goals.goal_outcome (surfaced as goals.approach).
  * `bandMidKgPerWeek` is (goalBand.low + goalBand.high) / 2 (negative = losing).
- * `bigGoal` is the user's top active goal from Vee (so the two stay in sync).
+ * `bigGoal` is the user's top active goal from Imperium (so the two stay in sync).
  */
 export function deriveGoalMode(input: {
   goalOutcome?: string | null
@@ -68,7 +68,7 @@ export function deriveGoalMode(input: {
   if (o === 'CUT' || o === 'CUT_HP') return 'lose'
   if (o === 'LEAN_BULK' || o === 'FAST_BULK' || o === 'RECOMP' || o === 'RECOMP_MAINTAIN') return 'build'
 
-  // Otherwise honor the goal the user set in Vee (so the coach and Vee agree).
+  // Otherwise honor the goal the user set in Imperium (so the coach and Imperium agree).
   const fromGoal = modeFromBigGoal(input.bigGoal)
   if (fromGoal) return fromGoal
 

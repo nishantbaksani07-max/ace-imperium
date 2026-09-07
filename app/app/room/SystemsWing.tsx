@@ -4,7 +4,7 @@
  * THE SYSTEMS - "every system, and whether it's alive."
  *
  * The room's second wing. Where the registry above answers "what number can
- * Vitality draw", this answers "is the machine that draws it actually running".
+ * Imperium draw", this answers "is the machine that draws it actually running".
  * Born the day an empty ANTHROPIC_API_KEY hid for weeks and the food scanner
  * died in silence. Fetches /api/systems/health on mount; that route reports
  * env-key presence only, never a key value.
@@ -81,7 +81,7 @@ export default function SystemsWing() {
       <div className={s.kicker}>the systems</div>
       <h2 className={`${s.systemsTitle} serif`}>Every system, and whether it&apos;s alive</h2>
       <p className={s.systemsIntro}>
-        Every system in Vitality, and whether it&apos;s alive. Born the day an empty
+        Every system in Imperium, and whether it&apos;s alive. Born the day an empty
         API key hid for weeks. What runs on Claude, USDA and the nightly cron reports
         here first, so no subsystem ever dies in silence again.
       </p>
