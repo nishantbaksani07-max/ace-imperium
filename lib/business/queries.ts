@@ -269,9 +269,10 @@ export async function getPartiesWithoutRecentOrders(userId: string, days: number
     .select('party_id')
     .eq('user_id', userId)
     .gte('order_date', cutoffStr)
-    .select('party_id', { count: 'distinct' })
-
-  const activePartyIds = new Set((activeOrders?.data ?? []).map((r: any) => r.party_id))
+    .select('party_id')
+  const activeOrdersResult = await activeOrders
+  const activeOrdersData = activeOrdersResult ? (activeOrdersResult as any).data ?? activeOrdersResult : null
+  const activePartyIds = new Set((activeOrdersData ?? []).map((r: any) => r.party_id))
 
   const { data, error } = await supabase
     .from('business_parties')
@@ -310,7 +311,7 @@ export async function getTopPartiesThisMonth(userId: string, limit: number = 3):
     .eq('user_id', userId)
     .in('id', sorted.map(s => s[0]))
 
-  const partyNames = new Map((parties?.data ?? []).map((p: any) => [p.id, p.name]))
+  const partyNames = new Map((parties ?? []).map((p: any) => [p.id, p.name]))
   return sorted.map(([id, amount]) => ({
     party: partyNames.get(id) || 'Unknown',
     amount,

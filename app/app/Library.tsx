@@ -73,6 +73,7 @@ const CORE_KICKER: Record<CoreTileId, string> = {
   peak: 'Periodization',
   brand: 'Your brand',
   finance: 'Net worth and subs',
+  business: 'Wholesale business',
 }
 
 /** 'all' / 'dash' / 'lib' are views; any other value is a category catKey

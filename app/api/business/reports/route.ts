@@ -209,7 +209,8 @@ async function buildDeepAnalysis(supabase: any, userId: string, orders: any[], r
     acc.set(o.party_id, (acc.get(o.party_id) || 0) + (o.total_amount || 0))
     return acc
   }, new Map())
-  const sortedParties = Array.from(top3Parties.entries()).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0)).slice(0, 3)
+  const entries = Array.from(top3Parties.entries()) as [string, number][];
+  const sortedParties = entries.sort((a, b) => b[1] - a[1]).slice(0, 3)
 
   // DAYS stats
   const avgDailySale = daysWithOrders > 0 ? orders.reduce((s: number, o: any) => s + o.total_amount, 0) / daysWithOrders : 0
@@ -233,11 +234,11 @@ async function buildDeepAnalysis(supabase: any, userId: string, orders: any[], r
     type: 'deep',
     period,
     lots: { arrived: arrivedLots, contributed: contributedLots, dead_stock: deadStockLots, avg_sale_per_lot: avgSalePerLot },
-    metres: { total_sold, avg_revenue_per_metre: avgRevPerMetre, fastest_lot: fastestLot, slowest_lot: slowestLot },
+    metres: { totalSold: totalSold, avg_revenue_per_metre: avgRevPerMetre, fastest_lot: fastestLot, slowest_lot: slowestLot },
     parties: { active_count: activePartyIds.size, top3: sortedParties.map(([id, amt]) => ({ party: (parties?.find((p: any) => p.id === id)?.name) || id, amount: amt })), inactive: inactiveParties, avg_order_value: orders.length > 0 ? orders.reduce((s: number, o: any) => s + o.total_amount, 0) / orders.length : 0 },
     days: { working_days: workingDays, days_with_orders: daysWithOrders, avg_daily_sale: avgDailySale, best_day: bestDay?.item_name || null, best_day_amount: bestDay?.total_amount || 0 },
-    orders: { total: orders.length, avg_metres_per_order: orders.length > 0 ? totalSold / orders.length : 0, avg_order_value: orders.length > 0 ? orders.reduce((s: number, o: any) => s + o.total_amount, 0) / orders.length : 0, gst_orders, non_gst_orders },
-    leverage: { overdue_amount, overdue_count: overdueOrders.length, dead_stock_value: deadStockValue },
+    orders: { total: orders.length, avg_metres_per_order: orders.length > 0 ? totalSold / orders.length : 0, avg_order_value: orders.length > 0 ? orders.reduce((s: number, o: any) => s + o.total_amount, 0) / orders.length : 0, gst_orders: gstOrders, non_gst_orders: nonGstOrders },
+    leverage: { overdue_amount: overdueAmount, overdue_count: overdueOrders.length, dead_stock_value: deadStockValue },
   }
 }
 
