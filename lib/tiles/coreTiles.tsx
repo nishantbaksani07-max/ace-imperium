@@ -36,6 +36,7 @@ export type CoreTileId =
   | 'peak'
   | 'brand'
   | 'finance'
+  | 'business'
 
 /** A single live metric to surface on a tile (Train day, Fuel kcal). */
 export interface CoreStat {
@@ -197,6 +198,36 @@ export const CORE_TILES: Record<CoreTileId, CoreTile> = {
           <line className="mot" x1="376" y1="26" x2="376" y2="70" /><rect className="candle" x="370" y="33" width="12" height="27" rx="2" />
         </g>
         <g className="orb" transform="translate(252 44)"><circle className="glow" r="9" /><circle className="node" r="3.4" /></g>
+      </svg>
+    ),
+  },
+  business: {
+    id: 'business',
+    href: '/business',
+    index: '08',
+    label: 'Business',
+    variant: 'fin',
+    orb: { mode: 'hop' },
+    defaultSize: 'm',
+    glyph: (
+      <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round">
+        <rect x="-8" y="-6" width="16" height="12" rx="2" />
+        <path d="M-5 0 h10M-3 4 h6M-3 8 h4" strokeWidth="1.2" />
+      </svg>
+    ),
+    art: (
+      <svg className="art" viewBox="0 0 434 118">
+        <g style={{ opacity: 0.8 }}>
+          <rect className="candle" x="60" y="30" width="20" height="50" rx="3" />
+          <rect className="candle" x="100" y="50" width="20" height="30" rx="3" />
+          <rect className="candle" x="140" y="20" width="20" height="60" rx="3" />
+          <rect className="candle" x="180" y="40" width="20" height="40" rx="3" />
+          <rect className="candle" x="220" y="35" width="20" height="45" rx="3" />
+          <rect className="candle" x="260" y="55" width="20" height="25" rx="3" />
+          <rect className="candle" x="300" y="45" width="20" height="35" rx="3" />
+          <rect className="candle" x="340" y="30" width="20" height="50" rx="3" />
+        </g>
+        <g className="orb" transform="translate(217 59)"><circle className="glow" r="9" /><circle className="node" r="3.4" /></g>
       </svg>
     ),
   },
@@ -382,6 +413,7 @@ export const DEFAULT_HOME_ORDER: HomeTileId[] = [
   'forge',
   'vitals',
   'finance',
+  'business',
   'vee',
 ]
 
