@@ -1,0 +1,1532 @@
+<title>Business Manager — Textile Wholesale</title>
+
+<style>
+/* ─────────────────────────────────────────────────────────────────────── */
+/* TOKEN SYSTEM                                                            */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Light Theme */
+  --bg-primary: #f8f8f8;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0f0f0;
+  --text-primary: #0c0f0d;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --accent: #34d399;
+  --warning: #f59e0b;
+  --critical: #ef4444;
+  --success: #10b981;
+  --muted: #d1d5db;
+
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Courier Prime', 'Menlo', monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-primary: #0c0f0d;
+    --bg-secondary: #141816;
+    --bg-tertiary: #1f2421;
+    --text-primary: #f0f0f0;
+    --text-secondary: #9ca3af;
+    --border: #374151;
+    --accent: #34d399;
+    --warning: #f59e0b;
+    --critical: #ef4444;
+    --success: #10b981;
+    --muted: #4b5563;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg-primary: #0c0f0d;
+  --bg-secondary: #141816;
+  --bg-tertiary: #1f2421;
+  --text-primary: #f0f0f0;
+  --text-secondary: #9ca3af;
+  --border: #374151;
+  --accent: #34d399;
+  --warning: #f59e0b;
+  --critical: #ef4444;
+  --success: #10b981;
+  --muted: #4b5563;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* GLOBAL STYLES                                                          */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 16px;
+  display: flex;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* LAYOUT: SIDEBAR + MAIN                                                  */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 24px 16px;
+  gap: 32px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* SIDEBAR HEADER                                                          */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), #10b981);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--bg-primary);
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* VIEWS SECTION                                                           */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.views-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.view-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.view-item.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  font-weight: 600;
+}
+
+.view-item::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.view-item.active::before {
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* CATEGORIES (TABS)                                                       */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.categories-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.category-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.category-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+}
+
+.category-item.active {
+  background: rgba(52, 211, 153, 0.1);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* MAIN HEADER (with action buttons)                                       */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.main-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  background: #2dd4a4;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* TAB CONTENT AREA                                                        */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* KPI GRID (Overview)                                                     */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.kpi-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kpi-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.kpi-value {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.kpi-change {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kpi-change.positive {
+  color: var(--success);
+}
+
+.kpi-change.negative {
+  color: var(--critical);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* ALERTS WIDGET                                                           */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.alert-widget {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--critical);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.alert-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--critical);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alert-item {
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  justify-content: space-between;
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-party {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.alert-amount {
+  font-family: var(--font-mono);
+  color: var(--critical);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* ACTIVE LOTS STRIP                                                       */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.lots-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+}
+
+.lot-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-width: 280px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lot-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.lot-thumbnail {
+  width: 100%;
+  height: 160px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.lot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.lot-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.lot-dno {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.status-pill {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-arrived {
+  background: rgba(52, 211, 153, 0.2);
+  color: var(--accent);
+}
+
+.status-active {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+}
+
+.status-low-stock {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--warning);
+}
+
+.status-cleared {
+  background: rgba(107, 114, 128, 0.2);
+  color: var(--text-secondary);
+}
+
+.status-dead {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--critical);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* STOCK PROGRESS BARS                                                     */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.stock-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stock-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stock-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--text-secondary);
+}
+
+.stock-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stock-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.stock-fill.healthy {
+  background: var(--accent);
+}
+
+.stock-fill.warning {
+  background: var(--warning);
+}
+
+.stock-fill.critical {
+  background: var(--critical);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* FILTER PILLS                                                            */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.filter-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pill {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pill.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* DATA TABLE                                                              */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.table-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+  padding: 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+tr:hover {
+  background: rgba(52, 211, 153, 0.05);
+  cursor: pointer;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* MODAL & FORMS                                                           */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input, .form-select, .form-textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* UTILITY CLASSES                                                         */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+.text-mono {
+  font-family: var(--font-mono);
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+
+.text-critical {
+  color: var(--critical);
+}
+
+.gap-4 {
+  gap: 16px;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+.hidden {
+  display: none !important;
+}
+</style>
+
+<div class="app-container">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-icon">𝖙</div>
+      <div class="sidebar-title">Business</div>
+    </div>
+
+    <!-- Views -->
+    <div class="views-section">
+      <div class="section-label">Views</div>
+      <div class="view-item active" data-view="overview">Overview</div>
+    </div>
+
+    <!-- Categories (Tabs) -->
+    <div class="categories-section">
+      <div class="section-label">Modules</div>
+      <div class="category-item active" data-tab="overview">📊 Overview</div>
+      <div class="category-item" data-tab="lots">📦 Lots</div>
+      <div class="category-item" data-tab="orders">📝 Orders</div>
+      <div class="category-item" data-tab="stock">📈 Stock Register</div>
+      <div class="category-item" data-tab="sales">💰 Sales Register</div>
+      <div class="category-item" data-tab="catalogue">🖼️ Catalogue</div>
+      <div class="category-item" data-tab="collection">💳 Collections</div>
+      <div class="category-item" data-tab="parties">👥 Parties</div>
+      <div class="category-item" data-tab="reports">📊 Reports</div>
+      <div class="category-item" data-tab="imperium">✨ Imperium</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="main-header">
+      <h1 class="header-title" id="page-title">Overview</h1>
+      <div class="header-actions">
+        <button class="btn-primary" id="btn-add-order">+ Add Order</button>
+        <button class="btn-secondary" id="btn-briefing">☀️ Morning Briefing</button>
+      </div>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div id="overview" class="tab-content active">
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">This Month Sales</div>
+          <div class="kpi-value">₹45,200</div>
+          <div class="kpi-change positive">↑ 12% vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Total Outstanding</div>
+          <div class="kpi-value">₹18,500</div>
+          <div class="kpi-change negative">↑ 8% (needs follow-up)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Active Lots</div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-change" style="color: var(--text-secondary); font-size: 12px;">3 Low Stock • 1 Dead Stock</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Orders This Month</div>
+          <div class="kpi-value">18</div>
+          <div class="kpi-change positive">↑ 5 since last month</div>
+        </div>
+      </div>
+
+      <!-- Overdue Alerts -->
+      <div class="alert-widget">
+        <div class="alert-title">⚠️ Overdue Payments</div>
+        <div class="alert-list">
+          <div class="alert-item">
+            <div>
+              <div class="alert-party">Sharma Textiles</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">26 days overdue</div>
+            </div>
+            <div class="alert-amount">₹12,500</div>
+          </div>
+          <div class="alert-item">
+            <div>
+              <div class="alert-party">Delhi Retail Co.</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">5 days overdue</div>
+            </div>
+            <div class="alert-amount">₹5,000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Lots Strip -->
+      <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary);">Active Lots</h3>
+      <div class="lots-strip">
+        <!-- Example Lot Card -->
+        <div class="lot-card">
+          <div class="lot-thumbnail">🧵</div>
+          <div class="lot-header">
+            <div>
+              <div class="lot-name">Printed Lawn</div>
+              <div class="lot-dno">D.No: PL-2024-001</div>
+            </div>
+            <span class="status-pill status-active">Active</span>
+          </div>
+          <div class="stock-bars">
+            <div class="stock-item">
+              <div class="stock-label">Top</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 65%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Bottom</div>
+              <div class="stock-bar"><div class="stock-fill warning" style="width: 28%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Dupatta</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 42%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lot-card">
+          <div class="lot-thumbnail">👗</div>
+          <div class="lot-header">
+            <div>
+              <div class="lot-name">Cotton Saree</div>
+              <div class="lot-dno">D.No: CS-2024-015</div>
+            </div>
+            <span class="status-pill status-low-stock">Low Stock</span>
+          </div>
+          <div class="stock-bars">
+            <div class="stock-item">
+              <div class="stock-label">Top</div>
+              <div class="stock-bar"><div class="stock-fill critical" style="width: 12%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Bottom</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 71%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Dupatta</div>
+              <div class="stock-bar"><div class="stock-fill warning" style="width: 18%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lot-card">
+          <div class="lot-thumbnail">🎨</div>
+          <div class="lot-header">
+            <div>
+              <div class="lot-name">Embroidered Kurti</div>
+              <div class="lot-dno">D.No: EK-2024-042</div>
+            </div>
+            <span class="status-pill status-arrived">Arrived</span>
+          </div>
+          <div class="stock-bars">
+            <div class="stock-item">
+              <div class="stock-label">Top</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 89%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Bottom</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 94%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Dupatta</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 87%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOTS TAB -->
+    <div id="lots" class="tab-content">
+      <div class="filter-pills">
+        <div class="pill active">All</div>
+        <div class="pill">Arrived</div>
+        <div class="pill">Active</div>
+        <div class="pill">Low Stock</div>
+        <div class="pill">Cleared</div>
+        <div class="pill">Dead Stock</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+        <div class="lot-card">
+          <div class="lot-thumbnail" style="font-size: 48px;">🧵</div>
+          <div class="lot-header">
+            <div>
+              <div class="lot-name">Printed Lawn</div>
+              <div class="lot-dno">D.No: PL-2024-001</div>
+            </div>
+          </div>
+          <div class="stock-bars">
+            <div class="stock-item">
+              <div class="stock-label">Top: 420m / 650m (65%)</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 65%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Bottom: 180m / 650m (28%)</div>
+              <div class="stock-bar"><div class="stock-fill warning" style="width: 28%;"></div></div>
+            </div>
+            <div class="stock-item">
+              <div class="stock-label">Dupatta: 274m / 650m (42%)</div>
+              <div class="stock-bar"><div class="stock-fill healthy" style="width: 42%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="orders" class="tab-content">
+      <div class="filter-pills">
+        <div class="pill active">All</div>
+        <div class="pill">Today</div>
+        <div class="pill">This Week</div>
+        <div class="pill">This Month</div>
+      </div>
+      <div class="table-container">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Party</th>
+                <th>Item</th>
+                <th>D.No</th>
+                <th>Qty (m)</th>
+                <th>Amount (₹)</th>
+                <th>Status</th>
+                <th>Due Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sep 5, 2026</td>
+                <td>Sharma Textiles</td>
+                <td>Printed Lawn</td>
+                <td>PL-2024-001</td>
+                <td class="text-mono">450</td>
+                <td class="text-mono">22,500</td>
+                <td><span class="status-pill status-low-stock" style="padding: 3px 6px; font-size: 11px;">Overdue</span></td>
+                <td>Sep 2</td>
+              </tr>
+              <tr>
+                <td>Sep 6, 2026</td>
+                <td>Delhi Retail</td>
+                <td>Cotton Saree</td>
+                <td>CS-2024-015</td>
+                <td class="text-mono">600</td>
+                <td class="text-mono">18,000</td>
+                <td><span class="status-pill status-arrived" style="padding: 3px 6px; font-size: 11px;">Pending</span></td>
+                <td>Sep 11</td>
+              </tr>
+              <tr>
+                <td>Sep 3, 2026</td>
+                <td>Mumbai Wholesale</td>
+                <td>Embroidered Kurti</td>
+                <td>EK-2024-042</td>
+                <td class="text-mono">300</td>
+                <td class="text-mono">15,000</td>
+                <td><span class="status-pill status-active" style="padding: 3px 6px; font-size: 11px;">Paid</span></td>
+                <td>Sep 8</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK REGISTER TAB -->
+    <div id="stock" class="tab-content">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>D.No</th>
+                <th>Top (m)</th>
+                <th>Bottom (m)</th>
+                <th>Dupatta (m)</th>
+                <th>Status</th>
+                <th>Stock Health</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Printed Lawn</td>
+                <td class="text-mono">PL-2024-001</td>
+                <td class="text-mono">420 / 650</td>
+                <td class="text-mono">180 / 650</td>
+                <td class="text-mono">274 / 650</td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td>
+                  <div style="display: flex; gap: 4px; align-items: center;">
+                    <div style="width: 40px; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
+                      <div style="width: 65%; height: 100%; background: var(--accent); border-radius: 3px;"></div>
+                    </div>
+                    <span style="font-size: 11px; color: var(--text-secondary);">avg 45%</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Cotton Saree</td>
+                <td class="text-mono">CS-2024-015</td>
+                <td class="text-mono">78 / 650</td>
+                <td class="text-mono">460 / 650</td>
+                <td class="text-mono">117 / 650</td>
+                <td><span class="status-pill status-low-stock">Low Stock</span></td>
+                <td>
+                  <div style="display: flex; gap: 4px; align-items: center;">
+                    <div style="width: 40px; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden;">
+                      <div style="width: 31%; height: 100%; background: var(--warning); border-radius: 3px;"></div>
+                    </div>
+                    <span style="font-size: 11px; color: var(--text-secondary);">avg 28%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES REGISTER TAB -->
+    <div id="sales" class="tab-content">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Party</th>
+                <th>Item</th>
+                <th>Top (m)</th>
+                <th>Bottom (m)</th>
+                <th>Dupatta (m)</th>
+                <th>Amount (₹)</th>
+                <th>GST</th>
+                <th>Net (₹)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sep 5</td>
+                <td>Sharma Textiles</td>
+                <td>Printed Lawn</td>
+                <td class="text-mono">200</td>
+                <td class="text-mono">150</td>
+                <td class="text-mono">100</td>
+                <td class="text-mono">22,500</td>
+                <td class="text-mono">1,125</td>
+                <td class="text-mono">23,625</td>
+                <td><span class="status-pill status-low-stock">Overdue</span></td>
+              </tr>
+              <tr>
+                <td>Sep 6</td>
+                <td>Delhi Retail</td>
+                <td>Cotton Saree</td>
+                <td class="text-mono">300</td>
+                <td class="text-mono">200</td>
+                <td class="text-mono">100</td>
+                <td class="text-mono">18,000</td>
+                <td class="text-mono">900</td>
+                <td class="text-mono">18,900</td>
+                <td><span class="status-pill status-arrived">Pending</span></td>
+              </tr>
+              <tr>
+                <td>Sep 3</td>
+                <td>Mumbai Wholesale</td>
+                <td>Embroidered Kurti</td>
+                <td class="text-mono">100</td>
+                <td class="text-mono">100</td>
+                <td class="text-mono">100</td>
+                <td class="text-mono">15,000</td>
+                <td class="text-mono">750</td>
+                <td class="text-mono">15,750</td>
+                <td><span class="status-pill status-active">Paid</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="background: var(--bg-tertiary); padding: 12px; margin-top: 16px; border-radius: var(--radius-md); border-top: 1px solid var(--border);">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: right; font-weight: 600;">
+          <div><div style="font-size: 12px; color: var(--text-secondary);">Total Metres</div><div class="text-mono" style="font-size: 14px;">1,450 m</div></div>
+          <div><div style="font-size: 12px; color: var(--text-secondary);">Gross Amount</div><div class="text-mono" style="font-size: 14px;">₹55,500</div></div>
+          <div><div style="font-size: 12px; color: var(--text-secondary);">Net Amount</div><div class="text-mono" style="font-size: 14px;">₹58,275</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATALOGUE TAB -->
+    <div id="catalogue" class="tab-content">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+          <div style="width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, var(--accent), #10b981); display: flex; align-items: center; justify-content: center; font-size: 64px;">🧵</div>
+          <div style="padding: 12px;">
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">Printed Lawn</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">D.No: PL-2024-001</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Top • Bottom • Dupatta</div>
+          </div>
+        </div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+          <div style="width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #8b5cf6, #ec4899); display: flex; align-items: center; justify-content: center; font-size: 64px;">👗</div>
+          <div style="padding: 12px;">
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">Cotton Saree</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">D.No: CS-2024-015</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Top • Bottom • Dupatta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLLECTIONS TAB -->
+    <div id="collection" class="tab-content">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Total Outstanding</div>
+          <div class="kpi-value">₹18,500</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Overdue Now</div>
+          <div class="kpi-value">₹17,500</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Due This Week</div>
+          <div class="kpi-value">₹1,000</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary);">Urgent Collections</h3>
+      <div class="table-container">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Party</th>
+                <th>Amount (₹)</th>
+                <th>Due Date</th>
+                <th>Days</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sharma Textiles</strong></td>
+                <td class="text-mono">12,500</td>
+                <td>Sep 2</td>
+                <td class="text-mono" style="color: var(--critical); font-weight: 600;">-26</td>
+                <td><span class="status-pill status-low-stock">Overdue</span></td>
+              </tr>
+              <tr>
+                <td><strong>Delhi Retail Co.</strong></td>
+                <td class="text-mono">5,000</td>
+                <td>Sep 1</td>
+                <td class="text-mono" style="color: var(--critical); font-weight: 600;">-5</td>
+                <td><span class="status-pill status-low-stock">Overdue</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTIES TAB -->
+    <div id="parties" class="tab-content">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;">
+        <div class="lot-card" style="cursor: pointer;">
+          <div style="background: linear-gradient(135deg, var(--accent), #10b981); height: 60px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👥</div>
+          <div style="font-weight: 600; margin-bottom: 4px;">Sharma Textiles</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Delhi</div>
+          <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border);">
+            <div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Orders</div>
+              <div style="font-size: 14px; font-weight: 600;">₹45,200</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; color: var(--text-secondary);">Outstanding</div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--critical);">₹12,500</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lot-card" style="cursor: pointer;">
+          <div style="background: linear-gradient(135deg, #8b5cf6, #ec4899); height: 60px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px;">👥</div>
+          <div style="font-weight: 600; margin-bottom: 4px;">Delhi Retail Co.</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Delhi</div>
+          <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border);">
+            <div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Orders</div>
+              <div style="font-size: 14px; font-weight: 600;">₹28,700</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; color: var(--text-secondary);">Outstanding</div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--critical);">₹5,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS TAB -->
+    <div id="reports" class="tab-content">
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <div class="pill active">Monthly</div>
+          <div class="pill">Quarterly</div>
+          <div class="pill">Half-Yearly</div>
+          <div class="pill">Yearly</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+        <!-- Per Day Sale -->
+        <div class="table-container" style="max-height: none;">
+          <div style="padding: 16px; border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: 14px; font-weight: 600;">Per Day Sale</h3>
+          </div>
+          <div style="padding: 16px;">
+            <div style="display: flex; align-items: flex-end; gap: 4px; height: 120px; align-items: flex-end; margin-bottom: 12px;">
+              <div style="flex: 1; background: var(--accent); height: 60%; border-radius: 4px;"></div>
+              <div style="flex: 1; background: var(--accent); height: 75%; border-radius: 4px;"></div>
+              <div style="flex: 1; background: var(--accent); height: 50%; border-radius: 4px;"></div>
+              <div style="flex: 1; background: var(--accent); height: 85%; border-radius: 4px;"></div>
+              <div style="flex: 1; background: var(--accent); height: 70%; border-radius: 4px;"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: center;">Sep 2–6, 2026</div>
+          </div>
+        </div>
+
+        <!-- Party-Wise Breakdown -->
+        <div class="table-container" style="max-height: none;">
+          <div style="padding: 16px; border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: 14px; font-weight: 600;">Top Parties</h3>
+          </div>
+          <div style="padding: 16px;">
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+                <span>Sharma Textiles</span>
+                <span class="text-mono">38%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                <div style="width: 38%; height: 100%; background: var(--accent);"></div>
+              </div>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+                <span>Delhi Retail</span>
+                <span class="text-mono">34%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                <div style="width: 34%; height: 100%; background: var(--success);"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+                <span>Mumbai Wholesale</span>
+                <span class="text-mono">28%</span>
+              </div>
+              <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                <div style="width: 28%; height: 100%; background: var(--warning);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPERIUM TAB -->
+    <div id="imperium" class="tab-content">
+      <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 16px; max-width: 700px; margin: 0 auto;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">✨ Imperium AI Mentor</h2>
+          <p style="font-size: 13px; color: var(--text-secondary);">Your AI business assistant powered by Groq. Get insights, recommendations, and data analysis in real-time.</p>
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-secondary" style="flex: 1; min-width: 150px; padding: 12px 16px; text-align: left;">
+            <div style="font-weight: 600; font-size: 12px;">☀️ Morning Briefing</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Today's overview</div>
+          </button>
+          <button class="btn-secondary" style="flex: 1; min-width: 150px; padding: 12px 16px; text-align: left;">
+            <div style="font-weight: 600; font-size: 12px;">👥 Pre-Visit Brief</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Party-specific data</div>
+          </button>
+          <button class="btn-secondary" style="flex: 1; min-width: 150px; padding: 12px 16px; text-align: left;">
+            <div style="font-weight: 600; font-size: 12px;">📊 Post-Day Debrief</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Daily analysis</div>
+          </button>
+        </div>
+
+        <div style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-md); border-left: 4px solid var(--accent);">
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">📍 Current Context</div>
+          <div style="font-size: 13px; line-height: 1.5;">
+            <strong style="color: var(--text-primary);">Today's Performance:</strong><br>
+            Sales: ₹8,400 | Outstanding: ₹18,500 | Low Stock Items: 3<br><br>
+            <strong style="color: var(--text-primary);">This Month vs Last:</strong><br>
+            +₹3,200 (+12%) | 5 new orders | 2 collections pending
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <input type="text" placeholder="Ask anything about your business..." class="form-input" style="flex: 1; padding: 10px 12px;">
+          <button class="btn-primary">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Add Order -->
+<div class="modal" id="modal-add-order">
+  <div class="modal-content">
+    <h2 style="font-size: 18px; font-weight: 600;">Add New Order</h2>
+
+    <div class="form-group">
+      <label class="form-label">Item & Lot</label>
+      <select class="form-select">
+        <option>Select item...</option>
+        <option>Printed Lawn (D.No: PL-2024-001) - 420m top, 180m bottom, 274m dupatta</option>
+        <option>Cotton Saree (D.No: CS-2024-015) - 78m top, 460m bottom, 117m dupatta</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Party</label>
+      <select class="form-select">
+        <option>Select party...</option>
+        <option>Sharma Textiles</option>
+        <option>Delhi Retail Co.</option>
+        <option>Mumbai Wholesale</option>
+      </select>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+      <div class="form-group">
+        <label class="form-label">Top (m/colour)</label>
+        <input type="number" class="form-input" placeholder="0" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bottom (m/colour)</label>
+        <input type="number" class="form-input" placeholder="0" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dupatta (m/colour)</label>
+        <input type="number" class="form-input" placeholder="0" value="25">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Number of Colours</label>
+      <input type="number" class="form-input" placeholder="1" value="4">
+      <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Total: 500m (50×4) + 500m (50×4) + 200m (25×4) = <strong>1,200m</strong></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+      <div class="form-group">
+        <label class="form-label">Top Rate (₹/m)</label>
+        <input type="number" class="form-input" placeholder="50" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bottom Rate (₹/m)</label>
+        <input type="number" class="form-input" placeholder="50" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Dupatta Rate (₹/m)</label>
+        <input type="number" class="form-input" placeholder="50" value="50">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Payment Terms (Days)</label>
+      <input type="number" class="form-input" placeholder="15" value="15">
+    </div>
+
+    <div style="background: var(--bg-tertiary); padding: 12px; border-radius: var(--radius-md); border-left: 4px solid var(--accent);">
+      <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">💰 Invoice Preview</div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 13px;">
+        <div>Top: 500m × ₹50</div>
+        <div style="text-align: right; font-weight: 600;">₹25,000</div>
+        <div>Bottom: 500m × ₹50</div>
+        <div style="text-align: right; font-weight: 600;">₹25,000</div>
+        <div>Dupatta: 200m × ₹50</div>
+        <div style="text-align: right; font-weight: 600;">₹10,000</div>
+        <div style="padding-top: 8px; border-top: 1px solid var(--border); font-weight: 600;">Gross Total</div>
+        <div style="text-align: right; font-weight: 600; padding-top: 8px; border-top: 1px solid var(--border);">₹60,000</div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-secondary" onclick="closeModal('modal-add-order')">Cancel</button>
+      <button class="btn-primary">Save Order</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.category-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const tab = this.getAttribute('data-tab');
+
+    // Update active states
+    document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+
+    // Update header title
+    document.getElementById('page-title').textContent = this.textContent.trim();
+  });
+});
+
+// Modal functionality
+function openModal(modalId) {
+  document.getElementById(modalId).classList.add('active');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+document.getElementById('btn-add-order').addEventListener('click', function() {
+  openModal('modal-add-order');
+});
+
+// Close modal on outside click
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+    }
+  });
+});
+
+// Filter pills
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', function() {
+    this.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
