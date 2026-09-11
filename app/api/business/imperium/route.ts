@@ -101,7 +101,7 @@ Never write in paragraphs unless the user specifically asks for detail.`
   return base
 }
 
-async function buildBusinessContext(supabase: any, userId: string): string {
+async function buildBusinessContext(supabase: any, userId: string): Promise<string> {
   const now = new Date()
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
   const monthStart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
@@ -182,3 +182,4 @@ async function buildBusinessContext(supabase: any, userId: string): string {
 
   return lines.join('\n')
 }
+

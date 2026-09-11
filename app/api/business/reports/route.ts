@@ -206,10 +206,10 @@ async function buildDeepAnalysis(supabase: any, userId: string, orders: any[], r
   const activePartyIds = new Set(orders.map((o: any) => o.party_id))
   const inactiveParties = ((parties ?? []).filter((p: any) => !activePartyIds.has(p.id))).length
   const top3Parties = orders.reduce((acc: Map<string, number>, o: any) => {
-    acc.set(o.party_id, (acc.get(o.party_id) || 0) + o.total_amount)
+    acc.set(o.party_id, (acc.get(o.party_id) || 0) + (o.total_amount || 0))
     return acc
   }, new Map())
-  const sortedParties = Array.from(top3Parties.entries()).sort((a, b) => b[1] - a[1]).slice(0, 3)
+  const sortedParties = Array.from(top3Parties.entries()).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0)).slice(0, 3)
 
   // DAYS stats
   const avgDailySale = daysWithOrders > 0 ? orders.reduce((s: number, o: any) => s + o.total_amount, 0) / daysWithOrders : 0
